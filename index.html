@@ -874,7 +874,8 @@ const DEFAULT_RATES={
   venta:{binance:{t:670},paypal:{t:670},zinli:{t:670},wally:{t:670},zelle:{t:670},airtm:{t:670},usdc:{t:670}}
 };
 let RATES=JSON.parse(JSON.stringify(DEFAULT_RATES));
-const loadRates=()=>{const r=ls('lsc_r');if(r)deepMerge(RATES,r)};
+function loadRates(){const r=ls('lsc_r');if(r)deepMerge(RATES,r)}
+function saveRates(){ls('lsc_r',RATES)}
 function deepMerge(t,s){for(const k in s){if(s[k]&&typeof s[k]==='object'&&!Array.isArray(s[k])){if(!t[k])t[k]={};deepMerge(t[k],s[k])}else t[k]=s[k]}}
 
 const PN={binance:'Binance/USDT',paypal:'PayPal',zinli:'Zinli',wally:'Wally',zelle:'Zelle',airtm:'Airtm',usdc:'USDC'};
@@ -1468,34 +1469,7 @@ function loadAct(){
   }).join('')}</tbody></table>`;
 }
 
-// ── AUTO REFRESH 8s ──
-let _rc=0,_ref=false;
-setInterval(async()=>{
-  if(_ref)return;_ref=true;_rc++;
-  try{
-    if(curOpId){
-      const sess=gS();if(!sess){_ref=false;return}
-      const ud=getUser(sess.email);if(!ud){_ref=false;return}
-      const op=(ud.hist||[]).find(o=>o.id===curOpId);
-      if(op){
-        const cm=document.getElementById('chat-msgs');
-        if(cm){const prev=cm.querySelectorAll('.cm,.cm-sys').length;if(op.chat.length!==prev)renderChat(op.chat)}
-        const cpb=document.getElementById('btn-cpr');if(cpb)cpb.style.display=op.st==='confirmed'?'block':'none';
-        const tb=document.getElementById('trd-badge');if(tb)tb.innerHTML=stBdg(op.st);
-        renderSteps(op.st);
-      }
-    }
-    if(aCur){
-      const ud=getUser(aCur.uem);if(ud){
-        const op=(ud.hist||[]).find(o=>o.id===aCur.opId);
-        if(op){const am=document.getElementById('a-msgs');if(am){const prev=am.querySelectorAll('.cm,.cm-sys').length;if(op.chat.length!==prev)renderAdmChat(op.chat)}}
-      }
-    }
-    if(_rc%3===0&&document.getElementById('ap').classList.contains('on')){
-      const av=document.querySelector('.av.on');if(av&&av.id!=='av-activity')loadAdmin();
-    }
-  }finally{_ref=false}
-},8000);
+
 
 // ── SUPABASE CONFIG ──
 const SUPABASE_URL = 'https://pusrbmnxmgfwyatdkiql.supabase.co';
@@ -1598,35 +1572,28 @@ async function sbLoadRates(){
   return data?data.rates:null;
 }
 
-// ── OVERRIDE funciones de datos para usar Supabase ──
+// ── SUPABASE OVERRIDES (redefinen funciones ya declaradas arriba) ──
 
-// Reemplazar getUser (ahora async — los llamadores ya hacen await)
-const _getUserOrig=getUser;
-// getUser sincrónico sigue usándose internamente donde ya existe en sesión
-// Para operaciones críticas usamos sbGetUser directamente
-
-// Override logAct para guardar en Supabase también
-const _logActOrig=logAct;
 function logAct(type,data){
-  _logActOrig(type,data); // sigue guardando en localStorage como caché
+  // localStorage caché
+  const log=ls('lsc_act')||[];
+  log.push({type,data,ts:new Date().toISOString(),date:new Date().toLocaleString('es-VE')});
+  if(log.length>500)log.splice(0,log.length-500);
+  ls('lsc_act',log);
+  // Supabase async
   sbLogAct(type,data).catch(console.error);
 }
 
-// Override saveRate para guardar en Supabase
-const _saveRatesOrig=saveRates;
 function saveRates(){
-  _saveRatesOrig();
+  ls('lsc_r',RATES);
   sbSaveRates(RATES).catch(console.error);
 }
 
-// Override loadRates para cargar desde Supabase
-const _loadRatesOrig=loadRates;
 async function loadRates(){
-  _loadRatesOrig(); // carga localStorage primero (fallback)
-  try{
-    const r=await sbLoadRates();
-    if(r){deepMerge(RATES,r);}
-  }catch(e){console.error('loadRates supabase error',e)}
+  // localStorage primero (instantáneo)
+  const r=ls('lsc_r');if(r)deepMerge(RATES,r);
+  // Supabase (async, actualiza si hay algo)
+  try{const sb=await sbLoadRates();if(sb)deepMerge(RATES,sb);}catch(e){console.error('loadRates sb',e)}
 }
 
 // ── OVERRIDE doLogin para usar Supabase ──
@@ -1929,10 +1896,16 @@ document.addEventListener('DOMContentLoaded',async()=>{
   setTimeout(playIntro,400);
 });
 
-// Intro hide
-window.addEventListener('load',()=>{
-  setTimeout(()=>{document.getElementById('intro').classList.add('out');document.getElementById('lp').style.opacity='0';requestAnimationFrame(()=>{document.getElementById('lp').style.transition='opacity .5s';document.getElementById('lp').style.opacity='1'})},2400);
-});
+// Intro hide — garantizado, sin depender de eventos async
+function hideIntro(){
+  const intro=document.getElementById('intro');
+  const lp=document.getElementById('lp');
+  if(!intro||intro.classList.contains('out'))return;
+  intro.classList.add('out');
+  if(lp){lp.style.opacity='0';requestAnimationFrame(()=>{lp.style.transition='opacity .5s';lp.style.opacity='1'});}
+}
+setTimeout(hideIntro,2400);
+window.addEventListener('load',()=>setTimeout(hideIntro,100));
 </script>
 </body>
 </html>
