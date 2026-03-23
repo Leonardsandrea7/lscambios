@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>LS Cambios — Tu dinero a tu destino</title>
@@ -473,10 +474,11 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 </style>
 </head>
 <body>
-
-</head>
-<body>
-
+<form id="registroCliente">
+  <input type="text" id="nombre" placeholder="Nombre completo" required>
+  <input type="email" id="email" placeholder="Correo electrónico" required>
+  <button type="submit">Registrar Cliente</button>
+</form>
 <!-- INTRO -->
 <div id="intro">
   <div class="intro-logo-wrap">
@@ -1532,6 +1534,31 @@ document.addEventListener('DOMContentLoaded',()=>{
 window.addEventListener('load',()=>{
   setTimeout(()=>{document.getElementById('intro').classList.add('out');document.getElementById('lp').style.opacity='0';requestAnimationFrame(()=>{document.getElementById('lp').style.transition='opacity .5s';document.getElementById('lp').style.opacity='1'})},2400);
 });
+</script><script>
+  // Sustituye estos datos con los de tu proyecto de Supabase
+  const SUPABASE_URL = 'https://pusrbmnxmgfwyatdkiql.supabase.co ';
+  const SUPABASE_KEY = 'sb_publishable_wmh9SkAoIr6dbHE53YcY7w_QnvXdtJg';
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const formulario = document.getElementById('registroCliente');
+
+  formulario.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const nombre = document.getElementById('nombre').value;
+    const email = document.getElementById('email').value;
+
+    const { data, error } = await supabase
+      .from('clientes') // Asegúrate que tu tabla se llame 'clientes'
+      .insert([{ nombre: nombre, email: email }]);
+
+    if (error) {
+      alert('Error al registrar: ' + error.message);
+    } else {
+      alert('¡Cliente registrado con éxito en LS Cambios!');
+      formulario.reset();
+    }
+  });
 </script>
 </body>
 </html>
