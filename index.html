@@ -874,8 +874,8 @@ const DEFAULT_RATES={
   venta:{binance:{t:670},paypal:{t:670},zinli:{t:670},wally:{t:670},zelle:{t:670},airtm:{t:670},usdc:{t:670}}
 };
 let RATES=JSON.parse(JSON.stringify(DEFAULT_RATES));
-function loadRates(){const r=ls('lsc_r');if(r)deepMerge(RATES,r)}
-function saveRates(){ls('lsc_r',RATES)}
+const loadRates=()=>{const r=ls('lsc_r');if(r)deepMerge(RATES,r)};
+const saveRates=()=>ls('lsc_r',RATES);
 function deepMerge(t,s){for(const k in s){if(s[k]&&typeof s[k]==='object'&&!Array.isArray(s[k])){if(!t[k])t[k]={};deepMerge(t[k],s[k])}else t[k]=s[k]}}
 
 const PN={binance:'Binance/USDT',paypal:'PayPal',zinli:'Zinli',wally:'Wally',zelle:'Zelle',airtm:'Airtm',usdc:'USDC'};
@@ -1469,485 +1469,645 @@ function loadAct(){
   }).join('')}</tbody></table>`;
 }
 
+// ── AUTO REFRESH reemplazado por Supabase Realtime ──
 
-
-// ── SUPABASE CONFIG ──
-const SUPABASE_URL = 'https://pusrbmnxmgfwyatdkiql.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1c3JibW54bWdmd3lhdGRraXFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyMjk4OTYsImV4cCI6MjA4OTgwNTg5Nn0.AJcquNKkTBYbTdnN_4OD7DzwXpwJD1BKw_aXnL-K4FY';
-const SB = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-// ── SUPABASE: USUARIOS ──
-async function sbGetUser(email){
-  const {data,error}=await SB.from('usuarios').select('*').eq('email',email.toLowerCase()).single();
-  if(error||!data)return null;
-  return data;
-}
-async function sbSaveUser(email,ud){
-  const payload={
-    email:email.toLowerCase(),
-    nombre:ud.nombre||'',
-    apellido:ud.apellido||'',
-    cedula:ud.cedula||'',
-    tel:ud.tel||'',
-    code:ud.code||'',
-    pw:ud.pw||'',
-    pago_movil:ud.pagoMovil||{},
-    cuentas:ud.cuentas||{},
-    joined:ud.joined||'',
-    created:ud.created||new Date().toISOString()
-  };
-  const {error}=await SB.from('usuarios').upsert(payload,{onConflict:'email'});
-  if(error)console.error('sbSaveUser error',error);
-}
-async function sbGetAllUsers(){
-  const {data,error}=await SB.from('usuarios').select('*').order('created',{ascending:false});
-  if(error||!data)return {};
-  const map={};
-  for(const u of data){
-    map[u.email]={
-      nombre:u.nombre,apellido:u.apellido,name:(u.nombre+' '+u.apellido).trim(),
-      cedula:u.cedula,tel:u.tel,code:u.code,pw:u.pw,email:u.email,
-      pagoMovil:u.pago_movil||{},cuentas:u.cuentas||{},
-      joined:u.joined,created:u.created,hist:[]
-    };
-  }
-  // Load operations for all users
-  const {data:ops}=await SB.from('operaciones').select('*').order('created_at',{ascending:true});
-  if(ops){
-    for(const op of ops){
-      if(map[op.user_email]){
-        map[op.user_email].hist=map[op.user_email].hist||[];
-        map[op.user_email].hist.push({
-          id:op.op_id,date:op.fecha,plat:op.plat,dir:op.dir,
-          send:op.send_txt,get:op.get_txt,st:op.estado,
-          chat:op.chat||[]
-        });
-      }
-    }
-  }
-  return map;
-}
-
-// ── SUPABASE: OPERACIONES ──
-async function sbSaveOp(email,op){
-  const payload={
-    op_id:op.id,user_email:email.toLowerCase(),
-    fecha:op.date,plat:op.plat,dir:op.dir,
-    send_txt:op.send,get_txt:op.get,
-    estado:op.st,chat:op.chat||[]
-  };
-  const {error}=await SB.from('operaciones').upsert(payload,{onConflict:'op_id'});
-  if(error)console.error('sbSaveOp error',error);
-}
-async function sbGetOp(opId){
-  const {data,error}=await SB.from('operaciones').select('*').eq('op_id',opId).single();
-  if(error||!data)return null;
-  return{id:data.op_id,date:data.fecha,plat:data.plat,dir:data.dir,
-    send:data.send_txt,get:data.get_txt,st:data.estado,chat:data.chat||[]};
-}
-async function sbGetUserOps(email){
-  const {data,error}=await SB.from('operaciones').select('*').eq('user_email',email.toLowerCase()).order('created_at',{ascending:true});
-  if(error||!data)return [];
-  return data.map(op=>({id:op.op_id,date:op.fecha,plat:op.plat,dir:op.dir,
-    send:op.send_txt,get:op.get_txt,st:op.estado,chat:op.chat||[]}));
-}
-
-// ── SUPABASE: ACTIVIDAD ──
-async function sbLogAct(type,data){
-  await SB.from('actividad').insert({type,data,fecha:new Date().toLocaleString('es-VE'),ts:new Date().toISOString()});
-}
-async function sbGetAct(filter){
-  let q=SB.from('actividad').select('*').order('ts',{ascending:false}).limit(200);
-  if(filter&&filter!=='all')q=q.eq('type',filter);
-  const {data}=await q;
-  return data||[];
-}
-
-// ── SUPABASE: TASAS ──
-async function sbSaveRates(rates){
-  await SB.from('tasas').upsert({id:1,rates},{onConflict:'id'});
-}
-async function sbLoadRates(){
-  const {data}=await SB.from('tasas').select('rates').eq('id',1).single();
-  return data?data.rates:null;
-}
-
-// ── SUPABASE OVERRIDES (redefinen funciones ya declaradas arriba) ──
-
-function logAct(type,data){
-  // localStorage caché
-  const log=ls('lsc_act')||[];
-  log.push({type,data,ts:new Date().toISOString(),date:new Date().toLocaleString('es-VE')});
-  if(log.length>500)log.splice(0,log.length-500);
-  ls('lsc_act',log);
-  // Supabase async
-  sbLogAct(type,data).catch(console.error);
-}
-
-function saveRates(){
-  ls('lsc_r',RATES);
-  sbSaveRates(RATES).catch(console.error);
-}
-
-async function loadRates(){
-  // localStorage primero (instantáneo)
-  const r=ls('lsc_r');if(r)deepMerge(RATES,r);
-  // Supabase (async, actualiza si hay algo)
-  try{const sb=await sbLoadRates();if(sb)deepMerge(RATES,sb);}catch(e){console.error('loadRates sb',e)}
-}
-
-// ── OVERRIDE doLogin para usar Supabase ──
-async function doLogin(){
-  const email=document.getElementById('li-e').value.trim().toLowerCase();
-  const pass=document.getElementById('li-p').value;
-  const err=document.getElementById('li-err');err.classList.remove('on');
-  if(!email||!pass){err.textContent='Ingresa correo y contraseña.';err.classList.add('on');return}
-  const btn=document.getElementById('li-btn');btn.textContent='Verificando...';btn.disabled=true;
-  try{
-    const user=await sbGetUser(email);
-    if(!user){err.textContent='Correo no registrado.';err.classList.add('on');return}
-    if(user.pw!==btoa(unescape(encodeURIComponent(pass)))){err.textContent='Contraseña incorrecta.';err.classList.add('on');return}
-    const ud={
-      nombre:user.nombre,apellido:user.apellido,name:(user.nombre+' '+user.apellido).trim(),
-      cedula:user.cedula,tel:user.tel,code:user.code,pw:user.pw,email:user.email,
-      pagoMovil:user.pago_movil||{},cuentas:user.cuentas||{},
-      joined:user.joined,created:user.created
-    };
-    // Load ops from Supabase
-    const ops=await sbGetUserOps(email);
-    ud.hist=ops;
-    // Sync to localStorage for session
-    saveUser(email,ud);
-    sS({email,...ud});
-    logAct('login',{email,name:ud.name,date:new Date().toISOString()});
-    closeAuth();toast('✅ Bienvenido, '+ud.nombre+'!','ok');setTimeout(goD,300);
-  }catch(e){err.textContent='Error de conexión. Intenta de nuevo.';err.classList.add('on');console.error(e)}
-  finally{btn.textContent='Entrar →';btn.disabled=false}
-}
-
-// ── OVERRIDE doRegister para usar Supabase ──
-async function doRegister(){
-  const g=id=>{const e=document.getElementById(id);return e?e.value.trim():''};
-  const nombre=g('rg-n'),apellido=g('rg-a'),cedula=g('rg-ci');
-  const email=g('rg-e').toLowerCase(),tel=g('rg-tel');
-  const banco=g('rg-banco'),pmTel=g('rg-pm-tel'),pmCi=g('rg-pm-ci');
-  const cDiv=g('rg-cdiv'),bid=g('rg-bid');
-  const pass=g('rg-pw'),pass2=g('rg-pw2');
-  const err=document.getElementById('rg-err'),ok=document.getElementById('rg-ok');
-  err.classList.remove('on');ok.classList.remove('on');
-  if(!nombre){err.textContent='Ingresa tu nombre.';err.classList.add('on');return}
-  if(!apellido){err.textContent='Ingresa tu apellido.';err.classList.add('on');return}
-  if(!cedula){err.textContent='Ingresa tu cédula.';err.classList.add('on');return}
-  if(!email||!email.includes('@')){err.textContent='Correo inválido.';err.classList.add('on');return}
-  if(!tel){err.textContent='Ingresa tu teléfono.';err.classList.add('on');return}
-  if(pass.length<6){err.textContent='Contraseña mínimo 6 caracteres.';err.classList.add('on');return}
-  if(pass!==pass2){err.textContent='Las contraseñas no coinciden.';err.classList.add('on');return}
-  const btn=document.getElementById('rg-btn');btn.textContent='Creando...';btn.disabled=true;
-  try{
-    // Check if email exists in Supabase
-    const existing=await sbGetUser(email);
-    if(existing){err.textContent='Ese correo ya está registrado.';err.classList.add('on');return}
-    const code=genCode();
-    const ud={nombre,apellido,name:nombre+' '+apellido,cedula,email,tel,code,
-      pw:btoa(unescape(encodeURIComponent(pass))),
-      pagoMovil:{banco,tel:pmTel,cedula:pmCi},
-      cuentas:{correo:cDiv,binanceId:bid},
-      joined:new Date().toLocaleDateString('es-VE'),
-      created:new Date().toISOString(),hist:[]};
-    // Save to Supabase
-    await sbSaveUser(email,ud);
-    // Save to localStorage as cache
-    saveUser(email,ud);
-    sS({email,...ud});
-    logAct('register',{email,name:ud.name,cedula:ud.cedula,date:new Date().toISOString()});
-    ok.textContent='✅ Cuenta creada. Ingresando...';ok.classList.add('on');
-    toast('🎉 Bienvenido, '+nombre+'!','ok');
-    setTimeout(()=>{closeAuth();goD()},900);
-  }catch(e){err.textContent='Error al crear cuenta: '+e.message;err.classList.add('on');console.error(e)}
-  finally{btn.textContent='Crear cuenta 🎉';btn.disabled=false}
-}
-
-// ── OVERRIDE startOp para guardar en Supabase ──
-async function startOp(){
-  const sess=gS();if(!sess){toast('Inicia sesión primero.','err');return}
-  const dir=document.getElementById('op-dir').value,plat=document.getElementById('op-plat').value;
-  const amt=parseFloat(document.getElementById('op-amt').value)||0;
-  if(!amt||amt<1){toast('Ingresa un monto válido.','err');return}
-  const rv=document.getElementById('op-res-val').textContent;
-  const ud=getUser(sess.email);if(!ud)return;
-  const sendTxt=dir==='compra'?'$'+fmt(amt,2)+' ('+PN[plat]+')':'Bs '+fmt(amt);
-  const getTxt=dir==='compra'?rv:rv+' ('+PN[plat]+')';
-  const id=genId(),now=new Date().toLocaleDateString('es-VE');
-  const op={id,date:now,plat,dir,send:sendTxt,get:getTxt,st:'pending',
-    chat:[{from:'sys',text:'Operación '+id+' iniciada.',time:tnow()},
-          {from:'sys',text:'📌 Realiza el pago y adjunta el comprobante aquí. LS Cambios lo verificará en breve.',time:tnow()}]};
-  ud.hist=ud.hist||[];ud.hist.push(op);
-  saveUser(sess.email,ud);sS({email:sess.email,...ud});
-  // Guardar en Supabase
-  await sbSaveOp(sess.email,op).catch(console.error);
-  logAct('operation',{id,email:sess.email,name:ud.name,dir,plat,send:sendTxt,get:getTxt});
-  openTrade(id);
-}
-
-// ── OVERRIDE saveMsgAndRender para persistir chat en Supabase ──
-async function saveMsgAndRender(msg){
-  const sess=gS();if(!sess)return;
-  const ud=getUser(sess.email);if(!ud)return;
-  const op=(ud.hist||[]).find(o=>o.id===curOpId);if(!op)return;
-  op.chat=op.chat||[];op.chat.push(msg);
-  saveUser(sess.email,ud);sS({email:sess.email,...ud});renderChat(op.chat);
-  // Persist chat to Supabase
-  await sbSaveOp(sess.email,op).catch(console.error);
-  if(msg.type==='img'){
-    setTimeout(async()=>{
-      const ud2=getUser(sess.email);if(!ud2)return;
-      const op2=(ud2.hist||[]).find(o=>o.id===curOpId);if(!op2)return;
-      op2.chat.push({from:'admin',text:'✅ Comprobante recibido. Verificando tu pago, en breve confirmamos.',time:tnow()});
-      saveUser(sess.email,ud2);sS({email:sess.email,...ud2});renderChat(op2.chat);
-      await sbSaveOp(sess.email,op2).catch(console.error);
-    },1800);
-  }
-}
-
-// ── OVERRIDE admSend para persistir en Supabase ──
-async function admSend(){
-  if(!aCur)return;const inp=document.getElementById('a-inp');const t=inp.value.trim();if(!t)return;
-  const ud=getUser(aCur.uem);if(!ud)return;
-  const op=(ud.hist||[]).find(o=>o.id===aCur.opId);if(!op)return;
-  op.chat=op.chat||[];op.chat.push({from:'admin',text:t,time:tnow()});
-  saveUser(aCur.uem,ud);inp.value='';renderAdmChat(op.chat);
-  await sbSaveOp(aCur.uem,op).catch(console.error);
-  toast('✅ Mensaje enviado','ok');
-}
-
-// ── OVERRIDE admConfirm para Supabase ──
-async function admConfirm(){
-  if(!aCur)return;const ud=getUser(aCur.uem);if(!ud)return;
-  const op=(ud.hist||[]).find(o=>o.id===aCur.opId);if(!op)return;
-  op.st='confirmed';
-  op.chat.push({from:'sys',text:'🟢 LS Cambios verificó y confirmó tu pago.',time:tnow()});
-  op.chat.push({from:'admin',text:'✅ Pago confirmado. Pulsa "Pago recibido — Completar" para finalizar.',time:tnow()});
-  saveUser(aCur.uem,ud);renderAdmChat(op.chat);
-  await sbSaveOp(aCur.uem,op).catch(console.error);
-  document.getElementById('a-chat-bdg').innerHTML=stBdg('confirmed');
-  loadAdmin();toast('✅ Confirmado. El cliente puede completar la operación.','ok');
-}
-
-// ── OVERRIDE admClose para Supabase ──
-async function admClose(){
-  if(!aCur||!confirm('¿Cerrar como completada?'))return;
-  const ud=getUser(aCur.uem);if(!ud)return;
-  const op=(ud.hist||[]).find(o=>o.id===aCur.opId);if(!op)return;
-  op.st='completed';op.chat.push({from:'sys',text:'🔒 Operación cerrada por el administrador.',time:tnow()});
-  saveUser(aCur.uem,ud);
-  await sbSaveOp(aCur.uem,op).catch(console.error);
-  const ab=document.getElementById('a-acts');if(ab)ab.style.display='none';
-  document.getElementById('a-chat-bdg').innerHTML=stBdg('completed');
-  renderAdmChat(op.chat);loadAdmin();toast('🔒 Cerrada','ok');
-}
-
-// ── OVERRIDE clientConfirm para Supabase ──
-async function clientConfirm(){
-  const sess=gS();if(!sess)return;
-  const ud=getUser(sess.email);if(!ud)return;
-  const op=(ud.hist||[]).find(o=>o.id===curOpId);if(!op)return;
-  op.st='completed';op.chat.push({from:'sys',text:'🎉 Operación completada. ¡Gracias por usar LS Cambios!',time:tnow()});
-  saveUser(sess.email,ud);sS({email:sess.email,...ud});
-  await sbSaveOp(sess.email,op).catch(console.error);
-  const cs=document.getElementById('compSub');if(cs&&op.get)cs.textContent='Recibirás: '+op.get;
-  document.getElementById('comp-ov').classList.add('on');playSuccess();openTrade(curOpId);
-}
-
-// ── OVERRIDE loadAdmin para cargar desde Supabase ──
-async function loadAdmin(){
-  // Cargar usuarios y operaciones desde Supabase
-  const users=await sbGetAllUsers().catch(()=>getUsers());
-  // Sincronizar con localStorage
-  saveUsers(users);
-  const allOps=[];
-  Object.entries(users).forEach(([em,ud])=>(ud.hist||[]).forEach(op=>allOps.push({...op,uem:em,uname:(ud.nombre||'')+(ud.apellido?' '+ud.apellido:'')})));
-  allOps.sort((a,b)=>b.id.localeCompare(a.id));
-  const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
-  s('ak-users',Object.keys(users).length);s('ak-ops',allOps.length);
-  s('ak-pend',allOps.filter(o=>o.st==='pending'||o.st==='confirmed').length);
-  s('ak-done',allOps.filter(o=>o.st==='completed').length);
-  const dao=document.getElementById('a-dash-ops');
-  if(dao)dao.innerHTML=allOps.length?buildAdmOps(allOps.slice(0,20)):'<div class="empty">Sin operaciones</div>';
-  const ct=document.getElementById('a-cli-body');
-  if(ct)ct.innerHTML=buildCliTbl(users);
-  const ol=document.getElementById('a-op-list');
-  if(ol){const act=allOps.filter(o=>o.st==='pending'||o.st==='confirmed');
-    ol.innerHTML=act.length?act.map(op=>`<div class="op-li" id="oli-${op.id}" onclick="admOpenChat('${op.uem}','${op.id}',this)">
-      <div class="op-li-id">${op.id} ${stBdg(op.st)}</div>
-      <div class="op-li-u">${op.uname.trim()} · ${PN[op.plat]||op.plat}</div>
-    </div>`).join(''):'<div style="padding:16px;font-size:12px;color:var(--t2);text-align:center">Sin operaciones activas</div>';
-  }
-  buildRateEditor();
-}
-
-// ── OVERRIDE loadAct para Supabase ──
-async function loadAct(){
-  const el=document.getElementById('act-body');if(!el)return;
-  el.innerHTML='<div class="empty">Cargando...</div>';
-  const log=await sbGetAct(actFilter).catch(()=>{
-    let l=ls('lsc_act')||[];
-    if(actFilter!=='all')l=l.filter(e=>e.type===actFilter);
-    return[...l].reverse();
-  });
-  if(!log.length){el.innerHTML='<div class="empty">Sin actividad</div>';return}
-  const icons={login:'🔑',register:'✨',operation:'💱'};
-  const colors={login:'var(--blue)',register:'var(--g)',operation:'var(--yellow)'};
-  el.innerHTML=`<table class="tbl"><thead><tr><th>Tipo</th><th>Nombre</th><th>Email</th><th>Detalle</th><th>Fecha</th></tr></thead>
-  <tbody>${log.slice(0,200).map(e=>{
-    const det=e.type==='operation'?`${e.data.dir==='compra'?'C':'V'} · ${PN[e.data.plat]||e.data.plat} · ${e.data.send||''} → ${e.data.get||''}`
-      :e.type==='login'?'Inicio de sesión':'Nueva cuenta';
-    return`<tr><td><span style="color:${colors[e.type]||'var(--t2)'};font-weight:700">${icons[e.type]||'•'} ${e.type}</span></td>
-      <td style="font-weight:600">${e.data.name||'—'}</td>
-      <td style="font-size:11px;color:var(--t2)">${e.data.email||'—'}</td>
-      <td style="font-size:11px;color:var(--t2)">${det}</td>
-      <td style="font-size:11px;color:var(--t3)">${e.fecha||e.date||'—'}</td></tr>`;
-  }).join('')}</tbody></table>`;
-}
-
-// ── AUTO REFRESH 8s (actualizado para Supabase) ──
-let _rc=0,_ref=false;
-setInterval(async()=>{
-  if(_ref)return;_ref=true;_rc++;
-  try{
-    if(curOpId){
-      const sess=gS();if(!sess){_ref=false;return}
-      // Refresh op from Supabase
-      const op=await sbGetOp(curOpId).catch(()=>null);
-      if(op){
-        // Sync to localStorage
-        const ud=getUser(sess.email);
-        if(ud){
-          const idx=(ud.hist||[]).findIndex(o=>o.id===curOpId);
-          if(idx>=0)ud.hist[idx]=op; else{ud.hist=ud.hist||[];ud.hist.push(op)}
-          saveUser(sess.email,ud);sS({email:sess.email,...ud});
-        }
-        const cm=document.getElementById('chat-msgs');
-        if(cm){const prev=cm.querySelectorAll('.cm,.cm-sys').length;if(op.chat.length!==prev)renderChat(op.chat)}
-        const cpb=document.getElementById('btn-cpr');if(cpb)cpb.style.display=op.st==='confirmed'?'block':'none';
-        const tb=document.getElementById('trd-badge');if(tb)tb.innerHTML=stBdg(op.st);
-        renderSteps(op.st);
-      }
-    }
-    if(aCur){
-      const op=await sbGetOp(aCur.opId).catch(()=>null);
-      if(op){
-        const ud=getUser(aCur.uem);
-        if(ud){const idx=(ud.hist||[]).findIndex(o=>o.id===aCur.opId);if(idx>=0)ud.hist[idx]=op;saveUser(aCur.uem,ud)}
-        const am=document.getElementById('a-msgs');
-        if(am){const prev=am.querySelectorAll('.cm,.cm-sys').length;if(op.chat.length!==prev)renderAdmChat(op.chat)}
-      }
-    }
-    if(_rc%3===0&&document.getElementById('ap').classList.contains('on')){
-      const av=document.querySelector('.av.on');if(av&&av.id!=='av-activity')loadAdmin();
-    }
-  }finally{_ref=false}
-},8000);
-
-// ── INIT ──
-document.addEventListener('DOMContentLoaded',async()=>{
-  await loadRates();renderLPRates();
-
-  document.getElementById('authOv').addEventListener('click',e=>{if(e.target===document.getElementById('authOv'))closeAuth()});
-  document.getElementById('admOv').addEventListener('click',e=>{if(e.target===document.getElementById('admOv'))closeAdmOv()});
-
-  // Hash routing
-  if(window.location.hash==='#admin'){
-    if(isAdm())goA();
-    else openAdminLogin();
-    return;
-  }
-
-  // Session restore
-  const sess=gS();
-  if(sess){
-    // Refresh user data from Supabase
-    try{
-      const sbUser=await sbGetUser(sess.email);
-      if(sbUser){
-        const ops=await sbGetUserOps(sess.email);
-        const ud={
-          nombre:sbUser.nombre,apellido:sbUser.apellido,name:(sbUser.nombre+' '+sbUser.apellido).trim(),
-          cedula:sbUser.cedula,tel:sbUser.tel,code:sbUser.code,pw:sbUser.pw,email:sbUser.email,
-          pagoMovil:sbUser.pago_movil||{},cuentas:sbUser.cuentas||{},
-          joined:sbUser.joined,created:sbUser.created,hist:ops
-        };
-        saveUser(sess.email,ud);
-        sS({email:sess.email,...ud});updLPNav();
-        const lv=ls('lsc_lv'),lo=ls('lsc_lo');
-        if(lv==='trade'&&lo){goD();setTimeout(()=>openTrade(lo),150)}
-        else if(lv&&lv!=='trade'){goD();setTimeout(()=>showDV(lv),150)}
-        else{goD()}
-        setTimeout(playIntro,200);
-        return;
-      }else{clS()}
-    }catch(e){
-      // Fallback a localStorage si Supabase falla
-      const ud=getUser(sess.email);
-      if(ud){sS({email:sess.email,...ud});updLPNav();goD();setTimeout(playIntro,200);return}
-      else{clS()}
-    }
-  }
-
-  setTimeout(playIntro,400);
-});
-
-// Intro hide — garantizado, sin depender de eventos async
-function hideIntro(){
-  const intro=document.getElementById('intro');
-  const lp=document.getElementById('lp');
-  if(!intro||intro.classList.contains('out'))return;
-  intro.classList.add('out');
-  if(lp){lp.style.opacity='0';requestAnimationFrame(()=>{lp.style.transition='opacity .5s';lp.style.opacity='1'});}
-}
-setTimeout(hideIntro,2400);
-window.addEventListener('load',()=>setTimeout(hideIntro,100));
+// ── INIT movido al script de Supabase ──
 </script><script>
-document.getElementById('registroCliente').addEventListener('submit', async (e) => {
-    e.preventDefault(); // Evita que la página se recargue y se pierdan los datos
+// ══════════════════════════════════════════════════════════════════
+// LS CAMBIOS — SUPABASE INTEGRATION v2.0
+// Tablas requeridas en Supabase:
+//   clientes   (id, email, nombre, apellido, cedula, tel, codigo,
+//               pw_hash, pago_movil jsonb, cuentas jsonb,
+//               joined text, created_at timestamptz)
+//   operaciones (id text PK, cliente_email text, plat text,
+//                dir text, send_txt text, get_txt text,
+//                estado text, created_at timestamptz)
+//   mensajes   (id bigserial PK, op_id text, from_role text,
+//               tipo text, contenido text, ts timestamptz)
+//   tasas      (id int PK default 1, data jsonb)
+// ══════════════════════════════════════════════════════════════════
+(function(){
+  const SUPABASE_URL = 'https://pusrbmnxmgfwyatdkiql.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_wmh9SkAoIr6dbHE53YcY7w_QnvXdtJg';
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const nombre = document.getElementById('nombre').value;
-    const email = document.getElementById('email').value;
-    // Como en tu formulario de la foto no veo campo de password, 
-    // le asignaremos una por defecto que el usuario pueda cambiar luego
-    const password = "UsuarioLS2026"; 
+  // ── Helpers ──────────────────────────────────────────────────────
+  const tnowISO = () => new Date().toISOString();
 
-    try {
-        // 1. Crear el usuario en el sistema de Autenticación
-        const { data, error: authError } = await supabase.auth.signUp({
-            email: email,
-            password: password
-        });
+  // ── CLIENTES ─────────────────────────────────────────────────────
+  // Override getUser / saveUser / getUsers para usar Supabase
+  // Se mantiene cache en localStorage para respuesta inmediata
 
-        if (authError) throw authError;
+  async function sbGetUser(email) {
+    const local = (JSON.parse(localStorage.getItem('lsc_u')||'{}')||{})[email.toLowerCase()];
+    if (local) return local; // cache inmediato
+    const { data, error } = await db.from('clientes').select('*').eq('email', email.toLowerCase()).single();
+    if (error || !data) return null;
+    const ud = {
+      nombre: data.nombre, apellido: data.apellido, name: data.nombre+' '+data.apellido,
+      cedula: data.cedula, email: data.email, tel: data.tel, code: data.codigo,
+      pw: data.pw_hash, pagoMovil: data.pago_movil||{}, cuentas: data.cuentas||{},
+      joined: data.joined, created: data.created_at, hist: []
+    };
+    // cache local
+    const u = JSON.parse(localStorage.getItem('lsc_u')||'{}');
+    u[email.toLowerCase()] = ud;
+    localStorage.setItem('lsc_u', JSON.stringify(u));
+    return ud;
+  }
 
-        if (data.user) {
-            // 2. Insertar los datos en tu tabla 'usuarios' para que salgan en el Admin
-            const { error: dbError } = await supabase
-                .from('usuarios')
-                .insert([
-                    { 
-                        id: data.user.id, 
-                        nombre: nombre, 
-                        email: email,
-                        fecha_registro: new Date()
-                    }
-                ]);
+  async function sbSaveUser(email, ud) {
+    // Actualiza cache local primero
+    const u = JSON.parse(localStorage.getItem('lsc_u')||'{}');
+    u[email.toLowerCase()] = ud;
+    localStorage.setItem('lsc_u', JSON.stringify(u));
+    // Sincroniza a Supabase (sin hist ya que las ops van a su propia tabla)
+    const { error } = await db.from('clientes').upsert({
+      email: email.toLowerCase(),
+      nombre: ud.nombre, apellido: ud.apellido,
+      cedula: ud.cedula, tel: ud.tel, codigo: ud.code,
+      pw_hash: ud.pw, pago_movil: ud.pagoMovil||{},
+      cuentas: ud.cuentas||{}, joined: ud.joined,
+      created_at: ud.created||tnowISO()
+    }, { onConflict: 'email' });
+    if (error) console.error('[sbSaveUser]', error.message);
+  }
 
-            if (dbError) throw dbError;
+  async function sbGetAllUsers() {
+    const { data, error } = await db.from('clientes').select('*').order('created_at', { ascending: false });
+    if (error) return JSON.parse(localStorage.getItem('lsc_u')||'{}');
+    const map = {};
+    data.forEach(d => {
+      map[d.email] = {
+        nombre: d.nombre, apellido: d.apellido, name: d.nombre+' '+d.apellido,
+        cedula: d.cedula, email: d.email, tel: d.tel, code: d.codigo,
+        pw: d.pw_hash, pagoMovil: d.pago_movil||{}, cuentas: d.cuentas||{},
+        joined: d.joined, created: d.created_at, hist: []
+      };
+    });
+    return map;
+  }
 
-            alert("¡Cliente registrado con éxito! Ya puedes verlo en Supabase.");
-            document.getElementById('registroCliente').reset(); // Limpia el formulario
-        }
-    } catch (err) {
-        console.error("Error completo:", err);
-        alert("Hubo un problema: " + err.message);
+  // ── OPERACIONES ───────────────────────────────────────────────────
+  async function sbGetOps(email) {
+    const { data, error } = await db.from('operaciones')
+      .select('*').eq('cliente_email', email.toLowerCase())
+      .order('created_at', { ascending: true });
+    if (error) return [];
+    return data.map(d => ({
+      id: d.id, plat: d.plat, dir: d.dir,
+      send: d.send_txt, get: d.get_txt, st: d.estado,
+      date: new Date(d.created_at).toLocaleDateString('es-VE'),
+      chat: [] // se carga aparte
+    }));
+  }
+
+  async function sbCreateOp(email, op) {
+    const { error } = await db.from('operaciones').insert({
+      id: op.id, cliente_email: email.toLowerCase(),
+      plat: op.plat, dir: op.dir,
+      send_txt: op.send, get_txt: op.get,
+      estado: 'pending', created_at: tnowISO()
+    });
+    if (error) console.error('[sbCreateOp]', error.message);
+  }
+
+  async function sbUpdateOpEstado(opId, estado) {
+    const { error } = await db.from('operaciones').update({ estado }).eq('id', opId);
+    if (error) console.error('[sbUpdateOpEstado]', error.message);
+    // actualiza cache local
+    const u = JSON.parse(localStorage.getItem('lsc_u')||'{}');
+    Object.values(u).forEach(ud => {
+      const op = (ud.hist||[]).find(o => o.id === opId);
+      if (op) op.st = estado;
+    });
+    localStorage.setItem('lsc_u', JSON.stringify(u));
+  }
+
+  async function sbGetAllOps() {
+    const { data, error } = await db.from('operaciones')
+      .select('*, clientes(nombre,apellido)')
+      .order('created_at', { ascending: false });
+    if (error) return [];
+    return data.map(d => ({
+      id: d.id, plat: d.plat, dir: d.dir,
+      send: d.send_txt, get: d.get_txt, st: d.estado,
+      uem: d.cliente_email,
+      uname: d.clientes ? (d.clientes.nombre+' '+d.clientes.apellido) : d.cliente_email,
+      date: new Date(d.created_at).toLocaleDateString('es-VE'),
+      chat: []
+    }));
+  }
+
+  // ── MENSAJES / CHAT ───────────────────────────────────────────────
+  async function sbGetMsgs(opId) {
+    const { data, error } = await db.from('mensajes')
+      .select('*').eq('op_id', opId)
+      .order('ts', { ascending: true });
+    if (error) return [];
+    return data.map(d => ({
+      from: d.from_role,
+      type: d.tipo === 'img' ? 'img' : undefined,
+      src: d.tipo === 'img' ? d.contenido : undefined,
+      text: d.tipo !== 'img' ? d.contenido : '📎 Comprobante',
+      time: new Date(d.ts).toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'})
+    }));
+  }
+
+  async function sbSendMsg(opId, msg) {
+    const { error } = await db.from('mensajes').insert({
+      op_id: opId, from_role: msg.from,
+      tipo: msg.type||'text',
+      contenido: msg.type==='img' ? msg.src : msg.text,
+      ts: tnowISO()
+    });
+    if (error) console.error('[sbSendMsg]', error.message);
+  }
+
+  // ── TASAS ─────────────────────────────────────────────────────────
+  async function sbLoadRates() {
+    const { data, error } = await db.from('tasas').select('data').eq('id', 1).single();
+    if (!error && data && data.data) {
+      deepMerge(RATES, data.data);
+      renderLPRates();
     }
-});
+  }
+
+  async function sbSaveRates() {
+    saveRates(); // guarda en localStorage
+    const { error } = await db.from('tasas').upsert({ id: 1, data: RATES }, { onConflict: 'id' });
+    if (error) console.error('[sbSaveRates]', error.message);
+  }
+
+  // ── REALTIME SUBSCRIPTIONS ────────────────────────────────────────
+  let realtimeChannel = null;
+
+  function setupRealtime(opId) {
+    if (realtimeChannel) { db.removeChannel(realtimeChannel); realtimeChannel = null; }
+    realtimeChannel = db.channel('mensajes-'+opId)
+      .on('postgres_changes', {
+        event: 'INSERT', schema: 'public', table: 'mensajes',
+        filter: 'op_id=eq.'+opId
+      }, payload => {
+        const m = payload.new;
+        const msg = {
+          from: m.from_role,
+          type: m.tipo === 'img' ? 'img' : undefined,
+          src: m.tipo === 'img' ? m.contenido : undefined,
+          text: m.tipo !== 'img' ? m.contenido : '📎 Comprobante',
+          time: new Date(m.ts).toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'})
+        };
+        // Actualiza el chat en pantalla si es la op activa
+        const el = document.getElementById('chat-msgs');
+        const elA = document.getElementById('a-msgs');
+        if (el && curOpId === opId) {
+          const div = buildMsgDiv(msg, false);
+          el.appendChild(div);
+          el.scrollTop = el.scrollHeight;
+        }
+        if (elA && aCur && aCur.opId === opId) {
+          const div = buildMsgDiv(msg, true);
+          elA.appendChild(div);
+          elA.scrollTop = elA.scrollHeight;
+        }
+      })
+      .on('postgres_changes', {
+        event: 'UPDATE', schema: 'public', table: 'operaciones',
+        filter: 'id=eq.'+opId
+      }, payload => {
+        const nuevoEstado = payload.new.estado;
+        // actualiza badge y steps del cliente
+        const tb = document.getElementById('trd-badge');
+        if (tb) tb.innerHTML = stBdg(nuevoEstado);
+        renderSteps(nuevoEstado);
+        const cpb = document.getElementById('btn-cpr');
+        if (cpb) cpb.style.display = nuevoEstado === 'confirmed' ? 'block' : 'none';
+        // actualiza badge en el panel admin
+        const ab = document.getElementById('a-chat-bdg');
+        if (ab) ab.innerHTML = stBdg(nuevoEstado);
+        if (nuevoEstado === 'completed') {
+          const acts = document.getElementById('a-acts');
+          if (acts) acts.style.display = 'none';
+        }
+        toast('🔄 Estado actualizado: ' + nuevoEstado);
+      })
+      .subscribe();
+  }
+
+  function buildMsgDiv(msg, isAdmin) {
+    const wrap = document.createElement('div');
+    if (msg.from === 'sys') {
+      wrap.className = 'cm-sys';
+      wrap.textContent = msg.text;
+    } else {
+      const me = isAdmin ? (msg.from === 'admin') : (msg.from === 'user');
+      wrap.className = 'cm ' + (me ? 'me' : 'them');
+      const who = document.createElement('div');
+      who.className = 'cm-who';
+      who.textContent = me ? (isAdmin ? 'Tú (Admin)' : 'Tú') : (isAdmin ? '👤 Cliente' : '🟢 LS Cambios');
+      const bbl = document.createElement('div');
+      bbl.className = 'cm-bbl';
+      if (msg.type === 'img') {
+        const img = document.createElement('img');
+        img.src = msg.src; img.className = 'chat-img';
+        img.onclick = () => openLB(msg.src);
+        bbl.appendChild(img);
+      } else {
+        bbl.textContent = msg.text;
+      }
+      const t = document.createElement('div');
+      t.className = 'cm-t'; t.textContent = msg.time || '';
+      wrap.append(who, bbl, t);
+    }
+    return wrap;
+  }
+
+  // ── OVERRIDE DE FUNCIONES PRINCIPALES ────────────────────────────
+
+  // doLogin — usa Supabase
+  window.doLogin = async function() {
+    const email = document.getElementById('li-e').value.trim().toLowerCase();
+    const pass = document.getElementById('li-p').value;
+    const err = document.getElementById('li-err'); err.classList.remove('on');
+    if (!email || !pass) { err.textContent='Ingresa correo y contraseña.'; err.classList.add('on'); return; }
+    const btn = document.getElementById('li-btn'); btn.textContent='Verificando...'; btn.disabled=true;
+    try {
+      const user = await sbGetUser(email);
+      if (!user) { err.textContent='Correo no registrado.'; err.classList.add('on'); return; }
+      if (user.pw !== btoa(unescape(encodeURIComponent(pass)))) { err.textContent='Contraseña incorrecta.'; err.classList.add('on'); return; }
+      // Cargar historial desde Supabase
+      user.hist = await sbGetOps(email);
+      sS({email, ...user});
+      const u = JSON.parse(localStorage.getItem('lsc_u')||'{}');
+      u[email] = user; localStorage.setItem('lsc_u', JSON.stringify(u));
+      closeAuth(); toast('✅ Bienvenido, '+user.nombre+'!','ok'); setTimeout(goD,300);
+    } finally { btn.textContent='Entrar →'; btn.disabled=false; }
+  };
+
+  // doRegister — usa Supabase
+  window.doRegister = async function() {
+    const g = id => { const e = document.getElementById(id); return e ? e.value.trim() : ''; };
+    const nombre=g('rg-n'), apellido=g('rg-a'), cedula=g('rg-ci');
+    const email=g('rg-e').toLowerCase(), tel=g('rg-tel');
+    const banco=g('rg-banco'), pmTel=g('rg-pm-tel'), pmCi=g('rg-pm-ci');
+    const cDiv=g('rg-cdiv'), bid=g('rg-bid');
+    const pass=g('rg-pw'), pass2=g('rg-pw2');
+    const err=document.getElementById('rg-err'), ok=document.getElementById('rg-ok');
+    err.classList.remove('on'); ok.classList.remove('on');
+    if (!nombre) { err.textContent='Ingresa tu nombre.'; err.classList.add('on'); return; }
+    if (!apellido) { err.textContent='Ingresa tu apellido.'; err.classList.add('on'); return; }
+    if (!cedula) { err.textContent='Ingresa tu cédula.'; err.classList.add('on'); return; }
+    if (!email || !email.includes('@')) { err.textContent='Correo inválido.'; err.classList.add('on'); return; }
+    if (!tel) { err.textContent='Ingresa tu teléfono.'; err.classList.add('on'); return; }
+    if (pass.length < 6) { err.textContent='Contraseña mínimo 6 caracteres.'; err.classList.add('on'); return; }
+    if (pass !== pass2) { err.textContent='Las contraseñas no coinciden.'; err.classList.add('on'); return; }
+    const btn = document.getElementById('rg-btn'); btn.textContent='Creando...'; btn.disabled=true;
+    try {
+      // Verificar en Supabase
+      const { data: exists } = await db.from('clientes').select('email').eq('email', email).single();
+      if (exists) { err.textContent='Ese correo ya está registrado.'; err.classList.add('on'); return; }
+      const code = genCode();
+      const ud = {
+        nombre, apellido, name: nombre+' '+apellido, cedula, email, tel, code,
+        pw: btoa(unescape(encodeURIComponent(pass))),
+        pagoMovil: {banco, tel:pmTel, cedula:pmCi},
+        cuentas: {correo:cDiv, binanceId:bid},
+        joined: new Date().toLocaleDateString('es-VE'),
+        created: tnowISO(), hist: []
+      };
+      await sbSaveUser(email, ud);
+      sS({email, ...ud});
+      ok.textContent='✅ Cuenta creada. Ingresando...'; ok.classList.add('on');
+      toast('🎉 Bienvenido, '+nombre+'!','ok');
+      setTimeout(()=>{ closeAuth(); goD(); }, 900);
+    } finally { btn.textContent='Crear cuenta 🎉'; btn.disabled=false; }
+  };
+
+  // startOp — crea operación en Supabase
+  window.startOp = async function() {
+    const sess = gS(); if (!sess) { toast('Inicia sesión primero.','err'); return; }
+    const dir = document.getElementById('op-dir').value;
+    const plat = document.getElementById('op-plat').value;
+    const amt = parseFloat(document.getElementById('op-amt').value)||0;
+    if (!amt || amt < 1) { toast('Ingresa un monto válido.','err'); return; }
+    const rv = document.getElementById('op-res-val').textContent;
+    const ud = getUser(sess.email); if (!ud) return;
+    const sendTxt = dir==='compra' ? '$'+fmt(amt,2)+' ('+PN[plat]+')' : 'Bs '+fmt(amt);
+    const getTxt  = dir==='compra' ? rv : rv+' ('+PN[plat]+')';
+    const id = genId();
+    const op = { id, date: new Date().toLocaleDateString('es-VE'), plat, dir, send:sendTxt, get:getTxt, st:'pending', chat:[] };
+    // Guarda en Supabase
+    await sbCreateOp(sess.email, op);
+    // Mensaje inicial en Supabase
+    const m1 = { from:'sys', text:'Operación '+id+' iniciada.', time: new Date().toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'}) };
+    const m2 = { from:'sys', text:'📌 Realiza el pago y adjunta el comprobante aquí. LS Cambios lo verificará en breve.', time: m1.time };
+    await sbSendMsg(id, m1); await sbSendMsg(id, m2);
+    op.chat = [m1, m2];
+    // Actualiza cache local
+    ud.hist = ud.hist||[]; ud.hist.push(op);
+    saveUser(sess.email, ud); sS({email:sess.email, ...ud});
+    openTradeDB(id, sess.email);
+  };
+
+  // openTrade — versión Supabase
+  window.openTrade = async function(opId) {
+    const sess = gS(); if (!sess) return;
+    let ud = getUser(sess.email); if (!ud) return;
+    // Asegurar que el historial esté cargado
+    if (!ud.hist || !ud.hist.find(o=>o.id===opId)) {
+      ud.hist = await sbGetOps(sess.email);
+      saveUser(sess.email, ud); sS({email:sess.email,...ud});
+    }
+    const op = (ud.hist||[]).find(o=>o.id===opId); if (!op) return;
+    op.chat = await sbGetMsgs(opId);
+    openTradeDB(opId, sess.email, op);
+  };
+
+  async function openTradeDB(opId, email, opIn) {
+    const sess = gS(); if (!sess) return;
+    const ud = getUser(sess.email)||{}; if (!ud) return;
+    const op = opIn || (ud.hist||[]).find(o=>o.id===opId); if (!op) return;
+    curOpId = opId;
+    ls('lsc_lv','trade'); ls('lsc_lo',opId);
+    const s = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+    s('trd-id',op.id); s('trd-type',op.dir==='compra'?'Compra':'Venta');
+    s('trd-plat',PN[op.plat]||op.plat); s('trd-send',op.send); s('trd-get',op.get); s('chat-id',op.id);
+    const tb=document.getElementById('trd-badge'); if(tb) tb.innerHTML=stBdg(op.st);
+    const cs=document.getElementById('chat-st'); if(cs) cs.innerHTML=stBdg(op.st);
+    const cpb=document.getElementById('btn-cpr'); if(cpb) cpb.style.display=op.st==='confirmed'?'block':'none';
+    renderSteps(op.st); renderChat(op.chat||[]);
+    document.querySelectorAll('.dv').forEach(d=>d.classList.remove('on'));
+    document.getElementById('dv-trade').classList.add('on');
+    setupRealtime(opId);
+  }
+
+  // sendMsg — usa Supabase
+  window.sendMsg = async function() {
+    const inp = document.getElementById('chat-inp');
+    const t = inp.value.trim(); if (!t) return; inp.value='';
+    const msg = { from:'user', text:t, time: new Date().toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'}) };
+    await sbSendMsg(curOpId, msg);
+    // El realtime channel renderizará el mensaje automáticamente
+  };
+
+  // sendImg — usa Supabase
+  window.sendImg = function(e) {
+    const f = e.target.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = async () => {
+      const msg = { from:'user', type:'img', src:r.result, text:'📎 Comprobante', time: new Date().toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'}) };
+      await sbSendMsg(curOpId, msg);
+      toast('📎 Comprobante enviado','ok');
+      // Auto-respuesta del admin
+      setTimeout(async () => {
+        const auto = { from:'admin', text:'✅ Comprobante recibido. Verificando tu pago, en breve confirmamos.', time: new Date().toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'}) };
+        await sbSendMsg(curOpId, auto);
+      }, 1800);
+    };
+    r.readAsDataURL(f); e.target.value='';
+  };
+
+  // clientConfirm — usa Supabase
+  window.clientConfirm = async function() {
+    const sess = gS(); if (!sess) return;
+    await sbUpdateOpEstado(curOpId, 'completed');
+    const msg = { from:'sys', text:'🎉 Operación completada. ¡Gracias por usar LS Cambios!', time: new Date().toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'}) };
+    await sbSendMsg(curOpId, msg);
+    const ud = getUser(sess.email)||{};
+    const op = (ud.hist||[]).find(o=>o.id===curOpId);
+    const cs = document.getElementById('compSub');
+    if (cs && op && op.get) cs.textContent='Recibirás: '+op.get;
+    document.getElementById('comp-ov').classList.add('on');
+    playSuccess();
+  };
+
+  // ── ADMIN: funciones P2P ─────────────────────────────────────────
+
+  // loadAdmin — carga desde Supabase
+  window.loadAdmin = async function() {
+    const allOps = await sbGetAllOps();
+    const users = await sbGetAllUsers();
+    const s = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+    s('ak-users', Object.keys(users).length);
+    s('ak-ops',   allOps.length);
+    s('ak-pend',  allOps.filter(o=>o.st==='pending'||o.st==='confirmed').length);
+    s('ak-done',  allOps.filter(o=>o.st==='completed').length);
+    // KPIs financieros reales
+    const totalVol = allOps.filter(o=>o.st==='completed').length;
+    const s2 = id => document.getElementById(id);
+    if (s2('ak-vol')) s2('ak-vol').textContent = totalVol + ' completadas';
+    // Dash ops
+    const dao = document.getElementById('a-dash-ops');
+    if (dao) dao.innerHTML = allOps.length ? buildAdmOps(allOps.slice(0,20)) : '<div class="empty">Sin operaciones</div>';
+    // Clientes
+    const ct = document.getElementById('a-cli-body');
+    if (ct) ct.innerHTML = buildCliTbl(users);
+    // Op list activas para P2P
+    const ol = document.getElementById('a-op-list');
+    if (ol) {
+      const act = allOps.filter(o=>o.st==='pending'||o.st==='confirmed');
+      ol.innerHTML = act.length ? act.map(op=>`
+        <div class="op-li" id="oli-${op.id}" onclick="admOpenChatDB('${op.uem}','${op.id}',this)">
+          <div class="op-li-id">${op.id} ${stBdg(op.st)}</div>
+          <div class="op-li-u">${(op.uname||'').trim()} · ${PN[op.plat]||op.plat}</div>
+        </div>`).join('') : '<div style="padding:16px;font-size:12px;color:var(--t2);text-align:center">Sin operaciones activas</div>';
+    }
+    buildRateEditor();
+  };
+
+  // admOpenChat — versión Supabase con comprobante admin
+  window.admOpenChatDB = async function(uem, opId, el) {
+    const users = await sbGetAllUsers();
+    const ud = users[uem]; if (!ud) return;
+    const ops = await sbGetOps(uem);
+    const op = ops.find(o=>o.id===opId); if (!op) return;
+    op.chat = await sbGetMsgs(opId);
+    aCur = {uem, opId};
+    document.querySelectorAll('.op-li').forEach(i=>i.classList.remove('on'));
+    if (el) el.classList.add('on');
+    document.getElementById('a-chat-ttl').textContent = 'Chat: '+opId;
+    document.getElementById('a-chat-sub').textContent = (ud.nombre+' '+ud.apellido).trim()+' · '+(PN[op.plat]||op.plat);
+    document.getElementById('a-chat-bdg').innerHTML = stBdg(op.st);
+    const ab = document.getElementById('a-acts'); if(ab) ab.style.display = op.st!=='completed'?'flex':'none';
+    renderAdmChat(op.chat||[]);
+    setupRealtime(opId);
+    // Agregar botón de enviar comprobante si no existe
+    const bar = document.getElementById('a-inp-row');
+    if (bar && !document.getElementById('a-att-btn')) {
+      const attBtn = document.createElement('label');
+      attBtn.id = 'a-att-btn';
+      attBtn.style.cssText = 'cursor:pointer;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:7px;border:1px solid rgba(240,64,96,.25);color:var(--red);font-size:14px;flex-shrink:0';
+      attBtn.innerHTML = '📎<input type="file" accept="image/*" style="display:none" onchange="admSendImg(event)">';
+      bar.insertBefore(attBtn, bar.firstChild);
+    }
+  };
+
+  // admSend — usa Supabase
+  window.admSend = async function() {
+    if (!aCur) return;
+    const inp = document.getElementById('a-inp');
+    const t = inp.value.trim(); if (!t) return;
+    const msg = { from:'admin', text:t, time: new Date().toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'}) };
+    await sbSendMsg(aCur.opId, msg);
+    inp.value=''; toast('✅ Mensaje enviado','ok');
+  };
+
+  // admSendImg — admin envía comprobante de pago al cliente
+  window.admSendImg = function(e) {
+    const f = e.target.files[0]; if (!f || !aCur) return;
+    const r = new FileReader();
+    r.onload = async () => {
+      const msg = { from:'admin', type:'img', src:r.result, text:'📎 Comprobante de pago', time: new Date().toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'}) };
+      await sbSendMsg(aCur.opId, msg);
+      toast('📎 Comprobante enviado al cliente','ok');
+    };
+    r.readAsDataURL(f); e.target.value='';
+  };
+
+  // admConfirm — usa Supabase
+  window.admConfirm = async function() {
+    if (!aCur) return;
+    await sbUpdateOpEstado(aCur.opId, 'confirmed');
+    const m1 = { from:'sys', text:'🟢 LS Cambios verificó y confirmó tu pago.', time: new Date().toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'}) };
+    const m2 = { from:'admin', text:'✅ Pago confirmado. Pulsa "Pago recibido — Completar" para finalizar.', time: m1.time };
+    await sbSendMsg(aCur.opId, m1); await sbSendMsg(aCur.opId, m2);
+    document.getElementById('a-chat-bdg').innerHTML = stBdg('confirmed');
+    loadAdmin(); toast('✅ Confirmado. El cliente puede completar la operación.','ok');
+  };
+
+  // admClose — BOTÓN "TRANSACCIÓN FINALIZADA" del admin
+  window.admClose = async function() {
+    if (!aCur || !confirm('¿Marcar como transacción finalizada?')) return;
+    await sbUpdateOpEstado(aCur.opId, 'completed');
+    const msg = { from:'sys', text:'🔒 Transacción finalizada por LS Cambios.', time: new Date().toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'}) };
+    await sbSendMsg(aCur.opId, msg);
+    const ab = document.getElementById('a-acts'); if(ab) ab.style.display='none';
+    document.getElementById('a-chat-bdg').innerHTML = stBdg('completed');
+    loadAdmin(); toast('🔒 Transacción finalizada','ok');
+  };
+
+  // admGoChat — versión Supabase
+  window.admGoChat = function(uem, opId) {
+    showAV('chats');
+    setTimeout(()=>{ const el=document.getElementById('oli-'+opId); admOpenChatDB(uem, opId, el); }, 120);
+  };
+
+  // Override saveRate para sincronizar con Supabase
+  window.saveRate = function(k) {
+    const ci=document.getElementById('rc-'+k), vi=document.getElementById('rv-'+k);
+    if(ci&&RATES.compra[k]) RATES.compra[k].t = parseFloat(ci.value)||0;
+    if(vi&&RATES.venta[k])  RATES.venta[k].t  = parseFloat(vi.value)||0;
+    sbSaveRates(); renderLPRates(); toast('💾 Tasa de '+PN[k]+' guardada','ok');
+  };
+
+  // loadDash — carga cifras reales desde Supabase
+  window.loadDash = async function() {
+    const sess = gS(); if (!sess) return;
+    let ud = getUser(sess.email);
+    if (!ud) { clS(); goL(); return; }
+    // Refresca historial desde Supabase
+    const hist = await sbGetOps(sess.email);
+    ud.hist = hist;
+    saveUser(sess.email, ud); sS({email:sess.email,...ud});
+    const pend = hist.filter(o=>o.st==='pending'||o.st==='confirmed').length;
+    const done = hist.filter(o=>o.st==='completed').length;
+    const s = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+    s('dpGreet','Hola, '+ud.nombre+' 👋'); s('dpAv',ud.nombre.charAt(0).toUpperCase()); s('dpNm',ud.nombre);
+    s('ov-tot',hist.length); s('ov-pend',pend); s('ov-done',done);
+    const badge = document.getElementById('si-pend');
+    if (badge) { badge.style.display=pend>0?'inline':'none'; badge.textContent=pend; }
+    const ro = document.getElementById('ov-ops');
+    if (ro) ro.innerHTML = hist.length ? buildHistTbl(hist.slice(-5).reverse()) : '<div class="empty">Sin operaciones aún</div>';
+    const hb = document.getElementById('hist-body');
+    if (hb) hb.innerHTML = hist.length ? buildHistTbl([...hist].reverse()) : '<div class="empty">Sin operaciones</div>';
+    const pm=ud.pagoMovil||{}, cu=ud.cuentas||{};
+    const pb = document.getElementById('prof-body');
+    if (pb) pb.innerHTML = `
+      <div class="card" style="padding:16px">
+        <div class="card-hdr" style="padding:0 0 12px;border-bottom:1px solid var(--brd);margin-bottom:12px"><span class="card-title">Datos personales</span></div>
+        <div class="sum-row"><span class="sum-k">Nombre</span><span class="sum-v">${ud.nombre} ${ud.apellido}</span></div>
+        <div class="sum-row"><span class="sum-k">Cédula</span><span class="sum-v">${ud.cedula||'—'}</span></div>
+        <div class="sum-row"><span class="sum-k">Correo</span><span class="sum-v">${sess.email}</span></div>
+        <div class="sum-row"><span class="sum-k">Teléfono</span><span class="sum-v">${ud.tel||'—'}</span></div>
+        <div class="sum-row"><span class="sum-k">Código</span><span class="sum-v" style="font-family:var(--mono);color:var(--g)">${ud.code||'—'}</span></div>
+      </div>
+      <div class="card" style="padding:16px">
+        <div class="card-hdr" style="padding:0 0 12px;border-bottom:1px solid var(--brd);margin-bottom:12px"><span class="card-title">Pago Móvil (vender Bs)</span></div>
+        <div class="sum-row"><span class="sum-k">Banco</span><span class="sum-v">${pm.banco||'—'}</span></div>
+        <div class="sum-row"><span class="sum-k">Teléfono</span><span class="sum-v">${pm.tel||'—'}</span></div>
+        <div class="sum-row"><span class="sum-k">Cédula</span><span class="sum-v">${pm.cedula||'—'}</span></div>
+      </div>
+      <div class="card" style="padding:16px">
+        <div class="card-hdr" style="padding:0 0 12px;border-bottom:1px solid var(--brd);margin-bottom:12px"><span class="card-title">Mis cuentas (comprar Bs)</span></div>
+        <div class="sum-row"><span class="sum-k">Correo divisas</span><span class="sum-v">${cu.correo||'—'}</span></div>
+        <div class="sum-row"><span class="sum-k">ID Binance</span><span class="sum-v">${cu.binanceId||'—'}</span></div>
+        <div style="padding:12px 0 0"><button class="btn red sm" onclick="doLogout()">Cerrar sesión</button></div>
+      </div>`;
+  };
+
+  // ── loadAct eliminada — no hay tabla actividad ──────────────────
+  window.loadAct = async function() {
+    const el = document.getElementById('act-body'); if (!el) return;
+    const allOps = await sbGetAllOps();
+    const recent = allOps.slice(0,200);
+    if (!recent.length) { el.innerHTML='<div class="empty">Sin actividad</div>'; return; }
+    const stC = {pending:'var(--yellow)',confirmed:'var(--g)',completed:'var(--g2)',rejected:'var(--red)'};
+    el.innerHTML=`<table class="tbl"><thead><tr><th>ID Op</th><th>Cliente</th><th>Plataforma</th><th>Envía</th><th>Recibe</th><th>Estado</th><th></th></tr></thead>
+    <tbody>${recent.map(op=>`<tr>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--g)">${op.id}</td>
+      <td style="font-weight:600">${(op.uname||'').trim()}</td>
+      <td>${PN[op.plat]||op.plat}</td>
+      <td style="color:var(--yellow);font-size:11px">${op.send}</td>
+      <td style="color:var(--g);font-size:11px">${op.get}</td>
+      <td>${stBdg(op.st)}</td>
+      <td><button class="btn ghost sm" onclick="admGoChat('${op.uem}','${op.id}')">→</button></td>
+    </tr>`).join('')}</tbody></table>`;
+  };
+
+  // ── INIT con Supabase ─────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', async () => {
+    await sbLoadRates();
+    renderLPRates();
+
+    document.getElementById('authOv').addEventListener('click', e=>{if(e.target===document.getElementById('authOv'))closeAuth()});
+    document.getElementById('admOv').addEventListener('click', e=>{if(e.target===document.getElementById('admOv'))closeAdmOv()});
+
+    if (window.location.hash==='#admin') {
+      if (isAdm()) goA(); else openAdminLogin(); return;
+    }
+
+    const sess = gS();
+    if (sess) {
+      let ud = getUser(sess.email);
+      if (ud) {
+        // Refresca historial
+        ud.hist = await sbGetOps(sess.email);
+        sS({email:sess.email,...ud});
+        updLPNav();
+        const lv=ls('lsc_lv'), lo=ls('lsc_lo');
+        if (lv==='trade'&&lo) { goD(); setTimeout(()=>openTrade(lo),300); }
+        else if (lv&&lv!=='trade') { goD(); setTimeout(()=>showDV(lv),150); }
+        else { goD(); }
+        setTimeout(playIntro, 200);
+        return;
+      } else { clS(); }
+    }
+    setTimeout(playIntro, 400);
+  });
+
+  window.addEventListener('load', ()=>{
+    setTimeout(()=>{
+      document.getElementById('intro').classList.add('out');
+      document.getElementById('lp').style.opacity='0';
+      requestAnimationFrame(()=>{
+        document.getElementById('lp').style.transition='opacity .5s';
+        document.getElementById('lp').style.opacity='1';
+      });
+    }, 2400);
+  });
+
+})();
 </script>
 </body>
 </html>
