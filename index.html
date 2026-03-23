@@ -474,11 +474,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 </style>
 </head>
 <body>
-<form id="registroCliente">
-  <input type="text" id="nombre" placeholder="Nombre completo" required>
-  <input type="email" id="email" placeholder="Correo electrónico" required>
-  <button type="submit">Registrar Cliente</button>
-</form>
 <!-- INTRO -->
 <div id="intro">
   <div class="intro-logo-wrap">
@@ -1399,28 +1394,25 @@ function renderAdmChat(msgs){
   }).join('');
   if(atBot)el.scrollTop=el.scrollHeight;
 }
+function admSendImg(e){
+  if(!aCur)return;
+  const f=e.target.files[0];if(!f)return;
+  const ud=getUser(aCur.uem);if(!ud)return;
+  const op=(ud.hist||[]).find(o=>o.id===aCur.opId);if(!op)return;
+  const r=new FileReader();
+  r.onload=function(ev){
+    op.chat=op.chat||[];
+    op.chat.push({from:'admin',type:'img',src:ev.target.result,text:'📎 Comprobante',time:tnow()});
+    saveUser(aCur.uem,ud);renderAdmChat(op.chat);toast('📎 Comprobante enviado','ok');
+  };
+  r.readAsDataURL(f);e.target.value='';
+}
 function admSend(){
   if(!aCur)return;const inp=document.getElementById('a-inp');const t=inp.value.trim();if(!t)return;
   const ud=getUser(aCur.uem);if(!ud)return;
   const op=(ud.hist||[]).find(o=>o.id===aCur.opId);if(!op)return;
   op.chat=op.chat||[];op.chat.push({from:'admin',text:t,time:tnow()});
   saveUser(aCur.uem,ud);inp.value='';renderAdmChat(op.chat);toast('✅ Mensaje enviado','ok');
-}
-function admSendImg(e){
-  if(!aCur)return;
-  const file=e.target.files[0];if(!file)return;
-  const ud=getUser(aCur.uem);if(!ud)return;
-  const op=(ud.hist||[]).find(o=>o.id===aCur.opId);if(!op)return;
-  const reader=new FileReader();
-  reader.onload=function(ev){
-    op.chat=op.chat||[];
-    op.chat.push({from:'admin',type:'img',src:ev.target.result,text:'📎 Comprobante adjunto',time:tnow()});
-    saveUser(aCur.uem,ud);
-    renderAdmChat(op.chat);
-    toast('📎 Comprobante enviado','ok');
-  };
-  reader.readAsDataURL(file);
-  e.target.value='';
 }
 function admConfirm(){
   if(!aCur)return;const ud=getUser(aCur.uem);if(!ud)return;
@@ -1552,31 +1544,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 window.addEventListener('load',()=>{
   setTimeout(()=>{document.getElementById('intro').classList.add('out');document.getElementById('lp').style.opacity='0';requestAnimationFrame(()=>{document.getElementById('lp').style.transition='opacity .5s';document.getElementById('lp').style.opacity='1'})},2400);
 });
-</script><script>
-  // Sustituye estos datos con los de tu proyecto de Supabase
-  const SUPABASE_URL = 'https://pusrbmnxmgfwyatdkiql.supabase.co ';
-  const SUPABASE_KEY = 'sb_publishable_wmh9SkAoIr6dbHE53YcY7w_QnvXdtJg';
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-  const formulario = document.getElementById('registroCliente');
-
-  formulario.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const nombre = document.getElementById('nombre').value;
-    const email = document.getElementById('email').value;
-
-    const { data, error } = await supabase
-      .from('clientes') // Asegúrate que tu tabla se llame 'clientes'
-      .insert([{ nombre: nombre, email: email }]);
-
-    if (error) {
-      alert('Error al registrar: ' + error.message);
-    } else {
-      alert('¡Cliente registrado con éxito en LS Cambios!');
-      formulario.reset();
-    }
-  });
 </script>
 </body>
 </html>
