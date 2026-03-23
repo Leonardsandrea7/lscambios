@@ -1906,6 +1906,48 @@ function hideIntro(){
 }
 setTimeout(hideIntro,2400);
 window.addEventListener('load',()=>setTimeout(hideIntro,100));
+</script><script>
+document.getElementById('registroCliente').addEventListener('submit', async (e) => {
+    e.preventDefault(); // Evita que la página se recargue y se pierdan los datos
+
+    const nombre = document.getElementById('nombre').value;
+    const email = document.getElementById('email').value;
+    // Como en tu formulario de la foto no veo campo de password, 
+    // le asignaremos una por defecto que el usuario pueda cambiar luego
+    const password = "UsuarioLS2026"; 
+
+    try {
+        // 1. Crear el usuario en el sistema de Autenticación
+        const { data, error: authError } = await supabase.auth.signUp({
+            email: email,
+            password: password
+        });
+
+        if (authError) throw authError;
+
+        if (data.user) {
+            // 2. Insertar los datos en tu tabla 'usuarios' para que salgan en el Admin
+            const { error: dbError } = await supabase
+                .from('usuarios')
+                .insert([
+                    { 
+                        id: data.user.id, 
+                        nombre: nombre, 
+                        email: email,
+                        fecha_registro: new Date()
+                    }
+                ]);
+
+            if (dbError) throw dbError;
+
+            alert("¡Cliente registrado con éxito! Ya puedes verlo en Supabase.");
+            document.getElementById('registroCliente').reset(); // Limpia el formulario
+        }
+    } catch (err) {
+        console.error("Error completo:", err);
+        alert("Hubo un problema: " + err.message);
+    }
+});
 </script>
 </body>
 </html>
