@@ -1533,5 +1533,26 @@ window.addEventListener('load',()=>{
   setTimeout(()=>{document.getElementById('intro').classList.add('out');document.getElementById('lp').style.opacity='0';requestAnimationFrame(()=>{document.getElementById('lp').style.transition='opacity .5s';document.getElementById('lp').style.opacity='1'})},2400);
 });
 </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+const supabase = supabase.createClient(
+"pusrbmnxmgfwyatdkiql",
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1c3JibW54bWdmd3lhdGRraXFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyMjk4OTYsImV4cCI6MjA4OTgwNTg5Nn0.AJcquNKkTBYbTdnN_4OD7DzwXpwJD1BKw_aXnL-K4FY"
+);
+
+async function registerUser(email, password) {
+const { data, error } = await supabase.auth.signUp({
+email: email,
+password: password
+});
+
+if(error){
+alert("Error: " + error.message);
+}else{
+alert("Usuario registrado correctamente");
+}
+}
+</script>
 </body>
 </html>
