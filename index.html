@@ -474,11 +474,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 </style>
 </head>
 <body>
-<form id="registroCliente">
-  <input type="text" id="nombre" placeholder="Nombre completo" required>
-  <input type="email" id="email" placeholder="Correo electrónico" required>
-  <button type="submit">Registrar Cliente</button>
-</form>
 <!-- INTRO -->
 <div id="intro">
   <div class="intro-logo-wrap">
@@ -823,6 +818,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
               <button class="btn ghost sm" onclick="admClose()">🔒 Cerrar</button>
             </div>
             <div class="a-inp-row">
+              <button class="chat-att" onclick="document.getElementById('a-fi-att').click()" title="Adjuntar comprobante">📎</button>
+              <input type="file" id="a-fi-att" accept="image/*" style="display:none" onchange="admSendImg(event)">
               <input class="a-inp" type="text" id="a-inp" placeholder="Respuesta al cliente..." onkeydown="if(event.key==='Enter')admSend()">
               <button class="a-send" onclick="admSend()">➤</button>
             </div>
@@ -1396,6 +1393,19 @@ function renderAdmChat(msgs){
     return`<div class="cm ${me?'me':'them'}"><div class="cm-who">${me?'Tú (Admin)':'👤 Cliente'}</div><div class="cm-bbl">${m.text}</div><div class="cm-t">${m.time||''}</div></div>`;
   }).join('');
   if(atBot)el.scrollTop=el.scrollHeight;
+}
+function admSendImg(e){
+  if(!aCur)return;
+  const f=e.target.files[0];if(!f)return;
+  const ud=getUser(aCur.uem);if(!ud)return;
+  const op=(ud.hist||[]).find(o=>o.id===aCur.opId);if(!op)return;
+  const r=new FileReader();
+  r.onload=function(ev){
+    op.chat=op.chat||[];
+    op.chat.push({from:'admin',type:'img',src:ev.target.result,text:'📎 Comprobante',time:tnow()});
+    saveUser(aCur.uem,ud);renderAdmChat(op.chat);toast('📎 Comprobante enviado','ok');
+  };
+  r.readAsDataURL(f);e.target.value='';
 }
 function admSend(){
   if(!aCur)return;const inp=document.getElementById('a-inp');const t=inp.value.trim();if(!t)return;
