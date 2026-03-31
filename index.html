@@ -1043,37 +1043,39 @@ async function doLogin(){
   }finally{btn.textContent='Entrar →';btn.disabled=false}
 }
 
-async function doRegister(){
-  const g=id=>{const e=document.getElementById(id);return e?e.value.trim():''};
-  const nombre=g('rg-n'),apellido=g('rg-a'),cedula=g('rg-ci');
-  const email=g('rg-e').toLowerCase(),tel=g('rg-tel');
-  const banco=g('rg-banco'),pmTel=g('rg-pm-tel'),pmCi=g('rg-pm-ci');
-  const cDiv=g('rg-cdiv'),bid=g('rg-bid');
-  const pass=g('rg-pw'),pass2=g('rg-pw2');
-  const err=document.getElementById('rg-err'),ok=document.getElementById('rg-ok');
-  err.classList.remove('on');ok.classList.remove('on');
-  if(!nombre){err.textContent='Ingresa tu nombre.';err.classList.add('on');return}
-  if(!apellido){err.textContent='Ingresa tu apellido.';err.classList.add('on');return}
-  if(!cedula){err.textContent='Ingresa tu cédula.';err.classList.add('on');return}
-  if(!email||!email.includes('@')){err.textContent='Correo inválido.';err.classList.add('on');return}
-  if(!tel){err.textContent='Ingresa tu teléfono.';err.classList.add('on');return}
-  if(pass.length<6){err.textContent='Contraseña mínimo 6 caracteres.';err.classList.add('on');return}
-  if(pass!==pass2){err.textContent='Las contraseñas no coinciden.';err.classList.add('on');return}
-  if(getUser(email)){err.textContent='Ese correo ya está registrado.';err.classList.add('on');return}
-  const btn=document.getElementById('rg-btn');btn.textContent='Creando...';btn.disabled=true;
-  try{
-    const code=genCode();
-    const ud={nombre,apellido,name:nombre+' '+apellido,cedula,email,tel,code,
-      pw:btoa(unescape(encodeURIComponent(pass))),
-      pagoMovil:{banco,tel:pmTel,cedula:pmCi},
-      cuentas:{correo:cDiv,binanceId:bid},
-      joined:new Date().toLocaleDateString('es-VE'),created:new Date().toISOString(),hist:[]};
-    saveUser(email,ud);sS({email,...ud});
-    logAct('register',{email,name:ud.name,cedula:ud.cedula,date:new Date().toISOString()});
-    ok.textContent='✅ Cuenta creada. Ingresando...';ok.classList.add('on');
-    toast('🎉 Bienvenido, '+nombre+'!','ok');
-    setTimeout(()=>{closeAuth();goD()},900);
-  }finally{btn.textContent='Crear cuenta 🎉';btn.disabled=false}
+async function doRegister() {
+  const n = document.getElementById('reg_n').value.trim();
+  const e = document.getElementById('reg_e').value.trim().toLowerCase();
+  const p1 = document.getElementById('reg_p1').value;
+  const p2 = document.getElementById('reg_p2').value;
+  const err = document.getElementById('reg_err');
+
+  err.classList.remove('on');
+  if(!n ⠟⠺⠞⠵ !p1 || !p2){ err.innerText='Completa todos los campos'; err.classList.add('on'); return; }
+  if(p1 !== p2){ err.innerText='Las contraseñas no coinciden'; err.classList.add('on'); return; }
+
+  // --- Esto es lo que falta en tu código real ---
+  try {
+    const success = await sbSaveUser({
+      name: n,
+      email: e,
+      pass: p1,
+      created_at: new Date().toISOString()
+    });
+
+    if (success) {
+      alert("¡Registro exitoso!");
+      location.reload(); 
+    } else {
+      err.innerText = 'Error al guardar. Revisa la consola.';
+      err.classList.add('on');
+    }
+  } catch (error) {
+    console.error(error);
+    err.innerText = 'Error de conexión';
+    err.classList.add('on');
+  }
+}}
 }
 
 function doLogout(){clS();ls('lsc_lv',null);ls('lsc_lo',null);goL();toast('👋 Hasta pronto!')}
