@@ -331,8 +331,16 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .chat-bar{padding:10px 12px;border-top:1px solid var(--brd);display:flex;gap:7px;align-items:center}
 .chat-inp{flex:1;background:var(--bg3);border:1px solid var(--brd);border-radius:8px;padding:9px 13px;color:var(--t1);font-size:12px;font-family:var(--fn);outline:none;transition:border-color .15s}
 .chat-inp:focus{border-color:var(--g)}
-.chat-att{background:none;border:1px solid var(--brd);width:34px;height:34px;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--t2);font-size:14px;flex-shrink:0}
+.chat-att{background:none;border:1px solid var(--brd);width:34px;height:34px;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--t2);font-size:14px;flex-shrink:0;transition:all .2s}
 .chat-att:hover{border-color:var(--brd2)}
+.chat-att.glow{border-color:rgba(0,214,143,.6);color:var(--g);background:rgba(0,214,143,.08);animation:attGlow 1.6s ease-in-out infinite;box-shadow:0 0 12px rgba(0,214,143,.3)}
+@keyframes attGlow{0%,100%{box-shadow:0 0 6px rgba(0,214,143,.3);border-color:rgba(0,214,143,.5)}50%{box-shadow:0 0 18px rgba(0,214,143,.6);border-color:rgba(0,214,143,.9)}}
+.att-hint{display:none;font-size:10px;color:var(--g);text-align:center;padding:4px 8px;background:rgba(0,214,143,.06);border:1px solid rgba(0,214,143,.15);border-radius:6px;margin:0 12px 6px;animation:fadeHint 1.2s ease-in-out infinite}
+.att-hint.on{display:block}
+@keyframes fadeHint{0%,100%{opacity:.6}50%{opacity:1}}
+.chat-notif-dot{display:none;position:fixed;top:12px;right:12px;z-index:9000;background:var(--g);color:#000;font-size:11px;font-weight:800;padding:6px 14px;border-radius:20px;box-shadow:0 2px 14px rgba(0,214,143,.4);animation:notifSlide .3s ease}
+.chat-notif-dot.on{display:flex;align-items:center;gap:6px}
+@keyframes notifSlide{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}
 .chat-send{width:34px;height:34px;border-radius:7px;background:var(--gd);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .chat-send svg{width:15px;height:15px;stroke:#000;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .chat-img{border-radius:7px;max-width:130px;max-height:110px;object-fit:cover;cursor:pointer;border:1px solid var(--brd);margin-top:4px}
@@ -729,12 +737,17 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
               <div id="btn-cpr" style="display:none;padding:14px"><button class="btn g full" onclick="clientConfirm()">✅ Pago recibido — Completar</button></div>
               <div style="padding:8px 14px 14px"><button class="btn red full sm" onclick="dispute()">⚠️ Reportar problema</button></div>
             </div>
+            <div class="card" id="trd-datos-ls" style="display:none;padding:16px">
+              <div class="card-hdr" style="padding:0 0 12px;border-bottom:1px solid var(--brd);margin-bottom:12px"><span class="card-title" id="trd-datos-title">📲 Envía tu pago a LS Cambios</span></div>
+              <div id="trd-datos-cnt"></div>
+            </div>
           </div>
           <div class="card chat-box">
             <div class="card-hdr"><div><div class="card-title" id="chat-id">Chat P2P</div><div style="font-size:10px;color:var(--t2);margin-top:1px">Con LS Cambios</div></div><div id="chat-st"></div></div>
             <div class="chat-msgs" id="chat-msgs"></div>
+            <div class="att-hint" id="att-hint">📎 Adjunta tu comprobante de pago aquí ↓</div>
             <div class="chat-bar">
-              <button class="chat-att" onclick="document.getElementById('fi-att').click()">📎</button>
+              <button class="chat-att" id="chat-att-btn" onclick="document.getElementById('fi-att').click()" title="Adjuntar comprobante de pago">📎</button>
               <input type="file" id="fi-att" accept="image/*" style="display:none" onchange="sendImg(event)">
               <input class="chat-inp" id="chat-inp" placeholder="Escribe un mensaje..." onkeydown="if(event.key==='Enter')sendMsg()">
               <button class="chat-send" onclick="sendMsg()"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
@@ -834,6 +847,13 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
           <div class="re-row"><span class="re-lbl">Correo Zelle</span><input class="re-inp" type="email" id="zelle-email-inp" placeholder="correo@ejemplo.com"></div>
           <button class="btn g sm full" style="margin-top:8px" onclick="saveZelleEmail()">💾 Guardar correo Zelle</button>
         </div>
+        <div style="margin-top:14px;background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r2);padding:16px">
+          <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:10px">📱 PAGO MÓVIL LS CAMBIOS (clientes envían Bs aquí)</div>
+          <div class="re-row"><span class="re-lbl">Banco</span><input class="re-inp" id="pm-banco-inp" placeholder="Ej: Banesco"></div>
+          <div class="re-row"><span class="re-lbl">Teléfono</span><input class="re-inp" id="pm-tel-inp" placeholder="0414-XXXXXXX"></div>
+          <div class="re-row"><span class="re-lbl">Cédula</span><input class="re-inp" id="pm-ci-inp" placeholder="V-XX.XXX.XXX"></div>
+          <button class="btn g sm full" style="margin-top:8px" onclick="saveLSPM()">💾 Guardar Pago Móvil</button>
+        </div>
       </div>
       <div class="av" id="av-activity">
         <div class="dv-h">Actividad 📋</div><div class="dv-s">Log completo de la plataforma · Listo para base de datos</div>
@@ -887,12 +907,17 @@ const WLS={
   paypal:{label:'Correo PayPal',val:'sandrealeonard@gmail.com',note:'Monto exacto'},
   zinli:{label:'Correo Zinli',val:'sandrealeonard@gmail.com',note:'Monto exacto'},
   wally:{label:'Usuario Wally',val:'leonardsandrea',note:'Monto exacto'},
-  zelle:{label:'Correo Zelle',val:'sandrealeonard@gmail.com',note:'Monto exacto'},
+  zelle:{label:'Correo Zelle',val:'Consultar correo Zelle en el chat',note:'Pregunta el correo Zelle en el chat 💬'},
   airtm:{label:'Correo Airtm',val:'sandrealeonard@gmail.com',note:'Monto exacto'},
   usdc:{label:'Dirección USDC',val:'0xb1d675ce126ab8dc3095ab3df99052cc4393685e',note:'Red BEP-20 (BSC)'},
 };
 
 const fmt=(n,d=0)=>Number(n).toLocaleString('es-VE',{minimumFractionDigits:d,maximumFractionDigits:d});
+
+// ── DATOS DE PAGO MÓVIL DE LS CAMBIOS (editar en admin → Tasas) ──
+const LS_PAGOMOVIL_DEFAULT={banco:'Banesco',tel:'0414-740-8768',cedula:'V-XX.XXX.XXX'};
+let LS_PM=JSON.parse(JSON.stringify(LS_PAGOMOVIL_DEFAULT));
+const loadLSPM=()=>{const d=ls('lsc_ls_pm');if(d)LS_PM=d;};
 const tnow=()=>new Date().toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'});
 const genId=()=>'OP'+Date.now().toString().slice(-6);
 const genCode=()=>'LS-'+Math.random().toString(36).toUpperCase().slice(2,8);
@@ -1188,28 +1213,33 @@ function updWallet(){
   const w=WLS[plat];
   if(dir==='compra'){
     box.style.display='block';box.style.borderColor='rgba(0,214,143,.18)';
-    let clientInfo='';
-    if(ud&&ud.cuentas){
-      const acc=plat==='binance'?ud.cuentas.binanceId:ud.cuentas.correo;
-      if(acc)clientInfo=`<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(0,214,143,.08)"><div style="font-size:9px;color:var(--t3);letter-spacing:.8px;font-weight:700;margin-bottom:6px">TU CUENTA DE ENVÍO</div>
-        <div class="wall-row"><span class="wall-k">${plat==='binance'?'Tu ID Binance':'Tu correo'}</span><span class="wall-v">${acc}</span></div></div>`;
-    }
-    cnt.innerHTML=`<div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button></span></div>
-      <div class="wall-row"><span class="wall-k">Nota</span><span class="wall-v">${w.note}</span></div>${clientInfo}
+    // Compra = cliente vende divisas → envía divisas a LS Cambios
+    const isZelle=plat==='zelle';
+    const valDisplay=isZelle
+      ?`<span style="color:var(--g);font-style:italic">💬 Consulta el correo en el chat</span>`
+      :`${w.val}<button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button>`;
+    cnt.innerHTML=`
+      <div style="font-size:9px;color:var(--g);letter-spacing:.8px;font-weight:700;margin-bottom:8px">📲 ENVÍA TUS DIVISAS A LS CAMBIOS</div>
+      <div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${valDisplay}</span></div>
+      <div class="wall-row"><span class="wall-k">Nota</span><span class="wall-v">${w.note}</span></div>
       <div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(0,214,143,.06)">⚠️ Envía el monto exacto y sube el comprobante en el chat.</div>`;
   }else{
     box.style.display='block';box.style.borderColor='rgba(240,64,96,.2)';
-    let pmInfo='<div style="margin-top:8px;padding:10px;background:rgba(240,64,96,.05);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ No tienes Pago Móvil registrado. Indica en el chat a dónde enviarte los Bs.</div>';
-    if(ud&&ud.pagoMovil&&ud.pagoMovil.tel){
-      const pm=ud.pagoMovil;
-      pmInfo=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(240,64,96,.08)"><div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:6px">TU PAGO MÓVIL (recibirás los Bs aquí)</div>
-        <div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco||'—'}</span></div>
-        <div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel}</span></div>
-        <div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula||'—'}</span></div></div>`;
+    // Venta = cliente compra divisas → envía Bs a LS Cambios vía Pago Móvil
+    const pm=LS_PM;
+    let clientRecibe='<div style="margin-top:10px;padding:10px;background:rgba(0,214,143,.05);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ Indícanos en el chat tu cuenta para recibir las divisas.</div>';
+    if(ud&&ud.cuentas){
+      const acc=plat==='binance'?ud.cuentas.binanceId:ud.cuentas.correo;
+      if(acc)clientRecibe=`<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(240,64,96,.08)"><div style="font-size:9px;color:var(--g);letter-spacing:.8px;font-weight:700;margin-bottom:6px">📥 TE ENVIAMOS LAS DIVISAS A</div>
+        <div class="wall-row"><span class="wall-k">${plat==='binance'?'Tu ID Binance':'Tu correo'}</span><span class="wall-v">${acc}</span></div></div>`;
     }
-    cnt.innerHTML=`<div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:8px">💸 ENVÍA LAS DIVISAS A LS CAMBIOS</div>
-      <div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${w.val}')">COPIAR</button></span></div>${pmInfo}
-      <div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(240,64,96,.06)">⚠️ Envía el monto exacto. Te enviamos los Bs una vez confirmado.</div>`;
+    cnt.innerHTML=`
+      <div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:8px">💸 ENVÍA LOS BS A LS CAMBIOS VÍA PAGO MÓVIL</div>
+      <div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${pm.banco}')">COPIAR</button></span></div>
+      <div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${pm.tel}')">COPIAR</button></span></div>
+      <div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${pm.cedula}')">COPIAR</button></span></div>
+      ${clientRecibe}
+      <div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(240,64,96,.06)">⚠️ Envía el monto exacto. Te enviamos las divisas una vez confirmado.</div>`;
   }
 }
 
@@ -1451,6 +1481,7 @@ function admClose(){
 function buildRateEditor(){
   const el=document.getElementById('a-rate-grid');if(!el)return;
   loadZelleEmail();
+  loadPMEditor();
   const plats=['binance','paypal','zinli','wally','zelle','airtm','usdc'];
   el.innerHTML=plats.map(k=>{const cv=RATES.compra[k]?.t??'',vv=RATES.venta[k]?.t??'';
     return`<div class="re-card"><div class="re-hdr"><div class="re-logo">${svgL(k,32)}</div><div class="re-name">${PN[k]}</div></div>
@@ -1478,6 +1509,21 @@ function saveZelleEmail(){
   WLS.zelle.val=email;
   ls('lsc_zelle_email',email);
   toast('💾 Correo Zelle actualizado: '+email,'ok');
+}
+
+function saveLSPM(){
+  const banco=(document.getElementById('pm-banco-inp')||{}).value||'';
+  const tel=(document.getElementById('pm-tel-inp')||{}).value||'';
+  const cedula=(document.getElementById('pm-ci-inp')||{}).value||'';
+  if(!banco||!tel||!cedula){toast('⚠️ Completa todos los campos del Pago Móvil','err');return;}
+  LS_PM={banco,tel,cedula};
+  ls('lsc_ls_pm',LS_PM);
+  toast('💾 Pago Móvil guardado','ok');
+}
+
+function loadPMEditor(){
+  const b=document.getElementById('pm-banco-inp'),t=document.getElementById('pm-tel-inp'),c=document.getElementById('pm-ci-inp');
+  if(b)b.value=LS_PM.banco||'';if(t)t.value=LS_PM.tel||'';if(c)c.value=LS_PM.cedula||'';
 }
 
 // Activity log
@@ -1679,18 +1725,45 @@ function loadAct(){
           text: m.tipo !== 'img' ? m.contenido : '📎 Comprobante',
           time: new Date(m.ts).toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'})
         };
-        // Actualiza el chat en pantalla si es la op activa
+        // Actualiza chat del cliente
         const el = document.getElementById('chat-msgs');
         const elA = document.getElementById('a-msgs');
         if (el && curOpId === opId) {
           const div = buildMsgDiv(msg, false);
           el.appendChild(div);
           el.scrollTop = el.scrollHeight;
+          // Notificación sonora al cliente cuando llega mensaje de admin o sys
+          if (msg.from === 'admin' || msg.from === 'sys') {
+            playMsgNotif();
+            showChatNotif(msg.text);
+          }
         }
         if (elA && aCur && aCur.opId === opId) {
           const div = buildMsgDiv(msg, true);
           elA.appendChild(div);
           elA.scrollTop = elA.scrollHeight;
+        }
+        // Actualizar estado en UI del cliente en cada mensaje
+        if (curOpId === opId) {
+          sbGetOps(gS()?.email||'').then(ops=>{
+            const op=ops.find(o=>o.id===opId);
+            if(!op)return;
+            const tb=document.getElementById('trd-badge');
+            if(tb)tb.innerHTML=stBdg(op.st);
+            const cs=document.getElementById('chat-st');
+            if(cs)cs.innerHTML=stBdg(op.st);
+            renderSteps(op.st);
+            const cpb=document.getElementById('btn-cpr');
+            if(cpb)cpb.style.display=op.st==='confirmed'?'block':'none';
+            // Actualizar glow del botón adjuntar
+            const attBtn=document.getElementById('chat-att-btn');
+            const attHint=document.getElementById('att-hint');
+            if(attBtn&&attHint){
+              const isPending=op.st==='pending';
+              attBtn.classList.toggle('glow',isPending);
+              attHint.classList.toggle('on',isPending);
+            }
+          });
         }
       })
       .on('postgres_changes', {
@@ -1702,6 +1775,8 @@ function loadAct(){
         const tb = document.getElementById('trd-badge');
         if (tb) tb.innerHTML = stBdg(nuevoEstado);
         renderSteps(nuevoEstado);
+        const cs=document.getElementById('chat-st');
+        if(cs)cs.innerHTML=stBdg(nuevoEstado);
         const cpb = document.getElementById('btn-cpr');
         if (cpb) cpb.style.display = nuevoEstado === 'confirmed' ? 'block' : 'none';
         // actualiza badge en el panel admin
@@ -1710,10 +1785,48 @@ function loadAct(){
         if (nuevoEstado === 'completed') {
           const acts = document.getElementById('a-acts');
           if (acts) acts.style.display = 'none';
+          // Ocultar card de datos LS al completar
+          const datosCard=document.getElementById('trd-datos-ls');
+          if(datosCard)datosCard.style.display='none';
+        }
+        // Actualizar glow del botón adjuntar
+        const attBtn=document.getElementById('chat-att-btn');
+        const attHint=document.getElementById('att-hint');
+        if(attBtn&&attHint){
+          attBtn.classList.toggle('glow',nuevoEstado==='pending');
+          attHint.classList.toggle('on',nuevoEstado==='pending');
         }
         toast('🔄 Estado actualizado: ' + nuevoEstado);
+        // Notificación web al cliente
+        if((nuevoEstado==='confirmed'||nuevoEstado==='completed')&&'Notification' in window&&Notification.permission==='granted'){
+          const msgs={confirmed:'✅ LS Cambios confirmó tu pago',completed:'🎉 ¡Operación completada!'};
+          new Notification('LS Cambios',{body:msgs[nuevoEstado]||'Estado actualizado',icon:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="16" fill="%2300d68f"/><text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" font-size="18" fill="%23000">LS</text></svg>'});
+        }
       })
       .subscribe();
+  }
+
+  // Sonido de notificación para el cliente al recibir mensaje
+  function playMsgNotif(){
+    try{
+      const t=ac().currentTime;
+      [[880,.0,.09,'sine',.14],[1047,.1,.09,'sine',.10],[1319,.2,.14,'sine',.08]].forEach(([f,d,r,tp,v])=>pn(f,t+d,r,tp,v));
+    }catch{}
+  }
+
+  // Notificación visual efímera en pantalla
+  let _notifT;
+  function showChatNotif(text){
+    let nd=document.getElementById('chat-notif-dot');
+    if(!nd){nd=document.createElement('div');nd.id='chat-notif-dot';nd.className='chat-notif-dot';document.body.appendChild(nd);}
+    nd.innerHTML='🟢 <span>Nuevo mensaje de LS Cambios</span>';
+    nd.classList.add('on');
+    clearTimeout(_notifT);
+    _notifT=setTimeout(()=>nd.classList.remove('on'),4000);
+    // Notificación web si el tab no está activo
+    if(document.hidden&&'Notification' in window&&Notification.permission==='granted'){
+      new Notification('LS Cambios',{body:text||'Tienes un nuevo mensaje',icon:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="16" fill="%2300d68f"/><text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" font-size="18" fill="%23000">LS</text></svg>'});
+    }
   }
 
   function buildMsgDiv(msg, isAdmin) {
@@ -1851,15 +1964,51 @@ function loadAct(){
     curOpId = opId;
     ls('lsc_lv','trade'); ls('lsc_lo',opId);
     const s = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
-    s('trd-id',op.id); s('trd-type',op.dir==='compra'?'Compra':'Venta');
+    s('trd-id',op.id); s('trd-type',op.dir==='compra'?'Compra (vendes divisas)':'Venta (compras divisas)');
     s('trd-plat',PN[op.plat]||op.plat); s('trd-send',op.send); s('trd-get',op.get); s('chat-id',op.id);
     const tb=document.getElementById('trd-badge'); if(tb) tb.innerHTML=stBdg(op.st);
     const cs=document.getElementById('chat-st'); if(cs) cs.innerHTML=stBdg(op.st);
     const cpb=document.getElementById('btn-cpr'); if(cpb) cpb.style.display=op.st==='confirmed'?'block':'none';
+    // Mostrar datos de LS Cambios según tipo de operación
+    const datosCard=document.getElementById('trd-datos-ls');
+    const datosCnt=document.getElementById('trd-datos-cnt');
+    const datosTitle=document.getElementById('trd-datos-title');
+    if(datosCard&&datosCnt&&op.st==='pending'){
+      datosCard.style.display='block';
+      if(op.dir==='compra'){
+        // Cliente vende divisas → envía divisas a LS Cambios
+        const w=WLS[op.plat]||{};
+        const isZelle=op.plat==='zelle';
+        const valDisplay=isZelle?'💬 Consulta el correo en el chat':w.val||'—';
+        datosTitle.textContent='📲 Envía tus divisas a LS Cambios';
+        datosCnt.innerHTML=`
+          <div class="sum-row"><span class="sum-k">${w.label||'Cuenta'}</span><span class="sum-v">${isZelle?`<span style="color:var(--g);font-style:italic">${valDisplay}</span>`:`${valDisplay} <button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button>`}</span></div>
+          <div class="sum-row"><span class="sum-k">Nota</span><span class="sum-v" style="font-size:11px;color:var(--t2)">${w.note||'Monto exacto'}</span></div>`;
+      }else{
+        // Cliente compra divisas → envía Bs a LS Cambios vía Pago Móvil
+        datosTitle.textContent='💸 Envía los Bs a LS Cambios (Pago Móvil)';
+        datosCnt.innerHTML=`
+          <div class="sum-row"><span class="sum-k">Banco</span><span class="sum-v">${LS_PM.banco} <button class="cpb" onclick="copyVal('${LS_PM.banco}')">COPIAR</button></span></div>
+          <div class="sum-row"><span class="sum-k">Teléfono</span><span class="sum-v">${LS_PM.tel} <button class="cpb" onclick="copyVal('${LS_PM.tel}')">COPIAR</button></span></div>
+          <div class="sum-row"><span class="sum-k">Cédula</span><span class="sum-v">${LS_PM.cedula} <button class="cpb" onclick="copyVal('${LS_PM.cedula}')">COPIAR</button></span></div>`;
+      }
+    } else if(datosCard){ datosCard.style.display='none'; }
+    // Animación del botón adjuntar según estado
+    const attBtn=document.getElementById('chat-att-btn');
+    const attHint=document.getElementById('att-hint');
+    if(attBtn&&attHint){
+      const isPending=op.st==='pending';
+      attBtn.classList.toggle('glow',isPending);
+      attHint.classList.toggle('on',isPending);
+    }
     renderSteps(op.st); renderChat(op.chat||[]);
     document.querySelectorAll('.dv').forEach(d=>d.classList.remove('on'));
     document.getElementById('dv-trade').classList.add('on');
     setupRealtime(opId);
+    // Solicitar permiso de notificaciones web
+    if('Notification' in window && Notification.permission==='default'){
+      Notification.requestPermission();
+    }
   }
 
   // sendMsg — usa Supabase
@@ -2088,6 +2237,7 @@ function loadAct(){
   // ── INIT con Supabase ─────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', async () => {
     await sbLoadRates();
+    loadLSPM();
     renderLPRates();
 
     document.getElementById('authOv').addEventListener('click', e=>{if(e.target===document.getElementById('authOv'))closeAuth()});
