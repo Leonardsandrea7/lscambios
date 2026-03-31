@@ -1513,45 +1513,32 @@ function loadAct(){
 // ── INIT movido al script de Supabase ──
 </script><script>
 // ══════════════════════════════════════════════════════════════════
-// LS CAMBIOS — SUPABASE INTEGRATION v2.0
-// Tablas requeridas en Supabase:
-//   clientes   (id, email, nombre, apellido, cedula, tel, codigo,
-//               pw_hash, pago_movil jsonb, cuentas jsonb,
-//               joined text, created_at timestamptz)
-//   operaciones (id text PK, cliente_email text, plat text,
-//                dir text, send_txt text, get_txt text,
-//                estado text, created_at timestamptz)
-//   mensajes   (id bigserial PK, op_id text, from_role text,
-//               tipo text, contenido text, ts timestamptz)
-//   tasas      (id int PK default 1, data jsonb)
+// LS CAMBIOS — SUPABASE INTEGRATION v3.0
 // ══════════════════════════════════════════════════════════════════
 (function(){
   const SUPABASE_URL = 'https://pusrbmnxmgfwyatdkiql.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_wmh9SkAoIr6dbHE53YcY7w_QnvXdtJg';
   const { createClient } = supabase;
   const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+  const ADMIN_URL = window.location.origin + window.location.pathname + '#admin';
 
   // ── Helpers ──────────────────────────────────────────────────────
   const tnowISO = () => new Date().toISOString();
 
   // ── CLIENTES ─────────────────────────────────────────────────────
-  // Override getUser / saveUser / getUsers para usar Supabase
-  // Se mantiene cache en localStorage para respuesta inmediata
 
   async function sbGetUser(email) {
     const { data, error } = await db.from('clientes').select('*').eq('email', email.toLowerCase()).single();
     if (error || !data) return null;
-    const ud = {
+    return {
       nombre: data.nombre, apellido: data.apellido, name: data.nombre+' '+data.apellido,
       cedula: data.cedula, email: data.email, tel: data.tel, code: data.codigo,
       pw: data.pw_hash, pagoMovil: data.pago_movil||{}, cuentas: data.cuentas||{},
       joined: data.joined, created: data.created_at, hist: []
     };
-    return ud;
   }
 
   async function sbSaveUser(email, ud) {
-    // Sincroniza directamente a Supabase (sin hist ya que las ops van a su propia tabla)
     const { error } = await db.from('clientes').upsert({
       email: email.toLowerCase(),
       nombre: ud.nombre, apellido: ud.apellido,
@@ -1565,7 +1552,7 @@ function loadAct(){
 
   async function sbGetAllUsers() {
     const { data, error } = await db.from('clientes').select('*').order('created_at', { ascending: false });
-    if (error) return {};
+    if (error || !data) return {};
     const map = {};
     data.forEach(d => {
       map[d.email] = {
@@ -1579,16 +1566,17 @@ function loadAct(){
   }
 
   // ── OPERACIONES ───────────────────────────────────────────────────
+
   async function sbGetOps(email) {
     const { data, error } = await db.from('operaciones')
       .select('*').eq('cliente_email', email.toLowerCase())
       .order('created_at', { ascending: true });
-    if (error) return [];
+    if (error || !data) return [];
     return data.map(d => ({
       id: d.id, plat: d.plat, dir: d.dir,
       send: d.send_txt, get: d.get_txt, st: d.estado,
       date: new Date(d.created_at).toLocaleDateString('es-VE'),
-      chat: [] // se carga aparte
+      chat: []
     }));
   }
 
@@ -1611,7 +1599,7 @@ function loadAct(){
     const { data, error } = await db.from('operaciones')
       .select('*, clientes(nombre,apellido)')
       .order('created_at', { ascending: false });
-    if (error) return [];
+    if (error || !data) return [];
     return data.map(d => ({
       id: d.id, plat: d.plat, dir: d.dir,
       send: d.send_txt, get: d.get_txt, st: d.estado,
@@ -1623,11 +1611,12 @@ function loadAct(){
   }
 
   // ── MENSAJES / CHAT ───────────────────────────────────────────────
+
   async function sbGetMsgs(opId) {
     const { data, error } = await db.from('mensajes')
       .select('*').eq('op_id', opId)
       .order('ts', { ascending: true });
-    if (error) return [];
+    if (error || !data) return [];
     return data.map(d => ({
       from: d.from_role,
       type: d.tipo === 'img' ? 'img' : undefined,
@@ -1798,7 +1787,7 @@ function loadAct(){
       await sbSaveUser(email, ud);
       sS({email, ...ud});
       // Notificación Telegram al admin — nuevo registro
-      tgNotify(`✨ <b>Nuevo registro</b>\n👤 ${nombre} ${apellido}\n📧 ${email}\n📱 ${tel||'—'}\n🆔 Cédula: ${cedula||'—'}\n🔑 Código: ${code}`);
+      tgNotify(`✨ <b>Nuevo registro</b>\n👤 ${nombre} ${apellido}\n📧 ${email}\n📱 ${tel||'—'}\n🆔 Cédula: ${cedula||'—'}\n🔑 Código: ${code}\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
       ok.textContent='✅ Cuenta creada. Ingresando...'; ok.classList.add('on');
       toast('🎉 Bienvenido, '+nombre+'!','ok');
       setTimeout(()=>{ closeAuth(); goD(); }, 900);
@@ -1825,10 +1814,8 @@ function loadAct(){
     const m2 = { from:'sys', text:'📌 Realiza el pago y adjunta el comprobante aquí. LS Cambios lo verificará en breve.', time: m1.time };
     await sbSendMsg(id, m1); await sbSendMsg(id, m2);
     op.chat = [m1, m2];
-    // Actualiza cache local
-    ud.hist = ud.hist||[]; ud.hist.push(op);
-    saveUser(sess.email, ud); sS({email:sess.email, ...ud});
-    tgNotify(`🔔 <b>Nueva operación</b>\n🆔 ${id}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n💱 ${dir==='compra'?'Comprar divisas':'Vender divisas'} · ${PN[plat]}\n📤 Envía: ${sendTxt}\n📥 Recibe: ${getTxt}`);
+    sS({email:sess.email, ...ud});
+    tgNotify(`🔔 <b>Nueva operación</b>\n🆔 ${id}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n💱 ${dir==='compra'?'Comprar divisas':'Vender divisas'} · ${PN[plat]}\n📤 Envía: ${sendTxt}\n📥 Recibe: ${getTxt}\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
     openTradeDB(id, sess.email);
   };
 
@@ -1839,7 +1826,7 @@ function loadAct(){
     // Asegurar que el historial esté cargado
     if (!ud.hist || !ud.hist.find(o=>o.id===opId)) {
       ud.hist = await sbGetOps(sess.email);
-      saveUser(sess.email, ud); sS({email:sess.email,...ud});
+      sS({email:sess.email,...ud});
     }
     const op = (ud.hist||[]).find(o=>o.id===opId); if (!op) return;
     op.chat = await sbGetMsgs(opId);
@@ -1884,7 +1871,7 @@ function loadAct(){
       await sbSendMsg(curOpId, msg);
       toast('📎 Comprobante enviado','ok');
       // Notificación Telegram al admin
-      if (ud && sess) tgNotify(`📎 <b>Comprobante recibido</b>\n🆔 ${curOpId}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n⏰ Revisa el chat del admin.`);
+      if (ud && sess) tgNotify(`📎 <b>Comprobante recibido</b>\n🆔 ${curOpId}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n⏰ Revisa el chat del admin.\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
       // Auto-respuesta del admin
       setTimeout(async () => {
         const auto = { from:'admin', text:'✅ Comprobante recibido. Verificando tu pago, en breve confirmamos.', time: new Date().toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'}) };
