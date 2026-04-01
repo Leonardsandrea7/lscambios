@@ -524,8 +524,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 
   <div class="rates-section" id="rates">
     <div class="rs-tabs">
-      <button class="rs-tab buy on" onclick="setLPMode('buy',this)">Comprar Bs</button>
-      <button class="rs-tab sell" onclick="setLPMode('sell',this)">Vender Bs</button>
+      <button class="rs-tab buy on" onclick="setLPMode('buy',this)">Vender divisas</button>
+      <button class="rs-tab sell" onclick="setLPMode('sell',this)">Comprar divisas</button>
     </div>
     <div class="rate-grid" id="lpBuy"></div>
     <div class="rate-grid" id="lpSell" style="display:none"></div>
@@ -687,8 +687,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <div class="op-form">
           <div class="fg"><label>TIPO</label>
             <select class="fsel" id="op-dir" onchange="calcOp();updWallet();swapPlats()">
-              <option value="compra">Compra — envío divisas, recibo Bs</option>
-              <option value="venta">Venta — envío Bs, recibo divisas</option>
+              <option value="compra">Vender divisas — envío divisas, recibo Bs</option>
+              <option value="venta">Comprar divisas — envío Bs, recibo divisas</option>
             </select>
           </div>
           <div class="fg"><label>PLATAFORMA</label>
@@ -829,6 +829,11 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <div class="av" id="av-rates">
         <div class="dv-h">Tasas 💱</div><div class="dv-s">Cambios aplican de inmediato.</div>
         <div class="re-grid" id="a-rate-grid"></div>
+        <div style="margin-top:18px;background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r2);padding:16px">
+          <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:10px">📧 CORREO ZELLE</div>
+          <div class="re-row"><span class="re-lbl">Correo Zelle</span><input class="re-inp" type="email" id="zelle-email-inp" placeholder="correo@ejemplo.com"></div>
+          <button class="btn g sm full" style="margin-top:8px" onclick="saveZelleEmail()">💾 Guardar correo Zelle</button>
+        </div>
       </div>
       <div class="av" id="av-activity">
         <div class="dv-h">Actividad 📋</div><div class="dv-s">Log completo de la plataforma · Listo para base de datos</div>
@@ -850,7 +855,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 
 <script>
 'use strict';
-const WA='https://wa.me/584147408768', ADM_PW='!!!!!!!#######';
+const WA='https://wa.me/584147408768';
+const _AH='b0be4eccdbc807053775c62524f83067ead0f1b00579fefc5aab17778e81c1e7';
 const ls=(k,v)=>{if(v===undefined){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}if(v===null){localStorage.removeItem(k)}else{localStorage.setItem(k,JSON.stringify(v))}};
 const SK='lsc_s3',AK='lsc_a3';
 const gS=()=>ls(SK), sS=u=>ls(SK,u), clS=()=>ls(SK,null);
@@ -871,7 +877,7 @@ const DEFAULT_RATES={
   venta:{binance:{t:670},paypal:{t:670},zinli:{t:670},wally:{t:670},zelle:{t:670},airtm:{t:670},usdc:{t:670}}
 };
 let RATES=JSON.parse(JSON.stringify(DEFAULT_RATES));
-const loadRates=()=>{const r=ls('lsc_r');if(r)deepMerge(RATES,r)};
+const loadRates=()=>{const r=ls('lsc_r');if(r)deepMerge(RATES,r);const ze=ls('lsc_zelle_email');if(ze)WLS.zelle.val=ze;};
 const saveRates=()=>ls('lsc_r',RATES);
 function deepMerge(t,s){for(const k in s){if(s[k]&&typeof s[k]==='object'&&!Array.isArray(s[k])){if(!t[k])t[k]={};deepMerge(t[k],s[k])}else t[k]=s[k]}}
 
@@ -883,7 +889,7 @@ const WLS={
   wally:{label:'Usuario Wally',val:'leonardsandrea',note:'Monto exacto'},
   zelle:{label:'Correo Zelle',val:'sandrealeonard@gmail.com',note:'Monto exacto'},
   airtm:{label:'Correo Airtm',val:'sandrealeonard@gmail.com',note:'Monto exacto'},
-  usdc:{label:'Dirección USDC',val:'sandrealeonard@gmail.com',note:'Red correcta'},
+  usdc:{label:'Dirección USDC',val:'0xb1d675ce126ab8dc3095ab3df99052cc4393685e',note:'Red BEP-20 (BSC)'},
 };
 
 const fmt=(n,d=0)=>Number(n).toLocaleString('es-VE',{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -911,6 +917,19 @@ function openLB(s){document.getElementById('lbImg').src=s;document.getElementByI
 
 // Activity log
 function logAct(type,data){const log=ls('lsc_act')||[];log.push({type,data,ts:new Date().toISOString(),date:new Date().toLocaleString('es-VE')});if(log.length>500)log.splice(0,log.length-500);ls('lsc_act',log)}
+
+// ── TELEGRAM NOTIFICACIONES ──
+const TG_TOKEN='8545688733:AAGUVpqSGdLH5A27RtwwxCPQFmlWBhZEj6A';
+const TG_CHAT='8180852500';
+async function tgNotify(msg){
+  try{
+    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({chat_id:TG_CHAT,text:msg,parse_mode:'HTML'})
+    });
+  }catch(e){console.warn('Telegram notify error:',e)}
+}
 
 // ── SOUND — Tonalidad Do exclusivo LS Cambios ──
 let _ac;
@@ -1062,10 +1081,12 @@ function doLogout(){clS();ls('lsc_lv',null);ls('lsc_lo',null);goL();toast('👋 
 // ── ADMIN AUTH ──
 function openAdminLogin(){window.location.hash='admin';document.getElementById('admOv').classList.add('on');setTimeout(()=>document.getElementById('adm-pw').focus(),150)}
 function closeAdmOv(){document.getElementById('admOv').classList.remove('on');if(window.location.hash==='#admin')history.pushState('',document.title,window.location.pathname+window.location.search)}
-function checkAdmin(){
+async function _h256(s){const b=new TextEncoder().encode(s);const hb=await crypto.subtle.digest('SHA-256',b);return Array.from(new Uint8Array(hb)).map(x=>x.toString(16).padStart(2,'0')).join('');}
+async function checkAdmin(){
   const pw=document.getElementById('adm-pw').value;
+  const h=await _h256(pw);
   const err=document.getElementById('adm-err');err.classList.remove('on');
-  if(pw===ADM_PW){setAdm();document.getElementById('admOv').classList.remove('on');window.location.hash='admin';goA()}
+  if(h===_AH){setAdm();document.getElementById('admOv').classList.remove('on');window.location.hash='admin';goA()}
   else{err.textContent='Contraseña incorrecta.';err.classList.add('on');document.getElementById('adm-pw').value=''}
 }
 function adminLogout(){clAdm();ls('lsc_av',null);window.location.hash='';goL();toast('👋 Sesión admin cerrada')}
@@ -1116,7 +1137,7 @@ function loadDash(){
       <div class="sum-row"><span class="sum-k">Cédula</span><span class="sum-v">${pm.cedula||'—'}</span></div>
     </div>
     <div class="card" style="padding:16px">
-      <div class="card-hdr" style="padding:0 0 12px;border-bottom:1px solid var(--brd);margin-bottom:12px"><span class="card-title">Mis cuentas (comprar Bs)</span></div>
+      <div class="card-hdr" style="padding:0 0 12px;border-bottom:1px solid var(--brd);margin-bottom:12px"><span class="card-title">Mis cuentas (comprar divisas)</span></div>
       <div class="sum-row"><span class="sum-k">Correo divisas</span><span class="sum-v">${cu.correo||'—'}</span></div>
       <div class="sum-row"><span class="sum-k">ID Binance</span><span class="sum-v">${cu.binanceId||'—'}</span></div>
       <div style="padding:12px 0 0"><button class="btn red sm" onclick="doLogout()">Cerrar sesión</button></div>
@@ -1210,6 +1231,7 @@ function startOp(){
   ud.hist=ud.hist||[];ud.hist.push(op);
   saveUser(sess.email,ud);sS({email:sess.email,...ud});
   logAct('operation',{id,email:sess.email,name:ud.name,dir,plat,send:sendTxt,get:getTxt});
+  tgNotify(`🔔 <b>Nueva operación</b>\n🆔 ${id}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n💱 ${dir==='compra'?'Compra':'Venta'} · ${PN[plat]}\n📤 Envía: ${sendTxt}\n📥 Recibe: ${getTxt}`);
   openTrade(id);
 }
 
@@ -1272,7 +1294,12 @@ async function saveMsgAndRender(msg){
   }
 }
 function sendMsg(){const inp=document.getElementById('chat-inp'),t=inp.value.trim();if(!t)return;inp.value='';saveMsgAndRender({from:'user',text:t,time:tnow()})}
-function sendImg(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{saveMsgAndRender({from:'user',type:'img',src:r.result,text:'📎 Comprobante',time:tnow()});toast('📎 Comprobante enviado','ok')};r.readAsDataURL(f);e.target.value=''}
+function sendImg(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{
+  const sess=gS(),ud=sess?getUser(sess.email):null;
+  saveMsgAndRender({from:'user',type:'img',src:r.result,text:'📎 Comprobante',time:tnow()});
+  toast('📎 Comprobante enviado','ok');
+  if(ud) tgNotify(`📎 <b>Comprobante recibido</b>\n🆔 ${curOpId}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n⏰ Revisa el chat del admin.`);
+};r.readAsDataURL(f);e.target.value=''}
 function clientConfirm(){
   const sess=gS();if(!sess)return;
   const ud=getUser(sess.email);if(!ud)return;
@@ -1423,6 +1450,7 @@ function admClose(){
 
 function buildRateEditor(){
   const el=document.getElementById('a-rate-grid');if(!el)return;
+  loadZelleEmail();
   const plats=['binance','paypal','zinli','wally','zelle','airtm','usdc'];
   el.innerHTML=plats.map(k=>{const cv=RATES.compra[k]?.t??'',vv=RATES.venta[k]?.t??'';
     return`<div class="re-card"><div class="re-hdr"><div class="re-logo">${svgL(k,32)}</div><div class="re-name">${PN[k]}</div></div>
@@ -1436,6 +1464,20 @@ function saveRate(k){
   if(ci&&RATES.compra[k])RATES.compra[k].t=parseFloat(ci.value)||0;
   if(vi&&RATES.venta[k])RATES.venta[k].t=parseFloat(vi.value)||0;
   saveRates();renderLPRates();toast('💾 Tasa de '+PN[k]+' guardada','ok');
+}
+function loadZelleEmail(){
+  const saved=ls('lsc_zelle_email');
+  if(saved)WLS.zelle.val=saved;
+  const inp=document.getElementById('zelle-email-inp');
+  if(inp)inp.value=WLS.zelle.val||'';
+}
+function saveZelleEmail(){
+  const inp=document.getElementById('zelle-email-inp');
+  if(!inp||!inp.value.trim()){toast('⚠️ Ingresa un correo válido','err');return;}
+  const email=inp.value.trim();
+  WLS.zelle.val=email;
+  ls('lsc_zelle_email',email);
+  toast('💾 Correo Zelle actualizado: '+email,'ok');
 }
 
 // Activity log
@@ -1784,6 +1826,7 @@ function loadAct(){
     // Actualiza cache local
     ud.hist = ud.hist||[]; ud.hist.push(op);
     saveUser(sess.email, ud); sS({email:sess.email, ...ud});
+    tgNotify(`🔔 <b>Nueva operación</b>\n🆔 ${id}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n💱 ${dir==='compra'?'Comprar divisas':'Vender divisas'} · ${PN[plat]}\n📤 Envía: ${sendTxt}\n📥 Recibe: ${getTxt}`);
     openTradeDB(id, sess.email);
   };
 
@@ -2016,7 +2059,7 @@ function loadAct(){
         <div class="sum-row"><span class="sum-k">Cédula</span><span class="sum-v">${pm.cedula||'—'}</span></div>
       </div>
       <div class="card" style="padding:16px">
-        <div class="card-hdr" style="padding:0 0 12px;border-bottom:1px solid var(--brd);margin-bottom:12px"><span class="card-title">Mis cuentas (comprar Bs)</span></div>
+        <div class="card-hdr" style="padding:0 0 12px;border-bottom:1px solid var(--brd);margin-bottom:12px"><span class="card-title">Mis cuentas (comprar divisas)</span></div>
         <div class="sum-row"><span class="sum-k">Correo divisas</span><span class="sum-v">${cu.correo||'—'}</span></div>
         <div class="sum-row"><span class="sum-k">ID Binance</span><span class="sum-v">${cu.binanceId||'—'}</span></div>
         <div style="padding:12px 0 0"><button class="btn red sm" onclick="doLogout()">Cerrar sesión</button></div>
