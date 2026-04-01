@@ -33,6 +33,13 @@ input, button { margin:5px; padding:10px; }
 
   <h3>Mis operaciones</h3>
   <div id="ops"></div>
+
+  <!-- 🔽 SOLO AGREGADO (NO CAMBIA TU UI EXISTENTE) -->
+  <h3>Soporte</h3>
+  <input id="msg-text" placeholder="Mensaje">
+  <input type="file" id="msg-file">
+  <button onclick="sendMessage()">Enviar</button>
+  <div id="chat"></div>
 </div>
 
 <div id="admin" class="hidden">
@@ -46,12 +53,18 @@ input, button { margin:5px; padding:10px; }
 
   <h3>Mensajes</h3>
   <div id="msgs"></div>
+
+  <!-- 🔽 SOLO AGREGADO -->
+  <h3>Responder cliente</h3>
+  <select id="chatUser" onchange="loadAdminChat()"></select>
+  <div id="adminChat"></div>
+  <input id="adminMsg" placeholder="Responder">
+  <button onclick="sendAdminMsg()">Enviar</button>
 </div>
 
 <script>
 const SUPABASE_URL = "https://pusrbmnxmgfwyatdkiql.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1c3JibW54bWdmd3lhdGRraXFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyMjk4OTYsImV4cCI6MjA4OTgwNTg5Nn0.AJcquNKkTBYbTdnN_4OD7DzwXpwJD1BKw_aXnL-K4FY";
-
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // -------- REGISTER --------
@@ -59,14 +72,9 @@ async function register(){
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
 
-  const { data, error } = await db.auth.signUp({
-    email,
-    password
-  });
-
+  const { error } = await db.auth.signUp({ email, password });
   if(error) return alert(error.message);
 
-  // guardar en tabla clientes
   await db.from('clientes').insert({
     email,
     created: new Date().toISOString()
@@ -80,11 +88,7 @@ async function login(){
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
 
-  const { data, error } = await db.auth.signInWithPassword({
-    email,
-    password
-  });
-
+  const { error } = await db.auth.signInWithPassword({ email, password });
   if(error) return alert(error.message);
 
   initApp();
@@ -104,6 +108,7 @@ async function initApp(){
   const { data: { user } } = await db.auth.getUser();
 
   loadOps(user.email);
+  loadChat(user.email);
 
   if(user.email === "admin@gmail.com"){
     document.getElementById('admin').classList.remove('hidden');
@@ -140,6 +145,53 @@ async function loadOps(email){
     `).join('');
 }
 
+// -------- MENSAJES CLIENTE --------
+async function sendMessage(){
+  const { data: { user } } = await db.auth.getUser();
+
+  const texto = document.getElementById('msg-text').value;
+  const file = document.getElementById('msg-file').files[0];
+
+  let imageUrl = null;
+
+  if(file){
+    const fileName = Date.now() + "_" + file.name;
+
+    await db.storage.from('comprobantes').upload(fileName, file);
+
+    const { data } = db.storage
+      .from('comprobantes')
+      .getPublicUrl(fileName);
+
+    imageUrl = data.publicUrl;
+  }
+
+  await db.from('mensajes').insert({
+    user_email: user.email,
+    texto,
+    imagen: imageUrl,
+    enviado_por: 'user'
+  });
+
+  loadChat(user.email);
+}
+
+async function loadChat(email){
+  const { data } = await db
+    .from('mensajes')
+    .select('*')
+    .eq('user_email', email)
+    .order('created', { ascending:true });
+
+  document.getElementById('chat').innerHTML =
+    data.map(m=>`
+      <div class="card">
+        <b>${m.enviado_por}</b>: ${m.texto || ''}
+        ${m.imagen ? `<br><img src="${m.imagen}" width="200">` : ''}
+      </div>
+    `).join('');
+}
+
 // -------- ADMIN --------
 async function loadAdmin(){
   const { data: users } = await db.from('clientes').select('*');
@@ -154,6 +206,41 @@ async function loadAdmin(){
 
   document.getElementById('msgs').innerHTML =
     msgs.map(m=>`<div class="card">${m.user_email}: ${m.texto}</div>`).join('');
+
+  // select usuarios para chat
+  document.getElementById('chatUser').innerHTML =
+    users.map(u=>`<option value="${u.email}">${u.email}</option>`).join('');
+}
+
+async function loadAdminChat(){
+  const email = document.getElementById('chatUser').value;
+
+  const { data } = await db
+    .from('mensajes')
+    .select('*')
+    .eq('user_email', email)
+    .order('created', { ascending:true });
+
+  document.getElementById('adminChat').innerHTML =
+    data.map(m=>`
+      <div class="card">
+        <b>${m.enviado_por}</b>: ${m.texto || ''}
+        ${m.imagen ? `<br><img src="${m.imagen}" width="200">` : ''}
+      </div>
+    `).join('');
+}
+
+async function sendAdminMsg(){
+  const email = document.getElementById('chatUser').value;
+  const texto = document.getElementById('adminMsg').value;
+
+  await db.from('mensajes').insert({
+    user_email: email,
+    texto,
+    enviado_por: 'admin'
+  });
+
+  loadAdminChat();
 }
 
 // -------- AUTO SESSION --------
