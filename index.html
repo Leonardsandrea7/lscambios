@@ -2,39 +2,56 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>App Supabase PRO</title>
+<title>App Supabase</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-body { font-family: Arial; background:#0f172a; color:#fff; padding:20px; }
+body { font-family: Arial; background:#111; color:#fff; padding:20px; }
 input, button { margin:5px; padding:10px; }
 .hidden { display:none; }
-.card { border:1px solid #334155; padding:10px; margin:10px 0; }
+.card { border:1px solid #333; padding:10px; margin:10px 0; }
 </style>
 </head>
 <body>
 
-<h1>App PRO</h1>
+<h1>App Supabase</h1>
 
-<div id="auth">
-  <h2>Login / Registro</h2>
-  <input id="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Password">
-  <button onclick="register()">Registrar</button>
-  <button onclick="login()">Login</button>
+<div id="login">
+  <h2>Login</h2>
+  <input id="li-e" placeholder="Email">
+  <input id="li-p" type="password" placeholder="Password">
+  <button onclick="doLogin()">Entrar</button>
 </div>
 
-<div id="app" class="hidden">
-  <button onclick="logout()">Cerrar sesión</button>
+<div id="register">
+  <h2>Registro</h2>
+  <input id="rg-n" placeholder="Nombre">
+  <input id="rg-a" placeholder="Apellido">
+  <input id="rg-ci" placeholder="Cédula">
+  <input id="rg-e" placeholder="Email">
+  <input id="rg-tel" placeholder="Teléfono">
+  <input id="rg-banco" placeholder="Banco">
+  <input id="rg-pm-tel" placeholder="Pago móvil tel">
+  <input id="rg-pm-ci" placeholder="Pago móvil CI">
+  <input id="rg-cdiv" placeholder="Cuenta divisas">
+  <input id="rg-bid" placeholder="Binance ID">
+  <input id="rg-pw" type="password" placeholder="Password">
+  <input id="rg-pw2" type="password" placeholder="Repetir Password">
+  <button onclick="doRegister()">Registrar</button>
+</div>
 
-  <h2>Crear operación</h2>
-  <input id="send" placeholder="Envías">
-  <input id="receive" placeholder="Recibes">
+<div id="dashboard" class="hidden">
+  <h2>Dashboard</h2>
+  <button onclick="logout()">Salir</button>
+
+  <h3>Crear operación</h3>
+  <input id="op-send" placeholder="Envías">
+  <input id="op-get" placeholder="Recibes">
   <button onclick="crearOp()">Crear</button>
 
   <h3>Mis operaciones</h3>
   <div id="ops"></div>
 
-  <!-- 🔽 SOLO AGREGADO (NO CAMBIA TU UI EXISTENTE) -->
+  <!-- SOPORTE (AGREGADO SIN CAMBIAR DISEÑO BASE) -->
   <h3>Soporte</h3>
   <input id="msg-text" placeholder="Mensaje">
   <input type="file" id="msg-file">
@@ -44,6 +61,7 @@ input, button { margin:5px; padding:10px; }
 
 <div id="admin" class="hidden">
   <h2>ADMIN</h2>
+  <button onclick="loadAdmin()">Recargar</button>
 
   <h3>Usuarios</h3>
   <div id="users"></div>
@@ -54,7 +72,7 @@ input, button { margin:5px; padding:10px; }
   <h3>Mensajes</h3>
   <div id="msgs"></div>
 
-  <!-- 🔽 SOLO AGREGADO -->
+  <!-- RESPUESTA ADMIN -->
   <h3>Responder cliente</h3>
   <select id="chatUser" onchange="loadAdminChat()"></select>
   <div id="adminChat"></div>
@@ -68,15 +86,19 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // -------- REGISTER --------
-async function register(){
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+async function doRegister(){
+  const g = id => document.getElementById(id).value.trim();
 
-  const { error } = await db.auth.signUp({ email, password });
-  if(error) return alert(error.message);
+  const email = g('rg-e').toLowerCase();
+  const pass = g('rg-pw');
+
+  const { error: authError } = await db.auth.signUp({ email, password: pass });
+  if(authError) return alert(authError.message);
 
   await db.from('clientes').insert({
     email,
+    nombre: g('rg-n'),
+    apellido: g('rg-a'),
     created: new Date().toISOString()
   });
 
@@ -84,11 +106,11 @@ async function register(){
 }
 
 // -------- LOGIN --------
-async function login(){
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+async function doLogin(){
+  const email = document.getElementById('li-e').value;
+  const pass = document.getElementById('li-p').value;
 
-  const { error } = await db.auth.signInWithPassword({ email, password });
+  const { error } = await db.auth.signInWithPassword({ email, password: pass });
   if(error) return alert(error.message);
 
   initApp();
@@ -102,17 +124,21 @@ async function logout(){
 
 // -------- INIT --------
 async function initApp(){
-  document.getElementById('auth').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('register').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
 
   const { data: { user } } = await db.auth.getUser();
 
   loadOps(user.email);
   loadChat(user.email);
 
+  setupRealtime(user.email);
+
   if(user.email === "admin@gmail.com"){
     document.getElementById('admin').classList.remove('hidden');
     loadAdmin();
+    setupAdminRealtime();
   }
 }
 
@@ -122,30 +148,25 @@ async function crearOp(){
 
   await db.from('operaciones').insert({
     user_email: user.email,
-    envio: document.getElementById('send').value,
-    recibe: document.getElementById('receive').value,
+    envio: document.getElementById('op-send').value,
+    recibe: document.getElementById('op-get').value,
     estado: "pendiente",
     created: new Date().toISOString()
   });
-
-  loadOps(user.email);
 }
 
-// -------- MIS OPERACIONES --------
+// -------- OPERACIONES --------
 async function loadOps(email){
-  const { data } = await db
-    .from('operaciones')
+  const { data } = await db.from('operaciones')
     .select('*')
     .eq('user_email', email)
     .order('created', { ascending:false });
 
   document.getElementById('ops').innerHTML =
-    data.map(o=>`
-      <div class="card">${o.envio} → ${o.recibe}</div>
-    `).join('');
+    data.map(o=>`<div class="card">${o.envio} → ${o.recibe}</div>`).join('');
 }
 
-// -------- MENSAJES CLIENTE --------
+// -------- MENSAJES --------
 async function sendMessage(){
   const { data: { user } } = await db.auth.getUser();
 
@@ -155,14 +176,9 @@ async function sendMessage(){
   let imageUrl = null;
 
   if(file){
-    const fileName = Date.now() + "_" + file.name;
-
+    const fileName = Date.now()+"_"+file.name;
     await db.storage.from('comprobantes').upload(fileName, file);
-
-    const { data } = db.storage
-      .from('comprobantes')
-      .getPublicUrl(fileName);
-
+    const { data } = db.storage.from('comprobantes').getPublicUrl(fileName);
     imageUrl = data.publicUrl;
   }
 
@@ -172,13 +188,10 @@ async function sendMessage(){
     imagen: imageUrl,
     enviado_por: 'user'
   });
-
-  loadChat(user.email);
 }
 
 async function loadChat(email){
-  const { data } = await db
-    .from('mensajes')
+  const { data } = await db.from('mensajes')
     .select('*')
     .eq('user_email', email)
     .order('created', { ascending:true });
@@ -207,16 +220,17 @@ async function loadAdmin(){
   document.getElementById('msgs').innerHTML =
     msgs.map(m=>`<div class="card">${m.user_email}: ${m.texto}</div>`).join('');
 
-  // select usuarios para chat
   document.getElementById('chatUser').innerHTML =
     users.map(u=>`<option value="${u.email}">${u.email}</option>`).join('');
 }
 
 async function loadAdminChat(){
   const email = document.getElementById('chatUser').value;
+  loadChatAdmin(email);
+}
 
-  const { data } = await db
-    .from('mensajes')
+async function loadChatAdmin(email){
+  const { data } = await db.from('mensajes')
     .select('*')
     .eq('user_email', email)
     .order('created', { ascending:true });
@@ -239,11 +253,38 @@ async function sendAdminMsg(){
     texto,
     enviado_por: 'admin'
   });
-
-  loadAdminChat();
 }
 
-// -------- AUTO SESSION --------
+// -------- REALTIME --------
+function setupRealtime(email){
+  db.channel('chat')
+    .on('postgres_changes',
+      { event: '*', schema: 'public', table: 'mensajes' },
+      payload => {
+        loadChat(email);
+      }
+    ).subscribe();
+
+  db.channel('ops')
+    .on('postgres_changes',
+      { event: '*', schema: 'public', table: 'operaciones' },
+      payload => {
+        loadOps(email);
+      }
+    ).subscribe();
+}
+
+function setupAdminRealtime(){
+  db.channel('admin')
+    .on('postgres_changes',
+      { event: '*', schema: 'public', table: 'mensajes' },
+      payload => {
+        loadAdmin();
+      }
+    ).subscribe();
+}
+
+// -------- AUTO LOGIN --------
 db.auth.getSession().then(({ data })=>{
   if(data.session){
     initApp();
