@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.50.0/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>LS Cambios — Tu dinero a tu destino</title>
@@ -1802,7 +1802,7 @@ function loadAct(){
     const amt = parseFloat(document.getElementById('op-amt').value)||0;
     if (!amt || amt < 1) { toast('Ingresa un monto válido.','err'); return; }
     const rv = document.getElementById('op-res-val').textContent;
-    const ud = await sbGetUser(sess.email); if (!ud) return;
+    const ud = getUser(sess.email); if (!ud) return;
     const sendTxt = dir==='compra' ? '$'+fmt(amt,2)+' ('+PN[plat]+')' : 'Bs '+fmt(amt);
     const getTxt  = dir==='compra' ? rv : rv+' ('+PN[plat]+')';
     const id = genId();
@@ -1822,9 +1822,12 @@ function loadAct(){
   // openTrade — versión Supabase
   window.openTrade = async function(opId) {
     const sess = gS(); if (!sess) return;
-    let ud = await sbGetUser(sess.email); if (!ud) return;
-    ud.hist = await sbGetOps(sess.email);
-    sS({email:sess.email,...ud});
+    let ud = getUser(sess.email); if (!ud) return;
+    // Asegurar que el historial esté cargado
+    if (!ud.hist || !ud.hist.find(o=>o.id===opId)) {
+      ud.hist = await sbGetOps(sess.email);
+      sS({email:sess.email,...ud});
+    }
     const op = (ud.hist||[]).find(o=>o.id===opId); if (!op) return;
     op.chat = await sbGetMsgs(opId);
     openTradeDB(opId, sess.email, op);
@@ -1832,7 +1835,7 @@ function loadAct(){
 
   async function openTradeDB(opId, email, opIn) {
     const sess = gS(); if (!sess) return;
-    const ud = await sbGetUser(sess.email)||{}; if (!ud) return;
+    const ud = getUser(sess.email)||{}; if (!ud) return;
     const op = opIn || (ud.hist||[]).find(o=>o.id===opId); if (!op) return;
     curOpId = opId;
     ls('lsc_lv','trade'); ls('lsc_lo',opId);
@@ -1863,7 +1866,7 @@ function loadAct(){
     const r = new FileReader();
     r.onload = async () => {
       const sess = gS();
-      const ud = sess ? (await sbGetUser(sess.email)) : null;
+      const ud = sess ? getUser(sess.email) : null;
       const msg = { from:'user', type:'img', src:r.result, text:'📎 Comprobante', time: new Date().toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'}) };
       await sbSendMsg(curOpId, msg);
       toast('📎 Comprobante enviado','ok');
@@ -1884,8 +1887,8 @@ function loadAct(){
     await sbUpdateOpEstado(curOpId, 'completed');
     const msg = { from:'sys', text:'🎉 Operación completada. ¡Gracias por usar LS Cambios!', time: new Date().toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'}) };
     await sbSendMsg(curOpId, msg);
-    const ud = (await sbGetUser(sess.email))||{};
-    const op = (await sbGetOps(sess.email)||[]).find(o=>o.id===curOpId);
+    const ud = getUser(sess.email)||{};
+    const op = (ud.hist||[]).find(o=>o.id===curOpId);
     const cs = document.getElementById('compSub');
     if (cs && op && op.get) cs.textContent='Recibirás: '+op.get;
     document.getElementById('comp-ov').classList.add('on');
@@ -2014,9 +2017,9 @@ function loadAct(){
   // loadDash — carga cifras reales desde Supabase
   window.loadDash = async function() {
     const sess = gS(); if (!sess) return;
-    // Carga siempre desde Supabase
-    let ud = await sbGetUser(sess.email);
+    let ud = getUser(sess.email);
     if (!ud) { clS(); goL(); return; }
+    // Refresca historial desde Supabase
     const hist = await sbGetOps(sess.email);
     ud.hist = hist;
     sS({email:sess.email,...ud});
@@ -2075,36 +2078,10 @@ function loadAct(){
     </tr>`).join('')}</tbody></table>`;
   };
 
-  // ── CONEXIÓN TEST ────────────────────────────────────────────────
-  async function sbTestConnection() {
-    try {
-      const { error } = await db.from('tasas').select('id').limit(1);
-      if (error) {
-        console.error('[Supabase] Error de conexión:', error.message, error.code);
-        if (error.message && error.message.includes('relation')) {
-          toast('⚠️ Supabase: tablas no creadas. Ejecuta el SQL primero.', 'err');
-        } else {
-          toast('⚠️ Supabase: ' + error.message, 'err');
-        }
-        return false;
-      }
-      console.log('[Supabase] Conexión OK ✅');
-      return true;
-    } catch(e) {
-      console.error('[Supabase] Error crítico:', e);
-      toast('⚠️ No se pudo conectar a Supabase.', 'err');
-      return false;
-    }
-  }
-
   // ── INIT con Supabase ─────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', async () => {
-    // Test de conexión primero
-    const connected = await sbTestConnection();
-    if (connected) {
-      await sbLoadRates();
-      renderLPRates();
-    }
+    await sbLoadRates();
+    renderLPRates();
 
     document.getElementById('authOv').addEventListener('click', e=>{if(e.target===document.getElementById('authOv'))closeAuth()});
     document.getElementById('admOv').addEventListener('click', e=>{if(e.target===document.getElementById('admOv'))closeAdmOv()});
@@ -2115,9 +2092,9 @@ function loadAct(){
 
     const sess = gS();
     if (sess) {
-      // Carga datos frescos desde Supabase
-      const ud = await sbGetUser(sess.email);
+      let ud = getUser(sess.email);
       if (ud) {
+        // Refresca historial
         ud.hist = await sbGetOps(sess.email);
         sS({email:sess.email,...ud});
         updLPNav();
