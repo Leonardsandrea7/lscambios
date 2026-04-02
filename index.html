@@ -857,310 +857,354 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 <script>
 'use strict';
 
-// ── CONSTANTES ─────────────────────────────────────────────────────
-const WA = 'https://wa.me/584147408768';
-const _AH = 'b0be4eccdbc807053775c62524f83067ead0f1b00579fefc5aab17778e81c1e7';
+// ══════════════════════════════════════════════════════════════════════
+//  LS CAMBIOS — SUPABASE COMPLETO v4.0
+//  Sin localStorage. Todo persiste en Supabase.
+//  REQUIERE: tablas clientes, operaciones, mensajes, tasas, actividad
+//  con RLS habilitado y políticas permisivas para anon (ver SQL adjunto)
+// ══════════════════════════════════════════════════════════════════════
 
-// ── SUPABASE ────────────────────────────────────────────────────────
+// ── CONSTANTES ────────────────────────────────────────────────────────
+const WA       = 'https://wa.me/584147408768';
+const TG_TOKEN = '8545688733:AAGUVpqSGdLH5A27RtwwxCPQFmlWBhZEj6A';
+const TG_CHAT  = '8180852500';
+const _AH      = 'b0be4eccdbc807053775c62524f83067ead0f1b00579fefc5aab17778e81c1e7';
+
+// ── SUPABASE INIT ─────────────────────────────────────────────────────
 const SUPABASE_URL = 'https://pusrbmnxmgfwyatdkiql.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_wmh9SkAoIr6dbHE53YcY7w_QnvXdtJg';
-const { createClient } = supabase;
-const db = createClient(SUPABASE_URL, SUPABASE_KEY);
-const ADMIN_URL = window.location.origin + window.location.pathname + '#admin';
+const db           = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const ADMIN_URL    = window.location.origin + window.location.pathname + '#admin';
 
-// ── SESIÓN (sessionStorage — sin localStorage) ──────────────────────
-let _session = null;
-const _SK = 'lsc_s3';
+// ── SESIÓN (solo sessionStorage + variable en memoria) ────────────────
+let _sess = null;
+const _SK  = 'lsc_s3';
+const _AK  = 'lsc_a3';
 
-function gS() {
-  if (_session) return _session;
-  try { const v = sessionStorage.getItem(_SK); return v ? JSON.parse(v) : null; } catch { return null; }
-}
-function sS(u) {
-  _session = u;
-  try { sessionStorage.setItem(_SK, JSON.stringify(u)); } catch {}
-}
-function clS() {
-  _session = null;
-  try { sessionStorage.removeItem(_SK); } catch {}
-}
+const gS  = ()=>{ if(_sess) return _sess; try{const v=sessionStorage.getItem(_SK);_sess=v?JSON.parse(v):null;return _sess}catch{return null} };
+const sS  = u=>{ _sess=u; try{sessionStorage.setItem(_SK,JSON.stringify(u))}catch{} };
+const clS = ()=>{ _sess=null; try{sessionStorage.removeItem(_SK)}catch{} };
 
-// Admin session (sessionStorage)
-const _AK = 'lsc_a3';
-function isAdm() {
-  try {
-    if (sessionStorage.getItem(_AK) !== '1') return false;
-    const ts = sessionStorage.getItem('lsc_ats');
-    if (ts && Date.now() - parseInt(ts) > 86400000) { sessionStorage.removeItem(_AK); return false; }
-    return true;
-  } catch { return false; }
-}
-function setAdm() {
-  try { sessionStorage.setItem(_AK, '1'); sessionStorage.setItem('lsc_ats', String(Date.now())); } catch {}
-}
-function clAdm() {
-  try { sessionStorage.removeItem(_AK); sessionStorage.removeItem('lsc_ats'); } catch {}
-}
+const isAdm  = ()=>{ try{if(sessionStorage.getItem(_AK)!=='1')return false;const ts=sessionStorage.getItem('lsc_ats');if(ts&&Date.now()-+ts>86400000){sessionStorage.removeItem(_AK);return false}return true}catch{return false} };
+const setAdm = ()=>{ try{sessionStorage.setItem(_AK,'1');sessionStorage.setItem('lsc_ats',String(Date.now()))}catch{} };
+const clAdm  = ()=>{ try{sessionStorage.removeItem(_AK);sessionStorage.removeItem('lsc_ats')}catch{} };
 
-// Estado de navegación (sessionStorage)
-function nsGet(k) { try { return sessionStorage.getItem(k); } catch { return null; } }
-function nsSet(k, v) { try { if (v === null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, v); } catch {} }
+// Navegación en sessionStorage
+const nsGet = k=>{ try{return sessionStorage.getItem(k)}catch{return null} };
+const nsSet = (k,v)=>{ try{if(v===null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v)}catch{} };
 
-// ── USUARIO EN SESIÓN ────────────────────────────────────────────────
-// Devuelve datos del usuario desde la sesión en memoria (sync)
-function getUser(email) {
-  const s = gS();
-  if (s && s.email && s.email.toLowerCase() === email.toLowerCase()) {
-    const { email: _e, ...ud } = s;
-    return Object.keys(ud).length ? ud : null;
+// Usuario actual (desde memoria/sessionStorage)
+function getUser(email){
+  const s=gS();
+  if(s&&s.email&&s.email.toLowerCase()===email.toLowerCase()){
+    const{email:_e,...ud}=s; return Object.keys(ud).length?ud:null;
   }
   return null;
 }
 
-// ── SUPABASE: HELPERS COMUNES ────────────────────────────────────────
-const tnowISO = () => new Date().toISOString();
+// ── HELPERS ────────────────────────────────────────────────────────────
+const tnowISO = ()=>new Date().toISOString();
+const tnow    = ()=>new Date().toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'});
+const genId   = ()=>'OP'+Date.now().toString().slice(-6);
+const genCode = ()=>'LS-'+Math.random().toString(36).toUpperCase().slice(2,8);
+const fmt     = (n,d=0)=>Number(n).toLocaleString('es-VE',{minimumFractionDigits:d,maximumFractionDigits:d});
 
-// ── SUPABASE: CLIENTES ───────────────────────────────────────────────
-async function sbGetUser(email) {
-  const { data, error } = await db.from('clientes').select('*').eq('email', email.toLowerCase()).single();
-  if (error || !data) return null;
-  return {
-    nombre: data.nombre, apellido: data.apellido, name: data.nombre+' '+data.apellido,
-    cedula: data.cedula, email: data.email, tel: data.tel, code: data.codigo,
-    pw: data.pw_hash, pagoMovil: data.pago_movil||{}, cuentas: data.cuentas||{},
-    joined: data.joined, created: data.created_at, hist: []
+// ── TOAST ──────────────────────────────────────────────────────────────
+let _tt;
+function toast(msg,t=''){
+  const e=document.getElementById('toast');
+  e.textContent=msg;e.className='on '+t;
+  clearTimeout(_tt);_tt=setTimeout(()=>e.className='',4000);
+}
+
+// ─── SUPABASE ERROR HANDLER ────────────────────────────────────────────
+// Centraliza todos los errores de Supabase y los muestra al usuario
+function sbErr(fn, error){
+  if(!error) return false;
+  const msg = error.message || JSON.stringify(error);
+  console.error(`[${fn}]`, msg);
+  // Mostrar error descriptivo al usuario
+  if(msg.includes('violates row-level security')||msg.includes('RLS')){
+    toast(`❌ Error de permisos Supabase en ${fn}. Revisa las políticas RLS.`, 'err');
+  } else if(msg.includes('Failed to fetch')||msg.includes('NetworkError')){
+    toast('❌ Sin conexión a Supabase. Verifica tu internet.', 'err');
+  } else {
+    toast(`❌ Error DB (${fn}): ${msg.slice(0,60)}`, 'err');
+  }
+  return true; // indica que hubo error
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  SUPABASE: CLIENTES
+// ════════════════════════════════════════════════════════════════════════
+
+async function sbGetUser(email){
+  const{data,error}=await db.from('clientes').select('*').eq('email',email.toLowerCase()).maybeSingle();
+  if(sbErr('sbGetUser',error)) return null;
+  if(!data) return null;
+  return _mapUser(data);
+}
+
+async function sbSaveUser(email, ud){
+  const payload={
+    email:       email.toLowerCase(),
+    nombre:      ud.nombre,
+    apellido:    ud.apellido,
+    cedula:      ud.cedula    || null,
+    tel:         ud.tel       || null,
+    codigo:      ud.code      || null,
+    pw_hash:     ud.pw,
+    pago_movil:  ud.pagoMovil || {},
+    cuentas:     ud.cuentas   || {},
+    joined:      ud.joined    || new Date().toLocaleDateString('es-VE'),
+    created_at:  ud.created   || tnowISO()
   };
+  const{error}=await db.from('clientes').upsert(payload,{onConflict:'email'});
+  if(sbErr('sbSaveUser',error)) return false;
+  return true;
 }
 
-async function sbSaveUser(email, ud) {
-  const { error } = await db.from('clientes').upsert({
-    email: email.toLowerCase(),
-    nombre: ud.nombre, apellido: ud.apellido,
-    cedula: ud.cedula, tel: ud.tel, codigo: ud.code,
-    pw_hash: ud.pw, pago_movil: ud.pagoMovil||{},
-    cuentas: ud.cuentas||{}, joined: ud.joined,
-    created_at: ud.created || tnowISO()
-  }, { onConflict: 'email' });
-  if (error) console.error('[sbSaveUser]', error.message);
-}
-
-async function sbGetAllUsers() {
-  const { data, error } = await db.from('clientes').select('*').order('created_at', { ascending: false });
-  if (error || !data) return {};
-  const map = {};
-  data.forEach(d => {
-    map[d.email] = {
-      nombre: d.nombre, apellido: d.apellido, name: d.nombre+' '+d.apellido,
-      cedula: d.cedula, email: d.email, tel: d.tel, code: d.codigo,
-      pw: d.pw_hash, pagoMovil: d.pago_movil||{}, cuentas: d.cuentas||{},
-      joined: d.joined, created: d.created_at, hist: []
-    };
-  });
+async function sbGetAllUsers(){
+  const{data,error}=await db.from('clientes').select('*').order('created_at',{ascending:false});
+  if(sbErr('sbGetAllUsers',error)) return {};
+  if(!data) return {};
+  const map={};
+  data.forEach(d=>{ map[d.email]=_mapUser(d); });
   return map;
 }
 
-// ── SUPABASE: OPERACIONES ────────────────────────────────────────────
-async function sbGetOps(email) {
-  const { data, error } = await db.from('operaciones')
-    .select('*').eq('cliente_email', email.toLowerCase())
-    .order('created_at', { ascending: true });
-  if (error || !data) return [];
-  return data.map(d => ({
-    id: d.id, plat: d.plat, dir: d.dir,
-    send: d.send_txt, get: d.get_txt, st: d.estado,
-    date: new Date(d.created_at).toLocaleDateString('es-VE'),
-    chat: []
-  }));
+function _mapUser(d){
+  return{
+    nombre: d.nombre, apellido: d.apellido,
+    name:   (d.nombre||'')+' '+(d.apellido||''),
+    cedula: d.cedula, email: d.email, tel: d.tel, code: d.codigo,
+    pw:     d.pw_hash,
+    pagoMovil: d.pago_movil  || {},
+    cuentas:   d.cuentas     || {},
+    joined:    d.joined,
+    created:   d.created_at,
+    hist:      []
+  };
 }
 
-async function sbCreateOp(email, op) {
-  const { error } = await db.from('operaciones').insert({
-    id: op.id, cliente_email: email.toLowerCase(),
-    plat: op.plat, dir: op.dir,
-    send_txt: op.send, get_txt: op.get,
-    estado: 'pending', created_at: tnowISO()
-  });
-  if (error) console.error('[sbCreateOp]', error.message);
+// ════════════════════════════════════════════════════════════════════════
+//  SUPABASE: OPERACIONES
+// ════════════════════════════════════════════════════════════════════════
+
+async function sbGetOps(email){
+  const{data,error}=await db.from('operaciones')
+    .select('*')
+    .eq('cliente_email',email.toLowerCase())
+    .order('created_at',{ascending:false});
+  if(sbErr('sbGetOps',error)) return [];
+  if(!data) return [];
+  return data.map(_mapOp);
 }
 
-async function sbUpdateOpEstado(opId, estado) {
-  const { error } = await db.from('operaciones').update({ estado }).eq('id', opId);
-  if (error) console.error('[sbUpdateOpEstado]', error.message);
+async function sbCreateOp(email, op){
+  const payload={
+    id:            op.id,
+    cliente_email: email.toLowerCase(),
+    plat:          op.plat,
+    dir:           op.dir,
+    send_txt:      op.send,
+    get_txt:       op.get,
+    estado:        'pending',
+    created_at:    tnowISO()
+  };
+  const{error}=await db.from('operaciones').insert(payload);
+  if(sbErr('sbCreateOp',error)) return false;
+  return true;
 }
 
-async function sbGetAllOps() {
-  const { data, error } = await db.from('operaciones')
+async function sbUpdateOpEstado(opId, estado){
+  const{error}=await db.from('operaciones').update({estado,updated_at:tnowISO()}).eq('id',opId);
+  if(sbErr('sbUpdateOpEstado',error)) return false;
+  return true;
+}
+
+async function sbGetAllOps(){
+  const{data,error}=await db.from('operaciones')
     .select('*, clientes(nombre,apellido)')
-    .order('created_at', { ascending: false });
-  if (error || !data) return [];
-  return data.map(d => ({
-    id: d.id, plat: d.plat, dir: d.dir,
+    .order('created_at',{ascending:false});
+  if(sbErr('sbGetAllOps',error)) return [];
+  if(!data) return [];
+  return data.map(d=>({
+    ..._mapOp(d),
+    uem:   d.cliente_email,
+    uname: d.clientes ? (d.clientes.nombre+' '+d.clientes.apellido) : d.cliente_email
+  }));
+}
+
+function _mapOp(d){
+  return{
+    id:   d.id, plat: d.plat, dir: d.dir,
     send: d.send_txt, get: d.get_txt, st: d.estado,
-    uem: d.cliente_email,
-    uname: d.clientes ? (d.clientes.nombre+' '+d.clientes.apellido) : d.cliente_email,
     date: new Date(d.created_at).toLocaleDateString('es-VE'),
     chat: []
-  }));
+  };
 }
 
-// ── SUPABASE: MENSAJES / CHAT ────────────────────────────────────────
-async function sbGetMsgs(opId) {
-  const { data, error } = await db.from('mensajes')
-    .select('*').eq('op_id', opId)
-    .order('ts', { ascending: true });
-  if (error || !data) return [];
-  return data.map(d => ({
+// ════════════════════════════════════════════════════════════════════════
+//  SUPABASE: MENSAJES
+// ════════════════════════════════════════════════════════════════════════
+
+async function sbGetMsgs(opId){
+  const{data,error}=await db.from('mensajes')
+    .select('*').eq('op_id',opId)
+    .order('ts',{ascending:true});
+  if(sbErr('sbGetMsgs',error)) return [];
+  if(!data) return [];
+  return data.map(_mapMsg);
+}
+
+async function sbSendMsg(opId, msg){
+  const payload={
+    op_id:     opId,
+    from_role: msg.from,
+    tipo:      msg.type==='img' ? 'img' : 'text',
+    contenido: msg.type==='img' ? (msg.src||'') : (msg.text||''),
+    ts:        tnowISO()
+  };
+  const{error}=await db.from('mensajes').insert(payload);
+  CONSOLE.LOG('error de supabase:',error)
+  if(sbErr('sbSendMsg',error)) return false;
+  return true;
+}
+
+function _mapMsg(d){
+  const esImg = d.tipo==='img';
+  return{
     from: d.from_role,
-    type: d.tipo === 'img' ? 'img' : undefined,
-    src: d.tipo === 'img' ? d.contenido : undefined,
-    text: d.tipo !== 'img' ? d.contenido : '📎 Comprobante',
+    type: esImg ? 'img' : undefined,
+    src:  esImg ? d.contenido : undefined,
+    text: esImg ? '📎 Comprobante' : d.contenido,
     time: new Date(d.ts).toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'})
-  }));
+  };
 }
 
-async function sbSendMsg(opId, msg) {
-  const { error } = await db.from('mensajes').insert({
-    op_id: opId, from_role: msg.from,
-    tipo: msg.type || 'text',
-    contenido: msg.type === 'img' ? msg.src : msg.text,
-    ts: tnowISO()
-  });
-  if (error) console.error('[sbSendMsg]', error.message);
-}
+// ════════════════════════════════════════════════════════════════════════
+//  SUPABASE: TASAS
+// ════════════════════════════════════════════════════════════════════════
 
-// ── SUPABASE: TASAS ──────────────────────────────────────────────────
-async function sbLoadRates() {
-  const { data, error } = await db.from('tasas').select('data').eq('id', 1).single();
-  if (!error && data && data.data) {
-    deepMerge(RATES, data.data);
-    if (data.data.zelleEmail) WLS.zelle.val = data.data.zelleEmail;
+async function sbLoadRates(){
+  const{data,error}=await db.from('tasas').select('data').eq('id',1).maybeSingle();
+  if(error){ sbErr('sbLoadRates',error); return; }
+  if(data&&data.data){
+    deepMerge(RATES,data.data);
+    if(data.data.zelleEmail) WLS.zelle.val=data.data.zelleEmail;
   }
 }
 
-async function sbSaveRates() {
-  const toSave = { ...RATES, zelleEmail: WLS.zelle.val };
-  const { error } = await db.from('tasas').upsert({ id: 1, data: toSave }, { onConflict: 'id' });
-  if (error) console.error('[sbSaveRates]', error.message);
+async function sbSaveRates(){
+  const toSave={...RATES, zelleEmail:WLS.zelle.val};
+  const{error}=await db.from('tasas').upsert({id:1,data:toSave},{onConflict:'id'});
+  if(sbErr('sbSaveRates',error)) return false;
+  return true;
 }
 
-// ── SUPABASE: ACTIVIDAD LOG ──────────────────────────────────────────
-// TABLA REQUERIDA EN SUPABASE:
-// CREATE TABLE actividad (
-//   id bigserial PRIMARY KEY,
-//   type TEXT NOT NULL,
-//   email TEXT,
-//   nombre TEXT,
-//   datos JSONB,
-//   ts TIMESTAMPTZ DEFAULT now()
-// );
-async function logAct(type, data) {
-  try {
-    await db.from('actividad').insert({
-      type,
-      email: data.email || null,
-      nombre: data.name || null,
-      datos: data,
-      ts: tnowISO()
-    });
-  } catch(e) { console.warn('[logAct]', e); }
+// ════════════════════════════════════════════════════════════════════════
+//  SUPABASE: ACTIVIDAD LOG
+// ════════════════════════════════════════════════════════════════════════
+
+async function logAct(type, data){
+  const payload={
+    type,
+    email:  data.email  || null,
+    nombre: data.name   || null,
+    datos:  data,
+    ts:     tnowISO()
+  };
+  const{error}=await db.from('actividad').insert(payload);
+  // No mostramos error al usuario por log, solo consola
+  if(error) console.warn('[logAct]', error.message);
 }
 
-// ── RATES (constantes + helpers) ─────────────────────────────────────
-const DEFAULT_RATES = {
-  compra: {
-    binance:{t:660,type:'none'}, paypal:{t:520,type:'pct_fixed',pct:0.108,fixed:0.60},
+// ════════════════════════════════════════════════════════════════════════
+//  RATES + PLATAFORMAS
+// ════════════════════════════════════════════════════════════════════════
+
+const DEFAULT_RATES={
+  compra:{
+    binance:{t:660,type:'none'},   paypal:{t:520,type:'pct_fixed',pct:0.108,fixed:0.60},
     zinli:{t:520,type:'pct',pct:0.15}, wally:{t:520,type:'pct',pct:0.15},
-    zelle:{t:550,type:'none'}, airtm:{t:640,type:'none'}, usdc:{t:655,type:'none'}
+    zelle:{t:550,type:'none'},     airtm:{t:640,type:'none'}, usdc:{t:655,type:'none'}
   },
-  venta: {binance:{t:670},paypal:{t:670},zinli:{t:670},wally:{t:670},zelle:{t:670},airtm:{t:670},usdc:{t:670}}
+  venta:{binance:{t:670},paypal:{t:670},zinli:{t:670},wally:{t:670},zelle:{t:670},airtm:{t:670},usdc:{t:670}}
 };
-let RATES = JSON.parse(JSON.stringify(DEFAULT_RATES));
+let RATES=JSON.parse(JSON.stringify(DEFAULT_RATES));
 
 function deepMerge(t,s){
   for(const k in s){
-    if(s[k]&&typeof s[k]==='object'&&!Array.isArray(s[k])){
-      if(!t[k])t[k]={};deepMerge(t[k],s[k])
-    }else t[k]=s[k]
+    if(s[k]&&typeof s[k]==='object'&&!Array.isArray(s[k])){if(!t[k])t[k]={};deepMerge(t[k],s[k])}
+    else t[k]=s[k];
   }
 }
 
-const PN = {binance:'Binance/USDT',paypal:'PayPal',zinli:'Zinli',wally:'Wally',zelle:'Zelle',airtm:'Airtm',usdc:'USDC'};
-const WLS = {
-  binance:{label:'ID Binance',val:'906509124',note:'Envía USDT'},
-  paypal:{label:'Correo PayPal',val:'sandrealeonard@gmail.com',note:'Monto exacto'},
-  zinli:{label:'Correo Zinli',val:'sandrealeonard@gmail.com',note:'Monto exacto'},
-  wally:{label:'Usuario Wally',val:'leonardsandrea',note:'Monto exacto'},
-  zelle:{label:'Correo Zelle',val:'sandrealeonard@gmail.com',note:'Monto exacto'},
-  airtm:{label:'Correo Airtm',val:'sandrealeonard@gmail.com',note:'Monto exacto'},
-  usdc:{label:'Dirección USDC',val:'0xb1d675ce126ab8dc3095ab3df99052cc4393685e',note:'Red BEP-20 (BSC)'},
+const PN={binance:'Binance/USDT',paypal:'PayPal',zinli:'Zinli',wally:'Wally',zelle:'Zelle',airtm:'Airtm',usdc:'USDC'};
+const WLS={
+  binance:{label:'ID Binance',       val:'906509124',                                   note:'Envía USDT'},
+  paypal: {label:'Correo PayPal',    val:'sandrealeonard@gmail.com',                    note:'Monto exacto'},
+  zinli:  {label:'Correo Zinli',     val:'sandrealeonard@gmail.com',                    note:'Monto exacto'},
+  wally:  {label:'Usuario Wally',    val:'leonardsandrea',                              note:'Monto exacto'},
+  zelle:  {label:'Correo Zelle',     val:'sandrealeonard@gmail.com',                    note:'Monto exacto'},
+  airtm:  {label:'Correo Airtm',     val:'sandrealeonard@gmail.com',                    note:'Monto exacto'},
+  usdc:   {label:'Dirección USDC',   val:'0xb1d675ce126ab8dc3095ab3df99052cc4393685e', note:'Red BEP-20 (BSC)'},
 };
 
-// ── UI HELPERS ───────────────────────────────────────────────────────
-const fmt=(n,d=0)=>Number(n).toLocaleString('es-VE',{minimumFractionDigits:d,maximumFractionDigits:d});
-const tnow=()=>new Date().toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'});
-const genId=()=>'OP'+Date.now().toString().slice(-6);
-const genCode=()=>'LS-'+Math.random().toString(36).toUpperCase().slice(2,8);
-function netCalc(a,c){if(!c||c.type==='none')return a;if(c.type==='pct')return a*(1-c.pct);if(c.type==='pct_fixed')return(a-c.fixed)*(1-c.pct);return a}
+function netCalc(a,c){
+  if(!c||c.type==='none') return a;
+  if(c.type==='pct')      return a*(1-c.pct);
+  if(c.type==='pct_fixed')return(a-c.fixed)*(1-c.pct);
+  return a;
+}
 
-function svgL(id,sz=36){const r=Math.round(sz*.25),h=sz/2,logos={
-  binance:`<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#181a20"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Georgia" font-size="${Math.round(sz*.52)}" font-weight="900" fill="#f3ba2f">B</text></svg>`,
-  paypal:`<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#003087"/><text x="50%" y="56%" dominant-baseline="middle" text-anchor="middle" font-family="Georgia" font-size="${Math.round(sz*.52)}" font-weight="900" fill="#009cde">P</text></svg>`,
-  zinli:`<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#5b2d8e"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.27)}" font-weight="800" fill="#fff">Zinli</text></svg>`,
-  wally:`<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#006b31"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.27)}" font-weight="800" fill="#fff">Wally</text></svg>`,
-  zelle:`<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#6d1ed4"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Georgia" font-size="${Math.round(sz*.5)}" font-weight="900" fill="#fff">Z</text></svg>`,
-  airtm:`<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#0055b3"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.25)}" font-weight="800" fill="#fff">Airtm</text></svg>`,
-  usdc:`<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#2775ca"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.22)}" font-weight="800" fill="#fff">USDC</text></svg>`,
-};return logos[id]||''}
+// ── SVG LOGOS ─────────────────────────────────────────────────────────
+function svgL(id,sz=36){
+  const r=Math.round(sz*.25),h=sz/2;
+  const logos={
+    binance:`<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#181a20"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Georgia" font-size="${Math.round(sz*.52)}" font-weight="900" fill="#f3ba2f">B</text></svg>`,
+    paypal: `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#003087"/><text x="50%" y="56%" dominant-baseline="middle" text-anchor="middle" font-family="Georgia" font-size="${Math.round(sz*.52)}" font-weight="900" fill="#009cde">P</text></svg>`,
+    zinli:  `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#5b2d8e"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.27)}" font-weight="800" fill="#fff">Zinli</text></svg>`,
+    wally:  `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#006b31"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.27)}" font-weight="800" fill="#fff">Wally</text></svg>`,
+    zelle:  `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#6d1ed4"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Georgia" font-size="${Math.round(sz*.5)}" font-weight="900" fill="#fff">Z</text></svg>`,
+    airtm:  `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#0055b3"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.25)}" font-weight="800" fill="#fff">Airtm</text></svg>`,
+    usdc:   `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#2775ca"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.22)}" font-weight="800" fill="#fff">USDC</text></svg>`,
+  };
+  return logos[id]||'';
+}
 
-function stBdg(st){const m={pending:'Pendiente',confirmed:'Confirmada',completed:'Completada',rejected:'Rechazada'};const c={pending:'p',confirmed:'c',completed:'d',rejected:'r'};return`<span class="bdg ${c[st]||'p'}"><span class="bdg-dot"></span>${m[st]||st}</span>`}
+function stBdg(st){
+  const m={pending:'Pendiente',confirmed:'Confirmada',completed:'Completada',rejected:'Rechazada'};
+  const c={pending:'p',confirmed:'c',completed:'d',rejected:'r'};
+  return`<span class="bdg ${c[st]||'p'}"><span class="bdg-dot"></span>${m[st]||st}</span>`;
+}
 
-let _tt;
-function toast(msg,t=''){const e=document.getElementById('toast');e.textContent=msg;e.className='on '+t;clearTimeout(_tt);_tt=setTimeout(()=>e.className='',3000)}
-function copyVal(v){(navigator.clipboard?navigator.clipboard.writeText(v).then(()=>toast('📋 Copiado','ok')).catch(()=>fbCp(v)):fbCp(v))}
+// ── MISC UI ────────────────────────────────────────────────────────────
+function copyVal(v){navigator.clipboard?navigator.clipboard.writeText(v).then(()=>toast('📋 Copiado','ok')).catch(()=>fbCp(v)):fbCp(v)}
 function fbCp(t){const e=document.createElement('textarea');e.value=t;document.body.appendChild(e);e.select();try{document.execCommand('copy');toast('📋 Copiado','ok')}catch{}document.body.removeChild(e)}
 function openLB(s){document.getElementById('lbImg').src=s;document.getElementById('lb').classList.add('on')}
 
-// ── TELEGRAM NOTIFICACIONES ──────────────────────────────────────────
-const TG_TOKEN='8545688733:AAGUVpqSGdLH5A27RtwwxCPQFmlWBhZEj6A';
-const TG_CHAT='8180852500';
+// ── TELEGRAM ───────────────────────────────────────────────────────────
 async function tgNotify(msg){
   try{
     await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({chat_id:TG_CHAT,text:msg,parse_mode:'HTML'})
     });
-  }catch(e){console.warn('Telegram notify error:',e)}
+  }catch(e){console.warn('[tgNotify]',e)}
 }
 
-// ── SONIDO ───────────────────────────────────────────────────────────
+// ── SONIDO ─────────────────────────────────────────────────────────────
 let _ac;
 function ac(){if(!_ac)_ac=new(window.AudioContext||window.webkitAudioContext)();return _ac}
 function pn(f,t,d,tp,v){try{const o=ac().createOscillator(),g=ac().createGain();o.connect(g);g.connect(ac().destination);o.type=tp||'sine';o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v||.12,t+.04);g.gain.exponentialRampToValueAtTime(.001,t+d);o.start(t);o.stop(t+d+.06)}catch{}}
+function playIntro(){try{const t=ac().currentTime,m=ac().createGain();m.connect(ac().destination);m.gain.setValueAtTime(.5,t);m.gain.linearRampToValueAtTime(0,t+3.5);[[261.6,0,.35],[329.6,.22,.35],[392,.44,.35],[523,.68,.5],[659,.94,.45],[784,1.22,.5]].forEach(([f,d,r])=>pn(f,t+d,r,'sine',.14));[[1046.5,1.6,.8],[1318.5,1.75,.7],[1567.98,1.9,.7]].forEach(([f,d,r])=>pn(f,t+d,r,'triangle',.09));pn(130.8,2.2,.12,'square',.06);pn(261.6,2.32,.08,'square',.04);[[2093,2.55,.5],[2637,2.65,.5],[3136,2.75,.6]].forEach(([f,d,r])=>pn(f,t+d,r,'triangle',.06));const dl=ac().createDelay(.15);const dg=ac().createGain();dg.gain.value=.12;m.connect(dl);dl.connect(dg);dg.connect(ac().destination);if(navigator.vibrate)navigator.vibrate([80,40,120])}catch{}}
+function playSuccess(){try{const t=ac().currentTime;[[523,.0,.12],[659,.12,.12],[784,.24,.12],[1047,.38,.5]].forEach(([f,d,r])=>pn(f,t+d,r,'triangle',.18));[1047,1319,1568].forEach((f,i)=>pn(f,t+.62+i*.05,.6,'sine',.08));if(navigator.vibrate)navigator.vibrate([100,50,150])}catch{}}
 
-function playIntro(){
-  try{
-    const t=ac().currentTime,m=ac().createGain();
-    m.connect(ac().destination);m.gain.setValueAtTime(.5,t);m.gain.linearRampToValueAtTime(0,t+3.5);
-    const notes=[[261.6,0,.35],[329.6,.22,.35],[392,.44,.35],[523,.68,.5],[659,.94,.45],[784,1.22,.5]];
-    notes.forEach(([f,d,r])=>pn(f,t+d,r,'sine',.14));
-    [[1046.5,1.6,.8],[1318.5,1.75,.7],[1567.98,1.9,.7]].forEach(([f,d,r])=>pn(f,t+d,r,'triangle',.09));
-    pn(130.8,2.2,.12,'square',.06);pn(261.6,2.32,.08,'square',.04);
-    [[2093,2.55,.5],[2637,2.65,.5],[3136,2.75,.6]].forEach(([f,d,r])=>pn(f,t+d,r,'triangle',.06));
-    const dl=ac().createDelay(.15);const dg=ac().createGain();dg.gain.value=.12;m.connect(dl);dl.connect(dg);dg.connect(ac().destination);
-    if(navigator.vibrate)navigator.vibrate([80,40,120]);
-  }catch{}
-}
-
-function playSuccess(){
-  try{
-    const t=ac().currentTime;
-    [[523,.0,.12],[659,.12,.12],[784,.24,.12],[1047,.38,.5]].forEach(([f,d,r])=>pn(f,t+d,r,'triangle',.18));
-    [1047,1319,1568].forEach((f,i)=>pn(f,t+.62+i*.05,.6,'sine',.08));
-    if(navigator.vibrate)navigator.vibrate([100,50,150]);
-  }catch{}
-}
-
-// ── PÁGINAS ──────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════
+//  PÁGINAS / NAVEGACIÓN
+// ════════════════════════════════════════════════════════════════════════
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo(0,0)}
 function goL(){showPage('lp');updLPNav();if(window.location.hash==='#admin')history.pushState('',document.title,window.location.pathname+window.location.search)}
 function goD(){showPage('dp');loadDash()}
@@ -1184,35 +1228,24 @@ function setLPMode(mode,btn){
   document.getElementById('lpBuy').style.display=mode==='buy'?'flex':'none';
   document.getElementById('lpSell').style.display=mode==='sell'?'flex':'none';
 }
-
 function renderLPRates(){
   const sess=gS();
   const plats=['binance','paypal','zinli','wally','zelle','airtm','usdc'];
-  const buyH=plats.map(k=>{
-    const c=RATES.compra[k]||{},comm=c.type==='pct_fixed'?`Comisión ${(c.pct*100).toFixed(1)}% + $${c.fixed}`:c.type==='pct'?`Comisión ${(c.pct*100).toFixed(0)}%`:'Tasa fija';
-    const act=sess?`onclick="goD();setTimeout(()=>showDV('newop'),200)"` :`onclick="openAuth('register')"`;
-    return`<div class="rate-row" style="cursor:pointer" ${act}>
-      <div class="rr-logo">${svgL(k,36)}</div>
-      <div class="rr-info"><div class="rr-name">${PN[k]}</div><div class="rr-comm">${comm}</div></div>
-      <div class="rr-action">⚡ OPERAR</div>
-      <div class="rr-rate-wrap"><div class="rr-rate buy">${fmt(c.t)} Bs</div><div class="rr-unit">por USD</div></div>
-    </div>`;
+  const act=sess?`onclick="goD();setTimeout(()=>showDV('newop'),200)"` :`onclick="openAuth('register')"`;
+  document.getElementById('lpBuy').innerHTML=plats.map(k=>{
+    const c=RATES.compra[k]||{};
+    const comm=c.type==='pct_fixed'?`Comisión ${(c.pct*100).toFixed(1)}% + $${c.fixed}`:c.type==='pct'?`Comisión ${(c.pct*100).toFixed(0)}%`:'Tasa fija';
+    return`<div class="rate-row" style="cursor:pointer" ${act}><div class="rr-logo">${svgL(k,36)}</div><div class="rr-info"><div class="rr-name">${PN[k]}</div><div class="rr-comm">${comm}</div></div><div class="rr-action">⚡ OPERAR</div><div class="rr-rate-wrap"><div class="rr-rate buy">${fmt(c.t)} Bs</div><div class="rr-unit">por USD</div></div></div>`;
   }).join('');
-  const sellH=plats.map(k=>{
+  document.getElementById('lpSell').innerHTML=plats.map(k=>{
     const c=RATES.venta[k]||{};
-    const act=sess?`onclick="goD();setTimeout(()=>showDV('newop'),200)"` :`onclick="openAuth('register')"`;
-    return`<div class="rate-row" style="cursor:pointer" ${act}>
-      <div class="rr-logo">${svgL(k,36)}</div>
-      <div class="rr-info"><div class="rr-name">${PN[k]}</div><div class="rr-comm">Tasa fija</div></div>
-      <div class="rr-action" style="color:var(--red)">⚡ OPERAR</div>
-      <div class="rr-rate-wrap"><div class="rr-rate sell">${fmt(c.t)} Bs</div><div class="rr-unit">por USD</div></div>
-    </div>`;
+    return`<div class="rate-row" style="cursor:pointer" ${act}><div class="rr-logo">${svgL(k,36)}</div><div class="rr-info"><div class="rr-name">${PN[k]}</div><div class="rr-comm">Tasa fija</div></div><div class="rr-action" style="color:var(--red)">⚡ OPERAR</div><div class="rr-rate-wrap"><div class="rr-rate sell">${fmt(c.t)} Bs</div><div class="rr-unit">por USD</div></div></div>`;
   }).join('');
-  document.getElementById('lpBuy').innerHTML=buyH;
-  document.getElementById('lpSell').innerHTML=sellH;
 }
 
-// ── AUTH ─────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════
+//  AUTH — LOGIN / REGISTRO / LOGOUT
+// ════════════════════════════════════════════════════════════════════════
 function openAuth(tab){document.getElementById('authOv').classList.add('on');swAuth(tab)}
 function closeAuth(){document.getElementById('authOv').classList.remove('on')}
 function swAuth(tab){
@@ -1225,10 +1258,10 @@ function swAuth(tab){
 
 async function doLogin(){
   const email=document.getElementById('li-e').value.trim().toLowerCase();
-  const pass=document.getElementById('li-p').value;
-  const err=document.getElementById('li-err');err.classList.remove('on');
+  const pass =document.getElementById('li-p').value;
+  const err  =document.getElementById('li-err'); err.classList.remove('on');
   if(!email||!pass){err.textContent='Ingresa correo y contraseña.';err.classList.add('on');return}
-  const btn=document.getElementById('li-btn');btn.textContent='Verificando...';btn.disabled=true;
+  const btn=document.getElementById('li-btn'); btn.textContent='Verificando...'; btn.disabled=true;
   try{
     const user=await sbGetUser(email);
     if(!user){err.textContent='Correo no registrado.';err.classList.add('on');return}
@@ -1236,99 +1269,106 @@ async function doLogin(){
     user.hist=await sbGetOps(email);
     sS({email,...user});
     await logAct('login',{email,name:user.name,date:tnowISO()});
-    updLPNav();closeAuth();toast('✅ Bienvenido, '+user.nombre+'!','ok');setTimeout(goD,300);
-  }finally{btn.textContent='Entrar →';btn.disabled=false}
+    updLPNav(); closeAuth(); toast('✅ Bienvenido, '+user.nombre+'!','ok'); setTimeout(goD,300);
+  }finally{btn.textContent='Entrar →'; btn.disabled=false}
 }
 
 async function doRegister(){
   const g=id=>{const e=document.getElementById(id);return e?e.value.trim():''};
-  const nombre=g('rg-n'),apellido=g('rg-a'),cedula=g('rg-ci');
-  const email=g('rg-e').toLowerCase(),tel=g('rg-tel');
-  const banco=g('rg-banco'),pmTel=g('rg-pm-tel'),pmCi=g('rg-pm-ci');
-  const cDiv=g('rg-cdiv'),bid=g('rg-bid');
-  const pass=g('rg-pw'),pass2=g('rg-pw2');
-  const err=document.getElementById('rg-err'),ok=document.getElementById('rg-ok');
-  err.classList.remove('on');ok.classList.remove('on');
-  if(!nombre){err.textContent='Ingresa tu nombre.';err.classList.add('on');return}
-  if(!apellido){err.textContent='Ingresa tu apellido.';err.classList.add('on');return}
-  if(!cedula){err.textContent='Ingresa tu cédula.';err.classList.add('on');return}
-  if(!email||!email.includes('@')){err.textContent='Correo inválido.';err.classList.add('on');return}
-  if(!tel){err.textContent='Ingresa tu teléfono.';err.classList.add('on');return}
-  if(pass.length<6){err.textContent='Contraseña mínimo 6 caracteres.';err.classList.add('on');return}
-  if(pass!==pass2){err.textContent='Las contraseñas no coinciden.';err.classList.add('on');return}
-  const btn=document.getElementById('rg-btn');btn.textContent='Creando...';btn.disabled=true;
+  const nombre =g('rg-n'), apellido=g('rg-a'), cedula=g('rg-ci');
+  const email  =g('rg-e').toLowerCase(), tel=g('rg-tel');
+  const banco  =g('rg-banco'), pmTel=g('rg-pm-tel'), pmCi=g('rg-pm-ci');
+  const cDiv   =g('rg-cdiv'), bid=g('rg-bid');
+  const pass   =g('rg-pw'), pass2=g('rg-pw2');
+  const err=document.getElementById('rg-err'), ok=document.getElementById('rg-ok');
+  err.classList.remove('on'); ok.classList.remove('on');
+
+  // Validaciones
+  if(!nombre)   {err.textContent='Ingresa tu nombre.';                  err.classList.add('on');return}
+  if(!apellido) {err.textContent='Ingresa tu apellido.';                err.classList.add('on');return}
+  if(!cedula)   {err.textContent='Ingresa tu cédula.';                  err.classList.add('on');return}
+  if(!email||!email.includes('@')){err.textContent='Correo inválido.'; err.classList.add('on');return}
+  if(!tel)      {err.textContent='Ingresa tu teléfono.';                err.classList.add('on');return}
+  if(pass.length<6){err.textContent='Contraseña mínimo 6 caracteres.'; err.classList.add('on');return}
+  if(pass!==pass2){err.textContent='Las contraseñas no coinciden.';     err.classList.add('on');return}
+
+  const btn=document.getElementById('rg-btn'); btn.textContent='Creando...'; btn.disabled=true;
   try{
-    const {data:exists}=await db.from('clientes').select('email').eq('email',email).maybeSingle();
-    if(exists){err.textContent='Ese correo ya está registrado.';err.classList.add('on');return}
+    // Verificar si ya existe
+    const existeUser=await sbGetUser(email);
+    if(existeUser){err.textContent='Ese correo ya está registrado.';err.classList.add('on');return}
+
     const code=genCode();
     const ud={
-      nombre,apellido,name:nombre+' '+apellido,cedula,email,tel,code,
-      pw:btoa(unescape(encodeURIComponent(pass))),
-      pagoMovil:{banco,tel:pmTel,cedula:pmCi},
-      cuentas:{correo:cDiv,binanceId:bid},
-      joined:new Date().toLocaleDateString('es-VE'),
-      created:tnowISO(),hist:[]
+      nombre, apellido, name:nombre+' '+apellido, cedula, email, tel, code,
+      pw:      btoa(unescape(encodeURIComponent(pass))),
+      pagoMovil:{banco, tel:pmTel, cedula:pmCi},
+      cuentas:  {correo:cDiv, binanceId:bid},
+      joined:   new Date().toLocaleDateString('es-VE'),
+      created:  tnowISO(), hist:[]
     };
-    await sbSaveUser(email,ud);
+
+    const saved=await sbSaveUser(email,ud);
+    if(!saved){
+      err.textContent='No se pudo guardar en la base de datos. Intenta de nuevo.';
+      err.classList.add('on'); return;
+    }
+
     sS({email,...ud});
     await logAct('register',{email,name:ud.name,cedula:ud.cedula,date:tnowISO()});
     tgNotify(`✨ <b>Nuevo registro</b>\n👤 ${nombre} ${apellido}\n📧 ${email}\n📱 ${tel||'—'}\n🆔 Cédula: ${cedula||'—'}\n🔑 Código: ${code}\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
-    ok.textContent='✅ Cuenta creada. Ingresando...';ok.classList.add('on');
+    ok.textContent='✅ Cuenta creada. Ingresando...'; ok.classList.add('on');
     toast('🎉 Bienvenido, '+nombre+'!','ok');
     setTimeout(()=>{closeAuth();goD()},900);
-  }finally{btn.textContent='Crear cuenta 🎉';btn.disabled=false}
+  }finally{btn.textContent='Crear cuenta 🎉'; btn.disabled=false}
 }
 
 function doLogout(){
-  clS();
-  nsSet('lsc_lv',null);nsSet('lsc_lo',null);
-  updLPNav();goL();toast('👋 Hasta pronto!');
+  clS(); nsSet('lsc_lv',null); nsSet('lsc_lo',null);
+  updLPNav(); goL(); toast('👋 Hasta pronto!');
 }
 
-// ── ADMIN AUTH ────────────────────────────────────────────────────────
+// ── ADMIN AUTH ─────────────────────────────────────────────────────────
 function openAdminLogin(){window.location.hash='admin';document.getElementById('admOv').classList.add('on');setTimeout(()=>document.getElementById('adm-pw').focus(),150)}
 function closeAdmOv(){document.getElementById('admOv').classList.remove('on');if(window.location.hash==='#admin')history.pushState('',document.title,window.location.pathname+window.location.search)}
 async function _h256(s){const b=new TextEncoder().encode(s);const hb=await crypto.subtle.digest('SHA-256',b);return Array.from(new Uint8Array(hb)).map(x=>x.toString(16).padStart(2,'0')).join('')}
 async function checkAdmin(){
   const pw=document.getElementById('adm-pw').value;
   const h=await _h256(pw);
-  const err=document.getElementById('adm-err');err.classList.remove('on');
+  const err=document.getElementById('adm-err'); err.classList.remove('on');
   if(h===_AH){setAdm();document.getElementById('admOv').classList.remove('on');window.location.hash='admin';goA()}
   else{err.textContent='Contraseña incorrecta.';err.classList.add('on');document.getElementById('adm-pw').value=''}
 }
 function adminLogout(){clAdm();nsSet('lsc_av',null);window.location.hash='';goL();toast('👋 Sesión admin cerrada')}
 
-// ── DASHBOARD ─────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════
+//  DASHBOARD
+// ════════════════════════════════════════════════════════════════════════
 function showDV(name){
   document.querySelectorAll('.dv').forEach(d=>d.classList.remove('on'));
-  document.querySelectorAll('.sb-i').forEach(b=>b.classList.remove('on'));
-  document.querySelectorAll('.mn-i').forEach(b=>b.classList.remove('on'));
-  const dv=document.getElementById('dv-'+name);
-  const sb=document.getElementById('si-'+name);
-  const mn=document.getElementById('mn-'+name);
-  if(dv)dv.classList.add('on');if(sb)sb.classList.add('on');if(mn)mn.classList.add('on');
+  document.querySelectorAll('.sb-i,.mn-i').forEach(b=>b.classList.remove('on'));
+  ['dv-','si-','mn-'].forEach(p=>{const e=document.getElementById(p+name);if(e)e.classList.add('on')});
   if(name!=='trade')loadDash();
-  nsSet('lsc_lv',name);window.scrollTo(0,0);
+  nsSet('lsc_lv',name); window.scrollTo(0,0);
 }
 
 async function loadDash(){
-  const sess=gS();if(!sess)return;
+  const sess=gS(); if(!sess)return;
   let ud=getUser(sess.email);
   if(!ud){clS();goL();return}
   const hist=await sbGetOps(sess.email);
-  ud.hist=hist;
-  sS({email:sess.email,...ud});
+  ud.hist=hist; sS({email:sess.email,...ud});
   const pend=hist.filter(o=>o.st==='pending'||o.st==='confirmed').length;
   const done=hist.filter(o=>o.st==='completed').length;
   const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
-  s('dpGreet','Hola, '+ud.nombre+' 👋');s('dpAv',ud.nombre.charAt(0).toUpperCase());s('dpNm',ud.nombre);
-  s('ov-tot',hist.length);s('ov-pend',pend);s('ov-done',done);
+  s('dpGreet','Hola, '+ud.nombre+' 👋'); s('dpAv',ud.nombre.charAt(0).toUpperCase()); s('dpNm',ud.nombre);
+  s('ov-tot',hist.length); s('ov-pend',pend); s('ov-done',done);
   const badge=document.getElementById('si-pend');
   if(badge){badge.style.display=pend>0?'inline':'none';badge.textContent=pend}
   const ro=document.getElementById('ov-ops');
-  if(ro)ro.innerHTML=hist.length?buildHistTbl(hist.slice(-5).reverse()):'<div class="empty">Sin operaciones aún</div>';
+  if(ro)ro.innerHTML=hist.length?buildHistTbl(hist.slice(0,5)):'<div class="empty">Sin operaciones aún</div>';
   const hb=document.getElementById('hist-body');
-  if(hb)hb.innerHTML=hist.length?buildHistTbl([...hist].reverse()):'<div class="empty">Sin operaciones</div>';
+  if(hb)hb.innerHTML=hist.length?buildHistTbl(hist):'<div class="empty">Sin operaciones</div>';
   const pm=ud.pagoMovil||{},cu=ud.cuentas||{};
   const pb=document.getElementById('prof-body');
   if(pb)pb.innerHTML=`
@@ -1341,13 +1381,13 @@ async function loadDash(){
       <div class="sum-row"><span class="sum-k">Código</span><span class="sum-v" style="font-family:var(--mono);color:var(--g)">${ud.code||'—'}</span></div>
     </div>
     <div class="card" style="padding:16px">
-      <div class="card-hdr" style="padding:0 0 12px;border-bottom:1px solid var(--brd);margin-bottom:12px"><span class="card-title">Pago Móvil (vender Bs)</span></div>
+      <div class="card-hdr" style="padding:0 0 12px;border-bottom:1px solid var(--brd);margin-bottom:12px"><span class="card-title">Pago Móvil</span></div>
       <div class="sum-row"><span class="sum-k">Banco</span><span class="sum-v">${pm.banco||'—'}</span></div>
       <div class="sum-row"><span class="sum-k">Teléfono</span><span class="sum-v">${pm.tel||'—'}</span></div>
       <div class="sum-row"><span class="sum-k">Cédula</span><span class="sum-v">${pm.cedula||'—'}</span></div>
     </div>
     <div class="card" style="padding:16px">
-      <div class="card-hdr" style="padding:0 0 12px;border-bottom:1px solid var(--brd);margin-bottom:12px"><span class="card-title">Mis cuentas (comprar divisas)</span></div>
+      <div class="card-hdr" style="padding:0 0 12px;border-bottom:1px solid var(--brd);margin-bottom:12px"><span class="card-title">Mis cuentas</span></div>
       <div class="sum-row"><span class="sum-k">Correo divisas</span><span class="sum-v">${cu.correo||'—'}</span></div>
       <div class="sum-row"><span class="sum-k">ID Binance</span><span class="sum-v">${cu.binanceId||'—'}</span></div>
       <div style="padding:12px 0 0"><button class="btn red sm" onclick="doLogout()">Cerrar sesión</button></div>
@@ -1368,81 +1408,75 @@ function buildHistTbl(ops){
   </tr>`).join('')}</tbody></table>`;
 }
 
-// ── CALCULADORA ───────────────────────────────────────────────────────
+// ── CALCULADORA ────────────────────────────────────────────────────────
 function calcOp(){
-  const dir=document.getElementById('op-dir').value,plat=document.getElementById('op-plat').value;
+  const dir=document.getElementById('op-dir').value, plat=document.getElementById('op-plat').value;
   const amt=parseFloat(document.getElementById('op-amt').value)||0;
   const rl=document.getElementById('op-res-lbl'),rv=document.getElementById('op-res-val'),rd=document.getElementById('op-res-det');
   if(!amt){rv.textContent='—';rd.textContent='';return}
   if(dir==='compra'){
     const c=RATES.compra[plat]||{},net=netCalc(amt,c),bs=net*c.t;
     if(rl)rl.textContent='RECIBIRÍAS EN BOLÍVARES';
-    rv.textContent='Bs '+fmt(bs);rd.textContent=`Envías $${fmt(amt,2)} → Neto $${fmt(net,2)} · Tasa ${fmt(c.t)} Bs/USD`;
+    rv.textContent='Bs '+fmt(bs); rd.textContent=`Envías $${fmt(amt,2)} → Neto $${fmt(net,2)} · Tasa ${fmt(c.t)} Bs/USD`;
   }else{
     const c=RATES.venta[plat]||{},usd=amt/c.t;
     if(rl)rl.textContent='RECIBIRÍAS EN USD';
-    rv.textContent='$'+fmt(usd,2);rd.textContent=`Envías Bs ${fmt(amt)} · Tasa ${fmt(c.t)} Bs/USD`;
+    rv.textContent='$'+fmt(usd,2); rd.textContent=`Envías Bs ${fmt(amt)} · Tasa ${fmt(c.t)} Bs/USD`;
   }
 }
 function swapPlats(){
   const dir=document.getElementById('op-dir').value;
   const lbl=document.getElementById('op-amt-lbl');
   if(lbl)lbl.textContent=dir==='venta'?'MONTO A ENVIAR (Bs)':'MONTO A ENVIAR (USD)';
-  calcOp();updWallet();
+  calcOp(); updWallet();
 }
 function updWallet(){
-  const dir=document.getElementById('op-dir').value,plat=document.getElementById('op-plat').value;
-  const box=document.getElementById('wall-box'),cnt=document.getElementById('wall-cnt');
+  const dir=document.getElementById('op-dir').value, plat=document.getElementById('op-plat').value;
+  const box=document.getElementById('wall-box'), cnt=document.getElementById('wall-cnt');
   if(!box||!cnt)return;
-  const sess=gS(),ud=sess?getUser(sess.email):null;
-  const w=WLS[plat];
+  const sess=gS(), ud=sess?getUser(sess.email):null, w=WLS[plat];
   if(dir==='compra'){
-    box.style.display='block';box.style.borderColor='rgba(0,214,143,.18)';
-    let clientInfo='';
-    if(ud&&ud.cuentas){
-      const acc=plat==='binance'?ud.cuentas.binanceId:ud.cuentas.correo;
-      if(acc)clientInfo=`<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(0,214,143,.08)"><div style="font-size:9px;color:var(--t3);letter-spacing:.8px;font-weight:700;margin-bottom:6px">TU CUENTA DE ENVÍO</div>
-        <div class="wall-row"><span class="wall-k">${plat==='binance'?'Tu ID Binance':'Tu correo'}</span><span class="wall-v">${acc}</span></div></div>`;
-    }
-    cnt.innerHTML=`<div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button></span></div>
-      <div class="wall-row"><span class="wall-k">Nota</span><span class="wall-v">${w.note}</span></div>${clientInfo}
-      <div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(0,214,143,.06)">⚠️ Envía el monto exacto y sube el comprobante en el chat.</div>`;
+    box.style.display='block'; box.style.borderColor='rgba(0,214,143,.18)';
+    let ci='';
+    if(ud&&ud.cuentas){const acc=plat==='binance'?ud.cuentas.binanceId:ud.cuentas.correo;if(acc)ci=`<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(0,214,143,.08)"><div style="font-size:9px;color:var(--t3);letter-spacing:.8px;font-weight:700;margin-bottom:6px">TU CUENTA DE ENVÍO</div><div class="wall-row"><span class="wall-k">${plat==='binance'?'Tu ID Binance':'Tu correo'}</span><span class="wall-v">${acc}</span></div></div>`;}
+    cnt.innerHTML=`<div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button></span></div><div class="wall-row"><span class="wall-k">Nota</span><span class="wall-v">${w.note}</span></div>${ci}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(0,214,143,.06)">⚠️ Envía el monto exacto y sube el comprobante en el chat.</div>`;
   }else{
-    box.style.display='block';box.style.borderColor='rgba(240,64,96,.2)';
-    let pmInfo='<div style="margin-top:8px;padding:10px;background:rgba(240,64,96,.05);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ No tienes Pago Móvil registrado. Indica en el chat a dónde enviarte los Bs.</div>';
-    if(ud&&ud.pagoMovil&&ud.pagoMovil.tel){
-      const pm=ud.pagoMovil;
-      pmInfo=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(240,64,96,.08)"><div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:6px">TU PAGO MÓVIL (recibirás los Bs aquí)</div>
-        <div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco||'—'}</span></div>
-        <div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel}</span></div>
-        <div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula||'—'}</span></div></div>`;
-    }
-    cnt.innerHTML=`<div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:8px">💸 ENVÍA LAS DIVISAS A LS CAMBIOS</div>
-      <div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${w.val}')">COPIAR</button></span></div>${pmInfo}
-      <div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(240,64,96,.06)">⚠️ Envía el monto exacto. Te enviamos los Bs una vez confirmado.</div>`;
+    box.style.display='block'; box.style.borderColor='rgba(240,64,96,.2)';
+    let pm_html='<div style="margin-top:8px;padding:10px;background:rgba(240,64,96,.05);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ No tienes Pago Móvil registrado. Indica en el chat a dónde enviarte los Bs.</div>';
+    if(ud&&ud.pagoMovil&&ud.pagoMovil.tel){const pm=ud.pagoMovil;pm_html=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(240,64,96,.08)"><div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:6px">TU PAGO MÓVIL</div><div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco||'—'}</span></div><div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel}</span></div><div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula||'—'}</span></div></div>`;}
+    cnt.innerHTML=`<div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:8px">💸 ENVÍA LAS DIVISAS A LS CAMBIOS</div><div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${w.val}')">COPIAR</button></span></div>${pm_html}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(240,64,96,.06)">⚠️ Envía el monto exacto. Te enviamos los Bs una vez confirmado.</div>`;
   }
 }
 
-// ── OPERACIONES ───────────────────────────────────────────────────────
-let curOpId = null;
+// ════════════════════════════════════════════════════════════════════════
+//  OPERACIONES
+// ════════════════════════════════════════════════════════════════════════
+let curOpId=null;
 
 async function startOp(){
-  const sess=gS();if(!sess){toast('Inicia sesión primero.','err');return}
+  const sess=gS(); if(!sess){toast('Inicia sesión primero.','err');return}
   const dir=document.getElementById('op-dir').value;
   const plat=document.getElementById('op-plat').value;
   const amt=parseFloat(document.getElementById('op-amt').value)||0;
   if(!amt||amt<1){toast('Ingresa un monto válido.','err');return}
   const rv=document.getElementById('op-res-val').textContent;
-  const ud=getUser(sess.email);if(!ud)return;
+  const ud=getUser(sess.email); if(!ud)return;
   const sendTxt=dir==='compra'?'$'+fmt(amt,2)+' ('+PN[plat]+')':'Bs '+fmt(amt);
-  const getTxt=dir==='compra'?rv:rv+' ('+PN[plat]+')';
-  const id=genId(),now=new Date().toLocaleDateString('es-VE');
-  const op={id,date:now,plat,dir,send:sendTxt,get:getTxt,st:'pending',chat:[]};
-  await sbCreateOp(sess.email,op);
+  const getTxt =dir==='compra'?rv:rv+' ('+PN[plat]+')';
+  const id=genId();
+  const op={id,date:new Date().toLocaleDateString('es-VE'),plat,dir,send:sendTxt,get:getTxt,st:'pending',chat:[]};
+
+  // Guardar operación
+  const opOk=await sbCreateOp(sess.email,op);
+  if(!opOk){toast('❌ No se pudo crear la operación. Verifica tu conexión.','err');return}
+
+  // Mensajes iniciales del sistema
   const m1={from:'sys',text:'Operación '+id+' iniciada.',time:tnow()};
   const m2={from:'sys',text:'📌 Realiza el pago y adjunta el comprobante aquí. LS Cambios lo verificará en breve.',time:tnow()};
-  await sbSendMsg(id,m1);await sbSendMsg(id,m2);
+  await sbSendMsg(id,m1);
+  await sbSendMsg(id,m2);
   op.chat=[m1,m2];
+
   sS({email:sess.email,...ud});
   await logAct('operation',{id,email:sess.email,name:ud.name,dir,plat,send:sendTxt,get:getTxt,date:tnowISO()});
   tgNotify(`🔔 <b>Nueva operación</b>\n🆔 ${id}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n💱 ${dir==='compra'?'Compra':'Venta'} · ${PN[plat]}\n📤 Envía: ${sendTxt}\n📥 Recibe: ${getTxt}\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
@@ -1450,24 +1484,23 @@ async function startOp(){
 }
 
 async function openTrade(opId){
-  const sess=gS();if(!sess)return;
-  const ud=getUser(sess.email);if(!ud)return;
+  const sess=gS(); if(!sess)return;
   const ops=await sbGetOps(sess.email);
-  const op=ops.find(o=>o.id===opId);if(!op)return;
+  const op=ops.find(o=>o.id===opId); if(!op)return;
   op.chat=await sbGetMsgs(opId);
   openTradeUI(opId,op);
 }
 
 function openTradeUI(opId,op){
   curOpId=opId;
-  nsSet('lsc_lv','trade');nsSet('lsc_lo',opId);
+  nsSet('lsc_lv','trade'); nsSet('lsc_lo',opId);
   const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
-  s('trd-id',op.id);s('trd-type',op.dir==='compra'?'Compra':'Venta');
-  s('trd-plat',PN[op.plat]||op.plat);s('trd-send',op.send);s('trd-get',op.get);s('chat-id',op.id);
-  const tb=document.getElementById('trd-badge');if(tb)tb.innerHTML=stBdg(op.st);
-  const cs=document.getElementById('chat-st');if(cs)cs.innerHTML=stBdg(op.st);
-  const cpb=document.getElementById('btn-cpr');if(cpb)cpb.style.display=op.st==='confirmed'?'block':'none';
-  renderSteps(op.st);renderChat(op.chat||[]);
+  s('trd-id',op.id); s('trd-type',op.dir==='compra'?'Compra':'Venta');
+  s('trd-plat',PN[op.plat]||op.plat); s('trd-send',op.send); s('trd-get',op.get); s('chat-id',op.id);
+  const tb=document.getElementById('trd-badge'); if(tb)tb.innerHTML=stBdg(op.st);
+  const cs=document.getElementById('chat-st');   if(cs)cs.innerHTML=stBdg(op.st);
+  const cpb=document.getElementById('btn-cpr');  if(cpb)cpb.style.display=op.st==='confirmed'?'block':'none';
+  renderSteps(op.st); renderChat(op.chat||[]);
   document.querySelectorAll('.dv').forEach(d=>d.classList.remove('on'));
   document.getElementById('dv-trade').classList.add('on');
   setupRealtime(opId);
@@ -1481,15 +1514,16 @@ function renderSteps(st){
     {t:'Confirmar recepción',d:'Pulsa "Pago recibido" para completar.'},
     {t:'¡Completada!',d:'Tu cambio fue procesado. 🎉'},
   ];
-  const dI=st==='completed'?5:st==='confirmed'?3:1,aI=st==='completed'?5:st==='confirmed'?3:1;
-  const el=document.getElementById('steps-cnt');if(!el)return;
-  el.innerHTML=steps.map((s,i)=>{const idx=i+1;const cls=idx<dI?'done':idx===aI?'active':'';const ic=idx<dI?'✓':idx;
+  const dI=st==='completed'?5:st==='confirmed'?3:1;
+  const el=document.getElementById('steps-cnt'); if(!el)return;
+  el.innerHTML=steps.map((s,i)=>{
+    const idx=i+1,cls=idx<dI?'done':idx===dI?'active':'',ic=idx<dI?'✓':idx;
     return`<div class="step-item"><div class="step-c ${cls}">${ic}</div><div class="step-b"><div class="step-t">${s.t}</div><div class="step-d">${s.d}</div></div></div>`;
   }).join('');
 }
 
 function renderChat(msgs){
-  const el=document.getElementById('chat-msgs');if(!el)return;
+  const el=document.getElementById('chat-msgs'); if(!el)return;
   const atBot=el.scrollHeight-el.scrollTop<=el.clientHeight+60;
   el.innerHTML=msgs.map(m=>{
     if(m.from==='sys')return`<div class="cm-sys">${m.text}</div>`;
@@ -1501,67 +1535,69 @@ function renderChat(msgs){
 }
 
 async function sendMsg(){
-  const inp=document.getElementById('chat-inp'),t=inp.value.trim();if(!t)return;inp.value='';
-  await sbSendMsg(curOpId,{from:'user',text:t,time:tnow()});
+  const inp=document.getElementById('chat-inp'), t=inp.value.trim(); if(!t)return; inp.value='';
+  const ok=await sbSendMsg(curOpId,{from:'user',text:t,time:tnow()});
+  if(!ok) toast('❌ No se envió el mensaje. Intenta de nuevo.','err');
 }
 
 function sendImg(e){
-  const f=e.target.files[0];if(!f)return;
+  const f=e.target.files[0]; if(!f)return;
   const r=new FileReader();
   r.onload=async()=>{
-    const sess=gS(),ud=sess?getUser(sess.email):null;
-    await sbSendMsg(curOpId,{from:'user',type:'img',src:r.result,text:'📎 Comprobante',time:tnow()});
+    const sess=gS(), ud=sess?getUser(sess.email):null;
+    const ok=await sbSendMsg(curOpId,{from:'user',type:'img',src:r.result,text:'📎 Comprobante',time:tnow()});
+    if(!ok){toast('❌ No se pudo enviar el comprobante.','err');return}
     toast('📎 Comprobante enviado','ok');
     if(ud&&sess)tgNotify(`📎 <b>Comprobante recibido</b>\n🆔 ${curOpId}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n⏰ Revisa el chat del admin.\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
+    // Auto-respuesta admin
     setTimeout(async()=>{
       await sbSendMsg(curOpId,{from:'admin',text:'✅ Comprobante recibido. Verificando tu pago, en breve confirmamos.',time:tnow()});
     },1800);
   };
-  r.readAsDataURL(f);e.target.value='';
+  r.readAsDataURL(f); e.target.value='';
 }
 
 async function clientConfirm(){
-  const sess=gS();if(!sess)return;
+  const sess=gS(); if(!sess)return;
   await sbUpdateOpEstado(curOpId,'completed');
   await sbSendMsg(curOpId,{from:'sys',text:'🎉 Operación completada. ¡Gracias por usar LS Cambios!',time:tnow()});
-  const ud=getUser(sess.email)||{};
   const ops=await sbGetOps(sess.email);
   const op=ops.find(o=>o.id===curOpId);
-  const cs=document.getElementById('compSub');if(cs&&op&&op.get)cs.textContent='Recibirás: '+op.get;
+  const cs=document.getElementById('compSub'); if(cs&&op&&op.get)cs.textContent='Recibirás: '+op.get;
   document.getElementById('comp-ov').classList.add('on');
   playSuccess();
 }
 
 function dispute(){
-  const sess=gS();if(!sess)return;
-  const ud=getUser(sess.email);if(!ud)return;
+  const sess=gS(); if(!sess)return;
+  const ud=getUser(sess.email); if(!ud)return;
   const waMsg=`Hola, tengo un problema con mi operación ${curOpId}.\nNombre: ${ud.nombre} ${ud.apellido}\nCorreo: ${sess.email}`;
   window.open(WA+'?text='+encodeURIComponent(waMsg),'_blank');
   sbSendMsg(curOpId,{from:'sys',text:'⚠️ Reporte enviado. Un asesor te contactará.',time:tnow()});
 }
 
-// ── ADMIN ─────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════
+//  ADMIN PANEL
+// ════════════════════════════════════════════════════════════════════════
 function showAV(name){
   document.querySelectorAll('.av').forEach(a=>a.classList.remove('on'));
   document.querySelectorAll('.ap-sb-i').forEach(b=>b.classList.remove('on'));
-  const av=document.getElementById('av-'+name),sb=document.getElementById('asi-'+name);
-  if(av)av.classList.add('on');if(sb)sb.classList.add('on');
+  const av=document.getElementById('av-'+name), sb=document.getElementById('asi-'+name);
+  if(av)av.classList.add('on'); if(sb)sb.classList.add('on');
   nsSet('lsc_av',name);
   if(name==='activity'){loadAct();return}
   loadAdmin();
 }
 
 async function loadAdmin(){
-  const [allOps,users]=await Promise.all([sbGetAllOps(),sbGetAllUsers()]);
-  // Inyectar hist en cada usuario para mostrar conteo real
-  Object.keys(users).forEach(em=>{
-    users[em].hist=allOps.filter(o=>o.uem===em);
-  });
+  const[allOps,users]=await Promise.all([sbGetAllOps(),sbGetAllUsers()]);
+  // Inyectar historial real por usuario
+  Object.keys(users).forEach(em=>{ users[em].hist=allOps.filter(o=>o.uem===em); });
   const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
   s('ak-users',Object.keys(users).length);
-  s('ak-ops',allOps.length);
-  s('ak-pend',allOps.filter(o=>o.st==='pending'||o.st==='confirmed').length);
-  s('ak-done',allOps.filter(o=>o.st==='completed').length);
+  s('ak-ops',  allOps.length);
+  s('ak-pend', allOps.filter(o=>o.st==='pending'||o.st==='confirmed').length);
+  s('ak-done', allOps.filter(o=>o.st==='completed').length);
   const dao=document.getElementById('a-dash-ops');
   if(dao)dao.innerHTML=allOps.length?buildAdmOps(allOps.slice(0,20)):'<div class="empty">Sin operaciones</div>';
   const ct=document.getElementById('a-cli-body');
@@ -1602,16 +1638,21 @@ function buildCliTbl(users){
     return`<tr style="cursor:pointer" onclick="toggleUx('${sid}')">
       <td style="font-weight:700">${ud.nombre||''} ${ud.apellido||''}</td>
       <td>${ud.cedula||'—'}</td><td style="font-size:11px">${em}</td>
-      <td>${ud.tel||'—'}</td><td style="color:var(--g);font-weight:700">${(ud.hist||[]).length}</td>
+      <td>${ud.tel||'—'}</td>
+      <td style="color:var(--g);font-weight:700">${(ud.hist||[]).length}</td>
       <td style="font-size:11px;color:var(--t2)">${ud.joined||'—'}</td>
       <td style="color:var(--t3);font-size:10px">▼</td>
     </tr>
     <tr class="u-expand" id="${sid}"><td colspan="7">
-      <div><strong style="color:var(--g)">Contraseña:</strong> <code style="background:rgba(240,64,96,.1);border:1px solid rgba(240,64,96,.2);padding:1px 7px;border-radius:4px;color:var(--red);user-select:all">${pw}</code>
-      &nbsp; <strong style="color:var(--g)">Código:</strong> <span style="font-family:var(--mono)">${ud.code||'—'}</span></div>
-      <div style="margin-top:4px"><strong style="color:var(--g)">Pago Móvil:</strong> ${pm.banco&&pm.tel?pm.banco+' · '+pm.tel+' · '+pm.cedula:'—'}
-      &nbsp; <strong style="color:var(--g)">Correo divisas:</strong> ${cu.correo||'—'}
-      &nbsp; <strong style="color:var(--g)">Binance ID:</strong> ${cu.binanceId||'—'}</div>
+      <div><strong style="color:var(--g)">Contraseña:</strong>
+        <code style="background:rgba(240,64,96,.1);border:1px solid rgba(240,64,96,.2);padding:1px 7px;border-radius:4px;color:var(--red);user-select:all">${pw}</code>
+        &nbsp;<strong style="color:var(--g)">Código:</strong> <span style="font-family:var(--mono)">${ud.code||'—'}</span>
+      </div>
+      <div style="margin-top:4px">
+        <strong style="color:var(--g)">Pago Móvil:</strong> ${pm.banco&&pm.tel?pm.banco+' · '+pm.tel+' · '+(pm.cedula||''):'—'}
+        &nbsp;<strong style="color:var(--g)">Correo divisas:</strong> ${cu.correo||'—'}
+        &nbsp;<strong style="color:var(--g)">Binance ID:</strong> ${cu.binanceId||'—'}
+      </div>
       <div class="u-acts">
         <button class="u-btn wa" onclick="window.open('${WA}?text='+encodeURIComponent('Hola ${ud.nombre||em}, te contactamos de LS Cambios.'),'_blank')">💬 WhatsApp</button>
         <button class="u-btn vw" onclick="showAV('chats')">Ver chats</button>
@@ -1623,7 +1664,6 @@ function buildCliTbl(users){
 function toggleUx(id){const e=document.getElementById(id);if(e)e.classList.toggle('on')}
 
 let aCur=null;
-
 function admGoChat(uem,opId){
   showAV('chats');
   setTimeout(()=>{const el=document.getElementById('oli-'+opId);admOpenChatDB(uem,opId,el)},120);
@@ -1631,22 +1671,22 @@ function admGoChat(uem,opId){
 
 async function admOpenChatDB(uem,opId,el){
   const users=await sbGetAllUsers();
-  const ud=users[uem];if(!ud)return;
+  const ud=users[uem]; if(!ud)return;
   const ops=await sbGetOps(uem);
-  const op=ops.find(o=>o.id===opId);if(!op)return;
+  const op=ops.find(o=>o.id===opId); if(!op)return;
   op.chat=await sbGetMsgs(opId);
   aCur={uem,opId};
-  document.querySelectorAll('.op-li').forEach(i=>i.classList.remove('on'));if(el)el.classList.add('on');
+  document.querySelectorAll('.op-li').forEach(i=>i.classList.remove('on')); if(el)el.classList.add('on');
   document.getElementById('a-chat-ttl').textContent='Chat: '+opId;
   document.getElementById('a-chat-sub').textContent=(ud.nombre+' '+ud.apellido).trim()+' · '+(PN[op.plat]||op.plat);
   document.getElementById('a-chat-bdg').innerHTML=stBdg(op.st);
-  const ab=document.getElementById('a-acts');if(ab)ab.style.display=op.st!=='completed'?'flex':'none';
+  const ab=document.getElementById('a-acts'); if(ab)ab.style.display=op.st!=='completed'?'flex':'none';
   renderAdmChat(op.chat||[]);
   setupRealtime(opId);
 }
 
 function renderAdmChat(msgs){
-  const el=document.getElementById('a-msgs');if(!el)return;
+  const el=document.getElementById('a-msgs'); if(!el)return;
   const atBot=el.scrollHeight-el.scrollTop<=el.clientHeight+60;
   el.innerHTML=msgs.map(m=>{
     if(m.from==='sys')return`<div class="cm-sys">${m.text}</div>`;
@@ -1658,43 +1698,44 @@ function renderAdmChat(msgs){
 }
 
 async function admSend(){
-  if(!aCur)return;const inp=document.getElementById('a-inp');const t=inp.value.trim();if(!t)return;
-  await sbSendMsg(aCur.opId,{from:'admin',text:t,time:tnow()});
-  inp.value='';toast('✅ Mensaje enviado','ok');
+  if(!aCur)return; const inp=document.getElementById('a-inp'); const t=inp.value.trim(); if(!t)return;
+  const ok=await sbSendMsg(aCur.opId,{from:'admin',text:t,time:tnow()});
+  if(ok){inp.value='';toast('✅ Mensaje enviado','ok')}
 }
 
 function admSendImg(e){
-  const f=e.target.files[0];if(!f||!aCur)return;
+  const f=e.target.files[0]; if(!f||!aCur)return;
   const r=new FileReader();
   r.onload=async()=>{
-    await sbSendMsg(aCur.opId,{from:'admin',type:'img',src:r.result,text:'📎 Comprobante de pago',time:tnow()});
-    toast('📎 Comprobante enviado al cliente','ok');
+    const ok=await sbSendMsg(aCur.opId,{from:'admin',type:'img',src:r.result,text:'📎 Comprobante de pago',time:tnow()});
+    if(ok)toast('📎 Comprobante enviado al cliente','ok');
   };
-  r.readAsDataURL(f);e.target.value='';
+  r.readAsDataURL(f); e.target.value='';
 }
 
 async function admConfirm(){
   if(!aCur)return;
-  await sbUpdateOpEstado(aCur.opId,'confirmed');
-  const m1={from:'sys',text:'🟢 LS Cambios verificó y confirmó tu pago.',time:tnow()};
-  const m2={from:'admin',text:'✅ Pago confirmado. Pulsa "Pago recibido — Completar" para finalizar.',time:tnow()};
-  await sbSendMsg(aCur.opId,m1);await sbSendMsg(aCur.opId,m2);
+  const ok=await sbUpdateOpEstado(aCur.opId,'confirmed');
+  if(!ok)return;
+  await sbSendMsg(aCur.opId,{from:'sys',text:'🟢 LS Cambios verificó y confirmó tu pago.',time:tnow()});
+  await sbSendMsg(aCur.opId,{from:'admin',text:'✅ Pago confirmado. Pulsa "Pago recibido — Completar" para finalizar.',time:tnow()});
   document.getElementById('a-chat-bdg').innerHTML=stBdg('confirmed');
-  loadAdmin();toast('✅ Confirmado. El cliente puede completar la operación.','ok');
+  loadAdmin(); toast('✅ Confirmado. El cliente puede completar la operación.','ok');
 }
 
 async function admClose(){
   if(!aCur||!confirm('¿Marcar como transacción finalizada?'))return;
-  await sbUpdateOpEstado(aCur.opId,'completed');
+  const ok=await sbUpdateOpEstado(aCur.opId,'completed');
+  if(!ok)return;
   await sbSendMsg(aCur.opId,{from:'sys',text:'🔒 Transacción finalizada por LS Cambios.',time:tnow()});
-  const ab=document.getElementById('a-acts');if(ab)ab.style.display='none';
+  const ab=document.getElementById('a-acts'); if(ab)ab.style.display='none';
   document.getElementById('a-chat-bdg').innerHTML=stBdg('completed');
-  loadAdmin();toast('🔒 Transacción finalizada','ok');
+  loadAdmin(); toast('🔒 Transacción finalizada','ok');
 }
 
-// ── EDITOR DE TASAS ───────────────────────────────────────────────────
+// ── EDITOR TASAS ───────────────────────────────────────────────────────
 function buildRateEditor(){
-  const el=document.getElementById('a-rate-grid');if(!el)return;
+  const el=document.getElementById('a-rate-grid'); if(!el)return;
   loadZelleEmail();
   const plats=['binance','paypal','zinli','wally','zelle','airtm','usdc'];
   el.innerHTML=plats.map(k=>{const cv=RATES.compra[k]?.t??'',vv=RATES.venta[k]?.t??'';
@@ -1704,45 +1745,35 @@ function buildRateEditor(){
       <button class="btn g sm full" style="margin-top:8px" onclick="saveRate('${k}')">💾 Guardar</button></div>`;
   }).join('');
 }
-
 async function saveRate(k){
   const ci=document.getElementById('rc-'+k),vi=document.getElementById('rv-'+k);
   if(ci&&RATES.compra[k])RATES.compra[k].t=parseFloat(ci.value)||0;
-  if(vi&&RATES.venta[k])RATES.venta[k].t=parseFloat(vi.value)||0;
-  await sbSaveRates();renderLPRates();toast('💾 Tasa de '+PN[k]+' guardada','ok');
+  if(vi&&RATES.venta[k]) RATES.venta[k].t =parseFloat(vi.value)||0;
+  await sbSaveRates(); renderLPRates(); toast('💾 Tasa de '+PN[k]+' guardada','ok');
 }
-
-function loadZelleEmail(){
-  const inp=document.getElementById('zelle-email-inp');
-  if(inp)inp.value=WLS.zelle.val||'';
-}
-
+function loadZelleEmail(){const inp=document.getElementById('zelle-email-inp');if(inp)inp.value=WLS.zelle.val||'';}
 async function saveZelleEmail(){
   const inp=document.getElementById('zelle-email-inp');
   if(!inp||!inp.value.trim()){toast('⚠️ Ingresa un correo válido','err');return}
-  const email=inp.value.trim();
-  WLS.zelle.val=email;
-  await sbSaveRates();
-  toast('💾 Correo Zelle actualizado: '+email,'ok');
+  WLS.zelle.val=inp.value.trim(); await sbSaveRates(); toast('💾 Correo Zelle actualizado','ok');
 }
 
-// ── ACTIVIDAD LOG ─────────────────────────────────────────────────────
+// ── ACTIVIDAD LOG ──────────────────────────────────────────────────────
 let actFilter='all';
-
 function filterAct(f){
   actFilter=f;
   document.querySelectorAll('[id^="af-"]').forEach(b=>b.classList.remove('on'));
-  const btn=document.getElementById('af-'+f);if(btn)btn.classList.add('on');
+  const btn=document.getElementById('af-'+f); if(btn)btn.classList.add('on');
   loadAct();
 }
-
 async function loadAct(){
-  const el=document.getElementById('act-body');if(!el)return;
+  const el=document.getElementById('act-body'); if(!el)return;
   el.innerHTML='<div class="empty">Cargando...</div>';
-  let query=db.from('actividad').select('*').order('ts',{ascending:false}).limit(200);
-  if(actFilter!=='all')query=query.eq('type',actFilter);
-  const {data,error}=await query;
-  if(error||!data||!data.length){el.innerHTML='<div class="empty">Sin actividad</div>';return}
+  let q=db.from('actividad').select('*').order('ts',{ascending:false}).limit(300);
+  if(actFilter!=='all')q=q.eq('type',actFilter);
+  const{data,error}=await q;
+  if(error){sbErr('loadAct',error);el.innerHTML='<div class="empty">Error cargando actividad</div>';return}
+  if(!data||!data.length){el.innerHTML='<div class="empty">Sin actividad</div>';return}
   const icons={login:'🔑',register:'✨',operation:'💱'};
   const colors={login:'var(--blue)',register:'var(--g)',operation:'var(--yellow)'};
   el.innerHTML=`<table class="tbl"><thead><tr><th>Tipo</th><th>Nombre</th><th>Email</th><th>Detalle</th><th>Fecha</th></tr></thead>
@@ -1758,30 +1789,28 @@ async function loadAct(){
       <td style="font-size:11px;color:var(--t3)">${fecha}</td></tr>`;
   }).join('')}</tbody></table>`;
 }
-
 async function clearAct(){
-  if(!confirm('¿Borrar toda la actividad de Supabase?'))return;
+  if(!confirm('¿Borrar toda la actividad?'))return;
   await db.from('actividad').delete().neq('id',0);
   loadAct();
 }
 
-// ── REALTIME (Supabase) ───────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════
+//  REALTIME (Supabase Postgres Changes)
+// ════════════════════════════════════════════════════════════════════════
 let realtimeChannel=null;
 
 function buildMsgDiv(msg,isAdmin){
   const wrap=document.createElement('div');
-  if(msg.from==='sys'){
-    wrap.className='cm-sys';wrap.textContent=msg.text;
-  }else{
+  if(msg.from==='sys'){wrap.className='cm-sys';wrap.textContent=msg.text;}
+  else{
     const me=isAdmin?(msg.from==='admin'):(msg.from==='user');
     wrap.className='cm '+(me?'me':'them');
     const who=document.createElement('div');who.className='cm-who';
     who.textContent=me?(isAdmin?'Tú (Admin)':'Tú'):(isAdmin?'👤 Cliente':'🟢 LS Cambios');
     const bbl=document.createElement('div');bbl.className='cm-bbl';
-    if(msg.type==='img'){
-      const img=document.createElement('img');img.src=msg.src;img.className='chat-img';
-      img.onclick=()=>openLB(msg.src);bbl.appendChild(img);
-    }else{bbl.textContent=msg.text}
+    if(msg.type==='img'){const img=document.createElement('img');img.src=msg.src;img.className='chat-img';img.onclick=()=>openLB(msg.src);bbl.appendChild(img);}
+    else{bbl.textContent=msg.text}
     const t=document.createElement('div');t.className='cm-t';t.textContent=msg.time||'';
     wrap.append(who,bbl,t);
   }
@@ -1790,19 +1819,13 @@ function buildMsgDiv(msg,isAdmin){
 
 function setupRealtime(opId){
   if(realtimeChannel){db.removeChannel(realtimeChannel);realtimeChannel=null}
-  realtimeChannel=db.channel('op-'+opId)
+  realtimeChannel=db.channel('lsc-op-'+opId)
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'mensajes',filter:'op_id=eq.'+opId},payload=>{
       const m=payload.new;
-      const msg={
-        from:m.from_role,
-        type:m.tipo==='img'?'img':undefined,
-        src:m.tipo==='img'?m.contenido:undefined,
-        text:m.tipo!=='img'?m.contenido:'📎 Comprobante',
-        time:new Date(m.ts).toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'})
-      };
-      const el=document.getElementById('chat-msgs');
+      const msg=_mapMsg(m);
+      const el =document.getElementById('chat-msgs');
       const elA=document.getElementById('a-msgs');
-      if(el&&curOpId===opId){el.appendChild(buildMsgDiv(msg,false));el.scrollTop=el.scrollHeight}
+      if(el &&curOpId===opId){el.appendChild(buildMsgDiv(msg,false));el.scrollTop=el.scrollHeight}
       if(elA&&aCur&&aCur.opId===opId){elA.appendChild(buildMsgDiv(msg,true));elA.scrollTop=elA.scrollHeight}
     })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'operaciones',filter:'id=eq.'+opId},payload=>{
@@ -1812,31 +1835,42 @@ function setupRealtime(opId){
       const cpb=document.getElementById('btn-cpr');if(cpb)cpb.style.display=nuevoEstado==='confirmed'?'block':'none';
       const ab=document.getElementById('a-chat-bdg');if(ab)ab.innerHTML=stBdg(nuevoEstado);
       if(nuevoEstado==='completed'){const acts=document.getElementById('a-acts');if(acts)acts.style.display='none'}
-      toast('🔄 Estado actualizado: '+nuevoEstado);
+      toast('🔄 Estado: '+({pending:'Pendiente',confirmed:'Confirmado',completed:'Completado'}[nuevoEstado]||nuevoEstado));
     })
-    .subscribe();
+    .subscribe(status=>{
+      if(status==='SUBSCRIBED') console.log('[Realtime] conectado op:'+opId);
+      if(status==='CHANNEL_ERROR') console.warn('[Realtime] error en canal op:'+opId);
+    });
 }
 
-// ── INIT ──────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', async()=>{
+// ════════════════════════════════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',async()=>{
+  // Cargar tasas desde Supabase
   await sbLoadRates();
   renderLPRates();
 
+  // Cerrar modales al click fuera
   document.getElementById('authOv').addEventListener('click',e=>{if(e.target===document.getElementById('authOv'))closeAuth()});
   document.getElementById('admOv').addEventListener('click',e=>{if(e.target===document.getElementById('admOv'))closeAdmOv()});
 
+  // Routing admin por hash
   if(window.location.hash==='#admin'){
-    if(isAdm())goA();else openAdminLogin();return;
+    if(isAdm())goA(); else openAdminLogin();
+    return;
   }
 
+  // Restaurar sesión si existe
   const sess=gS();
   if(sess){
     const ud=getUser(sess.email);
     if(ud){
+      // Refrescar historial desde Supabase
       ud.hist=await sbGetOps(sess.email);
       sS({email:sess.email,...ud});
       updLPNav();
-      const lv=nsGet('lsc_lv'),lo=nsGet('lsc_lo');
+      const lv=nsGet('lsc_lv'), lo=nsGet('lsc_lo');
       if(lv==='trade'&&lo){goD();setTimeout(()=>openTrade(lo),300)}
       else if(lv&&lv!=='trade'){goD();setTimeout(()=>showDV(lv),150)}
       else{goD()}
