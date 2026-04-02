@@ -1067,7 +1067,6 @@ async function sbSendMsg(opId, msg){
     ts:        tnowISO()
   };
   const{error}=await db.from('mensajes').insert(payload);
-  CONSOLE.LOG('error de supabase:',error)
   if(sbErr('sbSendMsg',error)) return false;
   return true;
 }
@@ -1452,15 +1451,18 @@ function updWallet(){
 //  OPERACIONES
 // ════════════════════════════════════════════════════════════════════════
 let curOpId=null;
+let proofSent=false;
 
 async function startOp(){
   const sess=gS(); if(!sess){toast('Inicia sesión primero.','err');return}
+  const btn=document.querySelector('[onclick="startOp()"]');
+  if(btn){if(btn.disabled)return;btn.disabled=true;btn.textContent='Procesando...';}
   const dir=document.getElementById('op-dir').value;
   const plat=document.getElementById('op-plat').value;
   const amt=parseFloat(document.getElementById('op-amt').value)||0;
-  if(!amt||amt<1){toast('Ingresa un monto válido.','err');return}
+  if(!amt||amt<1){toast('Ingresa un monto válido.','err');if(btn){btn.disabled=false;btn.textContent='Confirmar operación →';}return}
   const rv=document.getElementById('op-res-val').textContent;
-  const ud=getUser(sess.email); if(!ud)return;
+  const ud=getUser(sess.email); if(!ud){if(btn){btn.disabled=false;btn.textContent='Confirmar operación →';}return}
   const sendTxt=dir==='compra'?'$'+fmt(amt,2)+' ('+PN[plat]+')':'Bs '+fmt(amt);
   const getTxt =dir==='compra'?rv:rv+' ('+PN[plat]+')';
   const id=genId();
@@ -1468,7 +1470,7 @@ async function startOp(){
 
   // Guardar operación
   const opOk=await sbCreateOp(sess.email,op);
-  if(!opOk){toast('❌ No se pudo crear la operación. Verifica tu conexión.','err');return}
+  if(!opOk){toast('❌ No se pudo crear la operación. Verifica tu conexión.','err');if(btn){btn.disabled=false;btn.textContent='Confirmar operación →';}return}
 
   // Mensajes iniciales del sistema
   const m1={from:'sys',text:'Operación '+id+' iniciada.',time:tnow()};
@@ -1500,7 +1502,7 @@ function openTradeUI(opId,op){
   const tb=document.getElementById('trd-badge'); if(tb)tb.innerHTML=stBdg(op.st);
   const cs=document.getElementById('chat-st');   if(cs)cs.innerHTML=stBdg(op.st);
   const cpb=document.getElementById('btn-cpr');  if(cpb)cpb.style.display=op.st==='confirmed'?'block':'none';
-  renderSteps(op.st); renderChat(op.chat||[]);
+  renderSteps((()=>{proofSent=(op.chat||[]).some(m=>m.type==='img'&&m.from==='user');return proofSent&&op.st==='pending'?'proof':op.st;})()); renderChat(op.chat||[]);
   document.querySelectorAll('.dv').forEach(d=>d.classList.remove('on'));
   document.getElementById('dv-trade').classList.add('on');
   setupRealtime(opId);
@@ -1514,7 +1516,7 @@ function renderSteps(st){
     {t:'Confirmar recepción',d:'Pulsa "Pago recibido" para completar.'},
     {t:'¡Completada!',d:'Tu cambio fue procesado. 🎉'},
   ];
-  const dI=st==='completed'?5:st==='confirmed'?3:1;
+  const dI=st==='completed'?6:st==='confirmed'?4:st==='proof'?2:1;
   const el=document.getElementById('steps-cnt'); if(!el)return;
   el.innerHTML=steps.map((s,i)=>{
     const idx=i+1,cls=idx<dI?'done':idx===dI?'active':'',ic=idx<dI?'✓':idx;
@@ -1548,6 +1550,7 @@ function sendImg(e){
     const ok=await sbSendMsg(curOpId,{from:'user',type:'img',src:r.result,text:'📎 Comprobante',time:tnow()});
     if(!ok){toast('❌ No se pudo enviar el comprobante.','err');return}
     toast('📎 Comprobante enviado','ok');
+    proofSent=true; renderSteps('proof');
     if(ud&&sess)tgNotify(`📎 <b>Comprobante recibido</b>\n🆔 ${curOpId}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n⏰ Revisa el chat del admin.\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
     // Auto-respuesta admin
     setTimeout(async()=>{
@@ -1560,6 +1563,7 @@ function sendImg(e){
 async function clientConfirm(){
   const sess=gS(); if(!sess)return;
   await sbUpdateOpEstado(curOpId,'completed');
+  renderSteps('completed');
   await sbSendMsg(curOpId,{from:'sys',text:'🎉 Operación completada. ¡Gracias por usar LS Cambios!',time:tnow()});
   const ops=await sbGetOps(sess.email);
   const op=ops.find(o=>o.id===curOpId);
@@ -1730,6 +1734,7 @@ async function admClose(){
   await sbSendMsg(aCur.opId,{from:'sys',text:'🔒 Transacción finalizada por LS Cambios.',time:tnow()});
   const ab=document.getElementById('a-acts'); if(ab)ab.style.display='none';
   document.getElementById('a-chat-bdg').innerHTML=stBdg('completed');
+  renderSteps('completed');
   loadAdmin(); toast('🔒 Transacción finalizada','ok');
 }
 
@@ -1831,7 +1836,7 @@ function setupRealtime(opId){
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'operaciones',filter:'id=eq.'+opId},payload=>{
       const nuevoEstado=payload.new.estado;
       const tb=document.getElementById('trd-badge');if(tb)tb.innerHTML=stBdg(nuevoEstado);
-      renderSteps(nuevoEstado);
+      renderSteps(proofSent&&nuevoEstado==='pending'?'proof':nuevoEstado);
       const cpb=document.getElementById('btn-cpr');if(cpb)cpb.style.display=nuevoEstado==='confirmed'?'block':'none';
       const ab=document.getElementById('a-chat-bdg');if(ab)ab.innerHTML=stBdg(nuevoEstado);
       if(nuevoEstado==='completed'){const acts=document.getElementById('a-acts');if(acts)acts.style.display='none'}
