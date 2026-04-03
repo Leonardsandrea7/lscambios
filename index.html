@@ -471,6 +471,40 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
   .dp-nav{padding:0 12px}
   .dv-h{font-size:18px}
 }
+
+/* ── PASSWORD EYE TOGGLE ── */
+.pw-wrap{position:relative}
+.pw-wrap .fi{padding-right:42px}
+.pw-eye{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;color:var(--t2);
+  padding:4px;display:flex;align-items:center;justify-content:center;
+  transition:color .15s;outline:none;
+}
+.pw-eye:hover{color:var(--t1)}
+.pw-eye svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── CONFIRM OP MODAL ── */
+.cop-ov{position:fixed;inset:0;z-index:6000;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;padding:16px}
+.cop-ov.on{display:flex}
+.cop-box{background:var(--bg2);border:1px solid var(--brd2);border-radius:var(--r2);padding:22px;max-width:420px;width:100%;max-height:90vh;overflow-y:auto}
+.cop-hdr{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.cop-icon{width:40px;height:40px;border-radius:10px;background:rgba(0,214,143,.1);border:1px solid rgba(0,214,143,.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.cop-title{font-size:15px;font-weight:800}
+.cop-sub{font-size:11px;color:var(--t2);margin-top:2px}
+.cop-sec{margin-bottom:14px}
+.cop-sec-hdr{font-size:9px;font-weight:700;color:var(--t3);letter-spacing:1px;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--brd)}
+.cop-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:12px}
+.cop-row:last-child{border-bottom:none}
+.cop-k{color:var(--t2)}
+.cop-v{font-weight:700;text-align:right;max-width:62%;word-break:break-all}
+.cop-v.hi{color:var(--g)}
+.cop-v.warn{color:var(--yellow)}
+.cop-v.red{color:var(--red)}
+.cop-alert{background:rgba(245,184,0,.07);border:1px solid rgba(245,184,0,.18);border-radius:8px;padding:10px 13px;font-size:11px;color:var(--yellow);margin-bottom:14px;line-height:1.6}
+.cop-btns{display:flex;gap:9px;margin-top:4px}
+.cop-badge-compra{background:rgba(0,214,143,.1);color:var(--g);border:1px solid rgba(0,214,143,.2);padding:2px 9px;border-radius:50px;font-size:10px;font-weight:700}
+.cop-badge-venta{background:rgba(240,64,96,.1);color:var(--red);border:1px solid rgba(240,64,96,.2);padding:2px 9px;border-radius:50px;font-size:10px;font-weight:700}
 </style>
 </head>
 <body>
@@ -563,7 +597,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
     <!-- LOGIN -->
     <div id="f-li">
       <div class="fg"><label>CORREO</label><input class="fi" type="email" id="li-e" placeholder="tu@correo.com" autocomplete="email"></div>
-      <div class="fg"><label>CONTRASEÑA</label><input class="fi" type="password" id="li-p" placeholder="••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <div class="fg"><label>CONTRASEÑA</label><div class="pw-wrap"><input class="fi" type="password" id="li-p" placeholder="••••••" onkeydown="if(event.key==='Enter')doLogin()"><button class="pw-eye" type="button" onclick="togglePw('li-p',this)" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
       <div class="ferr" id="li-err"></div>
       <a style="display:block;text-align:right;font-size:11px;color:var(--g);cursor:pointer;margin-bottom:14px" onclick="swAuth('forgot')">¿Olvidaste tu contraseña?</a>
       <button class="btn g full" id="li-btn" onclick="doLogin()">Entrar →</button>
@@ -607,8 +641,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <div class="fg"><label>ID BINANCE</label><input class="fi" type="text" id="rg-bid" placeholder="ID numérico Binance"></div>
       <div class="fdiv">CONTRASEÑA</div>
       <div class="fg2">
-        <div class="fg" style="margin-bottom:0"><label>CONTRASEÑA</label><input class="fi" type="password" id="rg-pw" placeholder="Mín. 6"></div>
-        <div class="fg" style="margin-bottom:0"><label>CONFIRMAR</label><input class="fi" type="password" id="rg-pw2" placeholder="Repetir" onkeydown="if(event.key==='Enter')doRegister()"></div>
+        <div class="fg" style="margin-bottom:0"><label>CONTRASEÑA</label><div class="pw-wrap"><input class="fi" type="password" id="rg-pw" placeholder="Mín. 6"><button class="pw-eye" type="button" onclick="togglePw('rg-pw',this)" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+        <div class="fg" style="margin-bottom:0"><label>CONFIRMAR</label><div class="pw-wrap"><input class="fi" type="password" id="rg-pw2" placeholder="Repetir" onkeydown="if(event.key==='Enter')doRegister()"><button class="pw-eye" type="button" onclick="togglePw('rg-pw2',this)" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
       </div>
       <div class="ferr" id="rg-err" style="margin-top:12px"></div>
       <div class="fok" id="rg-ok" style="margin-top:12px"></div>
@@ -626,7 +660,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <div style="font-size:15px;font-weight:800">Administrador</div>
       <div style="font-size:11px;color:var(--t2);margin-top:3px">Acceso restringido</div>
     </div>
-    <div class="fg"><label>CONTRASEÑA</label><input class="fi" type="password" id="adm-pw" placeholder="••••••••••" onkeydown="if(event.key==='Enter')checkAdmin()"></div>
+    <div class="fg"><label>CONTRASEÑA</label><div class="pw-wrap"><input class="fi" type="password" id="adm-pw" placeholder="••••••••••" onkeydown="if(event.key==='Enter')checkAdmin()"><button class="pw-eye" type="button" onclick="togglePw('adm-pw',this)" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
     <div class="ferr" id="adm-err"></div>
     <button class="btn g full" onclick="checkAdmin()">Acceder →</button>
     <button class="btn ghost full" style="margin-top:7px" onclick="closeAdmOv()">Cancelar</button>
@@ -833,13 +867,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
           <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:10px">📧 CORREO ZELLE</div>
           <div class="re-row"><span class="re-lbl">Correo Zelle</span><input class="re-inp" type="email" id="zelle-email-inp" placeholder="correo@ejemplo.com"></div>
           <button class="btn g sm full" style="margin-top:8px" onclick="saveZelleEmail()">💾 Guardar correo Zelle</button>
-        </div>
-        <div style="margin-top:12px;background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r2);padding:16px">
-          <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:10px">📱 PAGO MÓVIL LS CAMBIOS</div>
-          <div class="re-row"><span class="re-lbl">Banco</span><input class="re-inp" type="text" id="pm-banco-inp" placeholder="Banesco, BDV..."></div>
-          <div class="re-row"><span class="re-lbl">Teléfono</span><input class="re-inp" type="tel" id="pm-tel-inp" placeholder="0412-0000000"></div>
-          <div class="re-row"><span class="re-lbl">Cédula</span><input class="re-inp" type="text" id="pm-cedula-inp" placeholder="V-12345678"></div>
-          <button class="btn g sm full" style="margin-top:8px" onclick="savePagoMovilLS()">💾 Guardar Pago Móvil</button>
         </div>
       </div>
       <div class="av" id="av-activity">
@@ -1074,6 +1101,7 @@ async function sbSendMsg(opId, msg){
     ts:        tnowISO()
   };
   const{error}=await db.from('mensajes').insert(payload);
+  CONSOLE.LOG('error de supabase:',error)
   if(sbErr('sbSendMsg',error)) return false;
   return true;
 }
@@ -1099,14 +1127,11 @@ async function sbLoadRates(){
   if(data&&data.data){
     deepMerge(RATES,data.data);
     if(data.data.zelleEmail) WLS.zelle.val=data.data.zelleEmail;
-    if(data.data.pmBanco)  WLS.pagoMovil.banco  = data.data.pmBanco;
-    if(data.data.pmTel)    WLS.pagoMovil.tel     = data.data.pmTel;
-    if(data.data.pmCedula) WLS.pagoMovil.cedula  = data.data.pmCedula;
   }
 }
 
 async function sbSaveRates(){
-  const toSave={...RATES, zelleEmail:WLS.zelle.val, pmBanco:WLS.pagoMovil.banco, pmTel:WLS.pagoMovil.tel, pmCedula:WLS.pagoMovil.cedula};
+  const toSave={...RATES, zelleEmail:WLS.zelle.val};
   const{error}=await db.from('tasas').upsert({id:1,data:toSave},{onConflict:'id'});
   if(sbErr('sbSaveRates',error)) return false;
   return true;
@@ -1159,7 +1184,6 @@ const WLS={
   zelle:  {label:'Correo Zelle',     val:'sandrealeonard@gmail.com',                    note:'Monto exacto'},
   airtm:  {label:'Correo Airtm',     val:'sandrealeonard@gmail.com',                    note:'Monto exacto'},
   usdc:   {label:'Dirección USDC',   val:'0xb1d675ce126ab8dc3095ab3df99052cc4393685e', note:'Red BEP-20 (BSC)'},
-  pagoMovil:{banco:'', tel:'', cedula:''},
 };
 
 function netCalc(a,c){
@@ -1452,14 +1476,9 @@ function updWallet(){
     cnt.innerHTML=`<div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button></span></div><div class="wall-row"><span class="wall-k">Nota</span><span class="wall-v">${w.note}</span></div>${ci}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(0,214,143,.06)">⚠️ Envía el monto exacto y sube el comprobante en el chat.</div>`;
   }else{
     box.style.display='block'; box.style.borderColor='rgba(240,64,96,.2)';
-    const pm=WLS.pagoMovil;
-    let pm_html='<div style="margin-top:8px;padding:10px;background:rgba(240,64,96,.05);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ Pago Móvil no configurado. Contacta al asesor por el chat para coordinar el pago.</div>';
-    if(pm.tel){
-      pm_html=`<div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco||'—'}</span></div>`+
-              `<div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${pm.tel}')">COPIAR</button></span></div>`+
-              `<div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula||'—'}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${pm.cedula||''}')">COPIAR</button></span></div>`;
-    }
-    cnt.innerHTML=`<div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:8px">📱 ENVÍA TU PAGO MÓVIL A LS CAMBIOS</div>${pm_html}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(240,64,96,.06)">⚠️ Envía el monto exacto en Bs y sube el comprobante en el chat.</div>`;
+    let pm_html='<div style="margin-top:8px;padding:10px;background:rgba(240,64,96,.05);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ No tienes Pago Móvil registrado. Indica en el chat a dónde enviarte los Bs.</div>';
+    if(ud&&ud.pagoMovil&&ud.pagoMovil.tel){const pm=ud.pagoMovil;pm_html=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(240,64,96,.08)"><div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:6px">TU PAGO MÓVIL</div><div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco||'—'}</span></div><div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel}</span></div><div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula||'—'}</span></div></div>`;}
+    cnt.innerHTML=`<div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:8px">💸 ENVÍA LAS DIVISAS A LS CAMBIOS</div><div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${w.val}')">COPIAR</button></span></div>${pm_html}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(240,64,96,.06)">⚠️ Envía el monto exacto. Te enviamos los Bs una vez confirmado.</div>`;
   }
 }
 
@@ -1467,38 +1486,22 @@ function updWallet(){
 //  OPERACIONES
 // ════════════════════════════════════════════════════════════════════════
 let curOpId=null;
-let proofSent=false;
 
 async function startOp(){
   const sess=gS(); if(!sess){toast('Inicia sesión primero.','err');return}
-  const btn=document.querySelector('[onclick="startOp()"]');
-  if(btn){if(btn.disabled)return;btn.disabled=true;btn.textContent='Procesando...';}
   const dir=document.getElementById('op-dir').value;
   const plat=document.getElementById('op-plat').value;
   const amt=parseFloat(document.getElementById('op-amt').value)||0;
-  if(!amt||amt<1){toast('Ingresa un monto válido.','err');if(btn){btn.disabled=false;btn.textContent='Confirmar operación →';}return}
+  if(!amt||amt<1){toast('Ingresa un monto válido.','err');return}
   const rv=document.getElementById('op-res-val').textContent;
-  const ud=getUser(sess.email); if(!ud){if(btn){btn.disabled=false;btn.textContent='Confirmar operación →';}return}
+  const ud=getUser(sess.email); if(!ud)return;
   const sendTxt=dir==='compra'?'$'+fmt(amt,2)+' ('+PN[plat]+')':'Bs '+fmt(amt);
   const getTxt =dir==='compra'?rv:rv+' ('+PN[plat]+')';
   const id=genId();
   const op={id,date:new Date().toLocaleDateString('es-VE'),plat,dir,send:sendTxt,get:getTxt,st:'pending',chat:[]};
-
-  // Guardar operación
-  const opOk=await sbCreateOp(sess.email,op);
-  if(!opOk){toast('❌ No se pudo crear la operación. Verifica tu conexión.','err');if(btn){btn.disabled=false;btn.textContent='Confirmar operación →';}return}
-
-  // Mensajes iniciales del sistema
-  const m1={from:'sys',text:'Operación '+id+' iniciada.',time:tnow()};
-  const m2={from:'sys',text:'📌 Realiza el pago y adjunta el comprobante aquí. LS Cambios lo verificará en breve.',time:tnow()};
-  await sbSendMsg(id,m1);
-  await sbSendMsg(id,m2);
-  op.chat=[m1,m2];
-
-  sS({email:sess.email,...ud});
-  await logAct('operation',{id,email:sess.email,name:ud.name,dir,plat,send:sendTxt,get:getTxt,date:tnowISO()});
-  tgNotify(`🔔 <b>Nueva operación</b>\n🆔 ${id}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n💱 ${dir==='compra'?'Compra':'Venta'} · ${PN[plat]}\n📤 Envía: ${sendTxt}\n📥 Recibe: ${getTxt}\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
-  openTradeUI(id,op);
+  const w=WLS[plat];
+  // Show confirmation modal instead of executing directly
+  openCopOv({dir,plat,amt,sendTxt,getTxt,ud,sess,id,op,w});
 }
 
 async function openTrade(opId){
@@ -1518,7 +1521,7 @@ function openTradeUI(opId,op){
   const tb=document.getElementById('trd-badge'); if(tb)tb.innerHTML=stBdg(op.st);
   const cs=document.getElementById('chat-st');   if(cs)cs.innerHTML=stBdg(op.st);
   const cpb=document.getElementById('btn-cpr');  if(cpb)cpb.style.display=op.st==='confirmed'?'block':'none';
-  renderSteps((()=>{proofSent=(op.chat||[]).some(m=>m.type==='img'&&m.from==='user');return proofSent&&op.st==='pending'?'proof':op.st;})()); renderChat(op.chat||[]);
+  renderSteps(op.st); renderChat(op.chat||[]);
   document.querySelectorAll('.dv').forEach(d=>d.classList.remove('on'));
   document.getElementById('dv-trade').classList.add('on');
   setupRealtime(opId);
@@ -1532,7 +1535,7 @@ function renderSteps(st){
     {t:'Confirmar recepción',d:'Pulsa "Pago recibido" para completar.'},
     {t:'¡Completada!',d:'Tu cambio fue procesado. 🎉'},
   ];
-  const dI=st==='completed'?6:st==='confirmed'?4:st==='proof'?2:1;
+  const dI=st==='completed'?5:st==='confirmed'?3:1;
   const el=document.getElementById('steps-cnt'); if(!el)return;
   el.innerHTML=steps.map((s,i)=>{
     const idx=i+1,cls=idx<dI?'done':idx===dI?'active':'',ic=idx<dI?'✓':idx;
@@ -1566,7 +1569,6 @@ function sendImg(e){
     const ok=await sbSendMsg(curOpId,{from:'user',type:'img',src:r.result,text:'📎 Comprobante',time:tnow()});
     if(!ok){toast('❌ No se pudo enviar el comprobante.','err');return}
     toast('📎 Comprobante enviado','ok');
-    proofSent=true; renderSteps('proof');
     if(ud&&sess)tgNotify(`📎 <b>Comprobante recibido</b>\n🆔 ${curOpId}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n⏰ Revisa el chat del admin.\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
     // Auto-respuesta admin
     setTimeout(async()=>{
@@ -1579,7 +1581,6 @@ function sendImg(e){
 async function clientConfirm(){
   const sess=gS(); if(!sess)return;
   await sbUpdateOpEstado(curOpId,'completed');
-  renderSteps('completed');
   await sbSendMsg(curOpId,{from:'sys',text:'🎉 Operación completada. ¡Gracias por usar LS Cambios!',time:tnow()});
   const ops=await sbGetOps(sess.email);
   const op=ops.find(o=>o.id===curOpId);
@@ -1750,7 +1751,6 @@ async function admClose(){
   await sbSendMsg(aCur.opId,{from:'sys',text:'🔒 Transacción finalizada por LS Cambios.',time:tnow()});
   const ab=document.getElementById('a-acts'); if(ab)ab.style.display='none';
   document.getElementById('a-chat-bdg').innerHTML=stBdg('completed');
-  renderSteps('completed');
   loadAdmin(); toast('🔒 Transacción finalizada','ok');
 }
 
@@ -1772,25 +1772,11 @@ async function saveRate(k){
   if(vi&&RATES.venta[k]) RATES.venta[k].t =parseFloat(vi.value)||0;
   await sbSaveRates(); renderLPRates(); toast('💾 Tasa de '+PN[k]+' guardada','ok');
 }
-function loadZelleEmail(){
-  const inp=document.getElementById('zelle-email-inp');if(inp)inp.value=WLS.zelle.val||'';
-  const ib=document.getElementById('pm-banco-inp'),it=document.getElementById('pm-tel-inp'),ic=document.getElementById('pm-cedula-inp');
-  if(ib)ib.value=WLS.pagoMovil.banco||'';
-  if(it)it.value=WLS.pagoMovil.tel||'';
-  if(ic)ic.value=WLS.pagoMovil.cedula||'';
-}
+function loadZelleEmail(){const inp=document.getElementById('zelle-email-inp');if(inp)inp.value=WLS.zelle.val||'';}
 async function saveZelleEmail(){
   const inp=document.getElementById('zelle-email-inp');
   if(!inp||!inp.value.trim()){toast('⚠️ Ingresa un correo válido','err');return}
   WLS.zelle.val=inp.value.trim(); await sbSaveRates(); toast('💾 Correo Zelle actualizado','ok');
-}
-async function savePagoMovilLS(){
-  const ib=document.getElementById('pm-banco-inp'),it=document.getElementById('pm-tel-inp'),ic=document.getElementById('pm-cedula-inp');
-  if(!it||!it.value.trim()){toast('⚠️ Ingresa al menos el teléfono','err');return}
-  WLS.pagoMovil.banco  = ib?ib.value.trim():'';
-  WLS.pagoMovil.tel    = it.value.trim();
-  WLS.pagoMovil.cedula = ic?ic.value.trim():'';
-  await sbSaveRates(); toast('💾 Pago Móvil actualizado','ok');
 }
 
 // ── ACTIVIDAD LOG ──────────────────────────────────────────────────────
@@ -1866,7 +1852,7 @@ function setupRealtime(opId){
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'operaciones',filter:'id=eq.'+opId},payload=>{
       const nuevoEstado=payload.new.estado;
       const tb=document.getElementById('trd-badge');if(tb)tb.innerHTML=stBdg(nuevoEstado);
-      renderSteps(proofSent&&nuevoEstado==='pending'?'proof':nuevoEstado);
+      renderSteps(nuevoEstado);
       const cpb=document.getElementById('btn-cpr');if(cpb)cpb.style.display=nuevoEstado==='confirmed'?'block':'none';
       const ab=document.getElementById('a-chat-bdg');if(ab)ab.innerHTML=stBdg(nuevoEstado);
       if(nuevoEstado==='completed'){const acts=document.getElementById('a-acts');if(acts)acts.style.display='none'}
@@ -1926,6 +1912,154 @@ window.addEventListener('load',()=>{
     });
   },2400);
 });
+</script>
+<!-- CONFIRM OPERATION MODAL -->
+<div class="cop-ov" id="copOv">
+  <div class="cop-box">
+    <div class="cop-hdr">
+      <div class="cop-icon">💱</div>
+      <div>
+        <div class="cop-title">Confirmar operación</div>
+        <div class="cop-sub">Revisa los datos antes de continuar</div>
+      </div>
+    </div>
+    <div id="cop-body"></div>
+    <div class="cop-btns">
+      <button class="btn ghost full" onclick="closeCopOv()">Cancelar</button>
+      <button class="btn g full" id="cop-ok-btn" onclick="execOp()">✅ Confirmar →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── PASSWORD EYE TOGGLE ──────────────────────────────────────────────────
+function togglePw(id,btn){
+  const inp=document.getElementById(id);if(!inp)return;
+  const show=inp.type==='password';
+  inp.type=show?'text':'password';
+  btn.innerHTML=show
+    ?'<svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+    :'<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+  btn.style.color=show?'var(--g)':'';
+}
+
+// ── CONFIRM OP MODAL ─────────────────────────────────────────────────────
+let _pendingOp=null;
+
+function closeCopOv(){document.getElementById('copOv').classList.remove('on');_pendingOp=null;}
+document.addEventListener('DOMContentLoaded',()=>{
+  const ov=document.getElementById('copOv');
+  if(ov)ov.addEventListener('click',e=>{if(e.target===ov)closeCopOv();});
+});
+
+function openCopOv(pending){
+  _pendingOp=pending;
+  const {dir,plat,amt,sendTxt,getTxt,ud,sess,w}=pending;
+  const isCompra=dir==='compra';
+  const platName=typeof PN!=='undefined'?PN[plat]||plat:plat;
+
+  // User account for this operation
+  let userAccHtml='';
+  if(isCompra){
+    // User is sending crypto — show their crypto account (origin)
+    const acc=ud.cuentas?(plat==='binance'?ud.cuentas.binanceId:ud.cuentas.correo):null;
+    if(acc){
+      userAccHtml=`<div class="cop-sec">
+        <div class="cop-sec-hdr">👤 TU CUENTA DE ORIGEN</div>
+        <div class="cop-row"><span class="cop-k">${plat==='binance'?'Tu ID Binance':'Tu correo'}</span><span class="cop-v" style="color:var(--blue)">${acc}</span></div>
+        <div class="cop-row"><span class="cop-k">A nombre de</span><span class="cop-v">${ud.nombre||''} ${ud.apellido||''}</span></div>
+      </div>`;
+    } else {
+      userAccHtml=`<div class="cop-sec"><div class="cop-sec-hdr">👤 TU CUENTA DE ORIGEN</div><div style="font-size:11px;color:var(--yellow);padding:6px 0">⚠️ No tienes ${plat==='binance'?'ID Binance':'correo'} registrado. Puedes actualizar tu perfil.</div></div>`;
+    }
+  } else {
+    // User is sending Bs — show their Pago Movil (destination for Bs they will receive? No — they send Bs via PM)
+    // Actually for venta: user sends Bs via PM to LS Cambios, receives crypto
+    // So show their PM data (they send FROM here)
+    const pm=ud.pagoMovil;
+    if(pm&&pm.tel){
+      userAccHtml=`<div class="cop-sec">
+        <div class="cop-sec-hdr">💳 TU PAGO MÓVIL (ORIGEN)</div>
+        <div class="cop-row"><span class="cop-k">Banco</span><span class="cop-v">${pm.banco||'—'}</span></div>
+        <div class="cop-row"><span class="cop-k">Teléfono</span><span class="cop-v">${pm.tel}</span></div>
+        <div class="cop-row"><span class="cop-k">Cédula</span><span class="cop-v">${pm.cedula||'—'}</span></div>
+      </div>`;
+    } else {
+      userAccHtml=`<div class="cop-sec"><div class="cop-sec-hdr">💳 TU PAGO MÓVIL</div><div style="font-size:11px;color:var(--yellow);padding:6px 0">⚠️ No tienes Pago Móvil registrado. Indícanos por el chat a dónde enviarte los Bs.</div></div>`;
+    }
+  }
+
+  // LS Cambios destination wallet
+  const lsHtml=`<div class="cop-sec">
+    <div class="cop-sec-hdr">${isCompra?'📲 ENVÍA A LS CAMBIOS':'🏦 LS CAMBIOS TE PAGARÁ EN Bs'}</div>
+    <div class="cop-row"><span class="cop-k">${w.label}</span><span class="cop-v hi">${w.val}</span></div>
+    <div class="cop-row"><span class="cop-k">Nota</span><span class="cop-v">${w.note}</span></div>
+  </div>`;
+
+  // If compra (user sends crypto), also show where they receive Bs (their PM? No — LS sends Bs)
+  // For compra: user sends crypto → LS sends Bs. Show user's PM so they see where Bs arrive.
+  let receiveHtml='';
+  if(isCompra){
+    const pm=ud.pagoMovil;
+    if(pm&&pm.tel){
+      receiveHtml=`<div class="cop-sec">
+        <div class="cop-sec-hdr">💰 RECIBIRÁS TUS BOLÍVARES EN</div>
+        <div class="cop-row"><span class="cop-k">Banco</span><span class="cop-v">${pm.banco||'—'}</span></div>
+        <div class="cop-row"><span class="cop-k">Teléfono</span><span class="cop-v">${pm.tel}</span></div>
+        <div class="cop-row"><span class="cop-k">Cédula</span><span class="cop-v">${pm.cedula||'—'}</span></div>
+      </div>`;
+    }
+  } else {
+    // venta: user sends Bs, receives crypto. Show their crypto account where they receive
+    const acc=ud.cuentas?(plat==='binance'?ud.cuentas.binanceId:ud.cuentas.correo):null;
+    if(acc){
+      receiveHtml=`<div class="cop-sec">
+        <div class="cop-sec-hdr">📥 RECIBIRÁS LAS DIVISAS EN</div>
+        <div class="cop-row"><span class="cop-k">${plat==='binance'?'Tu ID Binance':'Tu correo'}</span><span class="cop-v" style="color:var(--blue)">${acc}</span></div>
+      </div>`;
+    }
+  }
+
+  const badgeClass=isCompra?'cop-badge-compra':'cop-badge-venta';
+  const badgeTxt=isCompra?'Vender divisas':'Comprar divisas';
+
+  document.getElementById('cop-body').innerHTML=`
+    <div class="cop-sec">
+      <div class="cop-sec-hdr">📋 RESUMEN</div>
+      <div class="cop-row"><span class="cop-k">Tipo</span><span class="${badgeClass}">${badgeTxt}</span></div>
+      <div class="cop-row"><span class="cop-k">Plataforma</span><span class="cop-v">${platName}</span></div>
+      <div class="cop-row"><span class="cop-k">Tú envías</span><span class="cop-v warn">${sendTxt}</span></div>
+      <div class="cop-row"><span class="cop-k">Tú recibes</span><span class="cop-v hi">${getTxt}</span></div>
+    </div>
+    ${userAccHtml}
+    ${lsHtml}
+    ${receiveHtml}
+    <div class="cop-alert">⚠️ Envía el monto <strong>exacto</strong>. Adjunta el comprobante en el chat para que confirmemos tu operación.</div>
+  `;
+  document.getElementById('copOv').classList.add('on');
+}
+
+async function execOp(){
+  if(!_pendingOp)return;
+  const btn=document.getElementById('cop-ok-btn');
+  btn.disabled=true; btn.textContent='⏳ Procesando...';
+  const {dir,plat,amt,sendTxt,getTxt,ud,sess,id,op}=_pendingOp;
+  closeCopOv();
+  // Guardar operación
+  const opOk=await sbCreateOp(sess.email,op);
+  if(!opOk){toast('❌ No se pudo crear la operación. Verifica tu conexión.','err');btn.disabled=false;btn.textContent='✅ Confirmar →';return}
+  // Mensajes iniciales del sistema
+  const m1={from:'sys',text:'Operación '+id+' iniciada.',time:tnow()};
+  const m2={from:'sys',text:'📌 Realiza el pago y adjunta el comprobante aquí. LS Cambios lo verificará en breve.',time:tnow()};
+  await sbSendMsg(id,m1);
+  await sbSendMsg(id,m2);
+  op.chat=[m1,m2];
+  sS({email:sess.email,...ud});
+  await logAct('operation',{id,email:sess.email,name:ud.name,dir,plat,send:sendTxt,get:getTxt,date:tnowISO()});
+  tgNotify(`🔔 <b>Nueva operación</b>\n🆔 ${id}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n💱 ${dir==='compra'?'Compra':'Venta'} · ${(typeof PN!=='undefined'?PN[plat]:plat)}\n📤 Envía: ${sendTxt}\n📥 Recibe: ${getTxt}\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
+  openTradeUI(id,op);
+  btn.disabled=false; btn.textContent='✅ Confirmar →';
+}
 </script>
 </body>
 </html>
