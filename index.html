@@ -834,6 +834,13 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
           <div class="re-row"><span class="re-lbl">Correo Zelle</span><input class="re-inp" type="email" id="zelle-email-inp" placeholder="correo@ejemplo.com"></div>
           <button class="btn g sm full" style="margin-top:8px" onclick="saveZelleEmail()">💾 Guardar correo Zelle</button>
         </div>
+        <div style="margin-top:12px;background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r2);padding:16px">
+          <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:10px">📱 PAGO MÓVIL LS CAMBIOS</div>
+          <div class="re-row"><span class="re-lbl">Banco</span><input class="re-inp" type="text" id="pm-banco-inp" placeholder="Banesco, BDV..."></div>
+          <div class="re-row"><span class="re-lbl">Teléfono</span><input class="re-inp" type="tel" id="pm-tel-inp" placeholder="0412-0000000"></div>
+          <div class="re-row"><span class="re-lbl">Cédula</span><input class="re-inp" type="text" id="pm-cedula-inp" placeholder="V-12345678"></div>
+          <button class="btn g sm full" style="margin-top:8px" onclick="savePagoMovilLS()">💾 Guardar Pago Móvil</button>
+        </div>
       </div>
       <div class="av" id="av-activity">
         <div class="dv-h">Actividad 📋</div><div class="dv-s">Log completo de la plataforma · Listo para base de datos</div>
@@ -1092,11 +1099,14 @@ async function sbLoadRates(){
   if(data&&data.data){
     deepMerge(RATES,data.data);
     if(data.data.zelleEmail) WLS.zelle.val=data.data.zelleEmail;
+    if(data.data.pmBanco)  WLS.pagoMovil.banco  = data.data.pmBanco;
+    if(data.data.pmTel)    WLS.pagoMovil.tel     = data.data.pmTel;
+    if(data.data.pmCedula) WLS.pagoMovil.cedula  = data.data.pmCedula;
   }
 }
 
 async function sbSaveRates(){
-  const toSave={...RATES, zelleEmail:WLS.zelle.val};
+  const toSave={...RATES, zelleEmail:WLS.zelle.val, pmBanco:WLS.pagoMovil.banco, pmTel:WLS.pagoMovil.tel, pmCedula:WLS.pagoMovil.cedula};
   const{error}=await db.from('tasas').upsert({id:1,data:toSave},{onConflict:'id'});
   if(sbErr('sbSaveRates',error)) return false;
   return true;
@@ -1149,6 +1159,7 @@ const WLS={
   zelle:  {label:'Correo Zelle',     val:'sandrealeonard@gmail.com',                    note:'Monto exacto'},
   airtm:  {label:'Correo Airtm',     val:'sandrealeonard@gmail.com',                    note:'Monto exacto'},
   usdc:   {label:'Dirección USDC',   val:'0xb1d675ce126ab8dc3095ab3df99052cc4393685e', note:'Red BEP-20 (BSC)'},
+  pagoMovil:{banco:'', tel:'', cedula:''},
 };
 
 function netCalc(a,c){
@@ -1441,9 +1452,14 @@ function updWallet(){
     cnt.innerHTML=`<div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button></span></div><div class="wall-row"><span class="wall-k">Nota</span><span class="wall-v">${w.note}</span></div>${ci}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(0,214,143,.06)">⚠️ Envía el monto exacto y sube el comprobante en el chat.</div>`;
   }else{
     box.style.display='block'; box.style.borderColor='rgba(240,64,96,.2)';
-    let pm_html='<div style="margin-top:8px;padding:10px;background:rgba(240,64,96,.05);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ No tienes Pago Móvil registrado. Indica en el chat a dónde enviarte los Bs.</div>';
-    if(ud&&ud.pagoMovil&&ud.pagoMovil.tel){const pm=ud.pagoMovil;pm_html=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(240,64,96,.08)"><div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:6px">TU PAGO MÓVIL</div><div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco||'—'}</span></div><div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel}</span></div><div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula||'—'}</span></div></div>`;}
-    cnt.innerHTML=`<div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:8px">💸 ENVÍA LAS DIVISAS A LS CAMBIOS</div><div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${w.val}')">COPIAR</button></span></div>${pm_html}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(240,64,96,.06)">⚠️ Envía el monto exacto. Te enviamos los Bs una vez confirmado.</div>`;
+    const pm=WLS.pagoMovil;
+    let pm_html='<div style="margin-top:8px;padding:10px;background:rgba(240,64,96,.05);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ Pago Móvil no configurado. Contacta al asesor por el chat para coordinar el pago.</div>';
+    if(pm.tel){
+      pm_html=`<div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco||'—'}</span></div>`+
+              `<div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${pm.tel}')">COPIAR</button></span></div>`+
+              `<div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula||'—'}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${pm.cedula||''}')">COPIAR</button></span></div>`;
+    }
+    cnt.innerHTML=`<div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:8px">📱 ENVÍA TU PAGO MÓVIL A LS CAMBIOS</div>${pm_html}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(240,64,96,.06)">⚠️ Envía el monto exacto en Bs y sube el comprobante en el chat.</div>`;
   }
 }
 
@@ -1756,11 +1772,25 @@ async function saveRate(k){
   if(vi&&RATES.venta[k]) RATES.venta[k].t =parseFloat(vi.value)||0;
   await sbSaveRates(); renderLPRates(); toast('💾 Tasa de '+PN[k]+' guardada','ok');
 }
-function loadZelleEmail(){const inp=document.getElementById('zelle-email-inp');if(inp)inp.value=WLS.zelle.val||'';}
+function loadZelleEmail(){
+  const inp=document.getElementById('zelle-email-inp');if(inp)inp.value=WLS.zelle.val||'';
+  const ib=document.getElementById('pm-banco-inp'),it=document.getElementById('pm-tel-inp'),ic=document.getElementById('pm-cedula-inp');
+  if(ib)ib.value=WLS.pagoMovil.banco||'';
+  if(it)it.value=WLS.pagoMovil.tel||'';
+  if(ic)ic.value=WLS.pagoMovil.cedula||'';
+}
 async function saveZelleEmail(){
   const inp=document.getElementById('zelle-email-inp');
   if(!inp||!inp.value.trim()){toast('⚠️ Ingresa un correo válido','err');return}
   WLS.zelle.val=inp.value.trim(); await sbSaveRates(); toast('💾 Correo Zelle actualizado','ok');
+}
+async function savePagoMovilLS(){
+  const ib=document.getElementById('pm-banco-inp'),it=document.getElementById('pm-tel-inp'),ic=document.getElementById('pm-cedula-inp');
+  if(!it||!it.value.trim()){toast('⚠️ Ingresa al menos el teléfono','err');return}
+  WLS.pagoMovil.banco  = ib?ib.value.trim():'';
+  WLS.pagoMovil.tel    = it.value.trim();
+  WLS.pagoMovil.cedula = ic?ic.value.trim():'';
+  await sbSaveRates(); toast('💾 Pago Móvil actualizado','ok');
 }
 
 // ── ACTIVIDAD LOG ──────────────────────────────────────────────────────
