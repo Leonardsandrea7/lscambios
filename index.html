@@ -438,6 +438,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 /* RESPONSIVE */
 @media(max-width:800px){
   .trade-layout{grid-template-columns:1fr}
+  .chat-box{height:320px}
   .a-chat-g{grid-template-columns:1fr;height:auto}
   .op-panel{max-height:200px}
   .dp-sb{display:none}
@@ -1357,6 +1358,7 @@ function showDV(name){
   document.querySelectorAll('.sb-i,.mn-i').forEach(b=>b.classList.remove('on'));
   ['dv-','si-','mn-'].forEach(p=>{const e=document.getElementById(p+name);if(e)e.classList.add('on')});
   if(name!=='trade')loadDash();
+  if(name==='newop'){calcOp();updWallet();}
   nsSet('lsc_lv',name); window.scrollTo(0,0);
 }
 
@@ -1500,6 +1502,7 @@ async function openTrade(opId){
 }
 
 function openTradeUI(opId,op){
+  showPage('dp');
   curOpId=opId;
   nsSet('lsc_lv','trade'); nsSet('lsc_lo',opId);
   const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
