@@ -438,7 +438,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 /* RESPONSIVE */
 @media(max-width:800px){
   .trade-layout{grid-template-columns:1fr}
-  .chat-box{height:320px}
   .a-chat-g{grid-template-columns:1fr;height:auto}
   .op-panel{max-height:200px}
   .dp-sb{display:none}
@@ -458,8 +457,9 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 }
 @media(max-width:480px){
   .hero-h1{font-size:30px}
-  .kpi-row{grid-template-columns:1fr 1fr}
+  .kpi-row{grid-template-columns:1fr}
   .how-section{grid-template-columns:1fr}
+  .tbl th:nth-child(n+4),.tbl td:nth-child(n+4){display:none}
   .op-panel{padding:14px}
   .wall-box{font-size:12px}
   .wall-row{flex-wrap:wrap;gap:4px}
@@ -470,11 +470,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
   .nav-btn{padding:6px 12px;font-size:12px}
   .dp-nav{padding:0 12px}
   .dv-h{font-size:18px}
-  .tbl{min-width:460px;font-size:11px}
-  .tbl th,.tbl td{padding:8px 8px}
-  .card{overflow-x:auto}
-  .dp-body{overflow:visible}
-  .ap-body{overflow:visible}
 }
 </style>
 </head>
@@ -727,10 +722,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
               <div class="sum-row"><span class="sum-k">Plataforma</span><span class="sum-v" id="trd-plat">—</span></div>
               <div class="sum-row"><span class="sum-k">Envías</span><span class="sum-v" id="trd-send" style="color:var(--yellow)">—</span></div>
               <div class="sum-row"><span class="sum-k">Recibes</span><span class="sum-v" id="trd-get" style="color:var(--g)">—</span></div>
-            </div>
-            <div class="card" id="trd-wall-card" style="display:none">
-              <div class="card-hdr"><span class="card-title" id="trd-wall-title">Datos de pago</span></div>
-              <div style="padding:14px 16px" id="trd-wall-cnt"></div>
             </div>
             <div class="card">
               <div class="card-hdr"><span class="card-title">Estado</span></div>
@@ -1358,7 +1349,6 @@ function showDV(name){
   document.querySelectorAll('.sb-i,.mn-i').forEach(b=>b.classList.remove('on'));
   ['dv-','si-','mn-'].forEach(p=>{const e=document.getElementById(p+name);if(e)e.classList.add('on')});
   if(name!=='trade')loadDash();
-  if(name==='newop'){calcOp();updWallet();}
   nsSet('lsc_lv',name); window.scrollTo(0,0);
 }
 
@@ -1502,7 +1492,6 @@ async function openTrade(opId){
 }
 
 function openTradeUI(opId,op){
-  showPage('dp');
   curOpId=opId;
   nsSet('lsc_lv','trade'); nsSet('lsc_lo',opId);
   const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
@@ -1511,25 +1500,6 @@ function openTradeUI(opId,op){
   const tb=document.getElementById('trd-badge'); if(tb)tb.innerHTML=stBdg(op.st);
   const cs=document.getElementById('chat-st');   if(cs)cs.innerHTML=stBdg(op.st);
   const cpb=document.getElementById('btn-cpr');  if(cpb)cpb.style.display=op.st==='confirmed'?'block':'none';
-  // ── Datos de pago según tipo de cambio ─────────────────────────────
-  const sess=gS(), ud=sess?getUser(sess.email):null;
-  const w=WLS[op.plat], wCard=document.getElementById('trd-wall-card');
-  const wCnt=document.getElementById('trd-wall-cnt'), wTitle=document.getElementById('trd-wall-title');
-  if(w && wCard && wCnt){
-    wCard.style.display='block';
-    if(op.dir==='compra'){
-      wTitle.textContent='📲 Envía tu pago a LS Cambios'; wCard.style.borderColor='rgba(0,214,143,.18)';
-      let ci='';
-      if(ud&&ud.cuentas){const acc=op.plat==='binance'?ud.cuentas.binanceId:ud.cuentas.correo;if(acc)ci=`<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(0,214,143,.08)"><div style="font-size:9px;color:var(--t3);letter-spacing:.8px;font-weight:700;margin-bottom:6px">TU CUENTA DE ENVÍO</div><div class="wall-row"><span class="wall-k">${op.plat==='binance'?'Tu ID Binance':'Tu correo'}</span><span class="wall-v">${acc}</span></div></div>`;}
-      wCnt.innerHTML=`<div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button></span></div><div class="wall-row"><span class="wall-k">Nota</span><span class="wall-v">${w.note}</span></div>${ci}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(0,214,143,.06)">⚠️ Envía el monto exacto y sube el comprobante en el chat.</div>`;
-    }else{
-      wTitle.textContent='💸 Envía las divisas a LS Cambios'; wCard.style.borderColor='rgba(240,64,96,.2)';
-      let pm_html='<div style="margin-top:8px;padding:10px;background:rgba(240,64,96,.05);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ No tienes Pago Móvil registrado. Indica en el chat a dónde enviarte los Bs.</div>';
-      if(ud&&ud.pagoMovil&&ud.pagoMovil.tel){const pm=ud.pagoMovil;pm_html=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(240,64,96,.08)"><div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:6px">TU PAGO MÓVIL (recibirás aquí)</div><div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco||'—'}</span></div><div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel}</span></div><div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula||'—'}</span></div></div>`;}
-      wCnt.innerHTML=`<div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${w.val}')">COPIAR</button></span></div>${pm_html}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(240,64,96,.06)">⚠️ Envía el monto exacto. Te enviamos los Bs una vez confirmado.</div>`;
-    }
-  }
-  // ───────────────────────────────────────────────────────────────────
   renderSteps(op.st); renderChat(op.chat||[]);
   document.querySelectorAll('.dv').forEach(d=>d.classList.remove('on'));
   document.getElementById('dv-trade').classList.add('on');
