@@ -435,14 +435,21 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .mn-i svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .mn-i.on,.mn-i:hover{color:var(--g)}
 
-/* RESPONSIVE */
+/* ── PASSWORD EYE TOGGLE ── */
+.pw-wrap{position:relative;display:flex;align-items:center}
+.pw-wrap .fi{flex:1;padding-right:38px}
+.pw-eye{position:absolute;right:0;top:0;bottom:0;width:36px;background:none;border:none;cursor:pointer;font-size:15px;color:var(--t2);display:flex;align-items:center;justify-content:center;opacity:.6;transition:opacity .15s}
+.pw-eye:hover{opacity:1}
+
+/* ── RESPONSIVE ── */
 @media(max-width:800px){
   .trade-layout{grid-template-columns:1fr}
   .a-chat-g{grid-template-columns:1fr;height:auto}
   .op-panel{max-height:200px}
   .dp-sb{display:none}
   .dp-mob{display:block}
-  .dp-main{padding:14px;padding-bottom:68px}
+  .dp-body{overflow:visible;flex-direction:column}
+  .dp-main{padding:14px;padding-bottom:68px;overflow-y:auto}
   .ap-sb{display:none}
   .ap-main{padding:14px}
   .kpi-row{grid-template-columns:1fr 1fr}
@@ -457,9 +464,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 }
 @media(max-width:480px){
   .hero-h1{font-size:30px}
-  .kpi-row{grid-template-columns:1fr}
+  .kpi-row{grid-template-columns:1fr 1fr}
   .how-section{grid-template-columns:1fr}
-  .tbl th:nth-child(n+4),.tbl td:nth-child(n+4){display:none}
   .op-panel{padding:14px}
   .wall-box{font-size:12px}
   .wall-row{flex-wrap:wrap;gap:4px}
@@ -470,6 +476,11 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
   .nav-btn{padding:6px 12px;font-size:12px}
   .dp-nav{padding:0 12px}
   .dv-h{font-size:18px}
+  .tbl{min-width:460px;font-size:11px}
+  .tbl th,.tbl td{padding:8px 8px}
+  .card{overflow-x:auto}
+  .dp-body{overflow:visible}
+  .ap-body{overflow:visible}
 }
 </style>
 </head>
@@ -563,7 +574,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
     <!-- LOGIN -->
     <div id="f-li">
       <div class="fg"><label>CORREO</label><input class="fi" type="email" id="li-e" placeholder="tu@correo.com" autocomplete="email"></div>
-      <div class="fg"><label>CONTRASEÑA</label><input class="fi" type="password" id="li-p" placeholder="••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <div class="fg"><label>CONTRASEÑA</label><div class="pw-wrap"><input class="fi" type="password" id="li-p" placeholder="••••••" onkeydown="if(event.key==='Enter')doLogin()"><button type="button" class="pw-eye" onclick="togglePw('li-p',this)" tabindex="-1">👁</button></div></div>
       <div class="ferr" id="li-err"></div>
       <a style="display:block;text-align:right;font-size:11px;color:var(--g);cursor:pointer;margin-bottom:14px" onclick="swAuth('forgot')">¿Olvidaste tu contraseña?</a>
       <button class="btn g full" id="li-btn" onclick="doLogin()">Entrar →</button>
@@ -607,8 +618,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <div class="fg"><label>ID BINANCE</label><input class="fi" type="text" id="rg-bid" placeholder="ID numérico Binance"></div>
       <div class="fdiv">CONTRASEÑA</div>
       <div class="fg2">
-        <div class="fg" style="margin-bottom:0"><label>CONTRASEÑA</label><input class="fi" type="password" id="rg-pw" placeholder="Mín. 6"></div>
-        <div class="fg" style="margin-bottom:0"><label>CONFIRMAR</label><input class="fi" type="password" id="rg-pw2" placeholder="Repetir" onkeydown="if(event.key==='Enter')doRegister()"></div>
+        <div class="fg" style="margin-bottom:0"><label>CONTRASEÑA</label><div class="pw-wrap"><input class="fi" type="password" id="rg-pw" placeholder="Mín. 6"><button type="button" class="pw-eye" onclick="togglePw('rg-pw',this)" tabindex="-1">👁</button></div></div>
+        <div class="fg" style="margin-bottom:0"><label>CONFIRMAR</label><div class="pw-wrap"><input class="fi" type="password" id="rg-pw2" placeholder="Repetir" onkeydown="if(event.key==='Enter')doRegister()"><button type="button" class="pw-eye" onclick="togglePw('rg-pw2',this)" tabindex="-1">👁</button></div></div>
       </div>
       <div class="ferr" id="rg-err" style="margin-top:12px"></div>
       <div class="fok" id="rg-ok" style="margin-top:12px"></div>
@@ -626,7 +637,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <div style="font-size:15px;font-weight:800">Administrador</div>
       <div style="font-size:11px;color:var(--t2);margin-top:3px">Acceso restringido</div>
     </div>
-    <div class="fg"><label>CONTRASEÑA</label><input class="fi" type="password" id="adm-pw" placeholder="••••••••••" onkeydown="if(event.key==='Enter')checkAdmin()"></div>
+    <div class="fg"><label>CONTRASEÑA</label><div class="pw-wrap"><input class="fi" type="password" id="adm-pw" placeholder="••••••••••" onkeydown="if(event.key==='Enter')checkAdmin()"><button type="button" class="pw-eye" onclick="togglePw('adm-pw',this)" tabindex="-1">👁</button></div></div>
     <div class="ferr" id="adm-err"></div>
     <button class="btn g full" onclick="checkAdmin()">Acceder →</button>
     <button class="btn ghost full" style="margin-top:7px" onclick="closeAdmOv()">Cancelar</button>
@@ -1067,7 +1078,6 @@ async function sbSendMsg(opId, msg){
     ts:        tnowISO()
   };
   const{error}=await db.from('mensajes').insert(payload);
-  CONSOLE.LOG('error de supabase:',error)
   if(sbErr('sbSendMsg',error)) return false;
   return true;
 }
@@ -1184,6 +1194,7 @@ function stBdg(st){
 function copyVal(v){navigator.clipboard?navigator.clipboard.writeText(v).then(()=>toast('📋 Copiado','ok')).catch(()=>fbCp(v)):fbCp(v)}
 function fbCp(t){const e=document.createElement('textarea');e.value=t;document.body.appendChild(e);e.select();try{document.execCommand('copy');toast('📋 Copiado','ok')}catch{}document.body.removeChild(e)}
 function openLB(s){document.getElementById('lbImg').src=s;document.getElementById('lb').classList.add('on')}
+function togglePw(id,btn){const inp=document.getElementById(id);if(!inp)return;const show=inp.type==='password';inp.type=show?'text':'password';btn.textContent=show?'🙈':'👁';}
 
 // ── TELEGRAM ───────────────────────────────────────────────────────────
 async function tgNotify(msg){
@@ -1349,6 +1360,7 @@ function showDV(name){
   document.querySelectorAll('.sb-i,.mn-i').forEach(b=>b.classList.remove('on'));
   ['dv-','si-','mn-'].forEach(p=>{const e=document.getElementById(p+name);if(e)e.classList.add('on')});
   if(name!=='trade')loadDash();
+  if(name==='newop'){setTimeout(()=>{calcOp();updWallet();},100)}
   nsSet('lsc_lv',name); window.scrollTo(0,0);
 }
 
