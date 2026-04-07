@@ -279,11 +279,15 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .bdg{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700}
 .bdg-dot{width:4px;height:4px;border-radius:50%;background:currentColor}
 .bdg.p{background:rgba(245,184,0,.1);color:var(--yellow);border:1px solid rgba(245,184,0,.18)}
+.bdg.vs{background:rgba(68,136,255,.1);color:var(--blue);border:1px solid rgba(68,136,255,.18)}
+.bdg.rv{background:rgba(245,184,0,.15);color:var(--yellow);border:1px solid rgba(245,184,0,.25)}
 .bdg.c{background:rgba(0,214,143,.1);color:var(--g);border:1px solid rgba(0,214,143,.18)}
 .bdg.d{background:rgba(0,214,143,.18);color:var(--g2);border:1px solid rgba(0,214,143,.28)}
 .bdg.r{background:rgba(240,64,96,.1);color:var(--red);border:1px solid rgba(240,64,96,.18)}
 .bdg.buy{background:rgba(0,214,143,.1);color:var(--g)}
 .bdg.sell{background:rgba(240,64,96,.1);color:var(--red)}
+.chat-inp:disabled{background:var(--bg2);color:var(--t3);cursor:not-allowed}
+.chat-send:disabled,.chat-att:disabled{opacity:.3;cursor:not-allowed}
 
 /* Op form */
 .op-form{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r2);padding:20px;max-width:480px}
@@ -701,7 +705,22 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
           <div class="kpi"><div class="kpi-v" id="ov-pend">0</div><div class="kpi-l">PENDIENTES</div></div>
           <div class="kpi"><div class="kpi-v" id="ov-done">0</div><div class="kpi-l">COMPLETADAS</div></div>
         </div>
-        <div class="card"><div class="card-hdr"><span class="card-title">Operaciones recientes</span><button class="btn ghost sm" onclick="showDV('history')">Ver todas</button></div><div id="ov-ops"></div></div>
+        <!-- Operaciones Recientes colapsable -->
+        <div class="card" id="ov-recientes-card">
+          <div class="card-hdr" style="cursor:pointer;user-select:none" onclick="toggleRecientes()">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span class="card-title">Operaciones recientes</span>
+              <span id="ov-rec-badge" style="background:rgba(0,214,143,.12);color:var(--g);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:none"></span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <button class="btn ghost sm" onclick="event.stopPropagation();showDV('history')">Ver todas</button>
+              <svg id="ov-rec-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .2s"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div id="ov-ops-wrap" style="max-height:0;overflow:hidden;transition:max-height .35s ease">
+            <div id="ov-ops" style="padding:4px 0"></div>
+          </div>
+        </div>
       </div>
       <!-- NEW OP -->
       <div class="dv" id="dv-newop">
@@ -753,8 +772,13 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
             </div>
             <!-- Estado -->
             <div class="card">
-              <div class="card-hdr"><span class="card-title">Estado</span></div>
+              <div class="card-hdr"><span class="card-title">Estado de la operación</span></div>
               <div class="steps-list" id="steps-cnt"></div>
+              <div id="trd-timer-box" style="display:none;margin:0 14px 10px;padding:12px 14px;background:rgba(245,184,0,.06);border:1px solid rgba(245,184,0,.2);border-radius:var(--r);text-align:center">
+                <div style="font-size:10px;color:var(--yellow);font-weight:700;letter-spacing:.8px;margin-bottom:4px">TIEMPO ESTIMADO DE VERIFICACIÓN</div>
+                <div id="trd-timer" style="font-family:var(--mono);font-size:26px;font-weight:700;color:var(--yellow)">15:00</div>
+                <div style="font-size:10px;color:var(--t3);margin-top:3px">LS Cambios está revisando tu pago</div>
+              </div>
               <div id="btn-cpr" style="display:none;padding:14px"><button class="btn g full" onclick="clientConfirm()">✅ Pago recibido — Completar</button></div>
               <div style="padding:8px 14px 14px"><button class="btn red full sm" onclick="dispute()">⚠️ Reportar problema</button></div>
             </div>
@@ -845,6 +869,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
             </div>
             <div class="a-chat-msgs" id="a-msgs"></div>
             <div class="a-acts" id="a-acts" style="display:none">
+              <button class="btn ghost sm" onclick="admRevisar()" style="color:var(--yellow);border-color:rgba(245,184,0,.3)">🔍 Revisando</button>
               <button class="btn g sm" onclick="admConfirm()">✅ Confirmar pago</button>
               <button class="btn ghost sm" onclick="admClose()">🔒 Cerrar</button>
             </div>
@@ -1204,12 +1229,30 @@ function svgL(id,sz=36){
 }
 
 function stBdg(st){
-  const m={pending:'Pendiente',confirmed:'Confirmada',completed:'Completada',rejected:'Rechazada'};
-  const c={pending:'p',confirmed:'c',completed:'d',rejected:'r'};
+  const m={pending:'Pendiente',voucher_sent:'Comprobante enviado',reviewing:'Revisando',confirmed:'Confirmado',completed:'Completada',rejected:'Rechazada'};
+  const c={pending:'p',voucher_sent:'vs',reviewing:'rv',confirmed:'c',completed:'d',rejected:'r'};
   return`<span class="bdg ${c[st]||'p'}"><span class="bdg-dot"></span>${m[st]||st}</span>`;
 }
 
 // ── MISC UI ────────────────────────────────────────────────────────────
+let _recOpen=false;
+function toggleRecientes(){
+  _recOpen=!_recOpen;
+  const wrap=document.getElementById('ov-ops-wrap');
+  const arrow=document.getElementById('ov-rec-arrow');
+  if(wrap){wrap.style.maxHeight=_recOpen?(wrap.scrollHeight+300)+'px':'0';}
+  if(arrow)arrow.style.transform=_recOpen?'rotate(180deg)':'rotate(0deg)';
+}
+function buildRecentOps(ops){
+  return ops.map(op=>`
+    <div onclick="openTrade('${op.id}')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">${svgL(op.plat,18)}<span style="font-size:13px;font-weight:700">${PN[op.plat]||op.plat}</span><span style="font-size:10px;font-family:var(--mono);color:var(--g)">${op.id}</span></div>
+        <div style="font-size:11px;color:var(--t2)">${op.dir==='compra'?'Compra':'Venta'} · ${op.send} → ${op.get}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">${stBdg(op.st)}<span style="font-size:10px;color:var(--t3)">${op.date}</span></div>
+    </div>`).join('');
+}
 function copyVal(v){navigator.clipboard?navigator.clipboard.writeText(v).then(()=>toast('📋 Copiado','ok')).catch(()=>fbCp(v)):fbCp(v)}
 function fbCp(t){const e=document.createElement('textarea');e.value=t;document.body.appendChild(e);e.select();try{document.execCommand('copy');toast('📋 Copiado','ok')}catch{}document.body.removeChild(e)}
 function openLB(s){document.getElementById('lbImg').src=s;document.getElementById('lb').classList.add('on')}
@@ -1399,7 +1442,12 @@ async function loadDash(){
   const badge=document.getElementById('si-pend');
   if(badge){badge.style.display=pend>0?'inline':'none';badge.textContent=pend}
   const ro=document.getElementById('ov-ops');
-  if(ro)ro.innerHTML=hist.length?buildHistTbl(hist.slice(0,5)):'<div class="empty">Sin operaciones aún</div>';
+  if(ro){
+    const recent=hist.slice(0,5);
+    ro.innerHTML=recent.length?buildRecentOps(recent):'<div class="empty" style="padding:16px">Sin operaciones aún</div>';
+    const badge=document.getElementById('ov-rec-badge');
+    if(badge){const active=hist.filter(o=>o.st!=='completed'&&o.st!=='rejected').length;if(active>0){badge.textContent=active+' activa'+(active>1?'s':'');badge.style.display='inline';}else badge.style.display='none';}
+  }
   const hb=document.getElementById('hist-body');
   if(hb)hb.innerHTML=hist.length?buildHistTbl(hist):'<div class="empty">Sin operaciones</div>';
   const pm=ud.pagoMovil||{},cu=ud.cuentas||{};
@@ -1492,6 +1540,14 @@ async function startOp(){
   const plat=document.getElementById('op-plat').value;
   const amt=parseFloat(document.getElementById('op-amt').value)||0;
   if(!amt||amt<1){toast('Ingresa un monto válido.','err');return}
+  // Block duplicate open operations per platform
+  const existingOps=await sbGetOps(sess.email);
+  const openSamePlat=existingOps.find(o=>o.plat===plat&&(o.st==='pending'||o.st==='voucher_sent'||o.st==='reviewing'||o.st==='confirmed'));
+  if(openSamePlat){
+    toast('⚠️ Ya tienes una operación activa con '+PN[plat]+'. Complétala antes de abrir otra.','err');
+    setTimeout(()=>openTrade(openSamePlat.id),800);
+    return;
+  }
   const rv=document.getElementById('op-res-val').textContent;
   const ud=getUser(sess.email); if(!ud)return;
   const sendTxt=dir==='compra'?'$'+fmt(amt,2)+' ('+PN[plat]+')':'Bs '+fmt(amt);
@@ -1575,20 +1631,60 @@ function renderTradePayment(op){
   }
 }
 
+let _timerInterval=null;
 function renderSteps(st){
+  // 5 estados: pending, voucher_sent, reviewing, confirmed, completed
   const steps=[
-    {t:'Operación iniciada',d:'Tu solicitud fue registrada.'},
-    {t:'Envía el comprobante',d:'Realiza el pago y adjunta la captura.'},
-    {t:'Revisión LS Cambios',d:'Verificamos tu pago (5-15 min).'},
-    {t:'Confirmar recepción',d:'Pulsa "Pago recibido" para completar.'},
-    {t:'¡Completada!',d:'Tu cambio fue procesado. 🎉'},
+    {k:'pending',     t:'Operación iniciada',      d:'Tu solicitud fue registrada correctamente.',       col:'var(--g)'},
+    {k:'voucher_sent',t:'Comprobante enviado',      d:'Recibimos tu comprobante, en revisión.',           col:'var(--g)'},
+    {k:'reviewing',   t:'Revisando pago',           d:'LS Cambios está verificando tu pago.',             col:'var(--yellow)'},
+    {k:'confirmed',   t:'Pago confirmado',          d:'Pulsa "Pago recibido — Completar" para finalizar.',col:'var(--g)'},
+    {k:'completed',   t:'¡Completado! 🎉',          d:'Tu cambio fue procesado exitosamente.',            col:'var(--g)'},
   ];
-  const dI=st==='completed'?5:st==='confirmed'?3:1;
+  const order=['pending','voucher_sent','reviewing','confirmed','completed'];
+  const curIdx=order.indexOf(st); 
   const el=document.getElementById('steps-cnt'); if(!el)return;
   el.innerHTML=steps.map((s,i)=>{
-    const idx=i+1,cls=idx<dI?'done':idx===dI?'active':'',ic=idx<dI?'✓':idx;
-    return`<div class="step-item"><div class="step-c ${cls}">${ic}</div><div class="step-b"><div class="step-t">${s.t}</div><div class="step-d">${s.d}</div></div></div>`;
+    const done=i<curIdx, active=i===curIdx;
+    const cls=done?'done':active?'active':'';
+    const ic=done?'✓':(i+1);
+    const col=active?s.col:'';
+    return`<div class="step-item"><div class="step-c ${cls}" style="${active?'border-color:'+s.col+';color:'+s.col:''}">${ic}</div><div class="step-b"><div class="step-t" style="${active?'color:'+s.col:done?'color:var(--g)':''}">${s.t}</div><div class="step-d">${s.d}</div></div></div>`;
   }).join('');
+  // Timer: show when reviewing
+  const timerBox=document.getElementById('trd-timer-box');
+  if(timerBox){
+    if(st==='reviewing'){timerBox.style.display='block'; startCountdown();}
+    else{timerBox.style.display='none'; stopCountdown();}
+  }
+  // Confirm button: show when confirmed
+  const cpb=document.getElementById('btn-cpr');
+  if(cpb)cpb.style.display=st==='confirmed'?'block':'none';
+  // Lock chat when completed
+  lockChat(st==='completed');
+}
+function startCountdown(){
+  stopCountdown();
+  const el=document.getElementById('trd-timer'); if(!el)return;
+  let secs=15*60;
+  el.textContent=fmtTimer(secs);
+  _timerInterval=setInterval(()=>{
+    secs--;
+    if(secs<=0){stopCountdown();el.textContent='00:00';return;}
+    el.textContent=fmtTimer(secs);
+  },1000);
+}
+function stopCountdown(){if(_timerInterval){clearInterval(_timerInterval);_timerInterval=null;}}
+function fmtTimer(s){const m=Math.floor(s/60),sec=s%60;return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');}
+function lockChat(lock){
+  const inp=document.getElementById('chat-inp');
+  const btn=document.querySelector('.chat-send');
+  const att=document.querySelector('.chat-att');
+  const fi=document.getElementById('fi-att');
+  if(inp){inp.disabled=lock;inp.placeholder=lock?'🔒 Operación completada — Chat cerrado':'Escribe un mensaje...';}
+  if(btn)btn.disabled=lock;
+  if(att)att.disabled=lock;
+  if(fi)fi.disabled=lock;
 }
 
 function renderChat(msgs){
@@ -1617,14 +1713,14 @@ function sendImg(e){
     const ok=await sbSendMsg(curOpId,{from:'user',type:'img',src:r.result,text:'📎 Comprobante',time:tnow()});
     if(!ok){toast('❌ No se pudo enviar el comprobante.','err');return}
     toast('📎 Comprobante enviado','ok');
+    await sbUpdateOpEstado(curOpId,'voucher_sent');
+    await sbSendMsg(curOpId,{from:'sys',text:'📎 Comprobante enviado — LS Cambios comenzará la verificación en breve.',time:tnow()});
+    renderSteps('voucher_sent');
     if(ud&&sess)tgNotify(`📎 <b>Comprobante recibido</b>\n🆔 ${curOpId}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n⏰ Revisa el chat del admin.\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
-    // Auto-respuesta admin
-    setTimeout(async()=>{
-      await sbSendMsg(curOpId,{from:'admin',text:'✅ Comprobante recibido. Verificando tu pago, en breve confirmamos.',time:tnow()});
-    },1800);
   };
   r.readAsDataURL(f); e.target.value='';
 }
+
 
 async function clientConfirm(){
   const sess=gS(); if(!sess)return;
@@ -1782,14 +1878,23 @@ function admSendImg(e){
   r.readAsDataURL(f); e.target.value='';
 }
 
+async function admRevisar(){
+  if(!aCur)return;
+  const ok=await sbUpdateOpEstado(aCur.opId,'reviewing');
+  if(!ok)return;
+  await sbSendMsg(aCur.opId,{from:'sys',text:'🔍 LS Cambios está revisando tu pago — tiempo estimado 15 minutos.',time:tnow()});
+  document.getElementById('a-chat-bdg').innerHTML=stBdg('reviewing');
+  toast('🔍 Estado actualizado a Revisando','ok');
+}
+
 async function admConfirm(){
   if(!aCur)return;
   const ok=await sbUpdateOpEstado(aCur.opId,'confirmed');
   if(!ok)return;
-  await sbSendMsg(aCur.opId,{from:'sys',text:'🟢 LS Cambios verificó y confirmó tu pago.',time:tnow()});
-  await sbSendMsg(aCur.opId,{from:'admin',text:'✅ Pago confirmado. Pulsa "Pago recibido — Completar" para finalizar.',time:tnow()});
+  await sbSendMsg(aCur.opId,{from:'sys',text:'🟢 LS Cambios verificó y confirmó tu pago — ya puedes completar la operación.',time:tnow()});
+  await sbSendMsg(aCur.opId,{from:'admin',text:'✅ Todo en orden. Pulsa "Pago recibido — Completar" para finalizar.',time:tnow()});
   document.getElementById('a-chat-bdg').innerHTML=stBdg('confirmed');
-  loadAdmin(); toast('✅ Confirmado. El cliente puede completar la operación.','ok');
+  loadAdmin(); toast('✅ Pago confirmado. El cliente puede completar.','ok');
 }
 
 async function admClose(){
@@ -1899,12 +2004,12 @@ function setupRealtime(opId){
     })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'operaciones',filter:'id=eq.'+opId},payload=>{
       const nuevoEstado=payload.new.estado;
+      const stMap={pending:'Pendiente',voucher_sent:'Comprobante enviado',reviewing:'Revisando',confirmed:'Confirmado',completed:'Completado'};
       const tb=document.getElementById('trd-badge');if(tb)tb.innerHTML=stBdg(nuevoEstado);
       renderSteps(nuevoEstado);
-      const cpb=document.getElementById('btn-cpr');if(cpb)cpb.style.display=nuevoEstado==='confirmed'?'block':'none';
       const ab=document.getElementById('a-chat-bdg');if(ab)ab.innerHTML=stBdg(nuevoEstado);
-      if(nuevoEstado==='completed'){const acts=document.getElementById('a-acts');if(acts)acts.style.display='none'}
-      toast('🔄 Estado: '+({pending:'Pendiente',confirmed:'Confirmado',completed:'Completado'}[nuevoEstado]||nuevoEstado));
+      if(nuevoEstado==='completed'){const acts=document.getElementById('a-acts');if(acts)acts.style.display='none';}
+      toast('🔄 Estado: '+(stMap[nuevoEstado]||nuevoEstado));
     })
     .subscribe(status=>{
       if(status==='SUBSCRIBED') console.log('[Realtime] conectado op:'+opId);
