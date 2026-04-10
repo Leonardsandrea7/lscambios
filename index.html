@@ -822,7 +822,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <div class="fg" style="margin-bottom:0"><label>NOMBRE</label><input class="fi" type="text" id="rg-n" placeholder="Nombre"></div>
         <div class="fg" style="margin-bottom:0"><label>APELLIDO</label><input class="fi" type="text" id="rg-a" placeholder="Apellido"></div>
       </div>
-      <div class="fg" style="margin-top:12px"><label>CÉDULA</label><input class="fi" type="text" id="rg-ci" placeholder="V-12345678"></div>
+      <div class="fg" style="margin-top:12px"><label>CÉDULA</label><input class="fi" type="text" id="rg-ci" placeholder="V-123456789"></div>
       <div class="fg"><label>CORREO</label><input class="fi" type="email" id="rg-e" placeholder="tu@correo.com" autocomplete="email"></div>
       <div class="fg"><label>CELULAR / WHATSAPP</label><input class="fi" type="tel" id="rg-tel" placeholder="+58 412 000 0000"></div>
       <div class="fdiv">PARA VENDER Bs (Pago Móvil)</div>
@@ -832,7 +832,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
           <option value="">Selecciona banco</option>
           <option>Banesco</option><option>Banco de Venezuela</option><option>Mercantil</option>
           <option>Provincial (BBVA)</option><option>Bicentenario</option><option>Del Tesoro</option>
-          <option>Banplus</option><option>Venezolano de Crédito</option><option>Otro</option>
+          <option>Banplus</option><option>Venezolano de Crédito</option><option>bnc</option><option>Otro</option>
         </select>
       </div>
       <div class="fg2">
@@ -1386,7 +1386,12 @@ function deepMerge(t,s){
 }
 
 const PN={binance:'Binance/USDT',paypal:'PayPal',zinli:'Zinli',wally:'Wally',zelle:'Zelle',airtm:'Airtm',usdc:'USDC'};
-const WLS={
+const WLS={pagoMovil:{
+  banco:'TU BANCO',
+  tel:'TU TELEFONO',
+  cedula:'TU CEDULA',
+  nombre:'TU NOMBRE'
+}
   binance:{label:'ID Binance',       val:'906509124',                                   note:'Envía USDT'},
   paypal: {label:'Correo PayPal',    val:'sandrealeonard@gmail.com',                    note:'Monto exacto'},
   zinli:  {label:'Correo Zinli',     val:'sandrealeonard@gmail.com',                    note:'Monto exacto'},
@@ -1616,8 +1621,8 @@ async function loadDash(){
   const ro=document.getElementById('ov-ops');
   if(ro)ro.innerHTML=hist.length?buildHistTbl(hist.slice(0,5)):'<div class="empty">Sin operaciones aún</div>';
   const hb=document.getElementById('hist-body');
-  if(hb)hb.innerHTML=hist.length?buildHistTbl(hist):'<div class="empty">Sin operaciones</div>';
-  const pm=ud.pagoMovil||{},cu=ud.cuentas||{};
+  if(hb)pagoMovilhb.innerHTML=hist.length?buildHistTbl(hist):'<div class="empty">Sin operaciones</div>';
+  const pm = WLS.pagoMovil;{},cu=ud.cuentas||{};
   const pb=document.getElementById('prof-body');
   if(pb)pb.innerHTML=`
     <div class="card" style="padding:16px">
