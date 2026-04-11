@@ -10,12 +10,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#09090b;--bg1:#111115;--bg2:#18181c;--bg3:#1f1f25;
-  --brd:rgba(255,255,255,.07);--brd2:rgba(255,255,255,.12);
-  --g:#00d68f;--g2:#00f0a0;--gd:linear-gradient(135deg,#00d68f,#00b4cc);
-  --red:#f04060;--yellow:#f5b800;--blue:#4488ff;
-  --t1:#f0f0f4;--t2:#6b6b80;--t3:#3a3a48;
-  --r:10px;--r2:16px;--fn:'Outfit',sans-serif;--mono:'Space Mono',monospace;
+  --bg:#0b0e11;--bg1:#131722;--bg2:#1a1f2e;--bg3:#222838;
+  --brd:rgba(255,255,255,.06);--brd2:rgba(255,255,255,.11);
+  --g:#f0b90b;--g2:#fcd535;--gd:linear-gradient(135deg,#f0b90b,#fcd535);
+  --red:#f6465d;--yellow:#f0b90b;--blue:#1e80ff;
+  --t1:#eaecef;--t2:#848e9c;--t3:#474d57;
+  --r:8px;--r2:12px;--fn:'Outfit',sans-serif;--mono:'Space Mono',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
@@ -34,20 +34,20 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .intro-ring{
   position:absolute;inset:0;border-radius:50%;
   border:2px solid transparent;
-  border-top-color:var(--g);border-right-color:rgba(0,214,143,.3);
+  border-top-color:var(--g);border-right-color:rgba(240,185,11,.3);
   animation:spin 1.2s linear infinite;
 }
 .intro-ring2{
   position:absolute;inset:8px;border-radius:50%;
   border:1px solid transparent;
-  border-bottom-color:rgba(0,214,143,.2);
+  border-bottom-color:rgba(240,185,11,.2);
   animation:spin 2s linear infinite reverse;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 .intro-logo{
   width:88px;height:88px;border-radius:50%;overflow:hidden;
-  border:1.5px solid rgba(0,214,143,.25);
-  box-shadow:0 0 40px rgba(0,214,143,.2);
+  border:1.5px solid rgba(240,185,11,.25);
+  box-shadow:0 0 40px rgba(240,185,11,.2);
 }
 .intro-logo img{width:100%;height:100%;object-fit:cover}
 .intro-name{font-size:20px;font-weight:800;letter-spacing:3px;color:var(--t1)}
@@ -62,62 +62,62 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 
 /* ── NAV ── */
 .nav{
-  height:56px;padding:0 24px;flex-shrink:0;
+  height:60px;padding:0 24px;flex-shrink:0;
   display:flex;align-items:center;justify-content:space-between;
-  background:rgba(9,9,11,.9);backdrop-filter:blur(20px);
+  background:rgba(11,14,17,.96);backdrop-filter:blur(20px);
   border-bottom:1px solid var(--brd);
   position:sticky;top:0;z-index:100;
 }
 .nav-brand{display:flex;align-items:center;gap:10px;cursor:pointer}
-.nav-brand-img{width:30px;height:30px;border-radius:50%;overflow:hidden;border:1px solid rgba(0,214,143,.3)}
+.nav-brand-img{width:32px;height:32px;border-radius:50%;overflow:hidden;border:1.5px solid rgba(240,185,11,.4)}
 .nav-brand-img img{width:100%;height:100%;object-fit:cover}
-.nav-brand-name{font-size:15px;font-weight:800;background:var(--gd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.5px}
+.nav-brand-name{font-size:16px;font-weight:800;background:var(--gd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.3px}
 .nav-actions{display:flex;gap:8px}
-.nav-btn{padding:7px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--fn);border:none;transition:all .15s}
-.nav-btn-ghost{background:transparent;color:var(--t2);border:1px solid var(--brd2)}
-.nav-btn-ghost:hover{color:var(--t1);border-color:rgba(255,255,255,.2)}
-.nav-btn-solid{background:var(--gd);color:#000;font-weight:700;box-shadow:0 2px 12px rgba(0,214,143,.2)}
-.nav-btn-solid:hover{opacity:.88}
+.nav-btn{padding:7px 18px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--fn);border:none;transition:all .15s}
+.nav-btn-ghost{background:var(--bg3);color:var(--t1);border:1px solid var(--brd2)}
+.nav-btn-ghost:hover{background:var(--bg2);color:#fff}
+.nav-btn-solid{background:var(--gd);color:#0b0e11;font-weight:700}
+.nav-btn-solid:hover{filter:brightness(1.08)}
 
-/* ── HERO — clean, direct ── */
+/* ── HERO ── */
 .hero{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:60px 24px 40px;text-align:center;position:relative;overflow:hidden;
+  padding:70px 24px 50px;text-align:center;position:relative;overflow:hidden;
 }
 .hero::before{
   content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:600px;height:400px;
-  background:radial-gradient(ellipse at top,rgba(0,214,143,.05) 0%,transparent 70%);
+  width:700px;height:500px;
+  background:radial-gradient(ellipse at top,rgba(240,185,11,.06) 0%,transparent 65%);
   pointer-events:none;
 }
 .hero-logo{
-  width:80px;height:80px;border-radius:50%;overflow:hidden;
-  border:1.5px solid rgba(0,214,143,.3);margin-bottom:20px;
-  box-shadow:0 0 30px rgba(0,214,143,.15);
+  width:84px;height:84px;border-radius:50%;overflow:hidden;
+  border:2px solid rgba(240,185,11,.35);margin-bottom:22px;
+  box-shadow:0 0 40px rgba(240,185,11,.15);
 }
 .hero-logo img{width:100%;height:100%;object-fit:cover}
 .hero-h1{
-  font-size:clamp(36px,7vw,68px);font-weight:800;line-height:.98;
-  letter-spacing:-2px;color:#fff;margin-bottom:14px;
+  font-size:clamp(34px,7vw,64px);font-weight:800;line-height:.98;
+  letter-spacing:-2px;color:#fff;margin-bottom:16px;
 }
 .hero-h1 span{background:var(--gd);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero-sub{font-size:16px;color:var(--t2);max-width:360px;line-height:1.7;margin-bottom:32px;font-weight:300}
+.hero-sub{font-size:16px;color:var(--t2);max-width:380px;line-height:1.7;margin-bottom:36px;font-weight:300}
 .hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .btn-main{
-  padding:13px 28px;border-radius:8px;font-family:var(--fn);font-size:14px;
+  padding:14px 30px;border-radius:6px;font-family:var(--fn);font-size:14px;
   font-weight:700;border:none;cursor:pointer;transition:all .15s;text-decoration:none;
   display:inline-flex;align-items:center;gap:7px;
 }
-.btn-main.solid{background:var(--gd);color:#000;box-shadow:0 2px 16px rgba(0,214,143,.25)}
-.btn-main.solid:hover{opacity:.9;box-shadow:0 4px 24px rgba(0,214,143,.4)}
+.btn-main.solid{background:var(--gd);color:#0b0e11}
+.btn-main.solid:hover{filter:brightness(1.1)}
 .btn-main.outline{background:transparent;color:var(--t1);border:1px solid var(--brd2)}
-.btn-main.outline:hover{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.04)}
+.btn-main.outline:hover{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.05)}
 .btn-main:active{transform:scale(.97)}
 
 /* Live chip */
 .live-chip{
-  display:inline-flex;align-items:center;gap:6px;margin-bottom:20px;
-  background:rgba(0,214,143,.08);border:1px solid rgba(0,214,143,.18);
+  display:inline-flex;align-items:center;gap:6px;margin-bottom:22px;
+  background:rgba(240,185,11,.08);border:1px solid rgba(240,185,11,.2);
   padding:5px 13px;border-radius:50px;
 }
 .live-dot{width:5px;height:5px;border-radius:50%;background:var(--g);animation:blink 1.4s infinite}
@@ -170,42 +170,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .how-t{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px}
 .how-d{font-size:11px;color:var(--t2);line-height:1.65}
 
-/* ── TESTIMONIALS ── */
-.reviews-section{
-  max-width:860px;margin:0 auto;width:100%;
-  padding:0 24px 60px;
-}
-.reviews-title{font-size:13px;font-weight:700;letter-spacing:2px;color:var(--t2);text-align:center;margin-bottom:28px;text-transform:uppercase}
-.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.review-card{
-  background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);
-  padding:18px;display:flex;flex-direction:column;gap:10px;
-  transition:border-color .2s;
-}
-.review-card:hover{border-color:rgba(0,214,143,.25)}
-.review-stars{color:#f5b800;font-size:13px;letter-spacing:2px}
-.review-text{font-size:12px;color:var(--t2);line-height:1.7;flex:1}
-.review-author{display:flex;align-items:center;gap:8px;margin-top:4px}
-.review-av{width:30px;height:30px;border-radius:50%;background:var(--gd);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#000;flex-shrink:0}
-.review-name{font-size:11px;font-weight:700;color:var(--t1)}
-.review-loc{font-size:10px;color:var(--t3)}
-.review-verified{font-size:9px;color:var(--g);font-weight:700;letter-spacing:.5px;margin-top:2px}
-
-/* ── T&C / SECURITY MODALS ── */
-.info-ov{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px}
-.info-ov.on{display:flex}
-.info-modal{background:var(--bg1);border:1px solid var(--brd2);border-radius:var(--r2);max-width:560px;width:100%;max-height:80vh;overflow-y:auto;position:relative}
-.info-modal-hdr{padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg1);border-bottom:1px solid var(--brd);padding-bottom:14px;margin-bottom:2px}
-.info-modal-title{font-size:15px;font-weight:800;color:var(--t1)}
-.info-modal-x{background:transparent;border:none;color:var(--t2);font-size:18px;cursor:pointer;padding:4px;border-radius:6px;transition:color .15s}
-.info-modal-x:hover{color:var(--t1)}
-.info-modal-body{padding:18px 20px 24px;font-size:12px;color:var(--t2);line-height:1.8;display:flex;flex-direction:column;gap:14px}
-.info-modal-body h3{font-size:11px;font-weight:800;color:var(--g);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px}
-.info-modal-body p{margin:0}
-.security-badge{display:flex;align-items:center;gap:10px;background:rgba(0,214,143,.07);border:1px solid rgba(0,214,143,.2);border-radius:var(--r);padding:12px 14px;margin-bottom:6px}
-.security-badge-icon{font-size:22px;flex-shrink:0}
-.security-badge-text{font-size:11px;color:var(--t1);line-height:1.6;font-weight:600}
-
 /* footer */
 .lp-footer{
   border-top:1px solid var(--brd);padding:16px 24px;
@@ -248,7 +212,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
   transition:all .15s;font-family:var(--fn);
 }
 .sb-i:hover{background:var(--bg3);color:var(--t1)}
-.sb-i.on{background:rgba(0,214,143,.09);color:var(--g);border:1px solid rgba(0,214,143,.12)}
+.sb-i.on{background:rgba(240,185,11,.09);color:var(--g);border:1px solid rgba(240,185,11,.12)}
 .sb-i svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 .sb-sec{font-size:9px;color:var(--t3);letter-spacing:1.5px;font-weight:700;padding:10px 12px 4px}
 .sb-badge{margin-left:auto;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px}
@@ -292,7 +256,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .ferr{font-size:11px;color:var(--red);padding:8px 12px;background:rgba(240,64,96,.08);border:1px solid rgba(240,64,96,.2);border-radius:7px;margin-top:8px;display:none}
 .ferr.on{display:block}
-.fok{font-size:11px;color:var(--g);padding:8px 12px;background:rgba(0,214,143,.08);border:1px solid rgba(0,214,143,.2);border-radius:7px;margin-top:8px;display:none}
+.fok{font-size:11px;color:var(--g);padding:8px 12px;background:rgba(240,185,11,.08);border:1px solid rgba(240,185,11,.2);border-radius:7px;margin-top:8px;display:none}
 .fok.on{display:block}
 .fdiv{font-size:9px;color:var(--t3);letter-spacing:2px;text-align:center;margin:14px 0;position:relative}
 .fdiv::before,.fdiv::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--brd)}
@@ -301,7 +265,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 /* Btn */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:var(--r);border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--fn);transition:all .15s;letter-spacing:.2px}
 .btn:active{transform:scale(.97)}
-.btn.g{background:var(--gd);color:#000;box-shadow:0 2px 12px rgba(0,214,143,.2)}
+.btn.g{background:var(--gd);color:#0b0e11;box-shadow:0 2px 12px rgba(240,185,11,.2)}
 .btn.g:hover{opacity:.9}
 .btn.g:disabled{opacity:.4;cursor:not-allowed}
 .btn.ghost{background:transparent;color:var(--t1);border:1px solid var(--brd2)}
@@ -315,24 +279,28 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .bdg{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700}
 .bdg-dot{width:4px;height:4px;border-radius:50%;background:currentColor}
 .bdg.p{background:rgba(245,184,0,.1);color:var(--yellow);border:1px solid rgba(245,184,0,.18)}
-.bdg.c{background:rgba(0,214,143,.1);color:var(--g);border:1px solid rgba(0,214,143,.18)}
-.bdg.d{background:rgba(0,214,143,.18);color:var(--g2);border:1px solid rgba(0,214,143,.28)}
+.bdg.vs{background:rgba(68,136,255,.1);color:var(--blue);border:1px solid rgba(68,136,255,.18)}
+.bdg.rv{background:rgba(245,184,0,.15);color:var(--yellow);border:1px solid rgba(245,184,0,.25)}
+.bdg.c{background:rgba(240,185,11,.1);color:var(--g);border:1px solid rgba(240,185,11,.18)}
+.bdg.d{background:rgba(240,185,11,.18);color:var(--g2);border:1px solid rgba(240,185,11,.28)}
 .bdg.r{background:rgba(240,64,96,.1);color:var(--red);border:1px solid rgba(240,64,96,.18)}
-.bdg.buy{background:rgba(0,214,143,.1);color:var(--g)}
+.bdg.buy{background:rgba(240,185,11,.1);color:var(--g)}
 .bdg.sell{background:rgba(240,64,96,.1);color:var(--red)}
+.chat-inp:disabled{background:var(--bg2);color:var(--t3);cursor:not-allowed}
+.chat-send:disabled,.chat-att:disabled{opacity:.3;cursor:not-allowed}
 
 /* Op form */
 .op-form{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r2);padding:20px;max-width:480px}
-.res-box{background:rgba(0,214,143,.06);border:1px solid rgba(0,214,143,.18);border-radius:var(--r);padding:14px 18px;margin-bottom:14px}
+.res-box{background:rgba(240,185,11,.06);border:1px solid rgba(240,185,11,.18);border-radius:var(--r);padding:14px 18px;margin-bottom:14px}
 .res-lbl{font-size:9px;color:var(--t2);letter-spacing:1.5px;margin-bottom:5px}
 .res-val{font-family:var(--mono);font-size:26px;font-weight:700;color:var(--g)}
 .res-det{font-size:10px;color:var(--t3);margin-top:3px}
-.wall-box{background:rgba(0,214,143,.04);border:1px solid rgba(0,214,143,.15);border-radius:var(--r);padding:14px 16px;margin-bottom:14px}
-.wall-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(0,214,143,.07);font-size:12px}
+.wall-box{background:rgba(240,185,11,.04);border:1px solid rgba(240,185,11,.15);border-radius:var(--r);padding:14px 16px;margin-bottom:14px}
+.wall-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(240,185,11,.07);font-size:12px}
 .wall-row:last-child{border-bottom:none}
 .wall-k{color:var(--t2)}
 .wall-v{font-weight:600;display:flex;align-items:center;gap:7px}
-.cpb{background:rgba(0,214,143,.1);border:1px solid rgba(0,214,143,.18);color:var(--g);padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--fn)}
+.cpb{background:rgba(240,185,11,.1);border:1px solid rgba(240,185,11,.18);color:var(--g);padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--fn)}
 
 /* Trade layout */
 .trade-layout{display:grid;grid-template-columns:1fr 320px;gap:16px}
@@ -344,7 +312,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .step-item{display:flex;gap:12px;padding:9px 0;position:relative}
 .step-item:not(:last-child)::before{content:'';position:absolute;left:12px;top:28px;bottom:0;width:1px;background:var(--brd);z-index:0}
 .step-c{width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;position:relative;z-index:1;background:var(--bg3);border:1.5px solid var(--brd);color:var(--t2);transition:all .3s}
-.step-c.done{background:rgba(0,214,143,.12);border-color:var(--g);color:var(--g)}
+.step-c.done{background:rgba(240,185,11,.12);border-color:var(--g);color:var(--g)}
 .step-c.active{background:rgba(245,184,0,.1);border-color:var(--yellow);color:var(--yellow);animation:stPulse 1.8s infinite}
 @keyframes stPulse{0%,100%{box-shadow:0 0 0 0 rgba(245,184,0,.25)}50%{box-shadow:0 0 0 5px rgba(245,184,0,0)}}
 .step-b{padding-top:3px}
@@ -360,7 +328,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .cm-who{font-size:9px;color:var(--g);font-weight:700;margin-bottom:2px}
 .cm.me .cm-who{color:var(--blue)}
 .cm-bbl{padding:9px 13px;border-radius:10px;font-size:12px;line-height:1.55;word-break:break-word}
-.me .cm-bbl{background:rgba(0,214,143,.16);border:1px solid rgba(0,214,143,.18);border-bottom-right-radius:2px}
+.me .cm-bbl{background:rgba(240,185,11,.16);border:1px solid rgba(240,185,11,.18);border-bottom-right-radius:2px}
 .them .cm-bbl{background:var(--bg3);border:1px solid var(--brd);border-bottom-left-radius:2px}
 .cm-t{font-size:9px;color:var(--t3);margin-top:2px}
 .cm-sys{text-align:center;font-size:10px;color:var(--t2);background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:20px;padding:3px 12px;margin:2px auto;max-width:85%}
@@ -381,7 +349,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .modal-x{position:absolute;top:12px;right:12px;background:var(--bg3);border:none;color:var(--t2);width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer}
 .modal-x:hover{background:var(--brd2)}
 .modal-logo{display:flex;align-items:center;gap:10px;margin-bottom:20px}
-.modal-logo-img{width:32px;height:32px;border-radius:50%;overflow:hidden;border:1.5px solid rgba(0,214,143,.3)}
+.modal-logo-img{width:32px;height:32px;border-radius:50%;overflow:hidden;border:1.5px solid rgba(240,185,11,.3)}
 .modal-logo-img img{width:100%;height:100%;object-fit:cover}
 .modal-logo-name{font-size:14px;font-weight:800;background:var(--gd);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .auth-tabs{display:flex;background:var(--bg3);border:1px solid var(--brd);border-radius:8px;padding:3px;gap:3px;margin-bottom:20px}
@@ -392,7 +360,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 #comp-ov{display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.9);backdrop-filter:blur(12px);align-items:center;justify-content:center}
 #comp-ov.on{display:flex;animation:fadeIn .4s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.comp-box{background:var(--bg2);border:1px solid rgba(0,214,143,.3);border-radius:20px;padding:36px;text-align:center;box-shadow:0 0 60px rgba(0,214,143,.15);animation:popIn .45s cubic-bezier(.32,1.4,.6,1)}
+.comp-box{background:var(--bg2);border:1px solid rgba(240,185,11,.3);border-radius:20px;padding:36px;text-align:center;box-shadow:0 0 60px rgba(240,185,11,.15);animation:popIn .45s cubic-bezier(.32,1.4,.6,1)}
 @keyframes popIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
 .comp-icon{font-size:48px;display:block;margin-bottom:14px}
 .comp-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:8px}
@@ -402,7 +370,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 /* Toast */
 #toast{position:fixed;bottom:20px;right:20px;z-index:9999;background:var(--bg2);border:1px solid var(--brd2);padding:11px 18px;border-radius:9px;font-size:12px;font-weight:600;opacity:0;transform:translateY(8px);transition:opacity .22s,transform .22s;pointer-events:none;max-width:300px;box-shadow:0 4px 20px rgba(0,0,0,.4)}
 #toast.on{opacity:1;transform:translateY(0)}
-#toast.ok{border-color:rgba(0,214,143,.35);color:var(--g)}
+#toast.ok{border-color:rgba(240,185,11,.35);color:var(--g)}
 #toast.err{border-color:rgba(240,64,96,.35);color:var(--red)}
 
 /* Lightbox */
@@ -457,12 +425,12 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .act-filters{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap}
 
 /* user expand */
-.u-expand{display:none;background:rgba(0,214,143,.02)}.u-expand.on{display:table-row}
-.u-expand td{padding:12px 16px!important;border-top:1px solid rgba(0,214,143,.08)!important;font-size:12px;color:var(--t2);line-height:1.9}
+.u-expand{display:none;background:rgba(240,185,11,.02)}.u-expand.on{display:table-row}
+.u-expand td{padding:12px 16px!important;border-top:1px solid rgba(240,185,11,.08)!important;font-size:12px;color:var(--t2);line-height:1.9}
 .u-acts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 .u-btn{padding:4px 10px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;border:none;font-family:var(--fn)}
 .u-btn.wa{background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.2);color:#25D366}
-.u-btn.vw{background:rgba(0,214,143,.1);border:1px solid rgba(0,214,143,.18);color:var(--g)}
+.u-btn.vw{background:rgba(240,185,11,.1);border:1px solid rgba(240,185,11,.18);color:var(--g)}
 
 /* mob nav */
 .dp-mob{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg1);border-top:1px solid var(--brd);z-index:100;height:54px}
@@ -491,7 +459,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
   .ap-main{padding:14px}
   .kpi-row{grid-template-columns:1fr 1fr}
   .how-section{grid-template-columns:1fr 1fr;padding:0 16px 48px}
-  .reviews-grid{grid-template-columns:1fr 1fr}
   .hero{padding:40px 16px 30px}
   .hero-h1{font-size:36px;letter-spacing:-1.5px}
   .rates-section{padding:32px 16px}
@@ -515,7 +482,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
   .hero-h1{font-size:30px}
   .kpi-row{grid-template-columns:1fr 1fr}
   .how-section{grid-template-columns:1fr}
-  .reviews-grid{grid-template-columns:1fr}
   .op-panel{padding:14px}
   .wall-box{font-size:12px}
   .wall-row{flex-wrap:wrap;gap:4px}
@@ -598,191 +564,14 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
     <div class="how-item"><div class="how-num">04 —</div><div class="how-t">Recibe al instante</div><div class="how-d">Verificamos y procesamos. Listo en minutos. ⚡</div></div>
   </div>
 
-  <!-- TESTIMONIALS -->
-  <div class="reviews-section">
-    <div class="reviews-title">Lo que dicen nuestros clientes</div>
-    <div class="reviews-grid">
-      <div class="review-card">
-        <div class="review-stars">★★★★★</div>
-        <div class="review-text">"Hice mi primera operación con mucho miedo, pero el proceso fue clarísimo. En 10 minutos tenía los Bolívares en mi cuenta. ¡Definitivamente mi casa de cambio de confianza!"</div>
-        <div class="review-author">
-          <div class="review-av">M</div>
-          <div>
-            <div class="review-name">María G.</div>
-            <div class="review-loc">Caracas, Venezuela</div>
-            <div class="review-verified">✓ CLIENTE VERIFICADO</div>
-          </div>
-        </div>
-      </div>
-      <div class="review-card">
-        <div class="review-stars">★★★★★</div>
-        <div class="review-text">"Llevo 6 meses usando LS Cambios para mis pagos de Zelle a Bs. La tasa siempre es justa y el soporte responde rapidísimo por WhatsApp. 100% recomendado."</div>
-        <div class="review-author">
-          <div class="review-av">C</div>
-          <div>
-            <div class="review-name">Carlos R.</div>
-            <div class="review-loc">Maracaibo, Venezuela</div>
-            <div class="review-verified">✓ CLIENTE VERIFICADO</div>
-          </div>
-        </div>
-      </div>
-      <div class="review-card">
-        <div class="review-stars">★★★★★</div>
-        <div class="review-text">"Cambio mi Binance regularmente. El chat en tiempo real me da total tranquilidad. Nunca tuve un problema y cuando tuve una duda, la resolvieron al instante."</div>
-        <div class="review-author">
-          <div class="review-av">A</div>
-          <div>
-            <div class="review-name">Andreína L.</div>
-            <div class="review-loc">Valencia, Venezuela</div>
-            <div class="review-verified">✓ CLIENTE VERIFICADO</div>
-          </div>
-        </div>
-      </div>
-      <div class="review-card">
-        <div class="review-stars">★★★★★</div>
-        <div class="review-text">"Usé Zinli por primera vez aquí y quedé sorprendida de lo fácil que es. El comprobante lo subí desde el celular y en minutos confirmaron. ¡Excelente servicio!"</div>
-        <div class="review-author">
-          <div class="review-av">L</div>
-          <div>
-            <div class="review-name">Luisa M.</div>
-            <div class="review-loc">Barquisimeto, Venezuela</div>
-            <div class="review-verified">✓ CLIENTE VERIFICADO</div>
-          </div>
-        </div>
-      </div>
-      <div class="review-card">
-        <div class="review-stars">★★★★★</div>
-        <div class="review-text">"Me gusta que todo es transparente: la tasa que ven es la que pagan. Sin sorpresas ni comisiones ocultas. Ya recomendé LS Cambios a varios familiares."</div>
-        <div class="review-author">
-          <div class="review-av">J</div>
-          <div>
-            <div class="review-name">José V.</div>
-            <div class="review-loc">Maturín, Venezuela</div>
-            <div class="review-verified">✓ CLIENTE VERIFICADO</div>
-          </div>
-        </div>
-      </div>
-      <div class="review-card">
-        <div class="review-stars">★★★★★</div>
-        <div class="review-text">"La app funciona perfecta desde el teléfono. Hice mi operación mientras esperaba el bus y al llegar a casa ya tenía todo listo. Rapidez y seguridad al mismo nivel."</div>
-        <div class="review-author">
-          <div class="review-av">R</div>
-          <div>
-            <div class="review-name">Roberto P.</div>
-            <div class="review-loc">Maracay, Venezuela</div>
-            <div class="review-verified">✓ CLIENTE VERIFICADO</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <footer class="lp-footer">
     <div>© 2025 LS Cambios</div>
     <div class="footer-links">
       <a href="#rates">Tasas</a>
       <a href="https://wa.me/584147408768" target="_blank">Soporte</a>
-      <a href="#" onclick="openTCModal();return false">Términos</a>
-      <a href="#" onclick="openSecModal();return false">Seguridad</a>
       <span class="adm-a" onclick="openAdminLogin()">A</span>
     </div>
   </footer>
-</div>
-
-<!-- ══════ T&C MODAL ══════ -->
-<div class="info-ov" id="tcOv" onclick="if(event.target===this)closeTCModal()">
-  <div class="info-modal">
-    <div class="info-modal-hdr">
-      <div class="info-modal-title">📋 Términos y Condiciones</div>
-      <button class="info-modal-x" onclick="closeTCModal()">✕</button>
-    </div>
-    <div class="info-modal-body">
-      <div>
-        <h3>1. Aceptación</h3>
-        <p>Al registrarte y usar LS Cambios aceptas íntegramente estos términos. Si no estás de acuerdo, abstente de usar la plataforma. LS Cambios se reserva el derecho de actualizar estos términos con previo aviso.</p>
-      </div>
-      <div>
-        <h3>2. Servicio</h3>
-        <p>LS Cambios es una plataforma de cambio de divisas P2P (PayPal, Zelle, Binance, Zinli, Airtm, Wally) a Bolívares venezolanos. Actuamos como intermediarios de confianza entre las partes, verificando los pagos antes de liberar los fondos.</p>
-      </div>
-      <div>
-        <h3>3. Elegibilidad</h3>
-        <p>El servicio está disponible únicamente para personas mayores de 18 años con cédula de identidad venezolana vigente. Al registrarte garantizas que la información proporcionada es verídica y actual.</p>
-      </div>
-      <div>
-        <h3>4. Tasas y Comisiones</h3>
-        <p>Las tasas mostradas son las vigentes al momento de iniciar la operación. LS Cambios no cobra comisiones adicionales; la diferencia entre tasa de compra y venta constituye nuestra ganancia. Las tasas pueden variar sin previo aviso por condiciones de mercado.</p>
-      </div>
-      <div>
-        <h3>5. Proceso de Operación</h3>
-        <p>Una vez iniciada una operación, el usuario debe realizar el pago y adjuntar el comprobante en el chat. LS Cambios verificará el pago en un plazo de 5 a 30 minutos hábiles. Operaciones fuera de horario podrían tardar más.</p>
-      </div>
-      <div>
-        <h3>6. Cancelaciones y Devoluciones</h3>
-        <p>Las operaciones pueden cancelarse únicamente antes de que el usuario realice el pago. Una vez acreditado el pago, la operación es irrevocable. En caso de disputa, LS Cambios actuará como árbitro basándose en los comprobantes disponibles.</p>
-      </div>
-      <div>
-        <h3>7. Prohibiciones</h3>
-        <p>Queda prohibido el uso de la plataforma para actividades ilegales, lavado de dinero o cualquier acto contrario a las leyes venezolanas e internacionales. LS Cambios se reserva el derecho de bloquear cuentas sospechosas y reportar actividades ilícitas a las autoridades competentes.</p>
-      </div>
-      <div>
-        <h3>8. Limitación de Responsabilidad</h3>
-        <p>LS Cambios no se responsabiliza por pérdidas derivadas de fluctuaciones de tasas, demoras en redes bancarias externas, errores en datos proporcionados por el usuario, o interrupciones de servicio por causa de fuerza mayor.</p>
-      </div>
-      <div>
-        <h3>9. Contacto</h3>
-        <p>Para dudas, reclamos o soporte, comunícate con nosotros a través de WhatsApp al +58 414-740-8768 o mediante el chat de la plataforma. Horario de atención: Lunes a Sábado, 8:00 AM – 8:00 PM (hora Venezuela).</p>
-      </div>
-      <div>
-        <h3>10. Jurisdicción</h3>
-        <p>Estos términos se rigen por las leyes de la República Bolivariana de Venezuela. Cualquier disputa será resuelta mediante arbitraje amigable en primera instancia.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════ SECURITY MODAL ══════ -->
-<div class="info-ov" id="secOv" onclick="if(event.target===this)closeSecModal()">
-  <div class="info-modal">
-    <div class="info-modal-hdr">
-      <div class="info-modal-title">🔒 Seguridad del Usuario</div>
-      <button class="info-modal-x" onclick="closeSecModal()">✕</button>
-    </div>
-    <div class="info-modal-body">
-      <div class="security-badge">
-        <div class="security-badge-icon">🔐</div>
-        <div class="security-badge-text">Tus datos están protegidos con cifrado de extremo a extremo. <strong>LS Cambios no puede ver ni acceder a tu información personal en ningún momento.</strong></div>
-      </div>
-      <div>
-        <h3>Cifrado de Extremo a Extremo</h3>
-        <p>Toda la información que compartes en nuestra plataforma —datos personales, comprobantes, mensajes de chat— viaja y se almacena cifrada mediante protocolos de nivel bancario (AES-256 y TLS 1.3). Ni siquiera nuestro equipo técnico puede descifrar tu información personal sin tu consentimiento explícito.</p>
-      </div>
-      <div>
-        <h3>🛡️ Almacenamiento Seguro</h3>
-        <p>Toda tu información se almacena en servidores de Supabase con certificación SOC 2 Tipo II, alojados en centros de datos con múltiples capas de seguridad física y lógica. Los backups se realizan de forma automática y están también cifrados.</p>
-      </div>
-      <div>
-        <h3>🔑 Autenticación Segura</h3>
-        <p>Las contraseñas se almacenan usando hashing bcrypt con sal aleatoria. Nunca almacenamos contraseñas en texto plano. Recomendamos usar contraseñas únicas y largas para máxima seguridad.</p>
-      </div>
-      <div>
-        <h3>💬 Chat Privado</h3>
-        <p>Los mensajes y comprobantes del chat P2P son de uso exclusivo para la verificación de tu operación. Nadie fuera de tu sesión activa y el agente asignado puede leer tu conversación. Los mensajes se eliminan automáticamente tras 90 días.</p>
-      </div>
-      <div>
-        <h3>🚫 Sin Venta de Datos</h3>
-        <p>LS Cambios <strong>jamás vende, alquila ni comparte</strong> tu información personal con terceros con fines comerciales. Tus datos se usan únicamente para procesar tus operaciones de cambio y cumplir con obligaciones legales cuando corresponda.</p>
-      </div>
-      <div>
-        <h3>⚠️ Recomendaciones</h3>
-        <p>• Nunca compartas tu contraseña con nadie, incluyendo al soporte de LS Cambios.<br>• Verifica siempre que estés en la URL oficial antes de ingresar datos.<br>• Activa el bloqueo de pantalla en tu dispositivo.<br>• Cierra sesión cuando uses dispositivos compartidos.</p>
-      </div>
-      <div>
-        <h3>📞 Reporte de Incidentes</h3>
-        <p>Si detectas actividad sospechosa en tu cuenta, contáctanos inmediatamente por WhatsApp al +58 414-740-8768. Tenemos un equipo disponible para atender urgencias de seguridad en menos de 2 horas.</p>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- ══════ AUTH MODAL ══════ -->
@@ -808,7 +597,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
     </div>
     <!-- FORGOT -->
     <div id="f-fo" style="display:none">
-      <div style="background:rgba(0,214,143,.06);border:1px solid rgba(0,214,143,.16);border-radius:9px;padding:14px;margin-bottom:14px">
+      <div style="background:rgba(240,185,11,.06);border:1px solid rgba(240,185,11,.16);border-radius:9px;padding:14px;margin-bottom:14px">
         <div style="font-weight:700;margin-bottom:5px;font-size:13px">Recuperar por WhatsApp</div>
         <div style="font-size:12px;color:var(--t2);margin-bottom:12px;line-height:1.6">Escríbenos con tu nombre y cédula.</div>
         <a href="https://wa.me/584147408768?text=Hola%2C%20necesito%20recuperar%20mi%20contrase%C3%B1a%20de%20LS%20Cambios" target="_blank" class="btn g full" style="text-decoration:none">💬 Abrir WhatsApp</a>
@@ -916,7 +705,22 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
           <div class="kpi"><div class="kpi-v" id="ov-pend">0</div><div class="kpi-l">PENDIENTES</div></div>
           <div class="kpi"><div class="kpi-v" id="ov-done">0</div><div class="kpi-l">COMPLETADAS</div></div>
         </div>
-        <div class="card"><div class="card-hdr"><span class="card-title">Operaciones recientes</span><button class="btn ghost sm" onclick="showDV('history')">Ver todas</button></div><div id="ov-ops"></div></div>
+        <!-- Operaciones Recientes colapsable -->
+        <div class="card" id="ov-recientes-card">
+          <div class="card-hdr" style="cursor:pointer;user-select:none" onclick="toggleRecientes()">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span class="card-title">Operaciones recientes</span>
+              <span id="ov-rec-badge" style="background:rgba(240,185,11,.12);color:var(--g);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:none"></span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <button class="btn ghost sm" onclick="event.stopPropagation();showDV('history')">Ver todas</button>
+              <svg id="ov-rec-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .2s"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div id="ov-ops-wrap" style="max-height:0;overflow:hidden;transition:max-height .35s ease">
+            <div id="ov-ops" style="padding:4px 0"></div>
+          </div>
+        </div>
       </div>
       <!-- NEW OP -->
       <div class="dv" id="dv-newop">
@@ -968,8 +772,13 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
             </div>
             <!-- Estado -->
             <div class="card">
-              <div class="card-hdr"><span class="card-title">Estado</span></div>
+              <div class="card-hdr"><span class="card-title">Estado de la operación</span></div>
               <div class="steps-list" id="steps-cnt"></div>
+              <div id="trd-timer-box" style="display:none;margin:0 14px 10px;padding:12px 14px;background:rgba(245,184,0,.06);border:1px solid rgba(245,184,0,.2);border-radius:var(--r);text-align:center">
+                <div style="font-size:10px;color:var(--yellow);font-weight:700;letter-spacing:.8px;margin-bottom:4px">TIEMPO ESTIMADO DE VERIFICACIÓN</div>
+                <div id="trd-timer" style="font-family:var(--mono);font-size:26px;font-weight:700;color:var(--yellow)">15:00</div>
+                <div style="font-size:10px;color:var(--t3);margin-top:3px">LS Cambios está revisando tu pago</div>
+              </div>
               <div id="btn-cpr" style="display:none;padding:14px"><button class="btn g full" onclick="clientConfirm()">✅ Pago recibido — Completar</button></div>
               <div style="padding:8px 14px 14px"><button class="btn red full sm" onclick="dispute()">⚠️ Reportar problema</button></div>
             </div>
@@ -1060,6 +869,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
             </div>
             <div class="a-chat-msgs" id="a-msgs"></div>
             <div class="a-acts" id="a-acts" style="display:none">
+              <button class="btn ghost sm" onclick="admRevisar()" style="color:var(--yellow);border-color:rgba(245,184,0,.3)">🔍 Revisando</button>
               <button class="btn g sm" onclick="admConfirm()">✅ Confirmar pago</button>
               <button class="btn ghost sm" onclick="admClose()">🔒 Cerrar</button>
             </div>
@@ -1079,6 +889,13 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
           <div class="re-row"><span class="re-lbl">Correo Zelle</span><input class="re-inp" type="email" id="zelle-email-inp" placeholder="correo@ejemplo.com"></div>
           <button class="btn g sm full" style="margin-top:8px" onclick="saveZelleEmail()">💾 Guardar correo Zelle</button>
         </div>
+        <div style="margin-top:18px;background:var(--bg2);border:1px solid rgba(240,64,96,.2);border-radius:var(--r2);padding:16px">
+          <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:10px">📲 PAGO MÓVIL ADMIN (donde clientes envían Bs)</div>
+          <div class="re-row"><span class="re-lbl">Banco</span><input class="re-inp" type="text" id="adm-pm-banco" placeholder="Ej: Banesco"></div>
+          <div class="re-row"><span class="re-lbl">Teléfono</span><input class="re-inp" type="text" id="adm-pm-tel" placeholder="Ej: 0414-0000000"></div>
+          <div class="re-row"><span class="re-lbl">Cédula</span><input class="re-inp" type="text" id="adm-pm-ci" placeholder="Ej: V-12345678"></div>
+          <button class="btn red sm full" style="margin-top:8px" onclick="saveAdminPM()">💾 Guardar Pago Móvil Admin</button>
+        </div>
       </div>
       <div class="av" id="av-activity">
         <div class="dv-h">Actividad 📋</div><div class="dv-s">Log completo de la plataforma · Listo para base de datos</div>
@@ -1090,7 +907,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
           <button class="btn red sm" onclick="clearAct()">🗑 Limpiar</button>
         </div>
         <div class="card"><div id="act-body"></div></div>
-        <div style="margin-top:14px;padding:14px;background:rgba(0,214,143,.04);border:1px solid rgba(0,214,143,.12);border-radius:var(--r);font-size:11px;color:var(--t2);line-height:1.8">
+        <div style="margin-top:14px;padding:14px;background:rgba(240,185,11,.04);border:1px solid rgba(240,185,11,.12);border-radius:var(--r);font-size:11px;color:var(--t2);line-height:1.8">
           <strong style="color:var(--g)">🔌 Preparado para DB:</strong> Cada evento tiene tipo, email, nombre, fecha ISO y datos. Solo cambia <code style="color:var(--g)">logAct()</code> para hacer INSERT en Supabase/Firebase. Sin más cambios.
         </div>
       </div>
@@ -1337,11 +1154,12 @@ async function sbLoadRates(){
   if(data&&data.data){
     deepMerge(RATES,data.data);
     if(data.data.zelleEmail) WLS.zelle.val=data.data.zelleEmail;
+    if(data.data.adminPM) Object.assign(ADMIN_PM, data.data.adminPM);
   }
 }
 
 async function sbSaveRates(){
-  const toSave={...RATES, zelleEmail:WLS.zelle.val};
+  const toSave={...RATES, zelleEmail:WLS.zelle.val, adminPM:ADMIN_PM};
   const{error}=await db.from('tasas').upsert({id:1,data:toSave},{onConflict:'id'});
   if(sbErr('sbSaveRates',error)) return false;
   return true;
@@ -1396,6 +1214,9 @@ const WLS={
   usdc:   {label:'Dirección USDC',   val:'0xb1d675ce126ab8dc3095ab3df99052cc4393685e', note:'Red BEP-20 (BSC)'},
 };
 
+// Pago Móvil del ADMIN (donde el cliente envía Bs cuando compra divisas)
+let ADMIN_PM = { banco:'Banesco', tel:'0414-0000000', cedula:'V-00000000' };
+
 function netCalc(a,c){
   if(!c||c.type==='none') return a;
   if(c.type==='pct')      return a*(1-c.pct);
@@ -1419,12 +1240,30 @@ function svgL(id,sz=36){
 }
 
 function stBdg(st){
-  const m={pending:'Pendiente',confirmed:'Confirmada',completed:'Completada',rejected:'Rechazada'};
-  const c={pending:'p',confirmed:'c',completed:'d',rejected:'r'};
+  const m={pending:'Pendiente',voucher_sent:'Comprobante enviado',reviewing:'Revisando',confirmed:'Confirmado',completed:'Completada',rejected:'Rechazada'};
+  const c={pending:'p',voucher_sent:'vs',reviewing:'rv',confirmed:'c',completed:'d',rejected:'r'};
   return`<span class="bdg ${c[st]||'p'}"><span class="bdg-dot"></span>${m[st]||st}</span>`;
 }
 
 // ── MISC UI ────────────────────────────────────────────────────────────
+let _recOpen=false;
+function toggleRecientes(){
+  _recOpen=!_recOpen;
+  const wrap=document.getElementById('ov-ops-wrap');
+  const arrow=document.getElementById('ov-rec-arrow');
+  if(wrap){wrap.style.maxHeight=_recOpen?(wrap.scrollHeight+300)+'px':'0';}
+  if(arrow)arrow.style.transform=_recOpen?'rotate(180deg)':'rotate(0deg)';
+}
+function buildRecentOps(ops){
+  return ops.map(op=>`
+    <div onclick="openTrade('${op.id}')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">${svgL(op.plat,18)}<span style="font-size:13px;font-weight:700">${PN[op.plat]||op.plat}</span><span style="font-size:10px;font-family:var(--mono);color:var(--g)">${op.id}</span></div>
+        <div style="font-size:11px;color:var(--t2)">${op.dir==='compra'?'Compra':'Venta'} · ${op.send} → ${op.get}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">${stBdg(op.st)}<span style="font-size:10px;color:var(--t3)">${op.date}</span></div>
+    </div>`).join('');
+}
 function copyVal(v){navigator.clipboard?navigator.clipboard.writeText(v).then(()=>toast('📋 Copiado','ok')).catch(()=>fbCp(v)):fbCp(v)}
 function fbCp(t){const e=document.createElement('textarea');e.value=t;document.body.appendChild(e);e.select();try{document.execCommand('copy');toast('📋 Copiado','ok')}catch{}document.body.removeChild(e)}
 function openLB(s){document.getElementById('lbImg').src=s;document.getElementById('lb').classList.add('on')}
@@ -1614,7 +1453,12 @@ async function loadDash(){
   const badge=document.getElementById('si-pend');
   if(badge){badge.style.display=pend>0?'inline':'none';badge.textContent=pend}
   const ro=document.getElementById('ov-ops');
-  if(ro)ro.innerHTML=hist.length?buildHistTbl(hist.slice(0,5)):'<div class="empty">Sin operaciones aún</div>';
+  if(ro){
+    const recent=hist.slice(0,5);
+    ro.innerHTML=recent.length?buildRecentOps(recent):'<div class="empty" style="padding:16px">Sin operaciones aún</div>';
+    const badge=document.getElementById('ov-rec-badge');
+    if(badge){const active=hist.filter(o=>o.st!=='completed'&&o.st!=='rejected').length;if(active>0){badge.textContent=active+' activa'+(active>1?'s':'');badge.style.display='inline';}else badge.style.display='none';}
+  }
   const hb=document.getElementById('hist-body');
   if(hb)hb.innerHTML=hist.length?buildHistTbl(hist):'<div class="empty">Sin operaciones</div>';
   const pm=ud.pagoMovil||{},cu=ud.cuentas||{};
@@ -1684,14 +1528,15 @@ function updWallet(){
   if(!box||!cnt)return;
   const sess=gS(), ud=sess?getUser(sess.email):null, w=WLS[plat];
   if(dir==='compra'){
-    box.style.display='block'; box.style.borderColor='rgba(0,214,143,.18)';
+    box.style.display='block'; box.style.borderColor='rgba(240,185,11,.18)';
     let ci='';
-    if(ud&&ud.cuentas){const acc=plat==='binance'?ud.cuentas.binanceId:ud.cuentas.correo;if(acc)ci=`<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(0,214,143,.08)"><div style="font-size:9px;color:var(--t3);letter-spacing:.8px;font-weight:700;margin-bottom:6px">TU CUENTA DE ENVÍO</div><div class="wall-row"><span class="wall-k">${plat==='binance'?'Tu ID Binance':'Tu correo'}</span><span class="wall-v">${acc}</span></div></div>`;}
-    cnt.innerHTML=`<div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button></span></div><div class="wall-row"><span class="wall-k">Nota</span><span class="wall-v">${w.note}</span></div>${ci}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(0,214,143,.06)">⚠️ Envía el monto exacto y sube el comprobante en el chat.</div>`;
+    if(ud&&ud.cuentas){const acc=plat==='binance'?ud.cuentas.binanceId:ud.cuentas.correo;if(acc)ci=`<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(240,185,11,.08)"><div style="font-size:9px;color:var(--t3);letter-spacing:.8px;font-weight:700;margin-bottom:6px">TU CUENTA DE ENVÍO</div><div class="wall-row"><span class="wall-k">${plat==='binance'?'Tu ID Binance':'Tu correo'}</span><span class="wall-v">${acc}</span></div></div>`;}
+    cnt.innerHTML=`<div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button></span></div><div class="wall-row"><span class="wall-k">Nota</span><span class="wall-v">${w.note}</span></div>${ci}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(240,185,11,.06)">⚠️ Envía el monto exacto y sube el comprobante en el chat.</div>`;
   }else{
     box.style.display='block'; box.style.borderColor='rgba(240,64,96,.2)';
-    let pm_html='<div style="margin-top:8px;padding:10px;background:rgba(240,64,96,.05);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ No tienes Pago Móvil registrado. Indica en el chat a dónde enviarte los Bs.</div>';
-    if(ud&&ud.pagoMovil&&ud.pagoMovil.tel){const pm=ud.pagoMovil;pm_html=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(240,64,96,.08)"><div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:6px">TU PAGO MÓVIL</div><div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco||'—'}</span></div><div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel}</span></div><div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula||'—'}</span></div></div>`;}
+    // En venta (usuario envía Bs → recibe divisas), mostrar el Pago Móvil del ADMIN
+    let pm_html='<div style="margin-top:8px;padding:10px;background:rgba(240,64,96,.05);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ Pago Móvil del admin no configurado. Consulta en el chat.</div>';
+    if(ADMIN_PM&&ADMIN_PM.tel){const pm=ADMIN_PM;pm_html=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(240,64,96,.08)"><div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:6px">📲 PAGO MÓVIL LS CAMBIOS (ENVÍA Bs AQUÍ)</div><div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco||'—'}</span></div><div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${pm.tel}')">COPIAR</button></span></div><div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula||'—'}</span></div></div>`;}
     cnt.innerHTML=`<div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:8px">💸 ENVÍA LAS DIVISAS A LS CAMBIOS</div><div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${w.val}')">COPIAR</button></span></div>${pm_html}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(240,64,96,.06)">⚠️ Envía el monto exacto. Te enviamos los Bs una vez confirmado.</div>`;
   }
 }
@@ -1707,17 +1552,16 @@ async function startOp(){
   const plat=document.getElementById('op-plat').value;
   const amt=parseFloat(document.getElementById('op-amt').value)||0;
   if(!amt||amt<1){toast('Ingresa un monto válido.','err');return}
-  const rv=document.getElementById('op-res-val').textContent;
-  const ud=getUser(sess.email); if(!ud)return;
-
-  // Verificar que no haya operación activa en la misma plataforma
-  const existOps=await sbGetOps(sess.email);
-  const activeOp=existOps.find(o=>o.plat===plat&&(o.st==='pending'||o.st==='confirmed'));
-  if(activeOp){
-    toast('⚠️ Ya tienes una operación activa en '+PN[plat]+'. Complétala antes de iniciar otra.','err');
+  // Block duplicate open operations per platform
+  const existingOps=await sbGetOps(sess.email);
+  const openSamePlat=existingOps.find(o=>o.plat===plat&&(o.st==='pending'||o.st==='voucher_sent'||o.st==='reviewing'||o.st==='confirmed'));
+  if(openSamePlat){
+    toast('⚠️ Ya tienes una operación activa con '+PN[plat]+'. Complétala antes de abrir otra.','err');
+    setTimeout(()=>openTrade(openSamePlat.id),800);
     return;
   }
-
+  const rv=document.getElementById('op-res-val').textContent;
+  const ud=getUser(sess.email); if(!ud)return;
   const sendTxt=dir==='compra'?'$'+fmt(amt,2)+' ('+PN[plat]+')':'Bs '+fmt(amt);
   const getTxt =dir==='compra'?rv:rv+' ('+PN[plat]+')';
   const id=genId();
@@ -1773,8 +1617,8 @@ function renderTradePayment(op){
   if(!card||!body) return;
   const isCompra=op.dir==='compra';
   const col=isCompra?'var(--g)':'var(--red)';
-  const colBg=isCompra?'rgba(0,214,143,.08)':'rgba(240,64,96,.08)';
-  const colBrd=isCompra?'rgba(0,214,143,.18)':'rgba(240,64,96,.18)';
+  const colBg=isCompra?'rgba(240,185,11,.08)':'rgba(240,64,96,.08)';
+  const colBrd=isCompra?'rgba(240,185,11,.18)':'rgba(240,64,96,.18)';
   card.style.borderColor=colBrd;
   if(hdrEl)hdrEl.style.borderBottomColor=colBrd;
   if(titleEl){titleEl.style.color=col;titleEl.textContent=isCompra?'📲 Envía tu pago a LS Cambios':'💸 Envía las divisas a LS Cambios';}
@@ -1787,32 +1631,72 @@ function renderTradePayment(op){
     body.innerHTML=html;
   } else {
     let html=row(w.label,w.val,true);
-    const sess=gS();const ud=sess?getUser(sess.email):null;
-    const pm=ud&&ud.pagoMovil;
+    // En venta (compra divisas con Bs), mostrar Pago Móvil del ADMIN donde el cliente envía Bs
+    const pm=ADMIN_PM;
     if(pm&&pm.tel){
-      html+=`<div style="margin-top:10px;padding-top:10px;border-top:1px dashed ${colBrd}"><div style="font-size:9px;color:${col};letter-spacing:.8px;font-weight:700;margin-bottom:8px">TUS DATOS (RECIBES Bs)</div>${row('Banco',pm.banco||'—',false)}${row('Teléfono',pm.tel,false)}${row('Cédula',pm.cedula||'—',false)}</div>`;
+      html+=`<div style="margin-top:10px;padding-top:10px;border-top:1px dashed ${colBrd}"><div style="font-size:9px;color:${col};letter-spacing:.8px;font-weight:700;margin-bottom:8px">📲 PAGO MÓVIL LS CAMBIOS — ENVÍA LOS Bs AQUÍ</div>${row('Banco',pm.banco||'—',false)}${row('Teléfono',pm.tel,true)}${row('Cédula',pm.cedula||'—',false)}</div>`;
     } else {
-      html+=`<div style="margin-top:10px;padding:10px;background:rgba(240,64,96,.06);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ No tienes Pago Móvil registrado. Indícalo en el chat.</div>`;
+      html+=`<div style="margin-top:10px;padding:10px;background:rgba(240,64,96,.06);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ Pago Móvil del admin no configurado. Consulta en el chat.</div>`;
     }
     html+=`<div style="font-size:10px;color:var(--t3);padding-top:8px;line-height:1.6">⚠️ Envía el monto exacto. Te enviamos los Bs una vez confirmado.</div>`;
     body.innerHTML=html;
   }
 }
 
+let _timerInterval=null;
 function renderSteps(st){
+  // 5 estados: pending, voucher_sent, reviewing, confirmed, completed
   const steps=[
-    {t:'Operación iniciada',d:'Tu solicitud fue registrada.'},
-    {t:'Envía el comprobante',d:'Realiza el pago y adjunta la captura.'},
-    {t:'Revisión LS Cambios',d:'Verificamos tu pago (5-15 min).'},
-    {t:'Confirmar recepción',d:'Pulsa "Pago recibido" para completar.'},
-    {t:'¡Completada!',d:'Tu cambio fue procesado. 🎉'},
+    {k:'pending',     t:'Operación iniciada',      d:'Tu solicitud fue registrada correctamente.',       col:'var(--g)'},
+    {k:'voucher_sent',t:'Comprobante enviado',      d:'Recibimos tu comprobante, en revisión.',           col:'var(--g)'},
+    {k:'reviewing',   t:'Revisando pago',           d:'LS Cambios está verificando tu pago.',             col:'var(--yellow)'},
+    {k:'confirmed',   t:'Pago confirmado',          d:'Pulsa "Pago recibido — Completar" para finalizar.',col:'var(--g)'},
+    {k:'completed',   t:'¡Completado! 🎉',          d:'Tu cambio fue procesado exitosamente.',            col:'var(--g)'},
   ];
-  const dI=st==='completed'?5:st==='confirmed'?3:1;
+  const order=['pending','voucher_sent','reviewing','confirmed','completed'];
+  const curIdx=order.indexOf(st); 
   const el=document.getElementById('steps-cnt'); if(!el)return;
   el.innerHTML=steps.map((s,i)=>{
-    const idx=i+1,cls=idx<dI?'done':idx===dI?'active':'',ic=idx<dI?'✓':idx;
-    return`<div class="step-item"><div class="step-c ${cls}">${ic}</div><div class="step-b"><div class="step-t">${s.t}</div><div class="step-d">${s.d}</div></div></div>`;
+    const done=i<curIdx, active=i===curIdx;
+    const cls=done?'done':active?'active':'';
+    const ic=done?'✓':(i+1);
+    const col=active?s.col:'';
+    return`<div class="step-item"><div class="step-c ${cls}" style="${active?'border-color:'+s.col+';color:'+s.col:''}">${ic}</div><div class="step-b"><div class="step-t" style="${active?'color:'+s.col:done?'color:var(--g)':''}">${s.t}</div><div class="step-d">${s.d}</div></div></div>`;
   }).join('');
+  // Timer: show when reviewing
+  const timerBox=document.getElementById('trd-timer-box');
+  if(timerBox){
+    if(st==='reviewing'){timerBox.style.display='block'; startCountdown();}
+    else{timerBox.style.display='none'; stopCountdown();}
+  }
+  // Confirm button: show when confirmed
+  const cpb=document.getElementById('btn-cpr');
+  if(cpb)cpb.style.display=st==='confirmed'?'block':'none';
+  // Lock chat when completed
+  lockChat(st==='completed');
+}
+function startCountdown(){
+  stopCountdown();
+  const el=document.getElementById('trd-timer'); if(!el)return;
+  let secs=15*60;
+  el.textContent=fmtTimer(secs);
+  _timerInterval=setInterval(()=>{
+    secs--;
+    if(secs<=0){stopCountdown();el.textContent='00:00';return;}
+    el.textContent=fmtTimer(secs);
+  },1000);
+}
+function stopCountdown(){if(_timerInterval){clearInterval(_timerInterval);_timerInterval=null;}}
+function fmtTimer(s){const m=Math.floor(s/60),sec=s%60;return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');}
+function lockChat(lock){
+  const inp=document.getElementById('chat-inp');
+  const btn=document.querySelector('.chat-send');
+  const att=document.querySelector('.chat-att');
+  const fi=document.getElementById('fi-att');
+  if(inp){inp.disabled=lock;inp.placeholder=lock?'🔒 Operación completada — Chat cerrado':'Escribe un mensaje...';}
+  if(btn)btn.disabled=lock;
+  if(att)att.disabled=lock;
+  if(fi)fi.disabled=lock;
 }
 
 function renderChat(msgs){
@@ -1841,14 +1725,14 @@ function sendImg(e){
     const ok=await sbSendMsg(curOpId,{from:'user',type:'img',src:r.result,text:'📎 Comprobante',time:tnow()});
     if(!ok){toast('❌ No se pudo enviar el comprobante.','err');return}
     toast('📎 Comprobante enviado','ok');
+    await sbUpdateOpEstado(curOpId,'voucher_sent');
+    await sbSendMsg(curOpId,{from:'sys',text:'📎 Comprobante enviado — LS Cambios comenzará la verificación en breve.',time:tnow()});
+    renderSteps('voucher_sent');
     if(ud&&sess)tgNotify(`📎 <b>Comprobante recibido</b>\n🆔 ${curOpId}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n⏰ Revisa el chat del admin.\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
-    // Auto-respuesta admin
-    setTimeout(async()=>{
-      await sbSendMsg(curOpId,{from:'admin',text:'✅ Comprobante recibido. Verificando tu pago, en breve confirmamos.',time:tnow()});
-    },1800);
   };
   r.readAsDataURL(f); e.target.value='';
 }
+
 
 async function clientConfirm(){
   const sess=gS(); if(!sess)return;
@@ -2006,14 +1890,23 @@ function admSendImg(e){
   r.readAsDataURL(f); e.target.value='';
 }
 
+async function admRevisar(){
+  if(!aCur)return;
+  const ok=await sbUpdateOpEstado(aCur.opId,'reviewing');
+  if(!ok)return;
+  await sbSendMsg(aCur.opId,{from:'sys',text:'🔍 LS Cambios está revisando tu pago — tiempo estimado 15 minutos.',time:tnow()});
+  document.getElementById('a-chat-bdg').innerHTML=stBdg('reviewing');
+  toast('🔍 Estado actualizado a Revisando','ok');
+}
+
 async function admConfirm(){
   if(!aCur)return;
   const ok=await sbUpdateOpEstado(aCur.opId,'confirmed');
   if(!ok)return;
-  await sbSendMsg(aCur.opId,{from:'sys',text:'🟢 LS Cambios verificó y confirmó tu pago.',time:tnow()});
-  await sbSendMsg(aCur.opId,{from:'admin',text:'✅ Pago confirmado. Pulsa "Pago recibido — Completar" para finalizar.',time:tnow()});
+  await sbSendMsg(aCur.opId,{from:'sys',text:'🟢 LS Cambios verificó y confirmó tu pago — ya puedes completar la operación.',time:tnow()});
+  await sbSendMsg(aCur.opId,{from:'admin',text:'✅ Todo en orden. Pulsa "Pago recibido — Completar" para finalizar.',time:tnow()});
   document.getElementById('a-chat-bdg').innerHTML=stBdg('confirmed');
-  loadAdmin(); toast('✅ Confirmado. El cliente puede completar la operación.','ok');
+  loadAdmin(); toast('✅ Pago confirmado. El cliente puede completar.','ok');
 }
 
 async function admClose(){
@@ -2029,7 +1922,9 @@ async function admClose(){
 // ── EDITOR TASAS ───────────────────────────────────────────────────────
 function buildRateEditor(){
   const el=document.getElementById('a-rate-grid'); if(!el)return;
-  loadZelleEmail();
+  loadZelleEmail(); loadAdminPM();
+  loadAdminPM();
+  loadAdminPM();
   const plats=['binance','paypal','zinli','wally','zelle','airtm','usdc'];
   el.innerHTML=plats.map(k=>{const cv=RATES.compra[k]?.t??'',vv=RATES.venta[k]?.t??'';
     return`<div class="re-card"><div class="re-hdr"><div class="re-logo">${svgL(k,32)}</div><div class="re-name">${PN[k]}</div></div>
@@ -2045,10 +1940,46 @@ async function saveRate(k){
   await sbSaveRates(); renderLPRates(); toast('💾 Tasa de '+PN[k]+' guardada','ok');
 }
 function loadZelleEmail(){const inp=document.getElementById('zelle-email-inp');if(inp)inp.value=WLS.zelle.val||'';}
+function loadAdminPM(){
+  const b=document.getElementById('adm-pm-banco'),t=document.getElementById('adm-pm-tel'),c=document.getElementById('adm-pm-ci');
+  if(b)b.value=ADMIN_PM.banco||'';if(t)t.value=ADMIN_PM.tel||'';if(c)c.value=ADMIN_PM.cedula||'';
+}
+async function saveAdminPM(){
+  const b=document.getElementById('adm-pm-banco'),t=document.getElementById('adm-pm-tel'),c=document.getElementById('adm-pm-ci');
+  if(!t||!t.value.trim()){toast('⚠️ Ingresa el teléfono del Pago Móvil','err');return;}
+  ADMIN_PM={banco:(b?b.value.trim():''),tel:t.value.trim(),cedula:(c?c.value.trim():'')};
+  await sbSaveRates(); toast('💾 Pago Móvil Admin actualizado','ok');
+}
+function loadAdminPM(){
+  const b=document.getElementById('adm-pm-banco'),t=document.getElementById('adm-pm-tel'),c=document.getElementById('adm-pm-ci');
+  if(b)b.value=ADMIN_PM.banco||''; if(t)t.value=ADMIN_PM.tel||''; if(c)c.value=ADMIN_PM.cedula||'';
+}
+async function saveAdminPM(){
+  const b=document.getElementById('adm-pm-banco'),t=document.getElementById('adm-pm-tel'),c=document.getElementById('adm-pm-ci');
+  if(!t||!t.value.trim()){toast('⚠️ Ingresa el teléfono','err');return}
+  ADMIN_PM={banco:(b?b.value.trim():''),tel:t.value.trim(),cedula:(c?c.value.trim():'')};
+  await sbSaveRates(); toast('💾 Pago Móvil admin guardado','ok');
+}
 async function saveZelleEmail(){
   const inp=document.getElementById('zelle-email-inp');
   if(!inp||!inp.value.trim()){toast('⚠️ Ingresa un correo válido','err');return}
   WLS.zelle.val=inp.value.trim(); await sbSaveRates(); toast('💾 Correo Zelle actualizado','ok');
+}
+function loadAdminPM(){
+  const b=document.getElementById('adm-pm-banco');
+  const t=document.getElementById('adm-pm-tel');
+  const c=document.getElementById('adm-pm-ci');
+  if(b) b.value=ADMIN_PM.banco||'';
+  if(t) t.value=ADMIN_PM.tel||'';
+  if(c) c.value=ADMIN_PM.cedula||'';
+}
+async function saveAdminPM(){
+  const banco=(document.getElementById('adm-pm-banco')||{}).value?.trim();
+  const tel=(document.getElementById('adm-pm-tel')||{}).value?.trim();
+  const cedula=(document.getElementById('adm-pm-ci')||{}).value?.trim();
+  if(!tel){toast('⚠️ El teléfono es obligatorio','err');return;}
+  ADMIN_PM={banco:banco||'',tel,cedula:cedula||''};
+  await sbSaveRates(); toast('💾 Pago Móvil Admin guardado','ok');
 }
 
 // ── ACTIVIDAD LOG ──────────────────────────────────────────────────────
@@ -2123,12 +2054,12 @@ function setupRealtime(opId){
     })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'operaciones',filter:'id=eq.'+opId},payload=>{
       const nuevoEstado=payload.new.estado;
+      const stMap={pending:'Pendiente',voucher_sent:'Comprobante enviado',reviewing:'Revisando',confirmed:'Confirmado',completed:'Completado'};
       const tb=document.getElementById('trd-badge');if(tb)tb.innerHTML=stBdg(nuevoEstado);
       renderSteps(nuevoEstado);
-      const cpb=document.getElementById('btn-cpr');if(cpb)cpb.style.display=nuevoEstado==='confirmed'?'block':'none';
       const ab=document.getElementById('a-chat-bdg');if(ab)ab.innerHTML=stBdg(nuevoEstado);
-      if(nuevoEstado==='completed'){const acts=document.getElementById('a-acts');if(acts)acts.style.display='none'}
-      toast('🔄 Estado: '+({pending:'Pendiente',confirmed:'Confirmado',completed:'Completado'}[nuevoEstado]||nuevoEstado));
+      if(nuevoEstado==='completed'){const acts=document.getElementById('a-acts');if(acts)acts.style.display='none';}
+      toast('🔄 Estado: '+(stMap[nuevoEstado]||nuevoEstado));
     })
     .subscribe(status=>{
       if(status==='SUBSCRIBED') console.log('[Realtime] conectado op:'+opId);
@@ -2184,13 +2115,6 @@ window.addEventListener('load',()=>{
     });
   },2400);
 });
-
-// ── TÉRMINOS Y CONDICIONES / SEGURIDAD MODALS ──────────────────────────
-function openTCModal(){document.getElementById('tcOv').classList.add('on');document.body.style.overflow='hidden'}
-function closeTCModal(){document.getElementById('tcOv').classList.remove('on');document.body.style.overflow=''}
-function openSecModal(){document.getElementById('secOv').classList.add('on');document.body.style.overflow='hidden'}
-function closeSecModal(){document.getElementById('secOv').classList.remove('on');document.body.style.overflow=''}
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeTCModal();closeSecModal();}});
 </script>
 </body>
 </html>
