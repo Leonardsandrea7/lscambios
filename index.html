@@ -601,8 +601,198 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
     <div>© 2025 LS Cambios</div>
     <div class="footer-links">
       <a href="#rates">Tasas</a>
+      <a href="javascript:void(0)" onclick="showStaticPage('nosotros')">Quiénes Somos</a>
+      <a href="javascript:void(0)" onclick="showStaticPage('seguridad')">Seguridad</a>
+      <a href="javascript:void(0)" onclick="showStaticPage('tos')">Términos</a>
       <a href="https://wa.me/584147408768" target="_blank">Soporte</a>
       <span class="adm-a" onclick="openAdminLogin()">A</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════ QUIÉNES SOMOS ══════ -->
+<div class="page" id="pg-nosotros">
+  <nav class="nav">
+    <div class="nav-brand" onclick="showStaticPage(null)">
+      <div class="nav-brand-img"><img src="https://i.imgur.com/7JkKq5F.png" onerror="this.style.display='none'"></div>
+      <div class="nav-brand-name">LS CAMBIOS</div>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn nav-btn-ghost" onclick="showStaticPage(null)">← Volver</button>
+    </div>
+  </nav>
+  <div style="max-width:720px;margin:0 auto;padding:48px 24px 80px;flex:1">
+    <div style="margin-bottom:32px">
+      <div class="live-chip" style="margin-bottom:18px"><div class="live-dot"></div><span>NUESTRA HISTORIA</span></div>
+      <h1 style="font-size:clamp(28px,5vw,48px);font-weight:800;line-height:1.1;color:#fff;letter-spacing:-1px;margin-bottom:14px">Quiénes <span style="background:var(--gd);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Somos</span></h1>
+      <p style="font-size:15px;color:var(--t2);line-height:1.75;font-weight:300">LS Cambios es una casa de cambio digital venezolana dedicada a facilitar el intercambio seguro y rápido de divisas digitales a bolívares y viceversa.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:32px">
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="font-size:28px;margin-bottom:10px">🎯</div>
+        <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px">Nuestra Misión</div>
+        <p style="font-size:13px;color:var(--t2);line-height:1.7">Ofrecer un servicio de cambio de divisas confiable, transparente y accesible para todos los venezolanos, facilitando el acceso a plataformas digitales internacionales con tasas competitivas y atención personalizada.</p>
+      </div>
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="font-size:28px;margin-bottom:10px">👁️</div>
+        <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px">Nuestra Visión</div>
+        <p style="font-size:13px;color:var(--t2);line-height:1.7">Ser la casa de cambio digital de mayor confianza en Venezuela, reconocida por nuestra rapidez, transparencia y compromiso con el cliente en cada operación.</p>
+      </div>
+    </div>
+    <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:24px;margin-bottom:24px">
+      <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:16px">¿Por qué elegir LS Cambios?</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:flex-start;gap:12px"><span style="color:var(--g);font-size:18px;flex-shrink:0">✓</span><div><div style="font-size:13px;font-weight:600;color:var(--t1)">Tasas competitivas en tiempo real</div><div style="font-size:12px;color:var(--t2);margin-top:2px">Actualizamos nuestras tasas constantemente para ofrecerte el mejor precio del mercado.</div></div></div>
+        <div style="display:flex;align-items:flex-start;gap:12px"><span style="color:var(--g);font-size:18px;flex-shrink:0">✓</span><div><div style="font-size:13px;font-weight:600;color:var(--t1)">Procesamiento en minutos</div><div style="font-size:12px;color:var(--t2);margin-top:2px">La mayoría de las operaciones se completan en menos de 30 minutos durante el horario de atención.</div></div></div>
+        <div style="display:flex;align-items:flex-start;gap:12px"><span style="color:var(--g);font-size:18px;flex-shrink:0">✓</span><div><div style="font-size:13px;font-weight:600;color:var(--t1)">Soporte personalizado vía WhatsApp</div><div style="font-size:12px;color:var(--t2);margin-top:2px">Nuestro equipo está disponible para resolver cualquier duda antes, durante y después de tu operación.</div></div></div>
+        <div style="display:flex;align-items:flex-start;gap:12px"><span style="color:var(--g);font-size:18px;flex-shrink:0">✓</span><div><div style="font-size:13px;font-weight:600;color:var(--t1)">Múltiples plataformas</div><div style="font-size:12px;color:var(--t2);margin-top:2px">Operamos con PayPal, Zelle, Binance, Zinli, Airtm, Wally y USDC para tu comodidad.</div></div></div>
+      </div>
+    </div>
+    <div style="text-align:center;padding:24px;background:rgba(0,200,150,.05);border:1px solid rgba(0,200,150,.15);border-radius:var(--r2)">
+      <p style="font-size:13px;color:var(--t2);margin-bottom:14px">¿Listo para comenzar? Crea tu cuenta gratis hoy.</p>
+      <button class="btn-main solid" onclick="showStaticPage(null);setTimeout(()=>openAuth('register'),200)">Crear cuenta gratis →</button>
+    </div>
+  </div>
+  <footer class="lp-footer">
+    <div>© 2025 LS Cambios</div>
+    <div class="footer-links">
+      <a href="javascript:void(0)" onclick="showStaticPage(null)">Inicio</a>
+      <a href="javascript:void(0)" onclick="showStaticPage('seguridad')">Seguridad</a>
+      <a href="javascript:void(0)" onclick="showStaticPage('tos')">Términos</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════ SEGURIDAD ══════ -->
+<div class="page" id="pg-seguridad">
+  <nav class="nav">
+    <div class="nav-brand" onclick="showStaticPage(null)">
+      <div class="nav-brand-img"><img src="https://i.imgur.com/7JkKq5F.png" onerror="this.style.display='none'"></div>
+      <div class="nav-brand-name">LS CAMBIOS</div>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn nav-btn-ghost" onclick="showStaticPage(null)">← Volver</button>
+    </div>
+  </nav>
+  <div style="max-width:720px;margin:0 auto;padding:48px 24px 80px;flex:1">
+    <div style="margin-bottom:32px">
+      <div class="live-chip" style="margin-bottom:18px"><div class="live-dot" style="background:var(--blue)"></div><span style="color:var(--blue)">TU PROTECCIÓN</span></div>
+      <h1 style="font-size:clamp(28px,5vw,48px);font-weight:800;line-height:1.1;color:#fff;letter-spacing:-1px;margin-bottom:14px">Seguridad <span style="background:linear-gradient(135deg,#1a6cff,#00c896);-webkit-background-clip:text;-webkit-text-fill-color:transparent">& Privacidad</span></h1>
+      <p style="font-size:15px;color:var(--t2);line-height:1.75;font-weight:300">Tu seguridad es nuestra prioridad número uno. Conoce las medidas que tomamos para proteger tu dinero y tus datos.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:32px">
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span style="font-size:22px">🔐</span><div style="font-size:14px;font-weight:700;color:#fff">Protección de datos personales</div></div>
+        <p style="font-size:13px;color:var(--t2);line-height:1.7">Toda tu información personal (nombre, cédula, correo, datos bancarios) es almacenada de forma segura con cifrado. No compartimos tu información con terceros bajo ninguna circunstancia.</p>
+      </div>
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span style="font-size:22px">🛡️</span><div style="font-size:14px;font-weight:700;color:#fff">Verificación de operaciones</div></div>
+        <p style="font-size:13px;color:var(--t2);line-height:1.7">Cada operación pasa por un proceso de verificación manual por nuestro equipo. Solo confirmamos los pagos cuando hemos verificado que el comprobante es legítimo y el monto es correcto.</p>
+      </div>
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span style="font-size:22px">💬</span><div style="font-size:14px;font-weight:700;color:#fff">Comunicación directa y segura</div></div>
+        <p style="font-size:13px;color:var(--t2);line-height:1.7">Todo el proceso de tu operación ocurre dentro de nuestra plataforma con un chat en tiempo real. Nunca te pediremos datos por canales externos ni te solicitaremos contraseñas.</p>
+      </div>
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span style="font-size:22px">⚠️</span><div style="font-size:14px;font-weight:700;color:var(--yellow)">Recomendaciones de seguridad</div></div>
+        <div style="font-size:13px;color:var(--t2);line-height:1.7;display:flex;flex-direction:column;gap:8px">
+          <div>• Nunca compartas tu contraseña con nadie, ni siquiera con nuestro equipo.</div>
+          <div>• Verifica siempre que estás en el sitio oficial antes de ingresar tus datos.</div>
+          <div>• Usa una contraseña única y segura para tu cuenta en LS Cambios.</div>
+          <div>• Ante cualquier actividad sospechosa, contáctanos inmediatamente por WhatsApp.</div>
+          <div>• No realices operaciones desde redes WiFi públicas no seguras.</div>
+        </div>
+      </div>
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span style="font-size:22px">🔒</span><div style="font-size:14px;font-weight:700;color:#fff">Contraseñas y acceso</div></div>
+        <p style="font-size:13px;color:var(--t2);line-height:1.7">Las contraseñas son almacenadas con codificación segura. En caso de olvidar tu contraseña, puedes recuperarla desde la pantalla de inicio de sesión. Si sospechas de acceso no autorizado a tu cuenta, contáctanos de inmediato.</p>
+      </div>
+    </div>
+    <div style="text-align:center;padding:20px;background:rgba(26,108,255,.05);border:1px solid rgba(26,108,255,.15);border-radius:var(--r2)">
+      <p style="font-size:13px;color:var(--t2);margin-bottom:4px">¿Tienes alguna duda de seguridad?</p>
+      <a href="https://wa.me/584147408768" target="_blank" style="color:var(--g);font-size:13px;font-weight:600;text-decoration:none">Contáctanos por WhatsApp →</a>
+    </div>
+  </div>
+  <footer class="lp-footer">
+    <div>© 2025 LS Cambios</div>
+    <div class="footer-links">
+      <a href="javascript:void(0)" onclick="showStaticPage(null)">Inicio</a>
+      <a href="javascript:void(0)" onclick="showStaticPage('nosotros')">Quiénes Somos</a>
+      <a href="javascript:void(0)" onclick="showStaticPage('tos')">Términos</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════ TÉRMINOS Y CONDICIONES ══════ -->
+<div class="page" id="pg-tos">
+  <nav class="nav">
+    <div class="nav-brand" onclick="showStaticPage(null)">
+      <div class="nav-brand-img"><img src="https://i.imgur.com/7JkKq5F.png" onerror="this.style.display='none'"></div>
+      <div class="nav-brand-name">LS CAMBIOS</div>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn nav-btn-ghost" onclick="showStaticPage(null)">← Volver</button>
+    </div>
+  </nav>
+  <div style="max-width:720px;margin:0 auto;padding:48px 24px 80px;flex:1">
+    <div style="margin-bottom:32px">
+      <div class="live-chip" style="margin-bottom:18px"><div class="live-dot" style="background:var(--yellow)"></div><span style="color:var(--yellow)">LEGAL</span></div>
+      <h1 style="font-size:clamp(28px,5vw,48px);font-weight:800;line-height:1.1;color:#fff;letter-spacing:-1px;margin-bottom:14px">Términos y <span style="background:linear-gradient(135deg,#f0b90b,#00c896);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Condiciones</span></h1>
+      <p style="font-size:13px;color:var(--t3)">Última actualización: Enero 2025</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="font-size:14px;font-weight:700;color:var(--g);margin-bottom:10px">1. Aceptación de los términos</div>
+        <p style="font-size:13px;color:var(--t2);line-height:1.75">Al registrarte y utilizar los servicios de LS Cambios, aceptas estos Términos y Condiciones en su totalidad. Si no estás de acuerdo con alguno de los términos aquí descritos, no debes usar nuestra plataforma.</p>
+      </div>
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="font-size:14px;font-weight:700;color:var(--g);margin-bottom:10px">2. Descripción del servicio</div>
+        <p style="font-size:13px;color:var(--t2);line-height:1.75">LS Cambios es una plataforma P2P de intercambio de divisas digitales que facilita operaciones de compra y venta entre PayPal, Zelle, Binance/USDT, Zinli, Airtm, Wally y USDC, con liquidación en bolívares venezolanos (Bs). Actuamos como intermediarios facilitando la transacción.</p>
+      </div>
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="font-size:14px;font-weight:700;color:var(--g);margin-bottom:10px">3. Registro y cuenta de usuario</div>
+        <p style="font-size:13px;color:var(--t2);line-height:1.75">Para usar el servicio debes registrarte con información veraz y actualizada. Eres responsable de mantener la confidencialidad de tu contraseña y de todas las actividades que ocurran bajo tu cuenta. Debes notificarnos inmediatamente cualquier uso no autorizado.</p>
+      </div>
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="font-size:14px;font-weight:700;color:var(--g);margin-bottom:10px">4. Operaciones y pagos</div>
+        <p style="font-size:13px;color:var(--t2);line-height:1.75">Todas las operaciones son procesadas de forma manual por nuestro equipo. Las tasas de cambio se fijan al momento de confirmar la operación y pueden variar sin previo aviso. El tiempo de procesamiento habitual es de 5 a 30 minutos durante el horario de atención. No nos hacemos responsables de retrasos causados por las plataformas externas (PayPal, Binance, etc.).</p>
+      </div>
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="font-size:14px;font-weight:700;color:var(--g);margin-bottom:10px">5. Comisiones y tarifas</div>
+        <p style="font-size:13px;color:var(--t2);line-height:1.75">Las comisiones aplicables a cada plataforma se muestran claramente en la tabla de tasas antes de confirmar cualquier operación. Las tarifas pueden cambiar sin previo aviso, pero siempre se mostrarán actualizadas en la plataforma al momento de operar.</p>
+      </div>
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="font-size:14px;font-weight:700;color:var(--g);margin-bottom:10px">6. Cancelaciones y reembolsos</div>
+        <p style="font-size:13px;color:var(--t2);line-height:1.75">Una vez iniciada una operación y realizado el pago, no es posible cancelarla de forma unilateral. En caso de disputas o errores, el cliente debe notificarlo de inmediato a través del chat de la operación o por WhatsApp. Los reembolsos, de proceder, se gestionarán en un plazo de 24 a 72 horas hábiles.</p>
+      </div>
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="font-size:14px;font-weight:700;color:var(--g);margin-bottom:10px">7. Uso prohibido</div>
+        <p style="font-size:13px;color:var(--t2);line-height:1.75">Queda estrictamente prohibido usar LS Cambios para actividades ilegales, lavado de dinero, fraude, o cualquier otra actividad que viole las leyes venezolanas o internacionales. Nos reservamos el derecho de cancelar cuentas y reportar actividades sospechosas a las autoridades competentes.</p>
+      </div>
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="font-size:14px;font-weight:700;color:var(--g);margin-bottom:10px">8. Limitación de responsabilidad</div>
+        <p style="font-size:13px;color:var(--t2);line-height:1.75">LS Cambios no se hace responsable por pérdidas derivadas de fluctuaciones en las tasas de cambio, fallas en plataformas externas, errores del usuario al ingresar datos, o circunstancias fuera de nuestro control. El servicio se ofrece "tal cual" sin garantías de disponibilidad continua.</p>
+      </div>
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="font-size:14px;font-weight:700;color:var(--g);margin-bottom:10px">9. Privacidad de datos</div>
+        <p style="font-size:13px;color:var(--t2);line-height:1.75">Los datos personales que nos proporcionas son utilizados exclusivamente para la prestación del servicio. No vendemos, alquilamos ni compartimos tu información con terceros, salvo requerimiento legal. Consulta nuestra sección de Seguridad para más detalles.</p>
+      </div>
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="font-size:14px;font-weight:700;color:var(--g);margin-bottom:10px">10. Modificaciones</div>
+        <p style="font-size:13px;color:var(--t2);line-height:1.75">LS Cambios se reserva el derecho de modificar estos Términos y Condiciones en cualquier momento. Los cambios entrarán en vigor al momento de su publicación en la plataforma. El uso continuado del servicio tras la publicación de cambios implica la aceptación de los nuevos términos.</p>
+      </div>
+      <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px">
+        <div style="font-size:14px;font-weight:700;color:var(--g);margin-bottom:10px">11. Contacto</div>
+        <p style="font-size:13px;color:var(--t2);line-height:1.75">Para cualquier consulta sobre estos términos, puedes contactarnos a través de WhatsApp al número <a href="https://wa.me/584147408768" target="_blank" style="color:var(--g);text-decoration:none">+58 414-740-8768</a> o mediante el chat de soporte dentro de la plataforma.</p>
+      </div>
+    </div>
+  </div>
+  <footer class="lp-footer">
+    <div>© 2025 LS Cambios</div>
+    <div class="footer-links">
+      <a href="javascript:void(0)" onclick="showStaticPage(null)">Inicio</a>
+      <a href="javascript:void(0)" onclick="showStaticPage('nosotros')">Quiénes Somos</a>
+      <a href="javascript:void(0)" onclick="showStaticPage('seguridad')">Seguridad</a>
     </div>
   </footer>
 </div>
@@ -711,10 +901,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
   <div class="dp-body">
     <aside class="dp-sb">
       <div class="sb-sec">MENÚ</div>
-      <button class="sb-i on" id="si-overview" onclick="showDV('overview')">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Inicio
-      </button>
-      <button class="sb-i" id="si-newop" onclick="showDV('newop')">
+      <button class="sb-i on" id="si-newop" onclick="showDV('newop')">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Nueva operación
       </button>
       <button class="sb-i" id="si-history" onclick="showDV('history')">
@@ -730,33 +917,20 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       </button>
     </aside>
     <main class="dp-main">
-      <!-- OVERVIEW -->
-      <div class="dv on" id="dv-overview">
+      <!-- OVERVIEW (hidden, kept for loadDash data binding) -->
+      <div class="dv" id="dv-overview" style="display:none!important">
         <div class="dv-h" id="dpGreet">Hola 👋</div><div class="dv-s">Tu cuenta LS Cambios</div>
         <div class="kpi-row">
           <div class="kpi"><div class="kpi-v" id="ov-tot">0</div><div class="kpi-l">OPERACIONES</div></div>
           <div class="kpi"><div class="kpi-v" id="ov-pend">0</div><div class="kpi-l">PENDIENTES</div></div>
           <div class="kpi"><div class="kpi-v" id="ov-done">0</div><div class="kpi-l">COMPLETADAS</div></div>
         </div>
-        <!-- Operaciones Recientes colapsable -->
-        <div class="card" id="ov-recientes-card">
-          <div class="card-hdr" style="cursor:pointer;user-select:none" onclick="toggleRecientes()">
-            <div style="display:flex;align-items:center;gap:10px">
-              <span class="card-title">Operaciones recientes</span>
-              <span id="ov-rec-badge" style="background:rgba(0,200,150,.12);color:var(--g);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:none"></span>
-            </div>
-            <div style="display:flex;align-items:center;gap:8px">
-              <button class="btn ghost sm" onclick="event.stopPropagation();showDV('history')">Ver todas</button>
-              <svg id="ov-rec-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .2s"><polyline points="6 9 12 15 18 9"/></svg>
-            </div>
-          </div>
-          <div id="ov-ops-wrap" style="max-height:0;overflow:hidden;transition:max-height .35s ease">
-            <div id="ov-ops" style="padding:4px 0"></div>
-          </div>
-        </div>
+        <div id="ov-ops-wrap" style="display:none"><div id="ov-ops"></div></div>
+        <span id="ov-rec-badge" style="display:none"></span>
+        <svg id="ov-rec-arrow" style="display:none"></svg>
       </div>
       <!-- NEW OP -->
-      <div class="dv" id="dv-newop">
+      <div class="dv on" id="dv-newop">
         <div class="dv-h">Nueva operación ⚡</div><div class="dv-s">Calculadora con tasas exactas.</div>
         <div class="op-form">
           <div class="fg"><label>TIPO</label>
@@ -1325,8 +1499,12 @@ function playSuccess(){try{const t=ac().currentTime;[[523,.0,.12],[659,.12,.12],
 //  PÁGINAS / NAVEGACIÓN
 // ════════════════════════════════════════════════════════════════════════
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo(0,0)}
+function showStaticPage(name){
+  if(!name){showPage('lp');updLPNav();return}
+  showPage('pg-'+name);
+}
 function goL(){showPage('lp');updLPNav();if(window.location.hash==='#admin')history.pushState('',document.title,window.location.pathname+window.location.search)}
-function goD(){showPage('dp');loadDash()}
+function goD(){showPage('dp');showDV('newop')}
 function goA(){showPage('ap');loadAdmin()}
 
 window.addEventListener('hashchange',()=>{
