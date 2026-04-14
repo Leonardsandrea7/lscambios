@@ -941,17 +941,27 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       </button>
     </aside>
     <main class="dp-main">
-      <!-- OVERVIEW (hidden, kept for loadDash data binding) -->
-      <div class="dv" id="dv-overview" style="display:none">
-        <div class="dv-h" id="dpGreet">Hola 👋</div><div class="dv-s">Tu cuenta LS Cambios</div>
-        <div class="kpi-row">
-          <div class="kpi"><div class="kpi-v" id="ov-tot">0</div><div class="kpi-l">OPERACIONES</div></div>
-          <div class="kpi"><div class="kpi-v" id="ov-pend">0</div><div class="kpi-l">PENDIENTES</div></div>
-          <div class="kpi"><div class="kpi-v" id="ov-done">0</div><div class="kpi-l">COMPLETADAS</div></div>
+      <!-- OVERVIEW MÓVIL - Panel Inicio -->
+      <div class="dv" id="dv-overview">
+        <div class="dv-h" id="dpGreet">Hola 👋</div>
+        <div class="dv-s">Bienvenido a LS Cambios</div>
+        <!-- KPIs ocultos para que loadDash los llene igual -->
+        <div style="display:none">
+          <span id="ov-tot"></span><span id="ov-pend"></span><span id="ov-done"></span>
+          <span id="ov-rec-badge"></span><svg id="ov-rec-arrow"></svg>
+          <div id="ov-ops-wrap"><div id="ov-ops"></div></div>
         </div>
-        <div id="ov-ops-wrap" style="display:none"><div id="ov-ops"></div></div>
-        <span id="ov-rec-badge" style="display:none"></span>
-        <svg id="ov-rec-arrow" style="display:none"></svg>
+        <!-- Tasas del día -->
+        <div style="margin-bottom:16px">
+          <div class="rs-tabs" style="margin-bottom:14px">
+            <button class="rs-tab buy on" id="ov-tab-buy" onclick="setOVMode('buy',this)">Vender divisas</button>
+            <button class="rs-tab sell" id="ov-tab-sell" onclick="setOVMode('sell',this)">Comprar divisas</button>
+          </div>
+          <div class="rate-grid" id="ovBuy" style="display:flex;flex-direction:column"></div>
+          <div class="rate-grid" id="ovSell" style="display:none;flex-direction:column"></div>
+        </div>
+        <!-- Botón operar -->
+        <button class="btn g full" style="font-size:15px;padding:14px;margin-bottom:8px" onclick="showDV('newop')">⚡ Nueva operación</button>
       </div>
       <!-- NEW OP -->
       <div class="dv on" id="dv-newop">
@@ -1004,12 +1014,12 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
             <!-- Estado -->
             <div class="card">
               <div class="card-hdr"><span class="card-title">Estado de la operación</span></div>
-              <div class="steps-list" id="steps-cnt"></div>
-              <div id="trd-timer-box" style="display:none;margin:0 14px 10px;padding:12px 14px;background:rgba(245,184,0,.06);border:1px solid rgba(245,184,0,.2);border-radius:var(--r);text-align:center">
-                <div style="font-size:10px;color:var(--yellow);font-weight:700;letter-spacing:.8px;margin-bottom:4px">TIEMPO ESTIMADO DE VERIFICACIÓN</div>
-                <div id="trd-timer" style="font-family:var(--mono);font-size:26px;font-weight:700;color:var(--yellow)">15:00</div>
-                <div style="font-size:10px;color:var(--t3);margin-top:3px">LS Cambios está revisando tu pago</div>
+              <div id="trd-timer-box" style="display:none;margin:14px 14px 0;padding:14px;background:rgba(245,184,0,.06);border:1px solid rgba(245,184,0,.2);border-radius:var(--r);text-align:center">
+                <div style="font-size:10px;color:var(--yellow);font-weight:700;letter-spacing:.8px;margin-bottom:6px">⏳ VERIFICANDO TU COMPROBANTE</div>
+                <div id="trd-timer" style="font-family:var(--mono);font-size:32px;font-weight:700;color:var(--yellow);letter-spacing:2px">15:00</div>
+                <div style="font-size:11px;color:var(--t2);margin-top:4px">LS Cambios está revisando tu pago</div>
               </div>
+              <div class="steps-list" id="steps-cnt"></div>
               <div id="btn-cpr" style="display:none;padding:14px"><button class="btn g full" onclick="clientConfirm()">✅ Pago recibido — Completar</button></div>
               <div style="padding:8px 14px 14px"><button class="btn red full sm" onclick="dispute()">⚠️ Reportar problema</button></div>
             </div>
@@ -1100,7 +1110,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
             </div>
             <div class="a-chat-msgs" id="a-msgs"></div>
             <div class="a-acts" id="a-acts" style="display:none">
-              <button class="btn ghost sm" onclick="admRevisar()" style="color:var(--yellow);border-color:rgba(245,184,0,.3)">🔍 Revisando</button>
               <button class="btn g sm" onclick="admConfirm()">✅ Confirmar pago</button>
               <button class="btn ghost sm" onclick="admClose()">🔒 Cerrar</button>
             </div>
@@ -1471,8 +1480,8 @@ function svgL(id,sz=36){
 }
 
 function stBdg(st){
-  const m={pending:'Pendiente',voucher_sent:'Comprobante enviado',reviewing:'Revisando',confirmed:'Confirmado',completed:'Completada',rejected:'Rechazada'};
-  const c={pending:'p',voucher_sent:'vs',reviewing:'rv',confirmed:'c',completed:'d',rejected:'r'};
+  const m={pending:'Pendiente',voucher_sent:'Comprobante enviado',confirmed:'Confirmado',completed:'Completada',rejected:'Rechazada'};
+  const c={pending:'p',voucher_sent:'vs',confirmed:'c',completed:'d',rejected:'r'};
   return`<span class="bdg ${c[st]||'p'}"><span class="bdg-dot"></span>${m[st]||st}</span>`;
 }
 
@@ -1614,6 +1623,28 @@ function updLPNav(){
 }
 
 // ── TASAS EN LANDING ──────────────────────────────────────────────────
+function setOVMode(mode,btn){
+  document.querySelectorAll('#dv-overview .rs-tab').forEach(t=>t.classList.remove('on','buy','sell'));
+  btn.classList.add('on',mode);
+  document.getElementById('ovBuy').style.display=mode==='buy'?'flex':'none';
+  document.getElementById('ovSell').style.display=mode==='sell'?'flex':'none';
+}
+function renderOVRates(){
+  const ovBuy=document.getElementById('ovBuy');
+  const ovSell=document.getElementById('ovSell');
+  if(!ovBuy||!ovSell)return;
+  const plats=['binance','paypal','zinli','wally','zelle','airtm','usdc'];
+  const act=`onclick="showDV('newop')"`;
+  ovBuy.innerHTML=plats.map(k=>{
+    const c=RATES.compra[k]||{};
+    const comm=c.type==='pct_fixed'?`Comisión ${(c.pct*100).toFixed(1)}% + $${c.fixed}`:c.type==='pct'?`Comisión ${(c.pct*100).toFixed(0)}%`:'Tasa fija';
+    return`<div class="rate-row" style="cursor:pointer" ${act}><div class="rr-logo">${svgL(k,36)}</div><div class="rr-info"><div class="rr-name">${PN[k]}</div><div class="rr-comm">${comm}</div></div><div class="rr-action">⚡ OPERAR</div><div class="rr-rate-wrap"><div class="rr-rate buy">${fmt(c.t)} Bs</div><div class="rr-unit">por USD</div></div></div>`;
+  }).join('');
+  ovSell.innerHTML=plats.map(k=>{
+    const c=RATES.venta[k]||{};
+    return`<div class="rate-row" style="cursor:pointer" ${act}><div class="rr-logo">${svgL(k,36)}</div><div class="rr-info"><div class="rr-name">${PN[k]}</div><div class="rr-comm">Tasa fija</div></div><div class="rr-action" style="color:var(--red)">⚡ OPERAR</div><div class="rr-rate-wrap"><div class="rr-rate sell">${fmt(c.t)} Bs</div><div class="rr-unit">por USD</div></div></div>`;
+  }).join('');
+}
 function setLPMode(mode,btn){
   document.querySelectorAll('.rs-tab').forEach(t=>t.classList.remove('on','buy','sell'));
   btn.classList.add('on',mode);
@@ -1860,7 +1891,7 @@ async function startOp(){
   if(!amt||amt<1){toast('Ingresa un monto válido.','err');return}
   // Block duplicate open operations per platform
   const existingOps=await sbGetOps(sess.email);
-  const openSamePlat=existingOps.find(o=>o.plat===plat&&(o.st==='pending'||o.st==='voucher_sent'||o.st==='reviewing'||o.st==='confirmed'));
+  const openSamePlat=existingOps.find(o=>o.plat===plat&&(o.st==='pending'||o.st==='voucher_sent'||o.st==='confirmed'));
   if(openSamePlat){
     toast('⚠️ Ya tienes una operación activa con '+PN[plat]+'. Complétala antes de abrir otra.','err');
     setTimeout(()=>openTrade(openSamePlat.id),800);
@@ -1952,28 +1983,26 @@ function renderTradePayment(op){
 
 let _timerInterval=null;
 function renderSteps(st){
-  // 5 estados: pending, voucher_sent, reviewing, confirmed, completed
+  // 4 estados: pending, voucher_sent, confirmed, completed
   const steps=[
-    {k:'pending',     t:'Operación iniciada',      d:'Tu solicitud fue registrada correctamente.',       col:'var(--g)'},
-    {k:'voucher_sent',t:'Comprobante enviado',      d:'Recibimos tu comprobante, en revisión.',           col:'var(--g)'},
-    {k:'reviewing',   t:'Revisando pago',           d:'LS Cambios está verificando tu pago.',             col:'var(--yellow)'},
-    {k:'confirmed',   t:'Pago confirmado',          d:'Pulsa "Pago recibido — Completar" para finalizar.',col:'var(--g)'},
-    {k:'completed',   t:'¡Completado! 🎉',          d:'Tu cambio fue procesado exitosamente.',            col:'var(--g)'},
+    {k:'pending',     t:'Operación iniciada',      d:'Tu solicitud fue registrada correctamente.',                col:'var(--g)'},
+    {k:'voucher_sent',t:'Comprobante enviado',      d:'Recibimos tu comprobante, LS Cambios está verificando.',   col:'var(--yellow)'},
+    {k:'confirmed',   t:'Pago confirmado ✅',       d:'Pulsa "Pago recibido — Completar" para finalizar.',        col:'var(--g)'},
+    {k:'completed',   t:'¡Completado! 🎉',          d:'Tu cambio fue procesado exitosamente.',                    col:'var(--g)'},
   ];
-  const order=['pending','voucher_sent','reviewing','confirmed','completed'];
-  const curIdx=order.indexOf(st); 
+  const order=['pending','voucher_sent','confirmed','completed'];
+  const curIdx=order.indexOf(st);
   const el=document.getElementById('steps-cnt'); if(!el)return;
   el.innerHTML=steps.map((s,i)=>{
     const done=i<curIdx, active=i===curIdx;
     const cls=done?'done':active?'active':'';
     const ic=done?'✓':(i+1);
-    const col=active?s.col:'';
     return`<div class="step-item"><div class="step-c ${cls}" style="${active?'border-color:'+s.col+';color:'+s.col:''}">${ic}</div><div class="step-b"><div class="step-t" style="${active?'color:'+s.col:done?'color:var(--g)':''}">${s.t}</div><div class="step-d">${s.d}</div></div></div>`;
   }).join('');
-  // Timer: show when reviewing
+  // Timer: show when voucher sent (15 min para que el admin confirme)
   const timerBox=document.getElementById('trd-timer-box');
   if(timerBox){
-    if(st==='reviewing'){timerBox.style.display='block'; startCountdown();}
+    if(st==='voucher_sent'){timerBox.style.display='block'; startCountdown();}
     else{timerBox.style.display='none'; stopCountdown();}
   }
   // Confirm button: show when confirmed
@@ -2347,7 +2376,7 @@ function startStatusPoll(opId){
         tb.innerHTML=stBdg(data.estado);
         const cs=document.getElementById('chat-st');if(cs)cs.innerHTML=stBdg(data.estado);
         renderSteps(data.estado);
-        const stMap={pending:'Pendiente',voucher_sent:'Comprobante enviado',reviewing:'Revisando',confirmed:'Confirmado',completed:'Completado'};
+        const stMap={pending:'Pendiente',voucher_sent:'Comprobante enviado',confirmed:'Confirmado',completed:'Completado'};
         toast('🔄 Estado: '+(stMap[data.estado]||data.estado));
       }
     }
@@ -2385,7 +2414,7 @@ function setupRealtime(opId){
     })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'operaciones',filter:'id=eq.'+opId},payload=>{
       const nuevoEstado=payload.new.estado;
-      const stMap={pending:'Pendiente',voucher_sent:'Comprobante enviado',reviewing:'Revisando',confirmed:'Confirmado',completed:'Completado'};
+      const stMap={pending:'Pendiente',voucher_sent:'Comprobante enviado',confirmed:'Confirmado',completed:'Completado'};
       const tb=document.getElementById('trd-badge');if(tb){tb.innerHTML=stBdg(nuevoEstado);tb.dataset.st=nuevoEstado;}
       const cs=document.getElementById('chat-st');if(cs)cs.innerHTML=stBdg(nuevoEstado);
       renderSteps(nuevoEstado);
@@ -2406,6 +2435,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
   // Cargar tasas desde Supabase
   await sbLoadRates();
   renderLPRates();
+  renderOVRates();
   renderTestimonials();
 
   // Cerrar modales al click fuera
