@@ -2199,13 +2199,14 @@ function admSendImg(e){
 
 async function admRevisar(){
   if(!aCur)return;
-  const ok=await sbUpdateOpEstado(aCur.opId,'reviewing');
-  if(!ok)return;
-  await sbSendMsg(aCur.opId,{from:'sys',text:'🔍 LS Cambios está revisando tu pago — tiempo estimado 15 minutos.',time:tnow()});
-  await sbSendMsg(aCur.opId,{from:'admin',text:'⏳ Estamos verificando tu comprobante. En breve confirmaremos.',time:tnow()});
+  // 'reviewing' no está en el CHECK constraint de Supabase — solo enviamos mensajes al chat
+  // y actualizamos la UI localmente para que el usuario vea que están revisando
+  const ok1=await sbSendMsg(aCur.opId,{from:'sys',text:'🔍 LS Cambios está revisando tu pago — tiempo estimado 15 minutos.',time:tnow()});
+  const ok2=await sbSendMsg(aCur.opId,{from:'admin',text:'⏳ Estamos verificando tu comprobante. En breve confirmaremos.',time:tnow()});
+  if(!ok1||!ok2){toast('⚠️ No se pudo enviar el mensaje','err');return;}
+  // Actualizar badge local del admin
   const bdg=document.getElementById('a-chat-bdg'); if(bdg)bdg.innerHTML=stBdg('reviewing');
-  loadAdmin();
-  toast('🔍 Estado actualizado a Revisando','ok');
+  toast('🔍 Notificación enviada al cliente','ok');
 }
 
 async function admConfirm(){
