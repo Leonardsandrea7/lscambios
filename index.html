@@ -348,7 +348,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 /* Modal / overlay */
 .ov{display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;overflow-y:auto}
 .ov.on{display:flex}
-.modal{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r2);width:100%;max-width:440px;padding:24px;position:relative;animation:mIn .2s ease;margin:auto}
+.modal{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r2);width:100%;max-width:440px;padding:24px;position:relative;animation:mIn .2s ease;margin:auto;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
 @keyframes mIn{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:none}}
 .modal-x{position:absolute;top:12px;right:12px;background:var(--bg3);border:none;color:var(--t2);width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer}
 .modal-x:hover{background:var(--brd2)}
@@ -468,7 +468,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
   .rates-section{padding:32px 16px}
   .re-grid{grid-template-columns:1fr}
   .fg2{grid-template-columns:1fr}
-  .modal{padding:18px;max-width:100%;border-radius:20px 20px 0 0;margin-bottom:0;position:fixed;bottom:0;left:0;right:0;animation:slideUp .25s ease}
+  .modal{padding:18px;max-width:100%;border-radius:20px 20px 0 0;margin-bottom:0;position:fixed;bottom:0;left:0;right:0;animation:slideUp .25s ease;max-height:90dvh;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
   @keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
   .lp-footer{padding:12px 16px}
   .chat-box{height:auto}
@@ -617,29 +617,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
         <div class="live-chip"><div class="live-dot"></div><span>CLIENTES</span></div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:16px 18px">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-            <div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#0066ff,#00c896);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0">M</div>
-            <div><div style="font-size:13px;font-weight:700;color:var(--t1)">María G.</div><div style="font-size:10px;color:var(--g)">★★★★★</div></div>
-          </div>
-          <p style="font-size:12px;color:var(--t2);line-height:1.65">"Rapidísimo, en menos de 20 minutos tenía mis bolívares. Excelente atención y las tasas siempre competitivas. Lo recomiendo totalmente."</p>
-        </div>
-        <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:16px 18px">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-            <div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#6d1ed4,#1a6cff);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0">C</div>
-            <div><div style="font-size:13px;font-weight:700;color:var(--t1)">Carlos R.</div><div style="font-size:10px;color:var(--g)">★★★★★</div></div>
-          </div>
-          <p style="font-size:12px;color:var(--t2);line-height:1.65">"Llevo más de 6 meses usando LS Cambios. Siempre responden en el chat, son honestos con las tasas y nunca he tenido problemas."</p>
-        </div>
-        <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:16px 18px">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-            <div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#f0b90b,#f6465d);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0">A</div>
-            <div><div style="font-size:13px;font-weight:700;color:var(--t1)">Andrea L.</div><div style="font-size:10px;color:var(--g)">★★★★★</div></div>
-          </div>
-          <p style="font-size:12px;color:var(--t2);line-height:1.65">"El proceso es muy sencillo, el chat en tiempo real da mucha confianza. La plataforma es clara y funciona perfectamente en el celular."</p>
-        </div>
-      </div>
+      <div id="testimonials-wrap" style="display:flex;flex-direction:column;gap:10px"></div>
     </div>
 
   </div>
@@ -652,7 +630,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <a href="javascript:void(0)" onclick="showStaticPage('seguridad')">Seguridad</a>
       <a href="javascript:void(0)" onclick="showStaticPage('tos')">Términos</a>
       <a href="https://wa.me/584147408768" target="_blank">Soporte</a>
-      <span class="adm-a" onclick="openAdminLogin()">A</span>
     </div>
   </footer>
 </div>
@@ -1551,7 +1528,40 @@ function showStaticPage(name){
   showPage('pg-'+name);
 }
 
-// ── CALCULADORA LANDING ──────────────────────────────────────────────────
+// ── TESTIMONIOS ROTATIVOS (cambian cada día) ──────────────────────────
+const ALL_TESTIMONIALS=[
+  {init:'M',name:'María G.',grad:'135deg,#0066ff,#00c896',text:'"Rapidísimo, en menos de 20 minutos tenía mis bolívares. Excelente atención y las tasas siempre competitivas. Lo recomiendo totalmente."'},
+  {init:'C',name:'Carlos R.',grad:'135deg,#6d1ed4,#1a6cff',text:'"Llevo más de 6 meses usando LS Cambios. Siempre responden en el chat, son honestos con las tasas y nunca he tenido problemas."'},
+  {init:'A',name:'Andrea L.',grad:'135deg,#f0b90b,#f6465d',text:'"El proceso es muy sencillo, el chat en tiempo real da mucha confianza. La plataforma es clara y funciona perfectamente en el celular."'},
+  {init:'J',name:'José M.',grad:'135deg,#00c896,#0066ff',text:'"Cambié mis USDT de Binance sin ningún problema. El comprobante lo subí por el chat y en minutos me confirmaron. Servicio de primera."'},
+  {init:'V',name:'Valentina P.',grad:'135deg,#f6465d,#f0b90b',text:'"Muy buena experiencia. Las tasas son las mejores que he conseguido y la plataforma es súper intuitiva. Volveré a usar LS Cambios sin duda."'},
+  {init:'R',name:'Roberto S.',grad:'135deg,#1a6cff,#6d1ed4',text:'"Usé Zelle y fue todo perfecto. El admin respondió rápido en el chat y me explicó cada paso. Confiable al 100%."'},
+  {init:'L',name:'Luisa F.',grad:'135deg,#00c896,#f0b90b',text:'"Tenía dudas al principio pero desde la primera operación quedé encantada. Muy transparentes con las comisiones y súper rápidos."'},
+  {init:'D',name:'Diego H.',grad:'135deg,#0066ff,#f6465d',text:'"Perfecto para cambiar PayPal a bolívares. Lo he usado varias veces y siempre ha sido una experiencia excelente. El chat en vivo es un plus."'},
+  {init:'G',name:'Gabriela T.',grad:'135deg,#6d1ed4,#00c896',text:'"La mejor casa de cambio digital que he probado en Venezuela. Rápida, segura y con una tasa muy competitiva. 100% recomendada."'},
+  {init:'P',name:'Pedro A.',grad:'135deg,#f0b90b,#1a6cff',text:'"Cambié mis Zinli en minutos. Me gustó mucho que todo el proceso fue dentro de la plataforma, sin tener que ir a otro lado. Excelente."'},
+  {init:'N',name:'Natalia C.',grad:'135deg,#f6465d,#00c896',text:'"El soporte es increíble, responden de inmediato. Ya van 4 operaciones y todas han sido perfectas. LS Cambios es mi opción de confianza."'},
+  {init:'E',name:'Eduardo V.',grad:'135deg,#00c896,#6d1ed4',text:'"Muy buena plataforma. El historial de operaciones y el chat integrado hacen que todo sea muy fácil de seguir. Totalmente recomendado."'},
+];
+function renderTestimonials(){
+  const wrap=document.getElementById('testimonials-wrap');
+  if(!wrap)return;
+  const dayOfYear=Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/86400000);
+  const start=(dayOfYear*3)%ALL_TESTIMONIALS.length;
+  const picks=[
+    ALL_TESTIMONIALS[start%ALL_TESTIMONIALS.length],
+    ALL_TESTIMONIALS[(start+1)%ALL_TESTIMONIALS.length],
+    ALL_TESTIMONIALS[(start+2)%ALL_TESTIMONIALS.length],
+  ];
+  wrap.innerHTML=picks.map(t=>`
+    <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:16px 18px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(${t.grad});display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0">${t.init}</div>
+        <div><div style="font-size:13px;font-weight:700;color:var(--t1)">${t.name}</div><div style="font-size:10px;color:var(--g)">★★★★★</div></div>
+      </div>
+      <p style="font-size:12px;color:var(--t2);line-height:1.65">${t.text}</p>
+    </div>`).join('');
+}
 function lpCalc(){
   const dirEl=document.getElementById('lp-dir');
   const platEl=document.getElementById('lp-plat');
@@ -2334,12 +2344,13 @@ function startStatusPoll(opId){
       if(current!==data.estado){
         tb.dataset.st=data.estado;
         tb.innerHTML=stBdg(data.estado);
+        const cs=document.getElementById('chat-st');if(cs)cs.innerHTML=stBdg(data.estado);
         renderSteps(data.estado);
         const stMap={pending:'Pendiente',voucher_sent:'Comprobante enviado',reviewing:'Revisando',confirmed:'Confirmado',completed:'Completado'};
         toast('🔄 Estado: '+(stMap[data.estado]||data.estado));
       }
     }
-  },20000);
+  },5000);
 }
 function stopStatusPoll(){if(_pollInterval){clearInterval(_pollInterval);_pollInterval=null;}}
 
@@ -2374,7 +2385,8 @@ function setupRealtime(opId){
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'operaciones',filter:'id=eq.'+opId},payload=>{
       const nuevoEstado=payload.new.estado;
       const stMap={pending:'Pendiente',voucher_sent:'Comprobante enviado',reviewing:'Revisando',confirmed:'Confirmado',completed:'Completado'};
-      const tb=document.getElementById('trd-badge');if(tb)tb.innerHTML=stBdg(nuevoEstado);
+      const tb=document.getElementById('trd-badge');if(tb){tb.innerHTML=stBdg(nuevoEstado);tb.dataset.st=nuevoEstado;}
+      const cs=document.getElementById('chat-st');if(cs)cs.innerHTML=stBdg(nuevoEstado);
       renderSteps(nuevoEstado);
       const ab=document.getElementById('a-chat-bdg');if(ab)ab.innerHTML=stBdg(nuevoEstado);
       if(nuevoEstado==='completed'){const acts=document.getElementById('a-acts');if(acts)acts.style.display='none';}
@@ -2393,6 +2405,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
   // Cargar tasas desde Supabase
   await sbLoadRates();
   renderLPRates();
+  renderTestimonials();
 
   // Cerrar modales al click fuera
   document.getElementById('authOv').addEventListener('click',e=>{if(e.target===document.getElementById('authOv'))closeAuth()});
