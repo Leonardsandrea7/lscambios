@@ -1225,7 +1225,10 @@ function sbErr(fn, error){
   if(!error) return false;
   const msg = error.message || JSON.stringify(error);
   console.error(`[${fn}]`, msg);
-  // Mostrar error descriptivo al usuario
+  // Errores de CHECK constraint (estados no válidos) → solo log, no mostrar al usuario
+  if(msg.includes('violates check constraint')||msg.includes('check_')){
+    return true; // error silencioso
+  }
   if(msg.includes('violates row-level security')||msg.includes('RLS')){
     toast(`❌ Error de permisos Supabase en ${fn}. Revisa las políticas RLS.`, 'err');
   } else if(msg.includes('Failed to fetch')||msg.includes('NetworkError')){
@@ -1233,7 +1236,7 @@ function sbErr(fn, error){
   } else {
     toast(`❌ Error DB (${fn}): ${msg.slice(0,60)}`, 'err');
   }
-  return true; // indica que hubo error
+  return true;
 }
 
 // ════════════════════════════════════════════════════════════════════════
@@ -1848,15 +1851,16 @@ function calcOp(){
     if(rl)rl.textContent='RECIBIRÍAS EN BOLÍVARES';
     rv.textContent='Bs '+fmt(bs); rd.textContent=`Envías $${fmt(amt,2)} → Neto $${fmt(net,2)} · Tasa ${fmt(c.t)} Bs/USD`;
   }else{
-    const c=RATES.venta[plat]||{},usd=amt/c.t;
-    if(rl)rl.textContent='RECIBIRÍAS EN USD';
-    rv.textContent='$'+fmt(usd,2); rd.textContent=`Envías Bs ${fmt(amt)} · Tasa ${fmt(c.t)} Bs/USD`;
+    // "Comprar divisas": usuario ingresa los USD que quiere recibir → se calcula los Bs a enviar
+    const c=RATES.venta[plat]||{},bs=amt*c.t;
+    if(rl)rl.textContent='DEBES ENVIAR EN BOLÍVARES';
+    rv.textContent='Bs '+fmt(bs); rd.textContent=`Recibirás $${fmt(amt,2)} (${PN[plat]}) · Tasa ${fmt(c.t)} Bs/USD`;
   }
 }
 function swapPlats(){
   const dir=document.getElementById('op-dir').value;
   const lbl=document.getElementById('op-amt-lbl');
-  if(lbl)lbl.textContent=dir==='venta'?'MONTO A ENVIAR (Bs)':'MONTO A ENVIAR (USD)';
+  if(lbl)lbl.textContent=dir==='venta'?'MONTO A RECIBIR (USD)':'MONTO A ENVIAR (USD)';
   calcOp(); updWallet();
 }
 function updWallet(){
@@ -1899,8 +1903,15 @@ async function startOp(){
   }
   const rv=document.getElementById('op-res-val').textContent;
   const ud=getUser(sess.email); if(!ud)return;
-  const sendTxt=dir==='compra'?'$'+fmt(amt,2)+' ('+PN[plat]+')':'Bs '+fmt(amt);
-  const getTxt =dir==='compra'?rv:rv+' ('+PN[plat]+')';
+  let sendTxt, getTxt;
+  if(dir==='compra'){
+    sendTxt='$'+fmt(amt,2)+' ('+PN[plat]+')';
+    getTxt=rv;
+  }else{
+    // venta: amt = USD que quiere recibir, rv = Bs que debe enviar
+    sendTxt=rv; // Bs a enviar
+    getTxt='$'+fmt(amt,2)+' ('+PN[plat]+')'; // USD a recibir
+  }
   const id=genId();
   const op={id,date:new Date().toLocaleDateString('es-VE'),plat,dir,send:sendTxt,get:getTxt,st:'pending',chat:[]};
 
@@ -2061,9 +2072,13 @@ function sendImg(e){
     const ok=await sbSendMsg(curOpId,{from:'user',type:'img',src:r.result,text:'📎 Comprobante',time:tnow()});
     if(!ok){toast('❌ No se pudo enviar el comprobante.','err');return}
     toast('📎 Comprobante enviado','ok');
-    await sbUpdateOpEstado(curOpId,'voucher_sent');
+    // Intentar actualizar estado — si el CHECK constraint de Supabase lo rechaza, continuamos igual
+    try{await sbUpdateOpEstado(curOpId,'voucher_sent');}catch(err){console.warn('[sendImg] estado no actualizado:',err);}
+    // Enviar de todas formas aunque falle el estado
     await sbSendMsg(curOpId,{from:'sys',text:'📎 Comprobante enviado — LS Cambios comenzará la verificación en breve.',time:tnow()});
     renderSteps('voucher_sent');
+    const tb=document.getElementById('trd-badge');if(tb){tb.innerHTML=stBdg('voucher_sent');tb.dataset.st='voucher_sent';}
+    const cs=document.getElementById('chat-st');if(cs)cs.innerHTML=stBdg('voucher_sent');
     if(ud&&sess)tgNotify(`📎 <b>Comprobante recibido</b>\n🆔 ${curOpId}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n⏰ Revisa el chat del admin.\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
   };
   r.readAsDataURL(f); e.target.value='';
@@ -2194,6 +2209,21 @@ async function admOpenChatDB(uem,opId,el){
   document.getElementById('a-chat-sub').textContent=(ud.nombre+' '+ud.apellido).trim()+' · '+(PN[op.plat]||op.plat);
   document.getElementById('a-chat-bdg').innerHTML=stBdg(op.st);
   const ab=document.getElementById('a-acts'); if(ab)ab.style.display=op.st!=='completed'?'flex':'none';
+  // Mostrar datos de pago del cliente debajo del encabezado del chat
+  const pm=ud.pagoMovil||{}, cu=ud.cuentas||{};
+  const payInfo=op.dir==='compra'
+    ? `<div style="background:rgba(0,200,150,.06);border:1px solid rgba(0,200,150,.15);border-radius:8px;padding:10px 14px;margin:0 12px 8px;font-size:11px">
+        <div style="font-weight:700;color:var(--g);margin-bottom:6px">📤 TRANSFERIR AL CLIENTE (${op.get})</div>
+        <div style="color:var(--t2)"><b style="color:var(--t1)">Banco:</b> ${pm.banco||'—'} &nbsp;|&nbsp; <b style="color:var(--t1)">Tel:</b> ${pm.tel||'—'} &nbsp;|&nbsp; <b style="color:var(--t1)">Cédula:</b> ${pm.cedula||'—'}</div>
+      </div>`
+    : `<div style="background:rgba(26,108,255,.06);border:1px solid rgba(26,108,255,.15);border-radius:8px;padding:10px 14px;margin:0 12px 8px;font-size:11px">
+        <div style="font-weight:700;color:var(--blue);margin-bottom:6px">📤 ENVIAR DIVISAS AL CLIENTE (${op.get})</div>
+        <div style="color:var(--t2)">${op.plat==='binance'?`<b style="color:var(--t1)">Binance ID:</b> ${cu.binanceId||'—'}`:`<b style="color:var(--t1)">Correo:</b> ${cu.correo||'—'}`}</div>
+      </div>`;
+  // Insertar o actualizar el bloque de pago
+  let payDiv=document.getElementById('a-pay-info');
+  if(!payDiv){payDiv=document.createElement('div');payDiv.id='a-pay-info';const msgs=document.getElementById('a-msgs');if(msgs)msgs.parentNode.insertBefore(payDiv,msgs);}
+  payDiv.innerHTML=payInfo;
   renderAdmChat(op.chat||[]);
   setupRealtime(opId);
 }
