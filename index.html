@@ -530,6 +530,75 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .ui-col-g{color:var(--g)}
 .ui-col-t1{color:var(--t1)}
 .ui-col-y{color:var(--yellow)}
+
+/* ══════════════════════════════════════════════════════
+   CAJERO SYSTEM
+══════════════════════════════════════════════════════ */
+:root{--cj:#f59e0b;--cjd:linear-gradient(135deg,#d97706,#f59e0b);--cj-brd:rgba(245,158,11,.15);}
+#cajero-page{background:var(--bg)}
+.cj-nav{height:56px;padding:0 20px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;background:var(--bg1);border-bottom:1px solid var(--cj-brd);position:sticky;top:0;z-index:100}
+.cj-badge{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.28);color:var(--cj);padding:4px 11px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1.5px}
+.cj-body{display:flex;flex:1;overflow:hidden;min-height:0}
+.cj-sb{width:200px;flex-shrink:0;background:var(--bg1);border-right:1px solid var(--cj-brd);padding:10px 8px;display:flex;flex-direction:column;overflow-y:auto}
+.cj-sb-i{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;font-size:12px;color:var(--t2);background:transparent;border:none;width:100%;text-align:left;cursor:pointer;transition:all .15s;font-family:var(--fn)}
+.cj-sb-i:hover{background:rgba(245,158,11,.06);color:var(--t1)}
+.cj-sb-i.on{background:rgba(245,158,11,.1);color:var(--cj);border:1px solid rgba(245,158,11,.2)}
+.cj-sb-i svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.cj-badge-sb{margin-left:auto;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px}
+.cj-main{flex:1;overflow-y:auto;padding:20px}
+.cv{display:none}.cv.on{display:block}
+
+/* Cajero KPIs */
+.cj-kpi{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.18);border-radius:var(--r);padding:14px 18px}
+.cj-kpi-v{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--cj);margin-bottom:3px}
+.cj-kpi-l{font-size:10px;color:var(--t3);letter-spacing:.8px;font-weight:600}
+
+/* Cajero op-list */
+.cj-op-li{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.03);cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:space-between}
+.cj-op-li:hover,.cj-op-li.on{background:var(--bg3)}
+.cj-op-li.on{border-left:2px solid var(--cj)}
+
+/* Escrow box */
+.escrow-box{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.25);border-radius:var(--r2);padding:16px 18px;margin-bottom:14px}
+.escrow-title{font-size:11px;font-weight:700;color:var(--cj);letter-spacing:.8px;margin-bottom:10px}
+.escrow-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(245,158,11,.1);font-size:12px}
+.escrow-row:last-child{border-bottom:none}
+.escrow-check{width:18px;height:18px;border-radius:50%;border:2px solid var(--t3);display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0}
+.escrow-check.done{background:rgba(0,200,150,.15);border-color:var(--g);color:var(--g)}
+.escrow-check.wait{background:rgba(245,158,11,.1);border-color:var(--cj);color:var(--cj)}
+
+/* Commission badge */
+.bdg.esc{background:rgba(245,158,11,.12);color:var(--cj);border:1px solid rgba(245,158,11,.25)}
+.bdg.rv{background:rgba(245,158,11,.15);color:var(--cj);border:1px solid rgba(245,158,11,.3)}
+
+/* Admin cajero cards */
+.cj-card{background:var(--bg2);border:1px solid var(--cj-brd);border-radius:var(--r2);padding:14px;position:relative;overflow:hidden}
+.cj-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--cjd)}
+.cj-card.inactive{opacity:.5;border-color:var(--brd)}
+.cj-card.inactive::before{display:none}
+.cj-slot{font-size:9px;font-weight:700;color:var(--cj);letter-spacing:1.5px;margin-bottom:6px}
+.cj-name{font-size:15px;font-weight:800;color:#fff;margin-bottom:8px}
+.cj-liq-row{display:flex;gap:8px;margin-bottom:10px}
+.cj-liq{flex:1;background:rgba(0,0,0,.2);border-radius:6px;padding:7px 10px;text-align:center}
+.cj-liq-v{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--cj)}
+.cj-liq-l{font-size:9px;color:var(--t3);margin-top:1px}
+.cj-inp-row{display:flex;gap:6px;align-items:center;margin-bottom:6px}
+.cj-inp{flex:1;background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:7px 10px;color:var(--t1);font-family:var(--mono);font-size:12px;font-weight:700;outline:none;transition:border-color .15s}
+.cj-inp:focus{border-color:var(--cj)}
+.cj-inp-lbl{font-size:10px;color:var(--t2);min-width:28px;font-weight:600}
+
+/* Mobile cajero */
+.cj-mob{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(15,21,32,.96);backdrop-filter:blur(20px);border-top:1px solid var(--cj-brd);z-index:100;height:calc(54px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom)}
+.cj-mob-row{display:flex;height:54px}
+.cj-mn-i{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9px;color:var(--t3);cursor:pointer;font-family:var(--fn);font-weight:600;border:none;background:none;transition:color .15s}
+.cj-mn-i svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.cj-mn-i.on,.cj-mn-i:hover{color:var(--cj)}
+
+@media(max-width:800px){
+  .cj-sb{display:none}
+  .cj-mob{display:block}
+  .cj-main{padding:14px;padding-bottom:calc(68px + env(safe-area-inset-bottom))}
+}
 </style>
 </head>
 <body>
@@ -988,8 +1057,10 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
               <option value="paypal">PayPal</option>
               <option value="zinli">Zinli</option>
               <option value="wally">Wally</option>
-                            <option value="airtm">Airtm</option>
+              <option value="airtm">Airtm</option>
               <option value="usdc">USDC</option>
+              <option value="reserve">Reserve</option>
+              <option value="zelle">Zelle</option>
             </select>
           </div>
           <div class="fg"><label id="op-amt-lbl">MONTO A ENVIAR (USD)</label>
@@ -1030,6 +1101,22 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
               <div class="steps-list" id="steps-cnt"></div>
               <div id="btn-cpr" style="display:none;padding:14px"><button class="btn g full" onclick="clientConfirm()">✅ Pago recibido — Completar</button></div>
               <div style="padding:8px 14px 14px"><button class="btn red full sm" onclick="dispute()">⚠️ Reportar problema</button></div>
+            </div>
+
+            <!-- ── MENSAJE DE RESPONSABILIDAD ANTI-ESTAFA ─────────────── -->
+            <div class="card" id="compliance-card" style="display:none;border-color:rgba(245,184,0,.25)">
+              <div class="card-hdr" style="border-bottom-color:rgba(245,184,0,.2);background:rgba(245,184,0,.04)">
+                <span class="card-title" style="color:var(--yellow)">📋 Mensaje de Responsabilidad</span>
+                <span style="font-size:10px;color:var(--t3)">Anti-estafa</span>
+              </div>
+              <div style="padding:14px 18px">
+                <p style="font-size:11px;color:var(--t2);line-height:1.65;margin-bottom:10px">
+                  📌 Copia este texto y envíalo junto con tu <strong style="color:var(--t1)">factura/comprobante de pago</strong> al correo de LS Cambios:
+                </p>
+                <div id="compliance-text" style="background:var(--bg3);border:1px dashed rgba(245,184,0,.3);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--t1);line-height:1.75;word-break:break-word;white-space:pre-wrap;user-select:all;margin-bottom:10px;cursor:text"></div>
+                <button class="btn full" style="background:rgba(245,184,0,.12);border:1px solid rgba(245,184,0,.3);color:var(--yellow);font-size:13px;font-weight:700;padding:11px" onclick="copyCompliance()">📋 COPIAR MENSAJE</button>
+                <p style="font-size:10px;color:var(--red);font-weight:700;margin-top:10px;text-align:center;letter-spacing:.3px">⚠️ ENVIAR CON FACTURA DE PAGO QUE LLEGUE A SU CORREO</p>
+              </div>
             </div>
           </div>
           
@@ -1088,6 +1175,10 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <button class="ap-sb-i" id="asi-chats" onclick="showAV('chats')">
         <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chats P2P
       </button>
+      <button class="ap-sb-i" id="asi-cajeros" onclick="showAV('cajeros')">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>Cajeros
+        <span class="sb-badge" id="asi-cj-badge" style="display:none;background:var(--cj);color:#000">10</span>
+      </button>
       <button class="ap-sb-i" id="asi-rates" onclick="showAV('rates')">
         <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Tasas
       </button>
@@ -1122,6 +1213,12 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
             <div class="a-chat-msgs" id="a-msgs"></div>
             <div class="a-acts ui-hidden" id="a-acts">
               <button class="btn g sm" onclick="admConfirm()">✅ Confirmar pago</button>
+              <div style="display:flex;align-items:center;gap:5px">
+                <select id="a-assign-cj" style="background:var(--bg3);border:1px solid rgba(245,158,11,.3);border-radius:6px;padding:5px 8px;color:var(--cj);font-size:11px;font-weight:700;font-family:var(--fn);outline:none">
+                  <option value="">— Asignar cajero —</option>
+                </select>
+                <button class="btn sm" style="background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:var(--cj);font-weight:700" onclick="admDoAssignCajero()">🏧 Asignar</button>
+              </div>
               <button class="btn ghost sm" onclick="admClose()">🔒 Cerrar</button>
             </div>
             <div class="a-inp-row" id="a-inp-row">
@@ -1166,6 +1263,21 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
           <button class="btn g sm full" onclick="saveHorario()">💾 Guardar horario</button>
         </div>
       </div>
+      <!-- ══════ PANEL CAJEROS ══════ -->
+      <div class="av" id="av-cajeros">
+        <div class="dv-h">Cajeros 🏧</div>
+        <div class="dv-s">Hasta 10 cajeros · Acceso por <code style="color:var(--cj);background:rgba(245,158,11,.1);padding:1px 6px;border-radius:4px">#cajero1 … #cajero10</code></div>
+
+        <!-- SQL helper -->
+        <div style="background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:var(--r);padding:12px 16px;margin-bottom:18px;font-size:11px;color:var(--t2)">
+          <strong style="color:var(--cj)">⚠️ Requiere 1 línea SQL en Supabase:</strong>
+          <code style="display:block;margin-top:6px;background:var(--bg3);padding:8px 12px;border-radius:6px;color:var(--t1);font-size:11px;user-select:all">ALTER TABLE operaciones ADD COLUMN IF NOT EXISTS meta JSONB DEFAULT '{}';</code>
+          <span style="display:block;margin-top:4px">Ejecuta en <strong>Supabase → SQL Editor</strong> una sola vez.</span>
+        </div>
+
+        <div id="cj-admin-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px"></div>
+      </div>
+
       <div class="av" id="av-activity">
         <div class="dv-h">Actividad 📋</div><div class="dv-s">Log completo de la plataforma · Listo para base de datos</div>
         <div class="act-filters">
@@ -1184,8 +1296,198 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════════
+     CAJERO LOGIN MODAL
+══════════════════════════════════════════════════════ -->
+<div class="ov" id="cajeroOv">
+  <div class="modal" style="max-width:340px">
+    <div style="text-align:center;margin-bottom:18px">
+      <div style="width:56px;height:56px;border-radius:16px;background:var(--cjd);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 10px">🏧</div>
+      <div style="font-size:16px;font-weight:800;color:#fff" id="cj-ov-title">Cajero 1</div>
+      <div style="font-size:11px;color:var(--t2);margin-top:2px">Panel de cajero — LS Cambios</div>
+    </div>
+    <div class="fg"><label>CONTRASEÑA</label>
+      <div class="pw-wrap">
+        <input class="fi" type="password" id="cj-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')doCajeroLogin()">
+        <button type="button" class="pw-eye" onclick="togglePw('cj-pw',this)" tabindex="-1">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="ferr" id="cj-err"></div>
+    <button class="btn full" style="background:var(--cjd);color:#fff;font-weight:700;margin-top:10px" onclick="doCajeroLogin()">Entrar al panel →</button>
+    <button class="btn ghost full" style="margin-top:7px" onclick="closeCajeroOv()">Cancelar</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CAJERO PAGE
+══════════════════════════════════════════════════════ -->
+<div class="page" id="cajero-page">
+  <nav class="cj-nav">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="nav-brand-img" style="width:28px;height:28px"><img class="logo-img" src="" alt="LS"></div>
+      <div style="font-size:14px;font-weight:800;background:var(--cjd);-webkit-background-clip:text;-webkit-text-fill-color:transparent">LS CAMBIOS</div>
+      <span class="cj-badge" id="cj-nav-badge">CAJERO</span>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div style="font-size:12px;color:var(--t2)" id="cj-nav-name"></div>
+      <div id="cj-liq-chip" style="font-size:11px;font-weight:700;color:var(--cj);background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);padding:3px 10px;border-radius:20px"></div>
+      <button class="btn ghost sm" onclick="cajeroLogout()">← Salir</button>
+    </div>
+  </nav>
+
+  <div class="cj-body">
+    <!-- Sidebar desktop -->
+    <aside class="cj-sb">
+      <div class="sb-sec">PANEL</div>
+      <button class="cj-sb-i on" id="cjsi-ops" onclick="showCV('ops')">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Operaciones
+        <span class="cj-badge-sb ui-hidden" id="cjsi-badge">0</span>
+      </button>
+      <button class="cj-sb-i" id="cjsi-chat" onclick="showCV('chat')">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chat activo
+      </button>
+      <button class="cj-sb-i" id="cjsi-liq" onclick="showCV('liq')">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Mi liquidez
+      </button>
+      <button class="cj-sb-i" id="cjsi-stats" onclick="showCV('stats')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Mis stats
+      </button>
+      <div style="flex:1"></div>
+      <button class="cj-sb-i" style="color:var(--red);margin-top:8px" onclick="cajeroLogout()">
+        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Salir
+      </button>
+    </aside>
+
+    <main class="cj-main">
+
+      <!-- ── MIS OPERACIONES ── -->
+      <div class="cv on" id="cv-ops">
+        <div class="dv-h">Mis operaciones 📋</div>
+        <div class="dv-s">Operaciones asignadas a tu cajero</div>
+        <div class="kpi-row" style="grid-template-columns:repeat(3,1fr);margin-bottom:18px">
+          <div class="cj-kpi"><div class="cj-kpi-v" id="cjk-pend">0</div><div class="cj-kpi-l">ACTIVAS</div></div>
+          <div class="cj-kpi"><div class="cj-kpi-v" id="cjk-done">0</div><div class="cj-kpi-l">COMPLETADAS</div></div>
+          <div class="cj-kpi"><div class="cj-kpi-v" id="cjk-comm">$0.00</div><div class="cj-kpi-l">COMISIÓN HOY</div></div>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title" style="color:var(--cj)">Operaciones asignadas</span></div>
+          <div id="cj-ops-body"></div>
+        </div>
+      </div>
+
+      <!-- ── CHAT ACTIVO ── -->
+      <div class="cv" id="cv-chat">
+        <div class="dv-h">Chat con cliente 💬</div>
+        <div class="dv-s">Selecciona una operación de la lista</div>
+        <div style="display:grid;grid-template-columns:260px 1fr;gap:14px;height:calc(100vh - 180px)">
+          <div class="op-panel">
+            <div class="op-panel-h" style="color:var(--cj)">Operaciones activas</div>
+            <div id="cj-op-list" class="op-panel-list"></div>
+          </div>
+          <div class="a-chat-panel">
+            <div class="a-chat-hdr" style="background:rgba(245,158,11,.03)">
+              <div>
+                <div style="font-size:13px;font-weight:700" id="cj-chat-ttl">Selecciona operación</div>
+                <div style="font-size:10px;color:var(--t2);margin-top:1px" id="cj-chat-sub">Elige de la lista</div>
+              </div>
+              <div id="cj-chat-bdg"></div>
+            </div>
+            <!-- Escrow release box -->
+            <div id="cj-escrow-box" style="display:none;padding:12px 14px;background:rgba(245,158,11,.06);border-bottom:1px solid rgba(245,158,11,.2)">
+              <div class="escrow-title">🔒 CUSTODIA — CONFIRMA CUANDO HAYAS ENVIADO LOS FONDOS</div>
+              <div class="escrow-row">
+                <span style="color:var(--t1);font-weight:600">Tú enviaste los fondos al cliente</span>
+                <span class="escrow-check" id="cj-esc-cajero">?</span>
+              </div>
+              <div class="escrow-row">
+                <span style="color:var(--t1);font-weight:600">Cliente confirmó recepción</span>
+                <span class="escrow-check" id="cj-esc-client">?</span>
+              </div>
+              <div id="cj-comm-preview" style="font-size:10px;color:var(--t3);margin-top:6px;padding-top:6px;border-top:1px solid rgba(245,158,11,.1)"></div>
+              <button id="cj-release-btn" class="btn full" style="background:var(--cjd);color:#fff;font-weight:700;margin-top:10px;display:none" onclick="cajeroReleaseEscrow()">✅ Confirmé — Envié los fondos al cliente</button>
+            </div>
+            <div class="a-chat-msgs" id="cj-msgs"></div>
+            <div class="a-acts" id="cj-acts" style="display:none">
+              <button class="btn sm" style="background:var(--cjd);color:#fff;font-weight:700" onclick="cajeroConfirmSent()">✅ Confirmé envío de fondos</button>
+              <button class="btn ghost sm" onclick="showCV('ops')">← Volver</button>
+            </div>
+            <div class="a-inp-row">
+              <label style="cursor:pointer;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:7px;border:1px solid rgba(245,158,11,.25);color:var(--cj);font-size:14px;flex-shrink:0">📎<input type="file" accept="image/*" class="ui-hidden" onchange="cajeroSendImg(event)"></label>
+              <input class="a-inp" style="border-color:rgba(245,158,11,.15)" type="text" id="cj-inp" placeholder="Escribe al cliente..." onkeydown="if(event.key==='Enter')cajeroSend()">
+              <button style="width:34px;height:34px;border-radius:7px;background:var(--cjd);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:700" onclick="cajeroSend()">➤</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MI LIQUIDEZ ── -->
+      <div class="cv" id="cv-liq">
+        <div class="dv-h">Mi liquidez 💰</div>
+        <div class="dv-s">Actualiza tu disponibilidad de fondos</div>
+        <div style="max-width:400px">
+          <div class="card" style="padding:20px;margin-bottom:14px;border-color:rgba(245,158,11,.2)">
+            <div style="font-size:12px;font-weight:700;color:var(--cj);margin-bottom:14px">💵 FONDOS DISPONIBLES</div>
+            <div class="fg">
+              <label>USD DISPONIBLE</label>
+              <input class="fi" type="number" id="cj-liq-usd" placeholder="0.00" min="0" step="0.01">
+            </div>
+            <div class="fg">
+              <label>BOLÍVARES DISPONIBLES</label>
+              <input class="fi" type="number" id="cj-liq-bs" placeholder="0.00" min="0" step="1">
+            </div>
+            <div class="fg">
+              <label>NOTA (opcional)</label>
+              <input class="fi" type="text" id="cj-liq-nota" placeholder="Ej: disponible hasta las 6pm">
+            </div>
+            <button class="btn full" style="background:var(--cjd);color:#fff;font-weight:700;padding:13px" onclick="saveCajeroLiq()">💾 Actualizar liquidez</button>
+          </div>
+          <div class="card" style="padding:14px 18px;border-color:rgba(0,200,150,.15)">
+            <div style="font-size:11px;color:var(--t2);line-height:1.75">
+              ℹ️ <strong style="color:var(--t1)">¿Cómo funciona?</strong> El admin asigna operaciones según tu liquidez disponible. Actualiza este número antes y después de cada jornada para que solo te lleguen operaciones que puedes cubrir.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MIS STATS ── -->
+      <div class="cv" id="cv-stats">
+        <div class="dv-h">Mis estadísticas 📊</div>
+        <div class="dv-s">Tu rendimiento en la plataforma</div>
+        <div class="kpi-row" style="grid-template-columns:repeat(2,1fr);margin-bottom:18px">
+          <div class="cj-kpi"><div class="cj-kpi-v" id="cjst-total">0</div><div class="cj-kpi-l">TOTAL OPS</div></div>
+          <div class="cj-kpi"><div class="cj-kpi-v" id="cjst-vol">$0</div><div class="cj-kpi-l">VOLUMEN USD</div></div>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title" style="color:var(--cj)">Historial completo</span></div>
+          <div id="cj-hist-body"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Mobile bottom nav -->
+  <div class="cj-mob">
+    <div class="cj-mob-row">
+      <button class="cj-mn-i on" id="cjmn-ops" onclick="showCV('ops')">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Ops
+      </button>
+      <button class="cj-mn-i" id="cjmn-chat" onclick="showCV('chat')">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chat
+      </button>
+      <button class="cj-mn-i" id="cjmn-liq" onclick="showCV('liq')">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Liquidez
+      </button>
+      <button class="cj-mn-i" id="cjmn-stats" onclick="showCV('stats')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Stats
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
-'use strict';
 
 const WA       = 'https://wa.me/584147408768';
 const TG_TOKEN = '8545688733:AAGUVpqSGdLH5A27RtwwxCPQFmlWBhZEj6A';
@@ -1305,7 +1607,7 @@ function _mapUser(d){
 
 async function sbGetOps(email){
   const{data,error}=await db.from('operaciones')
-    .select('*')
+    .select('*, meta')
     .eq('cliente_email',email.toLowerCase())
     .order('created_at',{ascending:false});
   if(sbErr('sbGetOps',error)) return [];
@@ -1337,14 +1639,15 @@ async function sbUpdateOpEstado(opId, estado){
 
 async function sbGetAllOps(){
   const{data,error}=await db.from('operaciones')
-    .select('*, clientes(nombre,apellido)')
+    .select('*, clientes(nombre,apellido), meta')
     .order('created_at',{ascending:false});
   if(sbErr('sbGetAllOps',error)) return [];
   if(!data) return [];
   return data.map(d=>({
     ..._mapOp(d),
     uem:   d.cliente_email,
-    uname: d.clientes ? (d.clientes.nombre+' '+d.clientes.apellido) : d.cliente_email
+    uname: d.clientes ? (d.clientes.nombre+' '+d.clientes.apellido) : d.cliente_email,
+    meta:  d.meta||{}
   }));
 }
 
@@ -1353,6 +1656,7 @@ function _mapOp(d){
     id:   d.id, plat: d.plat, dir: d.dir,
     send: d.send_txt, get: d.get_txt, st: d.estado,
     date: new Date(d.created_at).toLocaleDateString('es-VE'),
+    meta: d.meta||{},
     chat: []
   };
 }
@@ -1432,9 +1736,10 @@ const DEFAULT_RATES={
   compra:{
     binance:{t:660,type:'none'},   paypal:{t:520,type:'pct_fixed',pct:0.108,fixed:0.60},
     zinli:{t:520,type:'pct',pct:0.15}, wally:{t:520,type:'pct',pct:0.15},
-    airtm:{t:640,type:'none'}, usdc:{t:655,type:'none'}
+    airtm:{t:640,type:'none'}, usdc:{t:655,type:'none'},
+    reserve:{t:655,type:'none'}, zelle:{t:650,type:'none'}
   },
-  venta:{binance:{t:670},paypal:{t:670},zinli:{t:670},wally:{t:670},airtm:{t:670},usdc:{t:670}}
+  venta:{binance:{t:670},paypal:{t:670},zinli:{t:670},wally:{t:670},airtm:{t:670},usdc:{t:670},reserve:{t:670},zelle:{t:670}}
 };
 let RATES=JSON.parse(JSON.stringify(DEFAULT_RATES));
 
@@ -1445,14 +1750,16 @@ function deepMerge(t,s){
   }
 }
 
-const PN={binance:'Binance/USDT',paypal:'PayPal',zinli:'Zinli',wally:'Wally',airtm:'Airtm',usdc:'USDC'};
+const PN={binance:'Binance/USDT',paypal:'PayPal',zinli:'Zinli',wally:'Wally',airtm:'Airtm',usdc:'USDC',reserve:'Reserve',zelle:'Zelle'};
 const WLS={
-  binance:{label:'ID Binance',       val:'906509124',                                   note:'Envía USDT'},
-  paypal: {label:'Correo PayPal',    val:'sandrealeonard@gmail.com',                    note:'Monto exacto'},
-  zinli:  {label:'Correo Zinli',     val:'sandrealeonard@gmail.com',                    note:'Monto exacto'},
-  wally:  {label:'Usuario Wally',    val:'leonardsandrea',                              note:'Monto exacto'},
-  airtm:  {label:'Correo Airtm',     val:'sandrealeonard@gmail.com',                    note:'Monto exacto'},
+  binance:{label:'ID Binance',       val:'906509124',                                   note:'Envía USDT · Red BEP-20'},
+  paypal: {label:'Correo PayPal',    val:'sandrealeonard@gmail.com',                    note:'Monto exacto USD'},
+  zinli:  {label:'Correo Zinli',     val:'sandrealeonard@gmail.com',                    note:'Monto exacto USD'},
+  wally:  {label:'Usuario Wally',    val:'leonardsandrea',                              note:'Monto exacto USD'},
+  airtm:  {label:'Correo Airtm',     val:'sandrealeonard@gmail.com',                    note:'Monto exacto USD'},
   usdc:   {label:'Dirección USDC',   val:'0xb1d675ce126ab8dc3095ab3df99052cc4393685e', note:'Red BEP-20 (BSC)'},
+  reserve:{label:'Número Reserve',   val:'+584147408768',                               note:'App Reserve · USD'},
+  zelle:  {label:'Email/Tel Zelle',  val:'sandrealeonard@gmail.com',                    note:'Monto exacto USD'},
 };
 
 let ADMIN_PM = { banco:'Banesco', tel:'0414-0000000', cedula:'V-00000000' };
@@ -1480,6 +1787,8 @@ function svgL(id,sz=36){
     wally:  `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#006b31"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.27)}" font-weight="800" fill="#fff">Wally</text></svg>`,
     airtm:  `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#0055b3"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.25)}" font-weight="800" fill="#fff">Airtm</text></svg>`,
     usdc:   `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#2775ca"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.22)}" font-weight="800" fill="#fff">USDC</text></svg>`,
+    reserve:`<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#1a1a2e"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.28)}" font-weight="900" fill="#e94560">RSV</text></svg>`,
+    zelle:  `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#6d1ed4"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.3)}" font-weight="900" fill="#fff">Z</text></svg>`,
   };
   return logos[id]||'';
 }
@@ -1508,7 +1817,21 @@ function buildRecentOps(ops){
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">${stBdg(op.st)}<span style="font-size:10px;color:var(--t3)">${op.date}</span></div>
     </div>`).join('');
 }
-function copyVal(v){navigator.clipboard?navigator.clipboard.writeText(v).then(()=>toast('📋 Copiado','ok')).catch(()=>fbCp(v)):fbCp(v)}
+function copyCompliance(){
+  const el=document.getElementById('compliance-text');
+  if(!el)return;
+  copyVal(el.textContent.trim());
+  toast('📋 Mensaje de responsabilidad copiado — envíalo con tu factura','ok');
+}
+
+function buildComplianceText(ud, sess, plat){
+  const today = new Date().toLocaleDateString('es-VE',{year:'numeric',month:'long',day:'numeric'});
+  const platName = PN[plat] || plat;
+  const nombre = ud ? `${ud.nombre||''} ${ud.apellido||''}`.trim() : '—';
+  const cedula = ud ? (ud.cedula || '—') : '—';
+  const email  = sess ? sess.email : '—';
+  return `Yo ${nombre}, cédula: ${cedula}, correo: ${email}, hoy ${today} me hago responsable de que hago un pago mediante ${platName} por el monto acordado y asumo toda la responsabilidad y no buscaré reembolso ni apelación en ${platName}. Recibí mi servicio por Leonard Sandrea y estoy conforme y satisfecho.`;
+}
 function fbCp(t){const e=document.createElement('textarea');e.value=t;document.body.appendChild(e);e.select();try{document.execCommand('copy');toast('📋 Copiado','ok')}catch{}document.body.removeChild(e)}
 function openLB(s){document.getElementById('lbImg').src=s;document.getElementById('lb').classList.add('on')}
 const _eyeOpen=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
@@ -1610,6 +1933,13 @@ function goD(){showPage('dp');showDV('newop')}
 function goA(){showPage('ap');loadAdmin();requestNotifPerm();}
 
 window.addEventListener('hashchange',()=>{
+  const cjSlot = parseCajeroHash();
+  if(cjSlot){
+    const cjSess=gCJ();
+    if(cjSess&&cjSess.slot===cjSlot) goC();
+    else openCajeroLogin(cjSlot);
+    return;
+  }
   if(window.location.hash==='#admin'){isAdm()?goA():openAdminLogin()}
   else if(document.getElementById('ap').classList.contains('on'))goL()
 });
@@ -1630,7 +1960,7 @@ function renderOVRates(){
   const ovBuy=document.getElementById('ovBuy');
   const ovSell=document.getElementById('ovSell');
   if(!ovBuy||!ovSell)return;
-  const plats=['binance','paypal','zinli','wally','airtm','usdc'];
+  const plats=['binance','paypal','zinli','wally','airtm','usdc','reserve','zelle'];
   const act=`onclick="showDV('newop')"`;
   ovBuy.innerHTML=plats.map(k=>{
     const c=RATES.compra[k]||{};
@@ -1643,14 +1973,14 @@ function renderOVRates(){
   }).join('');
 }
 function setLPMode(mode,btn){
-  document.querySelectorAll('.rs-tab').forEach(t=>t.classList.remove('on','buy','sell'));
+  document.querySelectorAll('#lp .rs-tab').forEach(t=>t.classList.remove('on','buy','sell'));
   btn.classList.add('on',mode);
   document.getElementById('lpBuy').style.display=mode==='buy'?'flex':'none';
   document.getElementById('lpSell').style.display=mode==='sell'?'flex':'none';
 }
 function renderLPRates(){
   const sess=gS();
-  const plats=['binance','paypal','zinli','wally','airtm','usdc'];
+  const plats=['binance','paypal','zinli','wally','airtm','usdc','reserve','zelle'];
   const act=sess?`onclick="goD();setTimeout(()=>showDV('newop'),200)"` :`onclick="openAuth('register')"`;
   document.getElementById('lpBuy').innerHTML=plats.map(k=>{
     const c=RATES.compra[k]||{};
@@ -1746,14 +2076,18 @@ function doLogout(){
   updLPNav(); goL(); toast('👋 Hasta pronto!');
 }
 
-function openAdminLogin(){window.location.hash='admin';document.getElementById('admOv').classList.add('on');setTimeout(()=>document.getElementById('adm-pw').focus(),150)}
+function openAdminLogin(){
+  try{history.replaceState(null,'',window.location.pathname+'#admin')}catch(e){}
+  document.getElementById('admOv').classList.add('on');
+  setTimeout(()=>{const el=document.getElementById('adm-pw');if(el)el.focus();},150);
+}
 function closeAdmOv(){document.getElementById('admOv').classList.remove('on');if(window.location.hash==='#admin')history.pushState('',document.title,window.location.pathname+window.location.search)}
 async function _h256(s){const b=new TextEncoder().encode(s);const hb=await crypto.subtle.digest('SHA-256',b);return Array.from(new Uint8Array(hb)).map(x=>x.toString(16).padStart(2,'0')).join('')}
 async function checkAdmin(){
   const pw=document.getElementById('adm-pw').value;
   const h=await _h256(pw);
   const err=document.getElementById('adm-err'); err.classList.remove('on');
-  if(h===_AH){setAdm();document.getElementById('admOv').classList.remove('on');window.location.hash='admin';goA()}
+  if(h===_AH){setAdm();document.getElementById('admOv').classList.remove('on');try{history.replaceState(null,'',window.location.pathname+'#admin')}catch(e){};goA()}
   else{err.textContent='Contraseña incorrecta.';err.classList.add('on');document.getElementById('adm-pw').value=''}
 }
 function adminLogout(){clAdm();nsSet('lsc_av',null);window.location.hash='';goL();toast('👋 Sesión admin cerrada')}
@@ -1908,7 +2242,11 @@ async function startOp(){
   const m2={from:'sys',text:'📌 Realiza el pago y adjunta el comprobante aquí. LS Cambios lo verificará en breve.',time:tnow()};
   await sbSendMsg(id,m1);
   await sbSendMsg(id,m2);
-  op.chat=[m1,m2];
+  // ── Mensaje de responsabilidad anti-estafa ──────────────────────────
+  const compTxt=buildComplianceText(ud, sess, plat);
+  const m3={from:'sys',text:'📋 MENSAJE DE RESPONSABILIDAD — Copia y envía junto a tu factura de pago:\n\n'+compTxt+'\n\n⚠️ ENVIAR CON FACTURA DE PAGO QUE LLEGUE A SU CORREO',time:tnow()};
+  await sbSendMsg(id,m3);
+  op.chat=[m1,m2,m3];
 
   sS({email:sess.email,...ud});
   await logAct('operation',{id,email:sess.email,name:ud.name,dir,plat,send:sendTxt,get:getTxt,date:tnowISO()});
@@ -1939,6 +2277,14 @@ function openTradeUI(opId,op){
   const cpb=document.getElementById('btn-cpr');  if(cpb)cpb.style.display=op.st==='confirmed'?'block':'none';
   renderSteps(op.st); renderChat(op.chat||[]); updateNotifBanner();
   renderTradePayment(op);
+  // ── Mostrar mensaje de responsabilidad anti-estafa ──────────────────
+  const sessC=gS(), udC=sessC?getUser(sessC.email):null;
+  const ctEl=document.getElementById('compliance-text');
+  const ccEl=document.getElementById('compliance-card');
+  if(ctEl && ccEl && sessC){
+    ctEl.textContent=buildComplianceText(udC, sessC, op.plat);
+    ccEl.style.display='block';
+  }
   document.querySelectorAll('.dv').forEach(d=>d.classList.remove('on'));
   document.getElementById('dv-trade').classList.add('on');
   setupRealtime(opId);
@@ -2115,6 +2461,7 @@ function showAV(name){
   if(av)av.classList.add('on'); if(sb)sb.classList.add('on');
   nsSet('lsc_av',name);
   if(name==='activity'){loadAct();return}
+  if(name==='cajeros'){buildCajeroManager();return}
   loadAdmin();
 }
 
@@ -2143,7 +2490,7 @@ async function loadAdmin(){
 }
 
 function buildAdmOps(ops){
-  return`<table class="tbl"><thead><tr><th>ID</th><th>Cliente</th><th>Tipo</th><th>Plataforma</th><th>Envía</th><th>Recibe</th><th>Estado</th><th></th></tr></thead>
+  return`<table class="tbl"><thead><tr><th>ID</th><th>Cliente</th><th>Tipo</th><th>Plataforma</th><th>Envía</th><th>Recibe</th><th>Cajero</th><th>Estado</th><th></th></tr></thead>
   <tbody>${ops.map(op=>`<tr>
     <td style="font-family:var(--mono);font-size:11px;color:var(--g)">${op.id}</td>
     <td style="font-size:11px">${(op.uname||'').trim()}</td>
@@ -2151,6 +2498,7 @@ function buildAdmOps(ops){
     <td>${PN[op.plat]||op.plat}</td>
     <td style="color:var(--yellow);font-size:11px">${op.send}</td>
     <td style="color:var(--g);font-size:11px">${op.get}</td>
+    <td style="color:var(--cj);font-size:10px;font-weight:700">${op.meta?.cajero_slot?'Cajero '+op.meta.cajero_slot:'—'}</td>
     <td>${stBdg(op.st)}</td>
     <td><button class="btn ghost sm" onclick="admGoChat('${op.uem}','${op.id}')">→</button></td>
   </tr>`).join('')}</tbody></table>`;
@@ -2210,6 +2558,15 @@ async function admOpenChatDB(uem,opId,el){
   document.getElementById('a-chat-sub').textContent=(ud.nombre+' '+ud.apellido).trim()+' · '+(PN[op.plat]||op.plat);
   document.getElementById('a-chat-bdg').innerHTML=stBdg(op.st);
   const ab=document.getElementById('a-acts'); if(ab)ab.style.display=op.st!=='completed'?'flex':'none';
+  await populateAssignSelect();
+  // Mostrar cajero asignado actual si existe
+  const assignedSlot=op.meta?.cajero_slot;
+  if(assignedSlot){
+    const slots=await sbGetCajeros();
+    const cj=slots.find(s=>s.slot===parseInt(assignedSlot));
+    const sub=document.getElementById('a-chat-sub');
+    if(sub&&cj) sub.textContent+=' · 🏧 '+cj.nombre;
+  }
   
   const pm=ud.pagoMovil||{}, cu=ud.cuentas||{};
   const payInfo=op.dir==='compra'
@@ -2257,7 +2614,29 @@ function admSendImg(e){
   r.readAsDataURL(f); e.target.value='';
 }
 
-async function admRevisar(){
+async function populateAssignSelect(){
+  const sel=document.getElementById('a-assign-cj'); if(!sel)return;
+  const slots=await sbGetCajeros();
+  const active=slots.filter(s=>s.activo);
+  sel.innerHTML='<option value="">— Asignar cajero —</option>'+
+    active.map(s=>`<option value="${s.slot}">${s.nombre} · $${fmt(s.liquidez_usd||0,0)} USD</option>`).join('');
+}
+
+async function admDoAssignCajero(){
+  const sel=document.getElementById('a-assign-cj'); if(!sel||!aCur)return;
+  const slot=parseInt(sel.value); if(!slot){toast('⚠️ Selecciona un cajero','err');return;}
+  await admAssignToCajero(aCur.opId, slot);
+  sel.value='';
+}
+
+async function admAssignToCajero(opId, slot){
+  const ok=await sbAssignCajero(opId,slot);
+  if(ok){
+    await sbSendMsg(opId,{from:'sys',text:`✅ Operación asignada a Cajero ${slot}. En breve te atenderán.`,time:tnow()});
+    toast(`✅ Op ${opId} → Cajero ${slot}`,'ok');
+    loadAdmin();
+  } else toast('❌ Error asignando cajero','err');
+}
   if(!aCur)return;
   
   
@@ -2294,7 +2673,7 @@ function buildRateEditor(){
   loadZelleEmail(); loadAdminPM();
   loadAdminPM();
   loadAdminPM();
-  const plats=['binance','paypal','zinli','wally','airtm','usdc'];
+  const plats=['binance','paypal','zinli','wally','airtm','usdc','reserve','zelle'];
   el.innerHTML=plats.map(k=>{const cv=RATES.compra[k]?.t??'',vv=RATES.venta[k]?.t??'';
     return`<div class="re-card"><div class="re-hdr"><div class="re-logo">${svgL(k,32)}</div><div class="re-name">${PN[k]}</div></div>
       <div class="re-row"><span class="re-lbl">Compra (Bs)</span><input class="re-inp" type="number" id="rc-${k}" value="${cv}" step="1" min="0"></div>
@@ -2686,6 +3065,490 @@ function setupRealtime(opId){
     });
 }
 
+// ════════════════════════════════════════════════════════════════════════
+//  CAJERO SYSTEM
+// ════════════════════════════════════════════════════════════════════════
+
+const CAJERO_COUNT = 10;
+const _CJK = 'lsc_cj3'; // cajero session key
+let curCajeroSlot = null;
+let cjCurOpId = null;
+let cjRealtimeChannel = null;
+
+// ── Default cajero structure ─────────────────────────────────────────
+function defaultCajeroSlots(){
+  return Array.from({length:CAJERO_COUNT},(_,i)=>({
+    slot:i+1, nombre:`Cajero ${i+1}`, pw_hash:'', activo:false,
+    liquidez_usd:0, liquidez_bs:0, notas:''
+  }));
+}
+
+// ── Session helpers ──────────────────────────────────────────────────
+const gCJ  = ()=>{ try{const v=sessionStorage.getItem(_CJK);return v?JSON.parse(v):null}catch{return null} };
+const sCJ  = d=>{ try{sessionStorage.setItem(_CJK,JSON.stringify(d))}catch{} };
+const clCJ = ()=>{ try{sessionStorage.removeItem(_CJK)}catch{} };
+
+// ── Load cajero slots from tasas ─────────────────────────────────────
+async function sbGetCajeros(){
+  const{data,error}=await db.from('tasas').select('data').eq('id',1).maybeSingle();
+  if(error||!data) return defaultCajeroSlots();
+  const slots = data.data?.cajeros;
+  if(!slots||!Array.isArray(slots)) return defaultCajeroSlots();
+  // Asegurar siempre 10 slots
+  const full = defaultCajeroSlots();
+  slots.forEach(s=>{ if(s.slot>=1&&s.slot<=10) full[s.slot-1]=Object.assign(full[s.slot-1],s); });
+  return full;
+}
+
+async function sbSaveCajeros(slots){
+  // Merge cajeros into existing tasas data
+  const{data}=await db.from('tasas').select('data').eq('id',1).maybeSingle();
+  const existing = data?.data || {};
+  existing.cajeros = slots;
+  const{error}=await db.from('tasas').upsert({id:1,data:existing},{onConflict:'id'});
+  if(sbErr('sbSaveCajeros',error)) return false;
+  return true;
+}
+
+async function sbGetCajeroOps(slot){
+  // Get ops where meta->cajero_slot = slot
+  const{data,error}=await db.from('operaciones')
+    .select('*, clientes(nombre,apellido,tel)')
+    .filter('meta->>cajero_slot','eq',String(slot))
+    .order('created_at',{ascending:false});
+  if(sbErr('sbGetCajeroOps',error)) return [];
+  if(!data) return [];
+  return data.map(d=>({
+    ..._mapOp(d),
+    uem:   d.cliente_email,
+    uname: d.clientes?(d.clientes.nombre+' '+d.clientes.apellido):d.cliente_email,
+    utel:  d.clientes?.tel||'',
+    meta:  d.meta||{}
+  }));
+}
+
+async function sbAssignCajero(opId, slot){
+  const{data,error}=await db.from('operaciones').select('meta').eq('id',opId).maybeSingle();
+  if(error) return false;
+  const meta = {...(data?.meta||{}), cajero_slot:slot};
+  const{error:e2}=await db.from('operaciones').update({meta,updated_at:tnowISO()}).eq('id',opId);
+  return !e2;
+}
+
+async function sbEscrowRelease(opId, role){
+  // role: 'cajero' | 'client'
+  const{data,error}=await db.from('operaciones').select('meta,send_txt').eq('id',opId).maybeSingle();
+  if(error||!data) return false;
+  const meta = {...(data.meta||{})};
+  if(role==='cajero') meta.escrow_cajero=true;
+  if(role==='client') meta.escrow_client=true;
+  // Calculate commission
+  if(!meta.commission_usd){
+    const match=(data.send_txt||'').match(/\$([0-9.,]+)/);
+    if(match){
+      const usd=parseFloat(match[1].replace(',',''));
+      meta.commission_usd=(usd*0.015).toFixed(4);
+      meta.net_usd=(usd*0.985).toFixed(4);
+      meta.gross_usd=usd;
+    }
+  }
+  const bothReleased = meta.escrow_cajero && meta.escrow_client;
+  const updates = {meta, updated_at:tnowISO()};
+  if(bothReleased) updates.estado='completed';
+  const{error:e2}=await db.from('operaciones').update(updates).eq('id',opId);
+  if(e2) return false;
+  if(bothReleased) await logAct('commission',{opId, commission:meta.commission_usd, gross:meta.gross_usd});
+  return {ok:true, bothReleased, meta};
+}
+
+async function sbUpdateCajeroLiq(slot, usd, bs, notas){
+  const slots = await sbGetCajeros();
+  const idx = slots.findIndex(s=>s.slot===slot);
+  if(idx<0) return false;
+  slots[idx].liquidez_usd=usd;
+  slots[idx].liquidez_bs=bs;
+  slots[idx].notas=notas||'';
+  return await sbSaveCajeros(slots);
+}
+
+// ── Hash routing para cajeros ─────────────────────────────────────────
+function parseCajeroHash(){
+  const m = window.location.hash.match(/^#cajero(\d+)$/i);
+  if(!m) return null;
+  const slot = parseInt(m[1]);
+  return (slot>=1&&slot<=10) ? slot : null;
+}
+
+function openCajeroLogin(slot){
+  const title = document.getElementById('cj-ov-title');
+  if(title) title.textContent = `Cajero ${slot}`;
+  document.getElementById('cj-pw').value='';
+  document.getElementById('cj-err').classList.remove('on');
+  document.getElementById('cajeroOv').classList.add('on');
+  document.getElementById('cajeroOv').dataset.slot = slot;
+  setTimeout(()=>document.getElementById('cj-pw').focus(),150);
+}
+
+function closeCajeroOv(){
+  document.getElementById('cajeroOv').classList.remove('on');
+  // Si no hay sesión cajero activa, limpiar el hash
+  if(!gCJ()) try{history.replaceState(null,'',window.location.pathname)}catch(e){}
+}
+
+async function doCajeroLogin(){
+  const slot = parseInt(document.getElementById('cajeroOv').dataset.slot||'0');
+  const pw   = document.getElementById('cj-pw').value;
+  const err  = document.getElementById('cj-err'); err.classList.remove('on');
+  if(!pw){ err.textContent='Ingresa la contraseña.'; err.classList.add('on'); return; }
+
+  const slots = await sbGetCajeros();
+  const cj = slots.find(s=>s.slot===slot);
+  if(!cj||!cj.activo){ err.textContent='Este cajero no está activo.'; err.classList.add('on'); return; }
+  if(!cj.pw_hash){ err.textContent='Sin contraseña asignada. Contacta al admin.'; err.classList.add('on'); return; }
+
+  const h = await _h256(pw);
+  if(h!==cj.pw_hash){ err.textContent='Contraseña incorrecta.'; err.classList.add('on'); document.getElementById('cj-pw').value=''; return; }
+
+  sCJ({slot, nombre:cj.nombre});
+  curCajeroSlot = slot;
+  document.getElementById('cajeroOv').classList.remove('on');
+  await logAct('cajero_login',{slot, nombre:cj.nombre, date:tnowISO()});
+  goC();
+}
+
+async function goC(){
+  curCajeroSlot = gCJ()?.slot;
+  if(!curCajeroSlot){ openCajeroLogin(1); return; }
+  showPage('cajero-page');
+  const cj = gCJ();
+  document.getElementById('cj-nav-badge').textContent = `CAJERO ${cj.slot}`;
+  document.getElementById('cj-nav-name').textContent  = cj.nombre;
+  try{history.replaceState(null,'',window.location.pathname+`#cajero${cj.slot}`)}catch(e){}
+  await loadCajeroPanel();
+}
+
+function cajeroLogout(){
+  if(cjRealtimeChannel){db.removeChannel(cjRealtimeChannel);cjRealtimeChannel=null;}
+  clCJ(); curCajeroSlot=null; cjCurOpId=null;
+  try{history.replaceState(null,'',window.location.pathname)}catch(e){}
+  goL(); toast('👋 Sesión cajero cerrada');
+}
+
+async function loadCajeroPanel(){
+  const slot = curCajeroSlot; if(!slot) return;
+  const slots = await sbGetCajeros();
+  const cj = slots.find(s=>s.slot===slot); if(!cj) return;
+
+  // Update liquidity chip
+  const chip = document.getElementById('cj-liq-chip');
+  if(chip) chip.textContent = `$${fmt(cj.liquidez_usd||0,0)} USD · Bs ${fmt(cj.liquidez_bs||0,0)}`;
+
+  // Pre-fill liquidity form
+  const lu=document.getElementById('cj-liq-usd'),lb=document.getElementById('cj-liq-bs'),ln=document.getElementById('cj-liq-nota');
+  if(lu)lu.value=cj.liquidez_usd||0;
+  if(lb)lb.value=cj.liquidez_bs||0;
+  if(ln)ln.value=cj.notas||'';
+
+  const ops = await sbGetCajeroOps(slot);
+  const active = ops.filter(o=>o.st!=='completed'&&o.st!=='rejected');
+  const done   = ops.filter(o=>o.st==='completed');
+
+  // KPIs
+  const kp=id=>document.getElementById(id);
+  if(kp('cjk-pend'))kp('cjk-pend').textContent=active.length;
+  if(kp('cjk-done'))kp('cjk-done').textContent=done.length;
+
+  // Commission today
+  const today = new Date().toLocaleDateString('es-VE');
+  const commToday = ops.filter(o=>o.st==='completed'&&o.date===today)
+    .reduce((acc,o)=>acc+parseFloat(o.meta?.commission_usd||0),0);
+  if(kp('cjk-comm'))kp('cjk-comm').textContent='$'+fmt(commToday,2);
+
+  // Stats
+  const vol = ops.reduce((acc,o)=>{ const m=o.send?.match(/\$([0-9.,]+)/); return acc+(m?parseFloat(m[1].replace(',','')):0); },0);
+  if(kp('cjst-total'))kp('cjst-total').textContent=ops.length;
+  if(kp('cjst-vol'))kp('cjst-vol').textContent='$'+fmt(vol,0);
+
+  // Badge
+  const badge=document.getElementById('cjsi-badge');
+  if(badge){badge.style.display=active.length>0?'inline':'none';badge.textContent=active.length;}
+
+  // Ops list body
+  const ob=document.getElementById('cj-ops-body');
+  if(ob) ob.innerHTML=ops.length?buildCajeroOpsList(ops):'<div class="empty" style="padding:30px">Sin operaciones asignadas aún</div>';
+
+  // Chat op-list
+  buildCjOpList(active);
+
+  // Stats history
+  const hb=document.getElementById('cj-hist-body');
+  if(hb) hb.innerHTML=buildCajeroHistTbl(ops);
+}
+
+function buildCajeroOpsList(ops){
+  return`<table class="tbl"><thead><tr><th>ID</th><th>Cliente</th><th>Plataforma</th><th>Envía</th><th>Recibe</th><th>Estado</th><th></th></tr></thead>
+  <tbody>${ops.map(op=>`<tr>
+    <td style="font-family:var(--mono);font-size:11px;color:var(--cj)">${op.id}</td>
+    <td style="font-weight:600;font-size:12px">${(op.uname||'').trim()}</td>
+    <td>${PN[op.plat]||op.plat}</td>
+    <td style="color:var(--yellow);font-size:11px;font-weight:600">${op.send}</td>
+    <td style="color:var(--g);font-size:11px;font-weight:600">${op.get}</td>
+    <td>${stBdg(op.st)}</td>
+    <td>${op.st!=='completed'?`<button class="btn ghost sm" onclick="cjOpenChat('${op.id}')">Chat →</button>`:'—'}</td>
+  </tr>`).join('')}</tbody></table>`;
+}
+
+function buildCajeroHistTbl(ops){
+  if(!ops.length)return'<div class="empty">Sin operaciones</div>';
+  return`<table class="tbl"><thead><tr><th>ID</th><th>Plataforma</th><th>Monto</th><th>Comisión</th><th>Estado</th><th>Fecha</th></tr></thead>
+  <tbody>${ops.map(op=>`<tr>
+    <td style="font-family:var(--mono);font-size:11px;color:var(--cj)">${op.id}</td>
+    <td>${PN[op.plat]||op.plat}</td>
+    <td style="color:var(--yellow);font-size:11px">${op.send}</td>
+    <td style="color:var(--cj);font-family:var(--mono);font-size:11px">$${fmt(op.meta?.commission_usd||0,2)}</td>
+    <td>${stBdg(op.st)}</td>
+    <td style="font-size:11px;color:var(--t3)">${op.date}</td>
+  </tr>`).join('')}</tbody></table>`;
+}
+
+function buildCjOpList(ops){
+  const el=document.getElementById('cj-op-list'); if(!el)return;
+  el.innerHTML=ops.length?ops.map(op=>`
+    <div class="op-li" id="cjoli-${op.id}" onclick="cjOpenChat('${op.id}',this)">
+      <div class="op-li-id">${op.id} ${stBdg(op.st)}</div>
+      <div class="op-li-u">${(op.uname||'').trim()} · ${PN[op.plat]||op.plat}</div>
+    </div>`).join(''):'<div style="padding:16px;font-size:12px;color:var(--t2);text-align:center">Sin activas</div>';
+}
+
+async function cjOpenChat(opId, el){
+  const ops = await sbGetCajeroOps(curCajeroSlot);
+  const op  = ops.find(o=>o.id===opId); if(!op)return;
+  op.chat   = await sbGetMsgs(opId);
+  cjCurOpId = opId;
+
+  document.querySelectorAll('.op-li').forEach(i=>i.classList.remove('on'));
+  if(el)el.classList.add('on');
+
+  document.getElementById('cj-chat-ttl').textContent = 'Chat: '+opId;
+  document.getElementById('cj-chat-sub').textContent = (op.uname||'').trim()+' · '+PN[op.plat];
+  document.getElementById('cj-chat-bdg').innerHTML   = stBdg(op.st);
+
+  const acts = document.getElementById('cj-acts');
+  if(acts) acts.style.display = (op.st!=='completed'&&op.st!=='rejected')?'flex':'none';
+
+  renderCjEscrowBox(op);
+  renderCjChat(op.chat||[]);
+  showCV('chat');
+  setupCjRealtime(opId);
+}
+
+function renderCjEscrowBox(op){
+  const box=document.getElementById('cj-escrow-box'); if(!box)return;
+  const meta=op.meta||{};
+  const isActive=(op.st!=='completed'&&op.st!=='rejected');
+  if(!isActive){box.style.display='none';return;}
+  box.style.display='block';
+
+  const cjDone  = !!meta.escrow_cajero;
+  const cliDone = !!meta.escrow_client;
+
+  const cjEl = document.getElementById('cj-esc-cajero');
+  const clEl = document.getElementById('cj-esc-client');
+  if(cjEl){cjEl.className='escrow-check '+(cjDone?'done':'wait');cjEl.textContent=cjDone?'✓':'⏳';}
+  if(clEl){clEl.className='escrow-check '+(cliDone?'done':'wait');clEl.textContent=cliDone?'✓':'⏳';}
+
+  // Commission preview
+  const prev=document.getElementById('cj-comm-preview');
+  const gross=parseFloat(meta.gross_usd||0)||0;
+  if(prev&&gross>0){
+    const comm=(gross*0.015).toFixed(2), net=(gross*0.985).toFixed(2);
+    prev.innerHTML=`💰 Bruto: <strong style="color:var(--t1)">$${fmt(gross,2)}</strong> · Comisión LS: <strong style="color:var(--cj)">$${comm}</strong> · Neto cliente/cajero: <strong style="color:var(--g)">$${net}</strong>`;
+  }
+
+  const relBtn=document.getElementById('cj-release-btn');
+  if(relBtn) relBtn.style.display=(!cjDone&&isActive)?'block':'none';
+}
+
+function renderCjChat(msgs){
+  const el=document.getElementById('cj-msgs'); if(!el)return;
+  const atBot=el.scrollHeight-el.scrollTop<=el.clientHeight+60;
+  el.innerHTML=msgs.map(m=>{
+    if(m.from==='sys')return`<div class="cm-sys">${m.text}</div>`;
+    const me=m.from==='cajero';
+    if(m.type==='img')return`<div class="cm ${me?'me':'them'}"><div class="cm-who">${me?'Tú (Cajero)':'👤 Cliente'}</div><div class="cm-bbl"><img src="${m.src}" class="chat-img" onclick="openLB('${m.src}')"></div><div class="cm-t">${m.time||''}</div></div>`;
+    return`<div class="cm ${me?'me':'them'}"><div class="cm-who">${me?'Tú (Cajero)':'👤 Cliente'}</div><div class="cm-bbl">${m.text}</div><div class="cm-t">${m.time||''}</div></div>`;
+  }).join('');
+  if(atBot)el.scrollTop=el.scrollHeight;
+}
+
+async function cajeroSend(){
+  if(!cjCurOpId)return;
+  const inp=document.getElementById('cj-inp'); const t=inp.value.trim(); if(!t)return; inp.value='';
+  await sbSendMsg(cjCurOpId,{from:'cajero',text:t,time:tnow()});
+}
+
+function cajeroSendImg(e){
+  const f=e.target.files[0]; if(!f||!cjCurOpId)return;
+  const r=new FileReader();
+  r.onload=async()=>{
+    await sbSendMsg(cjCurOpId,{from:'cajero',type:'img',src:r.result,text:'📎 Comprobante',time:tnow()});
+    toast('📎 Comprobante enviado','ok');
+  };
+  r.readAsDataURL(f); e.target.value='';
+}
+
+async function cajeroReleaseEscrow(){
+  if(!cjCurOpId)return;
+  const res=await sbEscrowRelease(cjCurOpId,'cajero');
+  if(!res||!res.ok){toast('❌ Error al confirmar','err');return;}
+  await sbSendMsg(cjCurOpId,{from:'sys',text:'✅ Cajero confirmó el envío de fondos.',time:tnow()});
+  if(res.bothReleased){
+    await sbSendMsg(cjCurOpId,{from:'sys',text:'🎉 ¡Ambas partes confirmaron! Operación completada. Comisión LS: $'+res.meta.commission_usd,time:tnow()});
+    playSuccess();
+  }
+  toast('✅ Confirmado','ok');
+  // Refresh
+  const ops=await sbGetCajeroOps(curCajeroSlot);
+  const op=ops.find(o=>o.id===cjCurOpId);
+  if(op){op.chat=await sbGetMsgs(cjCurOpId);renderCjEscrowBox(op);}
+}
+
+async function cajeroConfirmSent(){
+  await cajeroReleaseEscrow();
+}
+
+async function saveCajeroLiq(){
+  const usd=parseFloat(document.getElementById('cj-liq-usd').value)||0;
+  const bs =parseFloat(document.getElementById('cj-liq-bs').value)||0;
+  const nota=document.getElementById('cj-liq-nota').value.trim();
+  const ok=await sbUpdateCajeroLiq(curCajeroSlot,usd,bs,nota);
+  if(ok){ toast('💾 Liquidez actualizada','ok'); await loadCajeroPanel(); }
+  else toast('❌ Error guardando','err');
+}
+
+function showCV(name){
+  document.querySelectorAll('.cv').forEach(d=>d.classList.remove('on'));
+  document.querySelectorAll('.cj-sb-i,.cj-mn-i').forEach(b=>b.classList.remove('on'));
+  ['cv-','cjsi-','cjmn-'].forEach(p=>{const e=document.getElementById(p+name);if(e)e.classList.add('on');});
+  window.scrollTo(0,0);
+}
+
+function setupCjRealtime(opId){
+  if(cjRealtimeChannel){db.removeChannel(cjRealtimeChannel);cjRealtimeChannel=null;}
+  cjRealtimeChannel=db.channel('lsc-cj-'+opId)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'mensajes',filter:'op_id=eq.'+opId},payload=>{
+      const msg=_mapMsg(payload.new);
+      const el=document.getElementById('cj-msgs');
+      if(el&&cjCurOpId===opId){el.appendChild(buildMsgDiv(msg,false));el.scrollTop=el.scrollHeight;}
+      if(msg.from==='user'){playMsgSound();toast('💬 Nuevo mensaje del cliente');}
+    })
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'operaciones',filter:'id=eq.'+opId},async payload=>{
+      const st=payload.new.estado, meta=payload.new.meta||{};
+      document.getElementById('cj-chat-bdg').innerHTML=stBdg(st);
+      const ops=await sbGetCajeroOps(curCajeroSlot);
+      const op=ops.find(o=>o.id===opId);
+      if(op)renderCjEscrowBox({...op,meta,st});
+      toast('🔄 Estado: '+st);
+    })
+    .subscribe();
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  ADMIN — GESTIÓN DE CAJEROS
+// ════════════════════════════════════════════════════════════════════════
+
+async function buildCajeroManager(){
+  const el=document.getElementById('cj-admin-grid'); if(!el)return;
+  el.innerHTML='<div style="color:var(--t2);font-size:12px;padding:10px">Cargando cajeros…</div>';
+  const slots=await sbGetCajeros();
+
+  el.innerHTML=slots.map(cj=>{
+    const link=`${window.location.origin}${window.location.pathname}#cajero${cj.slot}`;
+    return`<div class="cj-card ${cj.activo?'':'inactive'}" id="cjcard-${cj.slot}">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <div class="cj-slot">CAJERO ${cj.slot}</div>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer">
+          <input type="checkbox" ${cj.activo?'checked':''} onchange="toggleCajeroActive(${cj.slot},this.checked)" style="accent-color:var(--cj);width:14px;height:14px">
+          <span style="font-size:10px;color:var(--t2)">${cj.activo?'Activo':'Inactivo'}</span>
+        </label>
+      </div>
+      <div class="cj-inp-row" style="margin-bottom:8px">
+        <input class="cj-inp" type="text" id="cjn-${cj.slot}" value="${cj.nombre}" placeholder="Nombre cajero" style="font-family:var(--fn);font-weight:700">
+      </div>
+      <div class="cj-liq-row">
+        <div class="cj-liq"><div class="cj-liq-v">$${fmt(cj.liquidez_usd||0,0)}</div><div class="cj-liq-l">USD</div></div>
+        <div class="cj-liq"><div class="cj-liq-v" style="color:var(--g)">Bs ${fmt(cj.liquidez_bs||0,0)}</div><div class="cj-liq-l">Bs</div></div>
+      </div>
+      <div class="cj-inp-row">
+        <span class="cj-inp-lbl">🔑</span>
+        <input class="cj-inp" type="password" id="cjpw-${cj.slot}" placeholder="Nueva contraseña">
+        <button class="btn ghost sm" onclick="saveCajeroPw(${cj.slot})" style="flex-shrink:0;border-color:rgba(245,158,11,.3);color:var(--cj)">💾</button>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:8px">
+        <button class="btn full sm" style="background:var(--cjd);color:#fff;font-weight:700" onclick="saveCajeroName(${cj.slot})">💾 Guardar</button>
+        <button class="btn ghost sm" onclick="copyVal('${link}')" style="border-color:rgba(245,158,11,.25);color:var(--cj)">🔗 Link</button>
+        <button class="btn ghost sm" onclick="admViewCajeroOps(${cj.slot})">👁 Ops</button>
+      </div>
+      ${cj.notas?`<div style="font-size:10px;color:var(--t2);margin-top:6px;padding-top:6px;border-top:1px solid var(--cj-brd)">📝 ${cj.notas}</div>`:''}
+    </div>`;
+  }).join('');
+
+  // Show badge
+  const badge=document.getElementById('asi-cj-badge');
+  if(badge){const a=slots.filter(s=>s.activo).length;badge.textContent=a;badge.style.display=a>0?'inline':'none';}
+}
+
+async function saveCajeroPw(slot){
+  const inp=document.getElementById(`cjpw-${slot}`); if(!inp) return;
+  const pw=inp.value.trim();
+  if(pw.length<4){toast('⚠️ Contraseña mínimo 4 caracteres','err');return;}
+  const h=await _h256(pw);
+  const slots=await sbGetCajeros();
+  const idx=slots.findIndex(s=>s.slot===slot); if(idx<0)return;
+  slots[idx].pw_hash=h;
+  const ok=await sbSaveCajeros(slots);
+  if(ok){inp.value='';toast(`✅ Contraseña cajero ${slot} actualizada`,'ok');}
+  else toast('❌ Error guardando','err');
+}
+
+async function saveCajeroName(slot){
+  const inp=document.getElementById(`cjn-${slot}`); if(!inp)return;
+  const nombre=inp.value.trim()||`Cajero ${slot}`;
+  const slots=await sbGetCajeros();
+  const idx=slots.findIndex(s=>s.slot===slot); if(idx<0)return;
+  slots[idx].nombre=nombre;
+  const ok=await sbSaveCajeros(slots);
+  if(ok){toast(`✅ Cajero ${slot} guardado`,'ok');buildCajeroManager();}
+  else toast('❌ Error guardando','err');
+}
+
+async function toggleCajeroActive(slot,checked){
+  const slots=await sbGetCajeros();
+  const idx=slots.findIndex(s=>s.slot===slot); if(idx<0)return;
+  slots[idx].activo=checked;
+  await sbSaveCajeros(slots);
+  const card=document.getElementById(`cjcard-${slot}`);
+  if(card)card.className='cj-card '+(checked?'':'inactive');
+  toast(`${checked?'✅ Cajero activado':'⛔ Cajero desactivado'}`,'ok');
+  buildCajeroManager();
+}
+
+function admViewCajeroOps(slot){
+  // Switch to chats tab filtered by cajero
+  showAV('chats');
+  toast(`👁 Mostrando ops de Cajero ${slot}`);
+}
+
+// ── Assign operation to cajero (from admin chats) ─────────────────────
+async function admAssignToCajero(opId, slot){
+  const ok = await sbAssignCajero(opId, slot);
+  if(ok){
+    await sbSendMsg(opId,{from:'sys',text:`✅ Operación asignada a Cajero ${slot}. En breve te atenderán.`,time:tnow()});
+    toast(`✅ Op ${opId} asignada a Cajero ${slot}`,'ok');
+    loadAdmin();
+  } else toast('❌ Error asignando cajero','err');
+}
+
 document.addEventListener('DOMContentLoaded',async()=>{
 
   // Registrar Service Worker para push notifications
@@ -2698,17 +3561,32 @@ document.addEventListener('DOMContentLoaded',async()=>{
     subscribePush(_swReg).catch(()=>{});
   }
 
-  try{ await sbLoadRates(); }catch(e){ console.warn('[init] sbLoadRates falló:',e); }
-  try{ renderLPRates(); }catch(e){ console.warn('[init] renderLPRates:',e); }
-  try{ renderOVRates(); }catch(e){ console.warn('[init] renderOVRates:',e); }
+  // ── Mostrar tasas INMEDIATAMENTE con valores por defecto ──────────────
+  try{ renderLPRates(); }catch(e){ console.warn('[init] renderLPRates default:',e); }
+  try{ renderOVRates(); }catch(e){ console.warn('[init] renderOVRates default:',e); }
   try{ renderTestimonials(); }catch(e){ console.warn('[init] renderTestimonials:',e); }
   try{ updateHorarioChip(); }catch(e){ console.warn('[init] updateHorarioChip:',e); }
+  // ── Cargar tasas actualizadas desde DB y re-renderizar ────────────────
+  try{
+    await sbLoadRates();
+    try{ renderLPRates(); }catch(e){}
+    try{ renderOVRates(); }catch(e){}
+    try{ updateHorarioChip(); }catch(e){}
+  }catch(e){ console.warn('[init] sbLoadRates falló:',e); }
 
   
   document.getElementById('authOv').addEventListener('click',e=>{if(e.target===document.getElementById('authOv'))closeAuth()});
   document.getElementById('admOv').addEventListener('click',e=>{if(e.target===document.getElementById('admOv'))closeAdmOv()});
 
   
+  // ── Ruta cajero (ej: #cajero3) ────────────────────────────────────
+  const cjSlot = parseCajeroHash();
+  if(cjSlot){
+    const cjSess=gCJ();
+    if(cjSess&&cjSess.slot===cjSlot){ await goC(); return; }
+    else { openCajeroLogin(cjSlot); return; }
+  }
+
   if(window.location.hash==='#admin'){
     if(isAdm())goA(); else openAdminLogin();
     return;
