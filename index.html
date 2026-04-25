@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded',function(){
   --bg:#080c12;--bg1:#0f1520;--bg2:#162030;--bg3:#1e2d42;
   --brd:rgba(0,180,130,.08);--brd2:rgba(0,180,130,.16);
   --g:#00c896;--g2:#00eeb3;--gd:linear-gradient(135deg,#0066ff,#00c896);
-  --red:#f6465d;--yellow:#f0b90b;--blue:#1a6cff;
+  --green:#2ef06f;--yellow:#f0b90b;--blue:#1a6cff;
   --t1:#e0eaf5;--t2:#7a92a8;--t3:#3d5168;
   --r:8px;--r2:12px;--fn:'Outfit',sans-serif;--mono:'Space Mono',monospace;
 }
@@ -1930,7 +1930,7 @@ function calcOp(){
     const r=(RATES.usdt_venta&&RATES.usdt_venta[plat])||{t:0.96};
     const usdt=amt*r.t;
     if(rl)rl.textContent='RECIBIRÍAS EN USDT (BEP20)';
-    rv.textContent=fmt(usdt,4)+' USDT';
+    rv.textContent=fmt(usdt,2)+' USDT';
     rd.textContent=`Envías $${fmt(amt,2)} (${PN[plat]}) · Tasa $1 USD = ${r.t} USDT · Red BEP20`;
   }
 }
