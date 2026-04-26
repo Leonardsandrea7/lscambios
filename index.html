@@ -2,7 +2,9 @@
 <html lang="es">
 <head>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  emailjs.send("service_a0ffcv5", "template_u8lwybr", {
+
+<script>
+    emailjs.send("service_a0ffcv5", "template_u8lwybr", {
   to_email: "lscambios1@gmail.com",
   code: "123456"
 }).then(function(response) {
@@ -10,8 +12,6 @@
 }, function(error) {
   console.error("ERROR", error);
 });
-
-<script>
 (function(){
   emailjs.init("v4cUL0MZLMTa3RT_b");
 })();
