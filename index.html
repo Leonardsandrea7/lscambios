@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded',function(){
   --bg:#080c12;--bg1:#0f1520;--bg2:#162030;--bg3:#1e2d42;
   --brd:rgba(0,180,130,.08);--brd2:rgba(0,180,130,.16);
   --g:#00c896;--g2:#00eeb3;--gd:linear-gradient(135deg,#0066ff,#00c896);
-  --green:#2ef06f;--yellow:#f0b90b;--blue:#1a6cff;
+  --red:#f7931a;--yellow:#f0b90b;--blue:#1a6cff;
   --t1:#e0eaf5;--t2:#7a92a8;--t3:#3d5168;
   --r:8px;--r2:12px;--fn:'Outfit',sans-serif;--mono:'Space Mono',monospace;
 }
@@ -251,7 +251,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .fi::placeholder{color:var(--t3)}
 .fsel option{background:var(--bg2)}
 .fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.ferr{font-size:11px;color:var(--red);padding:8px 12px;background:rgba(240,64,96,.08);border:1px solid rgba(240,64,96,.2);border-radius:7px;margin-top:8px;display:none}
+.ferr{font-size:11px;color:var(--red);padding:8px 12px;background:rgba(247,147,26,.08);border:1px solid rgba(247,147,26,.2);border-radius:7px;margin-top:8px;display:none}
 .ferr.on{display:block}
 .fok{font-size:11px;color:var(--g);padding:8px 12px;background:rgba(0,200,150,.08);border:1px solid rgba(0,200,150,.2);border-radius:7px;margin-top:8px;display:none}
 .fok.on{display:block}
@@ -266,8 +266,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .btn.g:disabled{opacity:.4;cursor:not-allowed}
 .btn.ghost{background:transparent;color:var(--t1);border:1px solid var(--brd2)}
 .btn.ghost:hover{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.04)}
-.btn.red{background:rgba(240,64,96,.1);color:var(--red);border:1px solid rgba(240,64,96,.2)}
-.btn.red:hover{background:rgba(240,64,96,.18)}
+.btn.red{background:rgba(247,147,26,.1);color:var(--red);border:1px solid rgba(247,147,26,.2)}
+.btn.red:hover{background:rgba(247,147,26,.18)}
 .btn.full{width:100%}
 .btn.sm{padding:6px 12px;font-size:11px;border-radius:7px}
 
@@ -278,9 +278,9 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .bdg.rv{background:rgba(245,184,0,.15);color:var(--yellow);border:1px solid rgba(245,184,0,.25)}
 .bdg.c{background:rgba(0,200,150,.1);color:var(--g);border:1px solid rgba(0,200,150,.18)}
 .bdg.d{background:rgba(0,200,150,.18);color:var(--g2);border:1px solid rgba(0,200,150,.28)}
-.bdg.r{background:rgba(240,64,96,.1);color:var(--red);border:1px solid rgba(240,64,96,.18)}
+.bdg.r{background:rgba(247,147,26,.1);color:var(--red);border:1px solid rgba(247,147,26,.18)}
 .bdg.buy{background:rgba(0,200,150,.1);color:var(--g)}
-.bdg.sell{background:rgba(240,64,96,.1);color:var(--red)}
+.bdg.sell{background:rgba(247,147,26,.1);color:var(--red)}
 .chat-inp:disabled{background:var(--bg2);color:var(--t3);cursor:not-allowed}
 .chat-send:disabled,.chat-att:disabled{opacity:.3;cursor:not-allowed}
 
@@ -360,20 +360,20 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 #toast{position:fixed;bottom:20px;right:20px;z-index:9999;background:var(--bg2);border:1px solid var(--brd2);padding:11px 18px;border-radius:9px;font-size:12px;font-weight:600;opacity:0;transform:translateY(8px);transition:opacity .22s,transform .22s;pointer-events:none;max-width:300px;box-shadow:0 4px 20px rgba(0,0,0,.4)}
 #toast.on{opacity:1;transform:translateY(0)}
 #toast.ok{border-color:rgba(0,200,150,.35);color:var(--g)}
-#toast.err{border-color:rgba(240,64,96,.35);color:var(--red)}
+#toast.err{border-color:rgba(247,147,26,.35);color:var(--red)}
 
 #lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:9998;align-items:center;justify-content:center;cursor:pointer}
 #lb.on{display:flex}
 #lb img{max-width:90vw;max-height:90vh;border-radius:9px}
 
 #ap{background:var(--bg)}
-.ap-nav{height:56px;padding:0 20px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;background:var(--bg1);border-bottom:1px solid rgba(240,64,96,.1);position:sticky;top:0;z-index:100}
-.ap-badge{background:rgba(240,64,96,.1);border:1px solid rgba(240,64,96,.18);color:var(--red);padding:4px 11px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1.5px}
+.ap-nav{height:56px;padding:0 20px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;background:var(--bg1);border-bottom:1px solid rgba(247,147,26,.1);position:sticky;top:0;z-index:100}
+.ap-badge{background:rgba(247,147,26,.1);border:1px solid rgba(247,147,26,.18);color:var(--red);padding:4px 11px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1.5px}
 .ap-body{display:flex;flex:1;overflow:hidden;min-height:0}
-.ap-sb{width:190px;flex-shrink:0;background:var(--bg1);border-right:1px solid rgba(240,64,96,.08);padding:10px 8px;display:flex;flex-direction:column;overflow-y:auto}
+.ap-sb{width:190px;flex-shrink:0;background:var(--bg1);border-right:1px solid rgba(247,147,26,.08);padding:10px 8px;display:flex;flex-direction:column;overflow-y:auto}
 .ap-sb-i{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;font-size:12px;color:var(--t2);background:transparent;border:none;width:100%;text-align:left;cursor:pointer;transition:all .15s;font-family:var(--fn)}
-.ap-sb-i:hover{background:rgba(240,64,96,.05);color:var(--t1)}
-.ap-sb-i.on{background:rgba(240,64,96,.07);color:var(--red);border:1px solid rgba(240,64,96,.12)}
+.ap-sb-i:hover{background:rgba(247,147,26,.05);color:var(--t1)}
+.ap-sb-i.on{background:rgba(247,147,26,.07);color:var(--red);border:1px solid rgba(247,147,26,.12)}
 .ap-sb-i svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 .ap-main{flex:1;overflow-y:auto;padding:20px}
 .av{display:none}.av.on{display:block}
@@ -398,7 +398,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .op-li-id{font-size:12px;font-weight:700}
 .op-li-u{font-size:10px;color:var(--t2);margin-top:2px}
 .a-chat-panel{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r2);overflow:hidden;display:flex;flex-direction:column}
-.a-chat-hdr{padding:12px 16px;border-bottom:1px solid var(--brd);display:flex;align-items:center;justify-content:space-between;background:rgba(240,64,96,.03)}
+.a-chat-hdr{padding:12px 16px;border-bottom:1px solid var(--brd);display:flex;align-items:center;justify-content:space-between;background:rgba(247,147,26,.03)}
 .a-chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;min-height:200px;max-height:none}
 .a-acts{padding:9px 14px;border-top:1px solid var(--brd);display:flex;gap:7px;flex-wrap:wrap;background:rgba(0,0,0,.15)}
 .a-inp-row{padding:10px 12px;border-top:1px solid var(--brd);display:flex;gap:7px}
@@ -976,19 +976,32 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <div class="dv on" id="dv-newop">
         <div class="dv-h">Nueva operación ⚡</div><div class="dv-s">Calculadora con tasas exactas.</div>
         <div class="op-form">
-          <div class="fg"><label>TIPO DE OPERACIÓN</label>
-            <select class="fsel" id="op-dir" onchange="onDirChange()">
-              <optgroup label="── Bolívares ──────────────">
-                <option value="compra">Vender divisas → recibo Bolívares</option>
-                <option value="venta">Comprar divisas → envío Bolívares</option>
-              </optgroup>
-              <optgroup label="── USDT (BEP20) ────────────">
-                <option value="usdt_compra">Envío USDT → recibo divisas</option>
-                <option value="usdt_venta">Envío divisas → recibo USDT</option>
-              </optgroup>
+
+          <!-- Selector modo -->
+          <div class="fg">
+            <label>MODO DE CAMBIO</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <button id="mode-bs" onclick="setMode('bs')"
+                style="padding:11px 6px;border-radius:8px;border:1.5px solid var(--g);background:var(--g);color:#000;font-size:12px;font-weight:800;cursor:pointer">
+                💵 Bolívares
+              </button>
+              <button id="mode-usdt" onclick="setMode('usdt')"
+                style="padding:11px 6px;border-radius:8px;border:1.5px solid var(--brd2);background:transparent;color:var(--t2);font-size:12px;font-weight:800;cursor:pointer">
+                🪙 USDT BEP20
+              </button>
+            </div>
+          </div>
+
+          <!-- Dirección -->
+          <div class="fg"><label>OPERACIÓN</label>
+            <select class="fsel" id="op-dir" onchange="calcOp();updWallet();swapPlats()">
+              <option value="compra">Vendo divisas → recibo Bolívares</option>
+              <option value="venta">Compro divisas → envío Bolívares</option>
             </select>
           </div>
-          <div class="fg"><label>PLATAFORMA</label>
+
+          <!-- Plataformas Bs -->
+          <div class="fg" id="plat-bs-wrap"><label>PLATAFORMA</label>
             <select class="fsel" id="op-plat" onchange="calcOp();updWallet()">
               <option value="binance">Binance</option>
               <option value="paypal">PayPal</option>
@@ -998,7 +1011,19 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
               <option value="usdc">USDC</option>
             </select>
           </div>
-          <div class="fg"><label id="op-amt-lbl">MONTO A ENVIAR</label>
+
+          <!-- Plataformas USDT (oculto por defecto) -->
+          <div class="fg" id="plat-usdt-wrap" style="display:none"><label>PLATAFORMA</label>
+            <select class="fsel" id="op-plat-usdt" onchange="calcOp();updWallet()">
+              <option value="paypal">PayPal</option>
+              <option value="zinli">Zinli</option>
+              <option value="wally">Wally</option>
+              <option value="airtm">Airtm</option>
+              <option value="binance">Binance</option>
+            </select>
+          </div>
+
+          <div class="fg"><label id="op-amt-lbl">MONTO A ENVIAR (USD)</label>
             <input class="fi" type="number" id="op-amt" value="100" min="1" oninput="calcOp()">
           </div>
           <div class="res-box"><div class="res-lbl" id="op-res-lbl">RECIBIRÍAS</div><div class="res-val" id="op-res-val">—</div><div class="res-det" id="op-res-det"></div></div>
@@ -1147,7 +1172,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
               <button class="btn ghost sm" onclick="admClose()">🔒 Cerrar</button>
             </div>
             <div class="a-inp-row" id="a-inp-row">
-              <label id="a-att-btn" style="cursor:pointer;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:7px;border:1px solid rgba(240,64,96,.25);color:var(--red);font-size:14px;flex-shrink:0" title="Adjuntar comprobante">📎<input type="file" accept="image/*" class="ui-hidden" onchange="admSendImg(event)"></label>
+              <label id="a-att-btn" style="cursor:pointer;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:7px;border:1px solid rgba(247,147,26,.25);color:var(--red);font-size:14px;flex-shrink:0" title="Adjuntar comprobante">📎<input type="file" accept="image/*" class="ui-hidden" onchange="admSendImg(event)"></label>
               <input class="a-inp" type="text" id="a-inp" placeholder="Respuesta al cliente..." onkeydown="if(event.key==='Enter')admSend()">
               <button class="a-send" onclick="admSend()">➤</button>
             </div>
@@ -1158,7 +1183,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <div class="dv-h">Tasas 💱</div><div class="dv-s">Cambios aplican de inmediato.</div>
         <div class="re-grid" id="a-rate-grid"></div>
 
-        <div style="margin-top:18px;background:var(--bg2);border:1px solid rgba(240,64,96,.2);border-radius:var(--r2);padding:16px">
+        <div style="margin-top:18px;background:var(--bg2);border:1px solid rgba(247,147,26,.2);border-radius:var(--r2);padding:16px">
           <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:10px">📲 PAGO MÓVIL ADMIN (donde clientes envían Bs)</div>
           <div class="re-row"><span class="re-lbl">Banco</span><input class="re-inp" type="text" id="adm-pm-banco" placeholder="Ej: Banesco"></div>
           <div class="re-row"><span class="re-lbl">Teléfono</span><input class="re-inp" type="text" id="adm-pm-tel" placeholder="Ej: 0414-0000000"></div>
@@ -1301,6 +1326,19 @@ async function sbSaveUser(email, ud){
   if(sbErr('sbSaveUser',error)) return false;
   return true;
 }
+async function sbSaveKyc(email, photoB64){
+  const{error}=await db.from('clientes').update({
+    kyc_status:'pending', kyc_photo:photoB64,
+    kyc_date:tnowISO(), kyc_reason:null
+  }).eq('email',email.toLowerCase());
+  return !error;
+}
+async function sbUpdateKyc(email, status, reason){
+  const upd={kyc_status:status};
+  if(reason) upd.kyc_reason=reason;
+  const{error}=await db.from('clientes').update(upd).eq('email',email.toLowerCase());
+  return !error;
+}
 
 async function sbGetAllUsers(){
   const{data,error}=await db.from('clientes').select('*').order('created_at',{ascending:false});
@@ -1321,7 +1359,11 @@ function _mapUser(d){
     cuentas:   d.cuentas     || {},
     joined:    d.joined,
     created:   d.created_at,
-    hist:      []
+    hist:      [],
+    kycStatus: d.kyc_status  || null,
+    kycPhoto:  d.kyc_photo   || null,
+    kycDate:   d.kyc_date    || null,
+    kycReason: d.kyc_reason  || null
   };
 }
 
@@ -1460,9 +1502,8 @@ const DEFAULT_RATES={
     airtm:{t:640,type:'none'}, usdc:{t:655,type:'none'}
   },
   venta:{binance:{t:670},paypal:{t:670},zinli:{t:670},wally:{t:670},airtm:{t:670},usdc:{t:670}},
-  // USDT ↔ Divisas  (tasa: USD que el cliente recibe/envía por cada USDT)
-  usdt_compra:{ paypal:{t:0.97}, zinli:{t:0.97}, wally:{t:0.97}, airtm:{t:0.97}, binance:{t:0.98} },
-  usdt_venta:{  paypal:{t:0.96}, zinli:{t:0.96}, wally:{t:0.96}, airtm:{t:0.96}, binance:{t:0.97} }
+  usdt_compra:{paypal:{t:0.97},zinli:{t:0.97},wally:{t:0.97},airtm:{t:0.97},binance:{t:0.98}},
+  usdt_venta: {paypal:{t:0.96},zinli:{t:0.96},wally:{t:0.96},airtm:{t:0.96},binance:{t:0.97}}
 };
 let RATES=JSON.parse(JSON.stringify(DEFAULT_RATES));
 
@@ -1481,8 +1522,7 @@ const WLS={
   wally:  {label:'Usuario Wally',    val:'leonardsandrea',                              note:'Monto exacto'},
   airtm:  {label:'Correo Airtm',     val:'sandrealeonard@gmail.com',                    note:'Monto exacto'},
   usdc:   {label:'Dirección USDC',   val:'0xb1d675ce126ab8dc3095ab3df99052cc4393685e', note:'Red BEP-20 (BSC)'},
-  // ── Wallet MetaMask para recibir USDT BEP20 de los clientes ──────────
-  usdt:   {label:'Wallet MetaMask',  val:'PENDIENTE_0x...',                             note:'Red BEP20 · Binance Smart Chain'},
+  usdt:   {label:'Wallet MetaMask',  val:'PENDIENTE_0x...',                             note:'Red BEP20 · BSC'},
 };
 
 let ADMIN_PM = { banco:'Banesco', tel:'0414-0000000', cedula:'V-00000000' };
@@ -1555,6 +1595,12 @@ function buildComplianceText(ud, sess, plat){
   return `Yo ${nombre}, cédula: ${cedula}, correo: ${email}, hoy ${today} me hago responsable de que hago un pago mediante ${platName} por el monto acordado y asumo toda la responsabilidad y no buscaré reembolso ni apelación en ${platName}. Recibí mi servicio por Leonard Sandrea y estoy conforme y satisfecho.`;
 }
 function fbCp(t){const e=document.createElement('textarea');e.value=t;document.body.appendChild(e);e.select();try{document.execCommand('copy');toast('📋 Copiado','ok')}catch{}document.body.removeChild(e)}
+function copyVal(t){
+  if(!t||t==='—')return;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(()=>toast('📋 Copiado','ok')).catch(()=>fbCp(t));
+  }else{ fbCp(t); }
+}
 function openLB(s){document.getElementById('lbImg').src=s;document.getElementById('lb').classList.add('on')}
 const _eyeOpen=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
 const _eyeOff=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
@@ -1584,15 +1630,15 @@ function showStaticPage(name){
 const ALL_TESTIMONIALS=[
   {init:'M',name:'María G.',grad:'135deg,#0066ff,#00c896',text:'"Rapidísimo, en menos de 20 minutos tenía mis bolívares. Excelente atención y las tasas siempre competitivas. Lo recomiendo totalmente."'},
   {init:'C',name:'Carlos R.',grad:'135deg,#6d1ed4,#1a6cff',text:'"Llevo más de 6 meses usando LS Cambios. Siempre responden en el chat, son honestos con las tasas y nunca he tenido problemas."'},
-  {init:'A',name:'Andrea L.',grad:'135deg,#f0b90b,#f6465d',text:'"El proceso es muy sencillo, el chat en tiempo real da mucha confianza. La plataforma es clara y funciona perfectamente en el celular."'},
+  {init:'A',name:'Andrea L.',grad:'135deg,#f0b90b,#f7931a',text:'"El proceso es muy sencillo, el chat en tiempo real da mucha confianza. La plataforma es clara y funciona perfectamente en el celular."'},
   {init:'J',name:'José M.',grad:'135deg,#00c896,#0066ff',text:'"Cambié mis USDT de Binance sin ningún problema. El comprobante lo subí por el chat y en minutos me confirmaron. Servicio de primera."'},
-  {init:'V',name:'Valentina P.',grad:'135deg,#f6465d,#f0b90b',text:'"Muy buena experiencia. Las tasas son las mejores que he conseguido y la plataforma es súper intuitiva. Volveré a usar LS Cambios sin duda."'},
+  {init:'V',name:'Valentina P.',grad:'135deg,#f7931a,#f0b90b',text:'"Muy buena experiencia. Las tasas son las mejores que he conseguido y la plataforma es súper intuitiva. Volveré a usar LS Cambios sin duda."'},
   {init:'R',name:'Roberto S.',grad:'135deg,#1a6cff,#6d1ed4',text:'"La plataforma es muy confiable. El admin respondió rápido en el chat y me explicó cada paso. 100% recomendado."'},
   {init:'L',name:'Luisa F.',grad:'135deg,#00c896,#f0b90b',text:'"Tenía dudas al principio pero desde la primera operación quedé encantada. Muy transparentes con las comisiones y súper rápidos."'},
-  {init:'D',name:'Diego H.',grad:'135deg,#0066ff,#f6465d',text:'"Perfecto para cambiar PayPal a bolívares. Lo he usado varias veces y siempre ha sido una experiencia excelente. El chat en vivo es un plus."'},
+  {init:'D',name:'Diego H.',grad:'135deg,#0066ff,#f7931a',text:'"Perfecto para cambiar PayPal a bolívares. Lo he usado varias veces y siempre ha sido una experiencia excelente. El chat en vivo es un plus."'},
   {init:'G',name:'Gabriela T.',grad:'135deg,#6d1ed4,#00c896',text:'"La mejor casa de cambio digital que he probado en Venezuela. Rápida, segura y con una tasa muy competitiva. 100% recomendada."'},
   {init:'P',name:'Pedro A.',grad:'135deg,#f0b90b,#1a6cff',text:'"Cambié mis Zinli en minutos. Me gustó mucho que todo el proceso fue dentro de la plataforma, sin tener que ir a otro lado. Excelente."'},
-  {init:'N',name:'Natalia C.',grad:'135deg,#f6465d,#00c896',text:'"El soporte es increíble, responden de inmediato. Ya van 4 operaciones y todas han sido perfectas. LS Cambios es mi opción de confianza."'},
+  {init:'N',name:'Natalia C.',grad:'135deg,#f7931a,#00c896',text:'"El soporte es increíble, responden de inmediato. Ya van 4 operaciones y todas han sido perfectas. LS Cambios es mi opción de confianza."'},
   {init:'E',name:'Eduardo V.',grad:'135deg,#00c896,#6d1ed4',text:'"Muy buena plataforma. El historial de operaciones y el chat integrado hacen que todo sea muy fácil de seguir. Totalmente recomendado."'},
 ];
 function renderTestimonials(){
@@ -1877,117 +1923,207 @@ function buildHistTbl(ops){
   </tr>`).join('')}</tbody></table>`;
 }
 
-// ── Plataformas disponibles por modo ──────────────────────────────────
-const PLATS_BS   = ['binance','paypal','zinli','wally','airtm','usdc'];
-const PLATS_USDT = ['paypal','zinli','wally','airtm','binance'];
+// ── modo actual: 'bs' | 'usdt' ────────────────────────────────────────
+let _opMode='bs';
 
-function onDirChange(){
-  const dir=document.getElementById('op-dir').value;
-  const sel=document.getElementById('op-plat');
-  const isUsdt=dir==='usdt_compra'||dir==='usdt_venta';
-  const plats=isUsdt?PLATS_USDT:PLATS_BS;
-  // Rebuild platform options
-  sel.innerHTML=plats.map(k=>`<option value="${k}">${PN[k]}</option>`).join('');
-  // Label del monto
+function setMode(m){
+  _opMode=m;
+  const bsBtn=document.getElementById('mode-bs');
+  const uBtn=document.getElementById('mode-usdt');
+  const dirSel=document.getElementById('op-dir');
+  const bsWrap=document.getElementById('plat-bs-wrap');
+  const uWrap=document.getElementById('plat-usdt-wrap');
   const lbl=document.getElementById('op-amt-lbl');
-  if(lbl){
-    if(dir==='compra')      lbl.textContent='MONTO A ENVIAR (USD)';
-    else if(dir==='venta')  lbl.textContent='MONTO A RECIBIR (USD)';
-    else if(dir==='usdt_compra') lbl.textContent='MONTO A ENVIAR (USDT)';
-    else                    lbl.textContent='MONTO A ENVIAR (USD)';
+
+  if(m==='bs'){
+    bsBtn.style.background='var(--g)'; bsBtn.style.color='#000'; bsBtn.style.borderColor='var(--g)';
+    uBtn.style.background='transparent'; uBtn.style.color='var(--t2)'; uBtn.style.borderColor='var(--brd2)';
+    bsWrap.style.display=''; uWrap.style.display='none';
+    dirSel.innerHTML='<option value="compra">Vendo divisas → recibo Bolívares</option><option value="venta">Compro divisas → envío Bolívares</option>';
+    if(lbl)lbl.textContent='MONTO A ENVIAR (USD)';
+  } else {
+    uBtn.style.background='#26a17b'; uBtn.style.color='#fff'; uBtn.style.borderColor='#26a17b';
+    bsBtn.style.background='transparent'; bsBtn.style.color='var(--t2)'; bsBtn.style.borderColor='var(--brd2)';
+    bsWrap.style.display='none'; uWrap.style.display='';
+    dirSel.innerHTML='<option value="usdt_compra">Envío USDT → recibo divisas</option><option value="usdt_venta">Envío divisas → recibo USDT</option>';
+    if(lbl)lbl.textContent='MONTO A ENVIAR (USDT)';
   }
   calcOp(); updWallet();
 }
 
+function _getPlat(){
+  const m=_opMode;
+  const sel=document.getElementById(m==='usdt'?'op-plat-usdt':'op-plat');
+  return sel?sel.value:'paypal';
+}
+
 function calcOp(){
-  const dir=document.getElementById('op-dir').value, plat=document.getElementById('op-plat').value;
+  const dir=document.getElementById('op-dir').value;
+  const plat=_getPlat();
   const amt=parseFloat(document.getElementById('op-amt').value)||0;
   const rl=document.getElementById('op-res-lbl'),rv=document.getElementById('op-res-val'),rd=document.getElementById('op-res-det');
   if(!amt){rv.textContent='—';rd.textContent='';return}
 
   if(dir==='compra'){
-    const c=RATES.compra[plat]||{},net=netCalc(amt,c),bs=net*c.t;
+    const r=RATES.compra[plat]||{},net=netCalc(amt,r),bs=net*r.t;
     if(rl)rl.textContent='RECIBIRÍAS EN BOLÍVARES';
     rv.textContent='Bs '+fmt(bs);
-    rd.textContent=`Envías $${fmt(amt,2)} → Neto $${fmt(net,2)} · Tasa ${fmt(c.t)} Bs/USD`;
-
-  }else if(dir==='venta'){
-    const c=RATES.venta[plat]||{},bs=amt*c.t;
+    rd.textContent=`Envías $${fmt(amt,2)} → Neto $${fmt(net,2)} · Tasa ${fmt(r.t)} Bs/USD`;
+  } else if(dir==='venta'){
+    const r=RATES.venta[plat]||{},bs=amt*r.t;
     if(rl)rl.textContent='DEBES ENVIAR EN BOLÍVARES';
     rv.textContent='Bs '+fmt(bs);
-    rd.textContent=`Recibirás $${fmt(amt,2)} (${PN[plat]}) · Tasa ${fmt(c.t)} Bs/USD`;
-
-  }else if(dir==='usdt_compra'){
-    // Cliente envía USDT → recibe USD en plataforma (PayPal, Zinli, etc.)
+    rd.textContent=`Recibirás $${fmt(amt,2)} (${PN[plat]}) · Tasa ${fmt(r.t)} Bs/USD`;
+  } else if(dir==='usdt_compra'){
     const r=(RATES.usdt_compra&&RATES.usdt_compra[plat])||{t:0.97};
     const usd=amt*r.t;
     if(rl)rl.textContent='RECIBIRÍAS EN '+PN[plat].toUpperCase();
     rv.textContent='$'+fmt(usd,2)+' USD';
-    rd.textContent=`Envías ${fmt(amt,2)} USDT (BEP20) · Tasa 1 USDT = $${r.t} USD en ${PN[plat]}`;
-
-  }else if(dir==='usdt_venta'){
-    // Cliente envía USD en plataforma → recibe USDT BEP20
+    rd.textContent=`Envías ${fmt(amt,4)} USDT (BEP20) · Tasa 1 USDT = $${r.t} en ${PN[plat]}`;
+  } else {
     const r=(RATES.usdt_venta&&RATES.usdt_venta[plat])||{t:0.96};
     const usdt=amt*r.t;
     if(rl)rl.textContent='RECIBIRÍAS EN USDT (BEP20)';
-    rv.textContent=fmt(usdt,2)+' USDT';
-    rd.textContent=`Envías $${fmt(amt,2)} (${PN[plat]}) · Tasa $1 USD = ${r.t} USDT · Red BEP20`;
+    rv.textContent=fmt(usdt,4)+' USDT';
+    rd.textContent=`Envías $${fmt(amt,2)} (${PN[plat]}) · 1 USD = ${r.t} USDT · Red BEP20`;
   }
 }
 function swapPlats(){
-  onDirChange();
+  const dir=document.getElementById('op-dir').value;
+  const lbl=document.getElementById('op-amt-lbl');
+  if(lbl){
+    if(dir==='venta') lbl.textContent='MONTO A RECIBIR (USD)';
+    else if(dir==='usdt_compra') lbl.textContent='MONTO A ENVIAR (USDT)';
+    else if(dir==='usdt_venta') lbl.textContent='MONTO A ENVIAR (USD)';
+    else lbl.textContent='MONTO A ENVIAR (USD)';
+  }
+  calcOp(); updWallet();
 }
 function updWallet(){
-  const dir=document.getElementById('op-dir').value, plat=document.getElementById('op-plat').value;
+  const dir=document.getElementById('op-dir').value;
+  const plat=_getPlat();
   const box=document.getElementById('wall-box'), cnt=document.getElementById('wall-cnt');
   if(!box||!cnt)return;
-  const sess=gS(), ud=sess?getUser(sess.email):null, w=WLS[plat];
-  const wu=WLS.usdt;
+  const sess=gS(), ud=sess?getUser(sess.email):null, w=WLS[plat], wu=WLS.usdt;
 
   if(dir==='compra'){
-    // Cliente envía divisas → recibe Bs
     box.style.display='block'; box.style.borderColor='rgba(0,200,150,.18)';
     let ci='';
     if(ud&&ud.cuentas){const acc=plat==='binance'?ud.cuentas.binanceId:ud.cuentas.correo;if(acc)ci=`<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(0,200,150,.08)"><div style="font-size:9px;color:var(--t3);letter-spacing:.8px;font-weight:700;margin-bottom:6px">TU CUENTA DE ENVÍO</div><div class="wall-row"><span class="wall-k">${plat==='binance'?'Tu ID Binance':'Tu correo'}</span><span class="wall-v">${acc}</span></div></div>`;}
     cnt.innerHTML=`<div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button></span></div><div class="wall-row"><span class="wall-k">Nota</span><span class="wall-v">${w.note}</span></div>${ci}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(0,200,150,.06)">⚠️ Envía el monto exacto y sube el comprobante en el chat.</div>`;
 
   }else if(dir==='venta'){
-    // Cliente envía Bs → recibe divisas
-    box.style.display='block'; box.style.borderColor='rgba(240,64,96,.2)';
-    let pm_html='<div style="margin-top:8px;padding:10px;background:rgba(240,64,96,.05);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ Pago Móvil del admin no configurado. Consulta en el chat.</div>';
-    if(ADMIN_PM&&ADMIN_PM.tel){const pm=ADMIN_PM;pm_html=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(240,64,96,.08)"><div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:6px">📲 PAGO MÓVIL LS CAMBIOS (ENVÍA Bs AQUÍ)</div><div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco||'—'}</span></div><div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${pm.tel}')">COPIAR</button></span></div><div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula||'—'}</span></div></div>`;}
-    cnt.innerHTML=`<div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:8px">💸 ENVÍA LAS DIVISAS A LS CAMBIOS</div><div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${w.val}')">COPIAR</button></span></div>${pm_html}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(240,64,96,.06)">⚠️ Envía el monto exacto. Te enviamos los Bs una vez confirmado.</div>`;
+    box.style.display='block'; box.style.borderColor='rgba(247,147,26,.2)';
+    let pm_html='<div style="margin-top:8px;padding:10px;background:rgba(247,147,26,.05);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ Pago Móvil no configurado. Consulta en el chat.</div>';
+    if(ADMIN_PM&&ADMIN_PM.tel){const pm=ADMIN_PM;pm_html=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(247,147,26,.08)"><div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:6px">📲 PAGO MÓVIL LS CAMBIOS</div><div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco||'—'}</span></div><div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel}<button class="cpb" onclick="copyVal('${pm.tel}')">COPIAR</button></span></div><div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula||'—'}</span></div></div>`;}
+    cnt.innerHTML=`<div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:8px">💸 ENVÍA LAS DIVISAS A LS CAMBIOS</div><div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button></span></div>${pm_html}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(247,147,26,.06)">⚠️ Envía el monto exacto. Te enviamos los Bs una vez confirmado.</div>`;
 
   }else if(dir==='usdt_compra'){
-    // Cliente envía USDT BEP20 → recibe divisas (PayPal, Zinli, etc.)
     box.style.display='block'; box.style.borderColor='rgba(38,161,123,.35)';
-    cnt.innerHTML=`
-      <div style="font-size:9px;color:#26a17b;letter-spacing:.8px;font-weight:700;margin-bottom:8px">🪙 ENVÍA USDT (BEP20) A LS CAMBIOS</div>
+    cnt.innerHTML=`<div style="font-size:9px;color:#26a17b;letter-spacing:.8px;font-weight:700;margin-bottom:8px">🪙 ENVÍA USDT (BEP20) A LS CAMBIOS</div>
       <div class="wall-row"><span class="wall-k">Wallet MetaMask</span><span class="wall-v" style="font-family:var(--mono);font-size:10px">${wu.val}<button class="cpb" style="background:rgba(38,161,123,.12);border-color:rgba(38,161,123,.3);color:#26a17b" onclick="copyVal('${wu.val}')">COPIAR</button></span></div>
-      <div class="wall-row"><span class="wall-k">Red</span><span class="wall-v" style="color:#26a17b;font-weight:700">BEP20 · Binance Smart Chain</span></div>
-      <div style="margin-top:8px;padding:8px;background:rgba(38,161,123,.06);border-radius:7px;font-size:10px;color:var(--t2)">
-        ⚠️ <strong>Solo BEP20.</strong> No envíes por TRC20 ni ERC20 — los fondos se perderían.<br>
-        Una vez enviado sube el hash de la transacción en el chat.
-      </div>`;
+      <div class="wall-row"><span class="wall-k">Red</span><span class="wall-v" style="color:#26a17b;font-weight:700">BEP20 · Binance Smart Chain ✅</span></div>
+      <div style="margin-top:8px;padding:8px;background:rgba(38,161,123,.06);border-radius:7px;font-size:10px;color:var(--t2)">⚠️ <strong>Solo BEP20.</strong> No envíes por TRC20 ni ERC20. Adjunta el hash de la transacción en el chat.</div>`;
 
-  }else if(dir==='usdt_venta'){
-    // Cliente envía divisas (PayPal, Zinli, etc.) → recibe USDT BEP20
-    box.style.display='block'; box.style.borderColor='rgba(240,64,96,.2)';
-    cnt.innerHTML=`
-      <div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:8px">💸 ENVÍA LAS DIVISAS A LS CAMBIOS</div>
-      <div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" style="background:rgba(240,64,96,.1);border-color:rgba(240,64,96,.2);color:var(--red)" onclick="copyVal('${w.val}')">COPIAR</button></span></div>
-      <div style="margin-top:8px;padding:8px;background:rgba(38,161,123,.06);border-radius:7px;font-size:10px;color:var(--t2)">
-        🪙 Te enviaremos el USDT a tu wallet <strong>BEP20</strong>. Indícanos tu dirección MetaMask en el chat.
-      </div>`;
+  }else{
+    box.style.display='block'; box.style.borderColor='rgba(247,147,26,.2)';
+    cnt.innerHTML=`<div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:8px">💸 ENVÍA LAS DIVISAS A LS CAMBIOS</div>
+      <div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button></span></div>
+      <div style="margin-top:8px;padding:8px;background:rgba(38,161,123,.06);border-radius:7px;font-size:10px;color:var(--t2)">🪙 Te enviaremos el USDT a tu wallet BEP20. Indícanos tu dirección MetaMask en el chat.</div>`;
   }
 }
 
 let curOpId=null;
 
+
+// ════════════════════════════════════════════════════════════════════════
+//  KYC — Verificación de identidad selfie + cédula
+// ════════════════════════════════════════════════════════════════════════
+function showKycModal(rejectedReason){
+  document.getElementById('kyc-modal').style.display='flex';
+  const info=document.getElementById('kyc-info');
+  if(rejectedReason){
+    info.innerHTML=`<div style="background:rgba(247,147,26,.1);border:1px solid rgba(247,147,26,.3);border-radius:8px;padding:12px;margin-bottom:14px;font-size:12px;color:var(--red)">⚠️ <strong>Verificación rechazada:</strong> ${rejectedReason}<br><span style="color:var(--t2)">Por favor envía una nueva foto.</span></div>`;
+  } else { info.innerHTML=''; }
+  document.getElementById('kyc-preview').style.display='none';
+  document.getElementById('kyc-preview').src='';
+  document.getElementById('kyc-file').value='';
+  document.getElementById('kyc-send-btn').disabled=true;
+  window._kycPhotoB64=null;
+}
+function closeKycModal(){ document.getElementById('kyc-modal').style.display='none'; }
+
+function kycFileChange(e){
+  const file=e.target.files[0]; if(!file)return;
+  if(file.size>10*1024*1024){toast('La foto es muy grande (máx 10MB)','err');return;}
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    const img=new Image();
+    img.onload=function(){
+      const canvas=document.createElement('canvas');
+      const MAX=1200; let w=img.width,h=img.height;
+      if(w>MAX){h=Math.round(h*MAX/w);w=MAX;} if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}
+      canvas.width=w; canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      const b64=canvas.toDataURL('image/jpeg',0.82);
+      window._kycPhotoB64=b64;
+      const prev=document.getElementById('kyc-preview');
+      prev.src=b64; prev.style.display='block';
+      document.getElementById('kyc-send-btn').disabled=false;
+    };
+    img.src=ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function submitKyc(){
+  const sess=gS(); if(!sess)return;
+  if(!window._kycPhotoB64){toast('Selecciona una foto primero','err');return;}
+  const btn=document.getElementById('kyc-send-btn');
+  btn.disabled=true; btn.textContent='Enviando...';
+  const ok=await sbSaveKyc(sess.email, window._kycPhotoB64);
+  if(!ok){toast('❌ Error enviando. Intenta de nuevo.','err');btn.disabled=false;btn.textContent='📤 Enviar verificación';return;}
+  const ud=getUser(sess.email)||{};
+  ud.kycStatus='pending';
+  tgNotify(`🆔 <b>Nueva verificación KYC</b>\n👤 ${ud.nombre||''} ${ud.apellido||''}\n📧 ${sess.email}\n📋 Cédula: ${ud.cedula||'—'}`);
+  closeKycModal();
+  toast('✅ Foto enviada. Te notificaremos cuando sea aprobada.','ok');
+}
+
+async function admKycApprove(email){
+  if(!confirm('¿Aprobar verificación de '+email+'?'))return;
+  const ok=await sbUpdateKyc(email,'verified',null);
+  if(!ok){toast('❌ Error','err');return;}
+  toast('✅ KYC aprobado','ok'); loadAdmin();
+}
+async function admKycReject(email){
+  const reason=prompt('Motivo del rechazo (se le mostrará al usuario):');
+  if(!reason)return;
+  const ok=await sbUpdateKyc(email,'rejected',reason);
+  if(!ok){toast('❌ Error','err');return;}
+  toast('🚫 KYC rechazado','ok'); loadAdmin();
+}
+function admKycView(src){
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.93);display:flex;align-items:center;justify-content:center;cursor:pointer';
+  const im=document.createElement('img');
+  im.src=src; im.style.cssText='max-width:95vw;max-height:90vh;border-radius:12px;border:2px solid rgba(0,200,150,.4)';
+  ov.appendChild(im); ov.onclick=()=>ov.remove(); document.body.appendChild(ov);
+}
+
 async function startOp(){
   const sess=gS(); if(!sess){toast('Inicia sesión primero.','err');return}
+  // ── KYC Guard ────────────────────────────────────────────────────────
+  const freshUser=await sbGetUser(sess.email);
+  if(!freshUser){toast('Error cargando tu perfil.','err');return;}
+  const ks=freshUser.kycStatus;
+  if(ks==='pending'){
+    toast('⏳ Tu verificación está siendo revisada. Te avisaremos pronto.','err'); return;
+  }
+  if(ks==='rejected'){ showKycModal(freshUser.kycReason); return; }
+  if(ks!=='verified'){ showKycModal(null); return; }
   const dir=document.getElementById('op-dir').value;
-  const plat=document.getElementById('op-plat').value;
+  const plat=_getPlat();
   const amt=parseFloat(document.getElementById('op-amt').value)||0;
   if(!amt||amt<1){toast('Ingresa un monto válido.','err');return}
   
@@ -2002,18 +2138,13 @@ async function startOp(){
   const ud=getUser(sess.email); if(!ud)return;
   let sendTxt, getTxt;
   if(dir==='compra'){
-    sendTxt='$'+fmt(amt,2)+' ('+PN[plat]+')';
-    getTxt=rv;
+    sendTxt='$'+fmt(amt,2)+' ('+PN[plat]+')'; getTxt=rv;
   }else if(dir==='venta'){
-    sendTxt=rv;
-    getTxt='$'+fmt(amt,2)+' ('+PN[plat]+')';
+    sendTxt=rv; getTxt='$'+fmt(amt,2)+' ('+PN[plat]+')';
   }else if(dir==='usdt_compra'){
-    sendTxt=fmt(amt,4)+' USDT (BEP20)';
-    getTxt=rv+' en '+PN[plat];
+    sendTxt=fmt(amt,4)+' USDT (BEP20)'; getTxt=rv+' en '+PN[plat];
   }else{
-    // usdt_venta
-    sendTxt='$'+fmt(amt,2)+' ('+PN[plat]+')';
-    getTxt=rv+' USDT (BEP20)';
+    sendTxt='$'+fmt(amt,2)+' ('+PN[plat]+')'; getTxt=rv+' USDT (BEP20)';
   }
   const id=genId();
   const op={id,date:new Date().toLocaleDateString('es-VE'),plat,dir,send:sendTxt,get:getTxt,st:'pending',chat:[]};
@@ -2035,7 +2166,7 @@ async function startOp(){
 
   sS({email:sess.email,...ud});
   await logAct('operation',{id,email:sess.email,name:ud.name,dir,plat,send:sendTxt,get:getTxt,date:tnowISO()});
-  const dirLabel=dir==='compra'?'Venta divisas→Bs':dir==='venta'?'Compra divisas←Bs':dir==='usdt_compra'?'USDT→'+PN[plat]:'Divisa→USDT';
+  const dirLabel=dir==='compra'?'Venta divisas→Bs':dir==='venta'?'Compra divisas←Bs':dir==='usdt_compra'?'USDT→'+PN[plat]:PN[plat]+'→USDT';
   tgNotify(`🔔 <b>Nueva operación</b>\n🆔 ${id}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n💱 ${dirLabel}\n📤 Envía: ${sendTxt}\n📥 Recibe: ${getTxt}\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
   openTradeUI(id,op);
 }
@@ -2086,8 +2217,8 @@ function renderTradePayment(op){
   if(!card||!body) return;
   const isCompra=op.dir==='compra';
   const col=isCompra?'var(--g)':'var(--red)';
-  const colBg=isCompra?'rgba(0,200,150,.08)':'rgba(240,64,96,.08)';
-  const colBrd=isCompra?'rgba(0,200,150,.18)':'rgba(240,64,96,.18)';
+  const colBg=isCompra?'rgba(0,200,150,.08)':'rgba(247,147,26,.08)';
+  const colBrd=isCompra?'rgba(0,200,150,.18)':'rgba(247,147,26,.18)';
   card.style.borderColor=colBrd;
   if(hdrEl)hdrEl.style.borderBottomColor=colBrd;
   if(titleEl){titleEl.style.color=col;titleEl.textContent=isCompra?'📲 Envía tu pago a LS Cambios':'💸 Envía las divisas a LS Cambios';}
@@ -2105,7 +2236,7 @@ function renderTradePayment(op){
     if(pm&&pm.tel){
       html+=`<div style="margin-top:10px;padding-top:10px;border-top:1px dashed ${colBrd}"><div style="font-size:9px;color:${col};letter-spacing:.8px;font-weight:700;margin-bottom:8px">📲 PAGO MÓVIL LS CAMBIOS — ENVÍA LOS Bs AQUÍ</div>${row('Banco',pm.banco||'—',false)}${row('Teléfono',pm.tel,true)}${row('Cédula',pm.cedula||'—',false)}</div>`;
     } else {
-      html+=`<div style="margin-top:10px;padding:10px;background:rgba(240,64,96,.06);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ Pago Móvil del admin no configurado. Consulta en el chat.</div>`;
+      html+=`<div style="margin-top:10px;padding:10px;background:rgba(247,147,26,.06);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ Pago Móvil del admin no configurado. Consulta en el chat.</div>`;
     }
     html+=`<div style="font-size:10px;color:var(--t3);padding-top:8px;line-height:1.6">⚠️ Envía el monto exacto. Te enviamos los Bs una vez confirmado.</div>`;
     body.innerHTML=html;
@@ -2288,25 +2419,35 @@ function buildAdmOps(ops){
   </tr>`).join('')}</tbody></table>`;
 }
 
+function kycBdg(s){
+  if(s==='verified') return'<span style="background:rgba(0,200,150,.12);color:var(--g);border:1px solid rgba(0,200,150,.25);border-radius:4px;padding:2px 7px;font-size:10px;font-weight:700">✅ Verificado</span>';
+  if(s==='pending')  return'<span style="background:rgba(247,147,26,.12);color:#f7931a;border:1px solid rgba(247,147,26,.3);border-radius:4px;padding:2px 7px;font-size:10px;font-weight:700">⏳ Pendiente</span>';
+  if(s==='rejected') return'<span style="background:rgba(247,147,26,.12);color:var(--red);border:1px solid rgba(247,147,26,.3);border-radius:4px;padding:2px 7px;font-size:10px;font-weight:700">❌ Rechazado</span>';
+  return'<span style="background:rgba(255,255,255,.05);color:var(--t3);border:1px solid var(--brd);border-radius:4px;padding:2px 7px;font-size:10px">— Sin enviar</span>';
+}
+
 function buildCliTbl(users){
   const arr=Object.entries(users).sort((a,b)=>b[1].created>a[1].created?1:-1);
   if(!arr.length)return'<div class="empty">Sin clientes</div>';
-  return`<table class="tbl"><thead><tr><th>Nombre</th><th>Cédula</th><th>Correo</th><th>Tel</th><th>Ops</th><th>Registro</th><th></th></tr></thead>
+  const pend=arr.filter(([,u])=>u.kycStatus==='pending').length;
+  const banner=pend?`<div style="background:rgba(247,147,26,.08);border:1px solid rgba(247,147,26,.25);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#f7931a;font-weight:600">⏳ ${pend} verificación${pend>1?'es':''} KYC pendiente${pend>1?'s':''} de revisión</div>`:'';
+  return banner+`<table class="tbl"><thead><tr><th>Nombre</th><th>Cédula</th><th>Correo</th><th>Tel</th><th>KYC</th><th>Ops</th><th>Registro</th><th></th></tr></thead>
   <tbody>${arr.map(([em,ud])=>{
     const sid='ux_'+em.replace(/[^a-z0-9]/gi,'_');
     let pw='—';try{pw=decodeURIComponent(escape(atob(ud.pw||'')))}catch{}
-    const pm=ud.pagoMovil||{},cu=ud.cuentas||{};
+    const pm=ud.pagoMovil||{},cu=ud.cuentas||{},ks=ud.kycStatus;
     return`<tr class="ui-pointer" onclick="toggleUx('${sid}')">
       <td style="font-weight:700">${ud.nombre||''} ${ud.apellido||''}</td>
       <td>${ud.cedula||'—'}</td><td style="font-size:11px">${em}</td>
       <td>${ud.tel||'—'}</td>
+      <td>${kycBdg(ks)}</td>
       <td style="color:var(--g);font-weight:700">${(ud.hist||[]).length}</td>
       <td class="ui-fn-xs">${ud.joined||'—'}</td>
       <td style="color:var(--t3);font-size:10px">▼</td>
     </tr>
-    <tr class="u-expand" id="${sid}"><td colspan="7">
+    <tr class="u-expand" id="${sid}"><td colspan="8">
       <div><strong class="ui-col-g">Contraseña:</strong>
-        <code style="background:rgba(240,64,96,.1);border:1px solid rgba(240,64,96,.2);padding:1px 7px;border-radius:4px;color:var(--red);user-select:all">${pw}</code>
+        <code style="background:rgba(247,147,26,.1);border:1px solid rgba(247,147,26,.2);padding:1px 7px;border-radius:4px;color:var(--red);user-select:all">${pw}</code>
         &nbsp;<strong class="ui-col-g">Código:</strong> <span style="font-family:var(--mono)">${ud.code||'—'}</span>
       </div>
       <div style="margin-top:4px">
@@ -2314,9 +2455,13 @@ function buildCliTbl(users){
         &nbsp;<strong class="ui-col-g">Correo divisas:</strong> ${cu.correo||'—'}
         &nbsp;<strong class="ui-col-g">Binance ID:</strong> ${cu.binanceId||'—'}
       </div>
-      <div class="u-acts">
+      ${ud.kycReason?`<div style="margin-top:6px;font-size:11px;color:var(--red)">⚠️ Motivo rechazo: ${ud.kycReason}</div>`:''}
+      <div class="u-acts" style="flex-wrap:wrap;gap:6px;margin-top:8px">
         <button class="u-btn wa" onclick="window.open('${WA}?text='+encodeURIComponent('Hola ${ud.nombre||em}, te contactamos de LS Cambios.'),'_blank')">💬 WhatsApp</button>
         <button class="u-btn vw" onclick="showAV('chats')">Ver chats</button>
+        ${ud.kycPhoto?`<button class="btn g sm" onclick="admKycView('${ud.kycPhoto}')">🆔 Ver foto KYC</button>`:''}
+        ${ks==='pending'?`<button class="btn g sm" onclick="admKycApprove('${em}')">✅ Aprobar</button><button class="btn ghost sm" style="color:var(--red)" onclick="admKycReject('${em}')">❌ Rechazar</button>`:''}
+        ${ks==='rejected'?`<button class="btn g sm" onclick="admKycApprove('${em}')">✅ Aprobar igual</button>`:''}
       </div>
     </td></tr>`;
   }).join('')}</tbody></table>`;
@@ -2424,68 +2569,58 @@ async function admClose(){
 function buildRateEditor(){
   const el=document.getElementById('a-rate-grid'); if(!el)return;
   loadZelleEmail(); loadAdminPM();
-  loadAdminPM();
-  loadAdminPM();
   const plats=['binance','paypal','zinli','wally','airtm','usdc'];
-  const usdtPlats=['paypal','zinli','wally','airtm','binance'];
+  const uPlats=['paypal','zinli','wally','airtm','binance'];
 
-  // ── Sección Bolívares ────────────────────────────────────────────────
   const bsCards=plats.map(k=>{
     const cv=RATES.compra[k]?.t??'',vv=RATES.venta[k]?.t??'';
     return`<div class="re-card"><div class="re-hdr"><div class="re-logo">${svgL(k,32)}</div><div class="re-name">${PN[k]}</div></div>
-      <div class="re-row"><span class="re-lbl">Compra (Bs)</span><input class="re-inp" type="number" id="rc-${k}" value="${cv}" step="1" min="0"></div>
-      <div class="re-row"><span class="re-lbl">Venta (Bs)</span><input class="re-inp" type="number" id="rv-${k}" value="${vv}" step="1" min="0"></div>
-      <button class="btn g sm full" style="margin-top:8px" onclick="saveRate('${k}')">💾 Guardar Bs</button></div>`;
+      <div class="re-row"><span class="re-lbl">Compra Bs</span><input class="re-inp" type="number" id="rc-${k}" value="${cv}" step="1" min="0"></div>
+      <div class="re-row"><span class="re-lbl">Venta Bs</span><input class="re-inp" type="number" id="rv-${k}" value="${vv}" step="1" min="0"></div>
+      <button class="btn g sm full" style="margin-top:8px" onclick="saveRate('${k}')">💾 Guardar</button></div>`;
   }).join('');
 
-  // ── Sección USDT ─────────────────────────────────────────────────────
-  const usdtCards=usdtPlats.map(k=>{
-    if(!RATES.usdt_compra) RATES.usdt_compra={};
-    if(!RATES.usdt_venta)  RATES.usdt_venta={};
+  if(!RATES.usdt_compra) RATES.usdt_compra={};
+  if(!RATES.usdt_venta)  RATES.usdt_venta={};
+  const uCards=uPlats.map(k=>{
     if(!RATES.usdt_compra[k]) RATES.usdt_compra[k]={t:0.97};
     if(!RATES.usdt_venta[k])  RATES.usdt_venta[k]={t:0.96};
-    const cu=RATES.usdt_compra[k]?.t??0.97, vu=RATES.usdt_venta[k]?.t??0.96;
     return`<div class="re-card" style="border-color:rgba(38,161,123,.25)">
       <div class="re-hdr"><div class="re-logo">${svgL(k,32)}</div><div class="re-name">${PN[k]}</div></div>
-      <div class="re-row"><span class="re-lbl" style="color:#26a17b">USDT→${PN[k]} (x USDT)</span><input class="re-inp" type="number" id="ruc-${k}" value="${cu}" step="0.001" min="0" max="2"></div>
-      <div class="re-row"><span class="re-lbl" style="color:#26a17b">${PN[k]}→USDT (x USD)</span><input class="re-inp" type="number" id="ruv-${k}" value="${vu}" step="0.001" min="0" max="2"></div>
+      <div class="re-row"><span class="re-lbl" style="color:#26a17b">USDT→${PN[k]}</span><input class="re-inp" type="number" id="ruc-${k}" value="${RATES.usdt_compra[k].t}" step="0.001" min="0" max="2"></div>
+      <div class="re-row"><span class="re-lbl" style="color:#26a17b">${PN[k]}→USDT</span><input class="re-inp" type="number" id="ruv-${k}" value="${RATES.usdt_venta[k].t}" step="0.001" min="0" max="2"></div>
       <button class="btn g sm full" style="margin-top:8px;background:linear-gradient(135deg,#26a17b,#1a7a5e)" onclick="saveRateUsdt('${k}')">💾 Guardar USDT</button></div>`;
   }).join('');
 
-  // ── Wallet USDT del admin ────────────────────────────────────────────
   const walletCard=`<div class="re-card" style="border-color:rgba(38,161,123,.35);grid-column:1/-1">
     <div class="re-hdr"><div class="re-logo">${svgL('usdt',32)}</div><div class="re-name">Wallet MetaMask (BEP20)</div></div>
-    <div class="re-row"><span class="re-lbl">Dirección MetaMask</span><input class="re-inp" type="text" id="adm-usdt-wallet" value="${WLS.usdt?.val||''}" placeholder="0x..."></div>
+    <div class="re-row"><span class="re-lbl">Dirección 0x...</span><input class="re-inp" type="text" id="adm-usdt-wallet" value="${WLS.usdt?.val||''}" placeholder="0x..."></div>
     <button class="btn g sm full" style="margin-top:8px;background:linear-gradient(135deg,#26a17b,#1a7a5e)" onclick="saveUsdtWallet()">💾 Guardar Wallet</button>
   </div>`;
 
   el.innerHTML=
-    `<div style="font-size:11px;font-weight:700;color:var(--t2);letter-spacing:.8px;padding:4px 0 8px;grid-column:1/-1">💱 TASAS BOLÍVARES</div>`
-    + bsCards
-    + `<div style="font-size:11px;font-weight:700;color:#26a17b;letter-spacing:.8px;padding:16px 0 8px;grid-column:1/-1;border-top:1px solid rgba(38,161,123,.15);margin-top:8px">🪙 TASAS USDT (BEP20)</div>`
-    + usdtCards
-    + walletCard;
+    `<div style="font-size:11px;font-weight:700;color:var(--t2);letter-spacing:.8px;padding:4px 0 10px;grid-column:1/-1">💵 TASAS BOLÍVARES</div>`
+    +bsCards
+    +`<div style="font-size:11px;font-weight:700;color:#26a17b;letter-spacing:.8px;padding:16px 0 10px;grid-column:1/-1;border-top:1px solid rgba(38,161,123,.15);margin-top:8px">🪙 TASAS USDT BEP20</div>`
+    +uCards+walletCard;
 }
-
 async function saveRate(k){
   const ci=document.getElementById('rc-'+k),vi=document.getElementById('rv-'+k);
   if(ci&&RATES.compra[k])RATES.compra[k].t=parseFloat(ci.value)||0;
   if(vi&&RATES.venta[k]) RATES.venta[k].t =parseFloat(vi.value)||0;
   await sbSaveRates(); renderLPRates(); toast('💾 Tasa Bs de '+PN[k]+' guardada','ok');
 }
-
 async function saveRateUsdt(k){
   if(!RATES.usdt_compra) RATES.usdt_compra={};
   if(!RATES.usdt_venta)  RATES.usdt_venta={};
-  const cu=document.getElementById('ruc-'+k), vu=document.getElementById('ruv-'+k);
+  const cu=document.getElementById('ruc-'+k),vu=document.getElementById('ruv-'+k);
   if(cu) RATES.usdt_compra[k]={t:parseFloat(cu.value)||0.97};
   if(vu) RATES.usdt_venta[k] ={t:parseFloat(vu.value)||0.96};
   await sbSaveRates(); toast('💾 Tasa USDT de '+PN[k]+' guardada','ok');
 }
-
 async function saveUsdtWallet(){
   const inp=document.getElementById('adm-usdt-wallet');
-  if(!inp) return;
+  if(!inp)return;
   WLS.usdt.val=inp.value.trim();
   await sbSaveRates(); toast('💾 Wallet MetaMask guardada','ok');
 }
@@ -2946,5 +3081,49 @@ setTimeout(()=>{
   if(lp){ lp.style.transition='opacity .5s'; lp.style.opacity='1'; }
 },3000);
 </script>
+
+<!-- ════ MODAL KYC ════════════════════════════════════════════════════ -->
+<div id="kyc-modal" style="display:none;position:fixed;inset:0;z-index:8000;background:rgba(0,0,0,.75);align-items:center;justify-content:center;padding:16px">
+  <div style="background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r2);max-width:420px;width:100%;padding:26px;position:relative">
+    <button onclick="closeKycModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--t2);font-size:18px;cursor:pointer">✕</button>
+    <div style="text-align:center;margin-bottom:18px">
+      <div style="font-size:36px;margin-bottom:6px">🆔</div>
+      <div style="font-size:15px;font-weight:800;color:var(--t1)">Verificación de Identidad</div>
+      <div style="font-size:12px;color:var(--t2);margin-top:3px">Requerida antes de tu primera operación</div>
+    </div>
+    <div id="kyc-info"></div>
+    <div style="background:rgba(0,200,150,.06);border:1px solid rgba(0,200,150,.15);border-radius:10px;padding:13px;margin-bottom:16px">
+      <div style="font-size:11px;font-weight:700;color:var(--g);margin-bottom:7px">📸 Instrucciones:</div>
+      <div style="font-size:11px;color:var(--t2);display:flex;flex-direction:column;gap:4px">
+        <span>✅ Sostén tu <strong style="color:var(--t1)">cédula de identidad</strong> en tu mano</span>
+        <span>✅ Tu <strong style="color:var(--t1)">cara y la cédula</strong> deben verse claramente</span>
+        <span>✅ Buena iluminación, sin objetos tapando datos</span>
+        <span>❌ No uses fotos editadas ni de pantalla</span>
+      </div>
+    </div>
+    <img id="kyc-preview" src="" alt="" style="display:none;width:100%;max-height:200px;object-fit:cover;border-radius:10px;border:2px solid rgba(0,200,150,.3);margin-bottom:12px">
+    <label style="display:flex;align-items:center;justify-content:center;gap:8px;background:var(--bg3);border:1.5px dashed var(--brd2);border-radius:10px;padding:13px;cursor:pointer;font-size:13px;color:var(--t2);margin-bottom:10px">
+      📷 Seleccionar foto / tomar selfie
+      <input id="kyc-file" type="file" accept="image/*" capture="user" style="display:none" onchange="kycFileChange(event)">
+    </label>
+    <button id="kyc-send-btn" onclick="submitKyc()" disabled
+      style="width:100%;padding:13px;border:none;border-radius:10px;background:var(--gd);color:#fff;font-size:14px;font-weight:700;cursor:not-allowed;opacity:.45">
+      📤 Enviar verificación
+    </button>
+    <div style="font-size:10px;color:var(--t3);text-align:center;margin-top:10px">🔒 Tu foto es confidencial — solo la ve el equipo de LS Cambios</div>
+  </div>
+</div>
+<script>
+// Botón KYC habilitar/deshabilitar dinámicamente
+(function(){
+  const btn=document.getElementById('kyc-send-btn');
+  if(!btn)return;
+  new MutationObserver(()=>{
+    btn.style.opacity=btn.disabled?'.45':'1';
+    btn.style.cursor=btn.disabled?'not-allowed':'pointer';
+  }).observe(btn,{attributes:true,attributeFilter:['disabled']});
+})();
+</script>
+
 </body>
 </html>
