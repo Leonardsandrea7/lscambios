@@ -1806,7 +1806,7 @@ async function doRegister(){
 async function sendVerifEmail(email, nombre, code){
   try{
     await emailjs.send('service_a0ffcv5','template_u8lwybr',{
-      to_email: email.value,
+      to_email: email,
       to_name:  nombre,
       code:     code,
       reply_to: email
