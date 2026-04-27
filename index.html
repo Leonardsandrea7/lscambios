@@ -1979,11 +1979,11 @@ function calcOp(){
     const r=(RATES.usdt_compra&&RATES.usdt_compra[plat])||{t:0.97};
     if(rl)rl.textContent='RECIBIRÍAS EN '+PN[plat].toUpperCase();
     rv.textContent='$'+fmt(amt*r.t,2)+' USD';
-    rd.textContent=`Envías ${fmt(amt,2)} USDT (BEP20) · Tasa 1 USDT = $${r.t} en ${PN[plat]}`;
+    rd.textContent=`Envías ${fmt(amt,4)} USDT (BEP20) · Tasa 1 USDT = $${r.t} en ${PN[plat]}`;
   }else{
     const r=(RATES.usdt_venta&&RATES.usdt_venta[plat])||{t:0.96};
     if(rl)rl.textContent='RECIBIRÍAS EN USDT (BEP20)';
-    rv.textContent=fmt(amt*r.t,2+' USDT';
+    rv.textContent=fmt(amt*r.t,4)+' USDT';
     rd.textContent=`Envías $${fmt(amt,2)} (${PN[plat]}) · 1 USD = ${r.t} USDT · Red BEP20`;
   }
 }
