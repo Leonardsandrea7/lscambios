@@ -428,84 +428,157 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .pw-eye svg{pointer-events:none}
 
 @media(max-width:800px){
+  /* ── Layout general ── */
   .trade-layout{grid-template-columns:1fr}
   .a-chat-g{grid-template-columns:1fr;height:auto}
   .op-panel{max-height:200px}
   .dp-sb{display:none}
   .dp-mob{display:block}
   .dp-body{overflow:visible;flex-direction:column}
-  .dp-main{padding:14px;padding-bottom:calc(68px + env(safe-area-inset-bottom));overflow-y:auto}
+  .dp-main{padding:12px;padding-bottom:calc(72px + env(safe-area-inset-bottom));overflow-y:auto}
   .ap-sb{display:none}
-  .ap-main{padding:14px}
-  .kpi-row{grid-template-columns:1fr 1fr}
+  .ap-mob{display:flex}
+  .ap-main{padding:12px;padding-bottom:calc(72px + env(safe-area-inset-bottom));overflow-y:auto;height:100%}
+  .ap-body{overflow:visible;flex-direction:column;height:calc(100vh - 56px);overflow:hidden}
+  
+  /* ── KPIs ── */
+  .kpi-row{grid-template-columns:1fr 1fr;gap:8px}
+  .kpi{padding:12px}
+  .kpi-v{font-size:20px}
+
+  /* ── Landing ── */
   .how-section{grid-template-columns:1fr 1fr;padding:0 16px 48px}
   .hero{padding:40px 16px 30px}
   .hero-h1{font-size:36px;letter-spacing:-1.5px}
   .rates-section{padding:32px 16px}
   .re-grid{grid-template-columns:1fr}
   .fg2{grid-template-columns:1fr}
+
+  /* ── Modal bottom-sheet ── */
   .modal{padding:18px;max-width:100%;border-radius:20px 20px 0 0;margin-bottom:0;position:fixed;bottom:0;left:0;right:0;animation:slideUp .25s ease;max-height:90dvh;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
   @keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
+
+  /* ── Footer y nav ── */
   .lp-footer{padding:12px 16px}
+  .dp-nav{height:52px;padding:0 16px}
+  .ap-nav{height:52px;padding:0 14px}
+
+  /* ── Chat ── */
   .chat-box{height:auto}
   .chat-msgs{height:260px;max-height:260px}
-  .op-form{max-width:100%}
-  .tbl{font-size:11px}
-  .tbl th,.tbl td{padding:8px 8px}
+
+  /* ── Form ── */
+  .op-form{max-width:100%;border-radius:16px}
+  .fi,.fsel{padding:14px;font-size:15px;border-radius:10px}
+  .btn.full{min-height:50px;font-size:15px;border-radius:12px}
+
+  /* ── Tablas mobile: card por fila ── */
+  .tbl{font-size:12px;width:100%}
+  .tbl th,.tbl td{padding:8px}
   .tbl thead{display:none}
-  .tbl tr{display:block;margin-bottom:10px;background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r);padding:8px 12px}
-  .tbl td{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.04);padding:7px 0}
+  .tbl tr{display:block;margin-bottom:10px;background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r);padding:10px 14px}
+  .tbl td{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.04);padding:8px 0;font-size:12px}
   .tbl td:last-child{border-bottom:none}
-  .tbl td::before{content:attr(data-label);color:var(--t2);font-size:10px;font-weight:700;letter-spacing:.5px}
-  .card{overflow-x:hidden}
-  
+  .tbl td::before{content:attr(data-label);color:var(--t2);font-size:10px;font-weight:700;letter-spacing:.5px;flex-shrink:0;margin-right:8px}
+
+  /* ── Cards ── */
+  .card{border-radius:14px;overflow-x:hidden}
+  .card-hdr{padding:12px 14px;flex-wrap:wrap;gap:6px}
+
+  /* ── Bottom nav usuario ── */
   .dp-mob{
-    background:rgba(15,21,32,.92);
+    background:rgba(10,15,25,.95);
     backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
     border-top:1px solid rgba(0,200,150,.12);
     padding-bottom:env(safe-area-inset-bottom);
-    height:calc(54px + env(safe-area-inset-bottom));
+    height:calc(56px + env(safe-area-inset-bottom));
   }
-  
+  .mn-i{gap:3px;font-size:9px;padding:6px 4px}
+  .mn-i svg{width:20px;height:20px}
+
+  /* ── Full height dashboard ── */
   #dp.on{height:100dvh;height:100vh;display:flex;flex-direction:column;overflow:hidden}
   #dp .dp-body{flex:1;overflow:hidden}
   #dp .dp-main{height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch}
-  
-  .dp-nav{height:52px;padding:0 16px}
-  
-  .card{border-radius:16px}
-  .op-form{border-radius:16px}
-  
-  .btn.full{min-height:48px;font-size:15px}
-  .mn-i{gap:3px;font-size:9px}
+
+  /* ── Full height admin ── */
+  #ap.on{height:100dvh;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+  #ap .ap-body{flex:1;overflow:hidden}
+  #ap .ap-main{height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+  .dv-h{font-size:20px}
 }
+
 @media(max-width:480px){
-  .hero-h1{font-size:30px}
-  .kpi-row{grid-template-columns:1fr 1fr}
+  /* ── Landing ── */
+  .hero-h1{font-size:28px}
   .how-section{grid-template-columns:1fr}
+
+  /* ── Forms ── */
   .op-panel{padding:14px}
+  .fi,.fsel{padding:13px 14px;font-size:14px}
+  .chat-inp{padding:11px 13px}
+
+  /* ── Wallet ── */
   .wall-box{font-size:12px}
   .wall-row{flex-wrap:wrap;gap:4px}
   .wall-v{word-break:break-all}
   .cpb{margin-left:0!important;margin-top:4px}
+
+  /* ── Op result ── */
   .res-val{font-size:20px}
-  .btn-main{padding:11px 18px;font-size:13px}
-  .nav-btn{padding:6px 12px;font-size:12px}
-  .dp-nav{padding:0 12px}
-  .dv-h{font-size:18px}
-  .dp-body{overflow:visible}
-  .ap-body{overflow:visible}
   .sum-row{flex-wrap:wrap;gap:4px}
   .sum-v{word-break:break-all;text-align:right;max-width:100%}
-  
+
+  /* ── Botones ── */
+  .btn-main{padding:11px 18px;font-size:13px}
+  .nav-btn{padding:6px 12px;font-size:12px}
+
+  /* ── Nav ── */
+  .dp-nav{padding:0 12px;background:rgba(8,12,18,.98)}
+  .ap-nav{padding:0 10px;background:rgba(8,12,18,.98)}
+  .dv-h{font-size:18px}
+
+  /* ── Animaciones ── */
   .dv.on{animation:dvFadeIn .22s ease}
   @keyframes dvFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  
-  .fi,.fsel{padding:13px 14px;font-size:14px}
-  .chat-inp{padding:11px 13px}
-  
-  .dp-nav{background:rgba(8,12,18,.98)}
+  .av.on{animation:dvFadeIn .22s ease}
+
+  /* ── KPIs 2 por fila siempre ── */
+  .kpi-row{grid-template-columns:1fr 1fr}
+  .kpi-v{font-size:18px}
+  .kpi{padding:10px 12px}
+  .kpi-l{font-size:9px}
+
+  /* ── Tablas más compactas ── */
+  .tbl td{font-size:11px}
+  .tbl td::before{font-size:9px}
+
+  /* ── Cards ── */
+  .card-hdr{padding:11px 12px}
+  .card-title{font-size:12px}
 }
+
+/* ── Admin nav móvil ─────────────────────────────────────── */
+.ap-mob{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(10,12,18,.95);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid rgba(247,147,26,.12);
+  z-index:200;
+  padding-bottom:env(safe-area-inset-bottom);
+  height:calc(56px + env(safe-area-inset-bottom));
+}
+.ap-mob-row{display:flex;height:56px}
+.ap-mn-i{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;font-size:9px;color:var(--t3);cursor:pointer;font-family:var(--fn);
+  font-weight:600;letter-spacing:.3px;border:none;background:none;
+  transition:color .15s;padding:4px 2px;
+}
+.ap-mn-i svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ap-mn-i.on,.ap-mn-i:hover{color:var(--red)}
 
 .ui-card{background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:22px}
 .ui-card-sm{background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:18px 14px}
@@ -1216,6 +1289,29 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Referidos 💸
       </button>
     </aside>
+    <!-- Nav móvil admin -->
+    <div class="ap-mob" id="ap-mob">
+      <div class="ap-mob-row">
+        <button class="ap-mn-i on" id="ami-dash" onclick="showAV('dash')">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Inicio
+        </button>
+        <button class="ap-mn-i" id="ami-clients" onclick="showAV('clients')">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clientes
+        </button>
+        <button class="ap-mn-i" id="ami-chats" onclick="showAV('chats')">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chats
+        </button>
+        <button class="ap-mn-i" id="ami-rates" onclick="showAV('rates')">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Tasas
+        </button>
+        <button class="ap-mn-i" id="ami-activity" onclick="showAV('activity')">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Actividad
+        </button>
+        <button class="ap-mn-i" id="ami-referidos" onclick="showAV('referidos')">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Refs
+        </button>
+      </div>
+    </div>
     <main class="ap-main">
       <div class="av on" id="av-dash">
         <div class="dv-h">Dashboard 📊</div><div class="dv-s">Resumen general</div>
@@ -2489,10 +2585,10 @@ function dispute(){
 
 function showAV(name){
   document.querySelectorAll('.av').forEach(a=>a.classList.remove('on'));
-  document.querySelectorAll('.ap-sb-i').forEach(b=>b.classList.remove('on'));
-  const av=document.getElementById('av-'+name), sb=document.getElementById('asi-'+name);
-  if(av)av.classList.add('on'); if(sb)sb.classList.add('on');
-  nsSet('lsc_av',name);
+  document.querySelectorAll('.ap-sb-i,.ap-mn-i').forEach(b=>b.classList.remove('on'));
+  const av=document.getElementById('av-'+name), sb=document.getElementById('asi-'+name), mb=document.getElementById('ami-'+name);
+  if(av)av.classList.add('on'); if(sb)sb.classList.add('on'); if(mb)mb.classList.add('on');
+  nsSet('lsc_av',name); window.scrollTo(0,0);
   if(name==='activity'){loadAct();return}
   if(name==='referidos'){loadAdminReferidos();return}
   loadAdmin();
@@ -3244,12 +3340,12 @@ async function loadReferidos(){
   if(!refs.length){tbody.innerHTML='<div class="empty">Aún no tienes referidos. ¡Comparte tu enlace y comienza a ganar!</div>';return;}
   tbody.innerHTML=`<table class="tbl"><thead><tr><th>Amigo</th><th>Fecha</th><th>Estado</th><th>Ganado</th></tr></thead>
   <tbody>${refs.map(r=>`<tr>
-    <td style="font-weight:600">${r.referred_name||'Amigo registrado'}</td>
-    <td class="ui-fn-xs">${r.created_at?new Date(r.created_at).toLocaleDateString('es-VE'):'—'}</td>
-    <td>${r.qualified
+    <td data-label="AMIGO" style="font-weight:600">${r.referred_name||'Amigo registrado'}</td>
+    <td data-label="FECHA" class="ui-fn-xs">${r.created_at?new Date(r.created_at).toLocaleDateString('es-VE'):'—'}</td>
+    <td data-label="ESTADO">${r.qualified
       ?(r.paid?'<span class="bdg d">✅ Canjeado</span>':'<span class="bdg c">✅ Calificado</span>')
       :'<span class="bdg p">⏳ Pendiente</span>'}</td>
-    <td style="font-weight:700;color:${r.paid?'var(--t2)':r.qualified?'var(--g)':'var(--t3)'}">${r.qualified?(r.paid?'✓':'$2'):'—'}</td>
+    <td data-label="GANADO" style="font-weight:700;color:${r.paid?'var(--t2)':r.qualified?'var(--g)':'var(--t3)'}">${r.qualified?(r.paid?'✓':'$2'):'—'}</td>
   </tr>`).join('')}</tbody></table>`;
 }
 
@@ -3296,13 +3392,13 @@ async function loadAdminReferidos(){
     :'';
   tbody.innerHTML=comBanner+`<table class="tbl"><thead><tr><th>Referente</th><th>Amigo referido</th><th>Fecha</th><th>Estado</th><th>Monto op.</th><th>Comisión</th><th></th></tr></thead>
   <tbody>${refs.map(r=>`<tr>
-    <td class="ui-fn-xs" style="font-size:11px">${r.referrer_email}</td>
-    <td style="font-weight:600">${r.referred_name||r.referred_email||'—'}</td>
-    <td class="ui-fn-xs">${r.created_at?new Date(r.created_at).toLocaleDateString('es-VE'):'—'}</td>
-    <td>${r.qualified?(r.paid?'<span class="bdg d">✅ Pagado</span>':'<span class="bdg c">✅ Calificado</span>'):'<span class="bdg p">⏳ Pendiente</span>'}</td>
-    <td class="ui-fn-xs">${r.op_amount||'—'}</td>
-    <td style="font-weight:700;color:${r.paid?'var(--t2)':r.qualified?'var(--g)':'var(--t3)'}">${r.qualified?(r.paid?'<span style="color:var(--t3)">✓ $2 pagado</span>':'<b style="color:var(--g)">$2</b>'):'—'}</td>
-    <td>${(r.qualified&&!r.paid)?`<button class="btn g sm" onclick="admPayRef(${r.id})">💸 Pagar</button>`:''}</td>
+    <td data-label="REFERENTE" class="ui-fn-xs" style="font-size:11px">${r.referrer_email}</td>
+    <td data-label="AMIGO" style="font-weight:600">${r.referred_name||r.referred_email||'—'}</td>
+    <td data-label="FECHA" class="ui-fn-xs">${r.created_at?new Date(r.created_at).toLocaleDateString('es-VE'):'—'}</td>
+    <td data-label="ESTADO">${r.qualified?(r.paid?'<span class="bdg d">✅ Pagado</span>':'<span class="bdg c">✅ Calificado</span>'):'<span class="bdg p">⏳ Pendiente</span>'}</td>
+    <td data-label="MONTO" class="ui-fn-xs">${r.op_amount||'—'}</td>
+    <td data-label="COMISIÓN" style="font-weight:700;color:${r.paid?'var(--t2)':r.qualified?'var(--g)':'var(--t3)'}">${r.qualified?(r.paid?'<span style="color:var(--t3)">✓ $2 pagado</span>':'<b style="color:var(--g)">$2</b>'):'—'}</td>
+    <td data-label="">${(r.qualified&&!r.paid)?`<button class="btn g sm" onclick="admPayRef(${r.id})">💸 Pagar</button>`:''}</td>
   </tr>`).join('')}</tbody></table>`;
 }
 
