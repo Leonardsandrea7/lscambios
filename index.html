@@ -1128,7 +1128,30 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <div class="kpi-row" style="margin-bottom:16px">
           <div class="kpi"><div class="kpi-v" id="ref-total">0</div><div class="kpi-l">REFERIDOS</div></div>
           <div class="kpi"><div class="kpi-v ui-col-g" id="ref-qualified">0</div><div class="kpi-l">CALIFICADOS</div></div>
-          <div class="kpi"><div class="kpi-v" style="color:var(--yellow)" id="ref-earned">$0</div><div class="kpi-l">GANADOS</div></div>
+          <div class="kpi"><div class="kpi-v" style="color:var(--yellow)" id="ref-earned">$0</div><div class="kpi-l">ACUMULADO</div></div>
+        </div>
+        <!-- Barra de progreso hacia $10 -->
+        <div class="card" style="margin-bottom:16px">
+          <div style="padding:14px 18px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <span style="font-size:11px;font-weight:700;color:var(--t2)">Progreso para retirar</span>
+              <span id="ref-progress-lbl" style="font-size:11px;font-weight:700;color:var(--g)">$0 / $10</span>
+            </div>
+            <div style="background:var(--bg3);border-radius:50px;height:8px;overflow:hidden">
+              <div id="ref-progress-bar" style="height:100%;width:0%;background:var(--gd);border-radius:50px;transition:width .5s ease"></div>
+            </div>
+            <div style="font-size:10px;color:var(--t3);margin-top:6px">Retiro mínimo: <strong style="color:var(--t2)">$10</strong></div>
+          </div>
+        </div>
+        <!-- Botón canje — aparece solo al llegar a $10 -->
+        <div id="ref-canje-box" style="display:none;margin-bottom:16px">
+          <div style="background:rgba(0,200,150,.08);border:1px solid rgba(0,200,150,.3);border-radius:var(--r2);padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--g)">🎉 ¡Saldo disponible para retirar!</div>
+              <div style="font-size:11px;color:var(--t2);margin-top:2px" id="ref-canje-sub">Contáctanos para reclamar tu recompensa</div>
+            </div>
+            <button class="btn g sm" onclick="solicitarCanje()">💸 Retirar</button>
+          </div>
         </div>
         <div class="card" style="margin-bottom:16px">
           <div class="card-hdr"><span class="card-title">Mis referidos</span></div>
@@ -1140,7 +1163,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
             <div>1️⃣ Comparte tu enlace único con amigos y familia</div>
             <div>2️⃣ Tu amigo se registra en LS Cambios usando tu código</div>
             <div>3️⃣ Cuando realice un cambio de <strong style="color:var(--g)">$30 o más</strong>, califica</div>
-            <div>4️⃣ Recibes <strong style="color:var(--g)">$2</strong> acreditados en tu próxima operación</div>
+            <div>4️⃣ Acumulas <strong style="color:var(--g)">$2</strong> por cada amigo calificado</div>
+            <div>5️⃣ Al llegar a <strong style="color:var(--g)">$10</strong> puedes retirar tu recompensa 🎁</div>
           </div>
         </div>
       </div>
@@ -1294,25 +1318,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
           </div>
           <div id="ar-body"><div class="empty">Cargando...</div></div>
         </div>
-        <div style="padding:14px;background:rgba(0,200,150,.04);border:1px solid rgba(0,200,150,.12);border-radius:var(--r);font-size:11px;color:var(--t2);line-height:1.8">
-          <strong class="ui-col-g">🗄️ Tabla Supabase requerida:</strong> Ejecuta este SQL en tu proyecto Supabase:<br>
-          <code style="display:block;margin-top:6px;padding:8px 10px;background:var(--bg3);border-radius:6px;font-size:10px;color:var(--g);line-height:1.7">
-            CREATE TABLE referidos (<br>
-            &nbsp;&nbsp;id SERIAL PRIMARY KEY,<br>
-            &nbsp;&nbsp;referrer_email TEXT NOT NULL,<br>
-            &nbsp;&nbsp;referred_email TEXT NOT NULL,<br>
-            &nbsp;&nbsp;referred_name TEXT,<br>
-            &nbsp;&nbsp;created_at TIMESTAMPTZ DEFAULT NOW(),<br>
-            &nbsp;&nbsp;qualified BOOLEAN DEFAULT FALSE,<br>
-            &nbsp;&nbsp;qualified_at TIMESTAMPTZ,<br>
-            &nbsp;&nbsp;op_amount TEXT,<br>
-            &nbsp;&nbsp;paid BOOLEAN DEFAULT FALSE,<br>
-            &nbsp;&nbsp;paid_at TIMESTAMPTZ<br>
-            );<br>
-            ALTER TABLE referidos ENABLE ROW LEVEL SECURITY;<br>
-            CREATE POLICY "admin_all" ON referidos FOR ALL USING (true);
-          </code>
-        </div>
+
       </div>
     </main>
   </div>
@@ -1944,8 +1950,15 @@ async function doVerifyCode(){
       try{
         const referrer=await sbGetUserByCode(refCode);
         if(referrer&&referrer.email.toLowerCase()!==d.email.toLowerCase()){
-          await sbCreateReferido(referrer.email,d.email,ud.nombre+' '+ud.apellido);
-          tgNotify(`🔗 <b>Nuevo referido</b>\n👤 Nuevo: ${ud.nombre} ${ud.apellido} (${d.email})\n🎁 Referente: ${referrer.nombre} ${referrer.apellido} (${referrer.email})\n📋 Código: ${refCode}`);
+          // Verificar límite silencioso de 20 referidos por usuario
+          const existingRefs=await sbGetReferidos(referrer.email);
+          if(existingRefs.length<20){
+            await sbCreateReferido(referrer.email,d.email,ud.nombre+' '+ud.apellido);
+            tgNotify(`🔗 <b>Nuevo referido</b>\n👤 Nuevo: ${ud.nombre} ${ud.apellido} (${d.email})\n🎁 Referente: ${referrer.nombre} ${referrer.apellido} (${referrer.email})\n📋 Código: ${refCode}\n📊 Total refs del referente: ${existingRefs.length+1}/20`);
+          }else{
+            // Límite alcanzado — se registra el usuario igual, pero sin comisión
+            tgNotify(`⚠️ <b>Límite de referidos alcanzado</b>\n🎁 Referente: ${referrer.email} ya tiene 20 referidos (límite máximo)\n👤 Nuevo usuario: ${d.email} registrado sin comisión`);
+          }
         }
       }catch(e){console.warn('[referido]',e);}
     }
@@ -3195,33 +3208,57 @@ async function checkAndQualifyReferido(email,opGetTxt){
 async function loadReferidos(){
   const sess=gS(); if(!sess)return;
   const ud=getUser(sess.email); if(!ud)return;
-  const refs=await sbGetReferidos(sess.email);
+  const refsAll=await sbGetReferidos(sess.email);
+  // Límite silencioso de 20 — el usuario solo ve hasta 20, sin explicación
+  const refs=refsAll.slice(0,20);
   const total=refs.length;
   const qualified=refs.filter(r=>r.qualified).length;
   const pendingPay=refs.filter(r=>r.qualified&&!r.paid).length;
-  const earned=(refs.filter(r=>r.qualified&&r.paid).length*2);
+  const saldoPendiente=pendingPay*2;  // solo los no pagados aún
+  const saldoTotal=qualified*2;       // todo lo acumulado
   const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
   s('ref-total',total);
   s('ref-qualified',qualified);
-  s('ref-earned','$'+earned+(pendingPay>0?' (+$'+pendingPay*2+' por cobrar)':''));
+  s('ref-earned','$'+saldoTotal);
+  // Barra de progreso hacia $10
+  const pct=Math.min(100,Math.round((saldoPendiente/10)*100));
+  const bar=document.getElementById('ref-progress-bar');
+  const lbl=document.getElementById('ref-progress-lbl');
+  if(bar)bar.style.width=pct+'%';
+  if(lbl)lbl.textContent='$'+saldoPendiente+' / $10';
+  // Botón de canje — visible solo si acumuló $10+
+  const canjeBox=document.getElementById('ref-canje-box');
+  const canjeSub=document.getElementById('ref-canje-sub');
+  if(canjeBox){canjeBox.style.display=saldoPendiente>=10?'block':'none';}
+  if(canjeSub&&saldoPendiente>=10)canjeSub.textContent='Tienes $'+saldoPendiente+' listos para retirar';
+  // Badge lateral
+  const badge=document.getElementById('si-ref-badge');
+  if(badge){badge.style.display=saldoPendiente>=10?'inline':'none';badge.textContent='$'+saldoPendiente;}
+  // Enlace de referido
   const refCode=ud.code||'';
   const refLink=window.location.origin+window.location.pathname+'?ref='+refCode;
   const linkEl=document.getElementById('ref-link-txt');
   if(linkEl)linkEl.textContent=refLink;
-  const badge=document.getElementById('si-ref-badge');
-  if(badge){badge.style.display=pendingPay>0?'inline':'none';badge.textContent='$'+pendingPay*2;}
   const tbody=document.getElementById('ref-body');
   if(!tbody)return;
   if(!refs.length){tbody.innerHTML='<div class="empty">Aún no tienes referidos. ¡Comparte tu enlace y comienza a ganar!</div>';return;}
-  tbody.innerHTML=`<table class="tbl"><thead><tr><th>Amigo</th><th>Fecha</th><th>Estado</th><th>Comisión</th></tr></thead>
+  tbody.innerHTML=`<table class="tbl"><thead><tr><th>Amigo</th><th>Fecha</th><th>Estado</th><th>Ganado</th></tr></thead>
   <tbody>${refs.map(r=>`<tr>
-    <td style="font-weight:600">${r.referred_name||r.referred_email||'—'}</td>
+    <td style="font-weight:600">${r.referred_name||'Amigo registrado'}</td>
     <td class="ui-fn-xs">${r.created_at?new Date(r.created_at).toLocaleDateString('es-VE'):'—'}</td>
     <td>${r.qualified
-      ?(r.paid?'<span class="bdg d">✅ Pagado</span>':'<span class="bdg c">✅ Calificado</span>')
+      ?(r.paid?'<span class="bdg d">✅ Canjeado</span>':'<span class="bdg c">✅ Calificado</span>')
       :'<span class="bdg p">⏳ Pendiente</span>'}</td>
-    <td style="font-weight:700;color:${r.paid?'var(--t2)':r.qualified?'var(--g)':'var(--t3)'}">${r.qualified?(r.paid?'$2 ✓':'$2 pendiente'):'—'}</td>
+    <td style="font-weight:700;color:${r.paid?'var(--t2)':r.qualified?'var(--g)':'var(--t3)'}">${r.qualified?(r.paid?'✓':'$2'):'—'}</td>
   </tr>`).join('')}</tbody></table>`;
+}
+
+function solicitarCanje(){
+  const sess=gS(); if(!sess)return;
+  const ud=getUser(sess.email)||{};
+  const refs=[];  // se usa solo para el mensaje
+  const msg=`Hola, quiero retirar mi saldo de referidos.\nNombre: ${ud.nombre||''} ${ud.apellido||''}\nCorreo: ${sess.email}\nCódigo: ${ud.code||'—'}`;
+  window.open('https://wa.me/584147408768?text='+encodeURIComponent(msg),'_blank');
 }
 
 function copyRefLink(){
