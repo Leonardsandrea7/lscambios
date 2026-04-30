@@ -892,6 +892,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <div class="fg"><label>CORREO PAYPAL / ZINLI / AIRTM / WALLY</label><input class="fi" type="email" id="rg-cdiv" placeholder="tucorreo@email.com"></div>
       <div class="fg"><label>ID BINANCE</label><input class="fi" type="text" id="rg-bid" placeholder="ID numérico Binance"></div>
       <div class="fg"><label>WALLET USDT TETHER <span style="font-size:10px;color:var(--t3);font-weight:400">(opcional)</span></label><input class="fi" type="text" id="rg-usdt" placeholder="0x... dirección BEP20"></div>
+      <div class="fdiv">REFERIDO (OPCIONAL)</div>
+      <div class="fg"><label>¿TIENES UN CÓDIGO DE REFERIDO? <span style="font-size:10px;color:var(--t3);font-weight:400">(opcional)</span></label><input class="fi" type="text" id="rg-ref" placeholder="Ej: LS-ABCDEF" autocomplete="off" style="text-transform:uppercase"></div>
       <div class="fdiv">CONTRASEÑA</div>
       <div class="fg2">
         <div class="fg ui-mb0"><label>CONTRASEÑA</label><div class="pw-wrap"><input class="fi" type="password" id="rg-pw" placeholder="Mín. 6"><button type="button" class="pw-eye" onclick="togglePw('rg-pw',this)" tabindex="-1"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
@@ -965,6 +967,10 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       </button>
       <button class="sb-i" id="si-profile" onclick="showDV('profile')">
         <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil
+      </button>
+      <button class="sb-i" id="si-referidos" onclick="showDV('referidos')">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Referidos 💸
+        <span class="sb-badge ui-hidden" id="si-ref-badge">$</span>
       </button>
       <div style="flex:1"></div>
       <button class="sb-i" style="color:var(--red);margin-top:8px" onclick="doLogout()">
@@ -1101,6 +1107,44 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       
       <div class="dv" id="dv-history"><div class="dv-h">Historial 📋</div><div class="dv-s">Todas tus operaciones</div><div class="card"><div id="hist-body"></div></div></div>
       
+      <div class="dv" id="dv-referidos">
+        <div class="dv-h">Referidos 💸</div>
+        <div class="dv-s">Gana $2 por cada amigo que cambie $30 o más</div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-hdr"><span class="card-title">Tu enlace de referido</span><button class="btn ghost sm" onclick="loadReferidos()">🔄</button></div>
+          <div style="padding:16px 18px">
+            <div style="background:var(--bg3);border:1px solid var(--brd2);border-radius:8px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+              <span id="ref-link-txt" style="font-family:var(--mono);font-size:11px;color:var(--g);word-break:break-all">Cargando...</span>
+              <button class="btn g sm" onclick="copyRefLink()">📋 Copiar</button>
+            </div>
+            <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn ghost sm" onclick="shareRefWhatsApp()">💬 Compartir WhatsApp</button>
+            </div>
+            <div style="margin-top:10px;font-size:11px;color:var(--t2);line-height:1.6">
+              💡 Comparte tu enlace. Cuando tu amigo se registre y cambie <strong style="color:var(--g)">$30 o más</strong>, ganas <strong style="color:var(--g)">$2</strong> por cada uno.
+            </div>
+          </div>
+        </div>
+        <div class="kpi-row" style="margin-bottom:16px">
+          <div class="kpi"><div class="kpi-v" id="ref-total">0</div><div class="kpi-l">REFERIDOS</div></div>
+          <div class="kpi"><div class="kpi-v ui-col-g" id="ref-qualified">0</div><div class="kpi-l">CALIFICADOS</div></div>
+          <div class="kpi"><div class="kpi-v" style="color:var(--yellow)" id="ref-earned">$0</div><div class="kpi-l">GANADOS</div></div>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-hdr"><span class="card-title">Mis referidos</span></div>
+          <div id="ref-body"><div class="empty">Cargando...</div></div>
+        </div>
+        <div style="background:rgba(0,200,150,.05);border:1px solid rgba(0,200,150,.15);border-radius:var(--r2);padding:16px 18px">
+          <div style="font-size:12px;font-weight:700;color:var(--g);margin-bottom:8px">💡 ¿Cómo funciona?</div>
+          <div style="font-size:12px;color:var(--t2);display:flex;flex-direction:column;gap:6px">
+            <div>1️⃣ Comparte tu enlace único con amigos y familia</div>
+            <div>2️⃣ Tu amigo se registra en LS Cambios usando tu código</div>
+            <div>3️⃣ Cuando realice un cambio de <strong style="color:var(--g)">$30 o más</strong>, califica</div>
+            <div>4️⃣ Recibes <strong style="color:var(--g)">$2</strong> acreditados en tu próxima operación</div>
+          </div>
+        </div>
+      </div>
+      
       <div class="dv" id="dv-profile"><div class="dv-h">Perfil 👤</div><div class="dv-s">Tu información</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px" id="prof-body"></div></div>
     </main>
   </div>
@@ -1110,6 +1154,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <button class="mn-i on" id="mn-overview" onclick="showDV('overview')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Inicio</button>
       <button class="mn-i" id="mn-newop" onclick="showDV('newop')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Operar</button>
       <button class="mn-i" id="mn-history" onclick="showDV('history')"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Historial</button>
+      <button class="mn-i" id="mn-referidos" onclick="showDV('referidos')"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Referidos</button>
       <button class="mn-i" id="mn-profile" onclick="showDV('profile')"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil</button>
     </div>
   </div>
@@ -1142,6 +1187,9 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       </button>
       <button class="ap-sb-i" id="asi-activity" onclick="showAV('activity')">
         <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Actividad
+      </button>
+      <button class="ap-sb-i" id="asi-referidos" onclick="showAV('referidos')">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Referidos 💸
       </button>
     </aside>
     <main class="ap-main">
@@ -1227,6 +1275,43 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <div class="card"><div id="act-body"></div></div>
         <div style="margin-top:14px;padding:14px;background:rgba(0,200,150,.04);border:1px solid rgba(0,200,150,.12);border-radius:var(--r);font-size:11px;color:var(--t2);line-height:1.8">
           <strong class="ui-col-g">🔌 Preparado para DB:</strong> Cada evento tiene tipo, email, nombre, fecha ISO y datos. Solo cambia <code class="ui-col-g">logAct()</code> para hacer INSERT en Supabase/Firebase. Sin más cambios.
+        </div>
+      </div>
+      
+      <div class="av" id="av-referidos">
+        <div class="dv-h">Referidos 💸</div>
+        <div class="dv-s">Control del programa · $2 por cada referido que cambie $30 o más</div>
+        <div class="kpi-row" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr));margin-bottom:16px">
+          <div class="kpi"><div class="kpi-v" id="ar-total">0</div><div class="kpi-l">TOTAL REFS</div></div>
+          <div class="kpi"><div class="kpi-v ui-col-g" id="ar-qualified">0</div><div class="kpi-l">CALIFICADOS</div></div>
+          <div class="kpi"><div class="kpi-v" style="color:var(--yellow)" id="ar-pending">0</div><div class="kpi-l">POR PAGAR</div></div>
+          <div class="kpi"><div class="kpi-v" style="color:var(--t2)" id="ar-paid">0</div><div class="kpi-l">PAGADOS</div></div>
+        </div>
+        <div class="card" style="margin-bottom:14px">
+          <div class="card-hdr">
+            <span class="card-title">Todos los referidos</span>
+            <button class="btn ghost sm" onclick="loadAdminReferidos()">🔄 Actualizar</button>
+          </div>
+          <div id="ar-body"><div class="empty">Cargando...</div></div>
+        </div>
+        <div style="padding:14px;background:rgba(0,200,150,.04);border:1px solid rgba(0,200,150,.12);border-radius:var(--r);font-size:11px;color:var(--t2);line-height:1.8">
+          <strong class="ui-col-g">🗄️ Tabla Supabase requerida:</strong> Ejecuta este SQL en tu proyecto Supabase:<br>
+          <code style="display:block;margin-top:6px;padding:8px 10px;background:var(--bg3);border-radius:6px;font-size:10px;color:var(--g);line-height:1.7">
+            CREATE TABLE referidos (<br>
+            &nbsp;&nbsp;id SERIAL PRIMARY KEY,<br>
+            &nbsp;&nbsp;referrer_email TEXT NOT NULL,<br>
+            &nbsp;&nbsp;referred_email TEXT NOT NULL,<br>
+            &nbsp;&nbsp;referred_name TEXT,<br>
+            &nbsp;&nbsp;created_at TIMESTAMPTZ DEFAULT NOW(),<br>
+            &nbsp;&nbsp;qualified BOOLEAN DEFAULT FALSE,<br>
+            &nbsp;&nbsp;qualified_at TIMESTAMPTZ,<br>
+            &nbsp;&nbsp;op_amount TEXT,<br>
+            &nbsp;&nbsp;paid BOOLEAN DEFAULT FALSE,<br>
+            &nbsp;&nbsp;paid_at TIMESTAMPTZ<br>
+            );<br>
+            ALTER TABLE referidos ENABLE ROW LEVEL SECURITY;<br>
+            CREATE POLICY "admin_all" ON referidos FOR ALL USING (true);
+          </code>
         </div>
       </div>
     </main>
@@ -1793,6 +1878,7 @@ async function doRegister(){
   const email=g('rg-e').toLowerCase(),tel=g('rg-tel');
   const banco=g('rg-banco'),pmTel=g('rg-pm-tel'),pmCi=g('rg-pm-ci');
   const cDiv=g('rg-cdiv'),bid=g('rg-bid'),usdtWallet=g('rg-usdt');
+  const refCode=(g('rg-ref')||getRefCodeFromURL()).toUpperCase().trim();
   const pass=g('rg-pw'),pass2=g('rg-pw2');
   const err=document.getElementById('rg-err'),ok=document.getElementById('rg-ok');
   err.classList.remove('on');ok.classList.remove('on');
@@ -1809,7 +1895,7 @@ async function doRegister(){
     const existeUser=await sbGetUser(email);
     if(existeUser){err.textContent='Ese correo ya está registrado.';err.classList.add('on');return}
     _pendingCode=String(Math.floor(100000+Math.random()*900000));
-    _pendingReg={nombre,apellido,cedula,email,tel,banco,pmTel,pmCi,cDiv,bid,usdtWallet,pass};
+    _pendingReg={nombre,apellido,cedula,email,tel,banco,pmTel,pmCi,cDiv,bid,usdtWallet,pass,refCode};
     const sent=await sendVerifEmail(email,nombre,_pendingCode);
     if(!sent){err.textContent='No se pudo enviar el código. Intenta de nuevo.';err.classList.add('on');_pendingReg=null;_pendingCode=null;return}
     const lbl=document.getElementById('verify-email-lbl');if(lbl)lbl.textContent=email;
@@ -1852,7 +1938,18 @@ async function doVerifyCode(){
     if(!saved){err.textContent='Error guardando. Intenta de nuevo.';err.classList.add('on');return}
     _pendingReg=null;_pendingCode=null;
     sS({email:d.email,...ud});
-    await logAct('register',{email:d.email,name:ud.name,cedula:ud.cedula,date:tnowISO()});
+    // ── Procesar código de referido ────────────────────────────────────
+    const refCode=(d.refCode||'').toUpperCase().trim();
+    if(refCode){
+      try{
+        const referrer=await sbGetUserByCode(refCode);
+        if(referrer&&referrer.email.toLowerCase()!==d.email.toLowerCase()){
+          await sbCreateReferido(referrer.email,d.email,ud.nombre+' '+ud.apellido);
+          tgNotify(`🔗 <b>Nuevo referido</b>\n👤 Nuevo: ${ud.nombre} ${ud.apellido} (${d.email})\n🎁 Referente: ${referrer.nombre} ${referrer.apellido} (${referrer.email})\n📋 Código: ${refCode}`);
+        }
+      }catch(e){console.warn('[referido]',e);}
+    }
+    await logAct('register',{email:d.email,name:ud.name,cedula:ud.cedula,date:tnowISO(),refCode:refCode||null});
     tgNotify(`✨ <b>Nuevo registro verificado</b>\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${d.email}\n📱 ${d.tel||'—'}\n🆔 Cédula: ${ud.cedula||'—'}\n💎 Wallet USDT: ${d.usdtWallet||'—'}\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
     toast('🎉 ¡Bienvenido, '+ud.nombre+'! Correo verificado.','ok');
     setTimeout(()=>{closeAuth();goD()},900);
@@ -1898,6 +1995,7 @@ function showDV(name){
   ['dv-','si-','mn-'].forEach(p=>{const e=document.getElementById(p+name);if(e)e.classList.add('on')});
   if(name!=='trade')loadDash();
   if(name==='newop'){setTimeout(()=>{calcOp();updWallet();},100)}
+  if(name==='referidos'){setTimeout(()=>loadReferidos(),150)}
   nsSet('lsc_lv',name); window.scrollTo(0,0);
 }
 
@@ -1979,7 +2077,7 @@ function calcOp(){
     const r=(RATES.usdt_compra&&RATES.usdt_compra[plat])||{t:0.97};
     if(rl)rl.textContent='RECIBIRÍAS EN '+PN[plat].toUpperCase();
     rv.textContent='$'+fmt(amt*r.t,2)+' USD';
-    rd.textContent=`Envías ${fmt(amt,2)} USDT (BEP20) · Tasa 1 USDT = $${r.t} en ${PN[plat]}`;
+    rd.textContent=`Envías ${fmt(amt,4)} USDT (BEP20) · Tasa 1 USDT = $${r.t} en ${PN[plat]}`;
   }else{
     const r=(RATES.usdt_venta&&RATES.usdt_venta[plat])||{t:0.96};
     if(rl)rl.textContent='RECIBIRÍAS EN USDT (BEP20)';
@@ -2138,7 +2236,7 @@ async function startOp(){
   }else if(dir==='venta'){
     sendTxt=rv;getTxt='$'+fmt(amt,2)+' ('+PN[plat]+')';
   }else if(dir==='usdt_compra'){
-    sendTxt=fmt(amt,2)+' USDT (BEP20)';getTxt=rv+' en '+PN[plat];
+    sendTxt=fmt(amt,4)+' USDT (BEP20)';getTxt=rv+' en '+PN[plat];
   }else{
     sendTxt='$'+fmt(amt,2)+' ('+PN[plat]+')';getTxt=rv+' USDT (BEP20)';
   }
@@ -2353,6 +2451,16 @@ async function clientConfirm(){
   await sbSendMsg(curOpId,{from:'sys',text:'🎉 Operación completada. ¡Gracias por usar LS Cambios!',time:tnow()});
   const ops=await sbGetOps(sess.email);
   const op=ops.find(o=>o.id===curOpId);
+  // ── Verificar si califica como referido ──────────────────────────────
+  if(op){
+    const sendAmt=(op.send||'').match(/\$?([\d,]+\.?\d*)/);
+    const getAmt=(op.get||'').match(/\$?([\d,]+\.?\d*)/);
+    const opAmt=sendAmt?parseFloat(sendAmt[1].replace(/,/g,'')):0;
+    const opAmtGet=getAmt?parseFloat(getAmt[1].replace(/,/g,'')):0;
+    if(opAmt>=30||opAmtGet>=30){
+      checkAndQualifyReferido(sess.email,op.send||op.get||'').catch(()=>{});
+    }
+  }
   const cs=document.getElementById('compSub'); if(cs&&op&&op.get)cs.textContent='Recibirás: '+op.get;
   document.getElementById('comp-ov').classList.add('on');
   playSuccess();
@@ -2373,6 +2481,7 @@ function showAV(name){
   if(av)av.classList.add('on'); if(sb)sb.classList.add('on');
   nsSet('lsc_av',name);
   if(name==='activity'){loadAct();return}
+  if(name==='referidos'){loadAdminReferidos();return}
   loadAdmin();
 }
 
@@ -3004,6 +3113,173 @@ function setupRealtime(opId){
     });
 }
 
+// ════ REFERIDOS ════════════════════════════════════════════════════════
+
+async function sbGetReferidos(referrerEmail){
+  try{
+    const{data,error}=await db.from('referidos')
+      .select('*').eq('referrer_email',referrerEmail.toLowerCase())
+      .order('created_at',{ascending:false});
+    if(error){console.warn('[sbGetReferidos]',error.message);return[];}
+    return data||[];
+  }catch(e){console.warn('[sbGetReferidos]',e);return[];}
+}
+
+async function sbGetAllReferidos(){
+  try{
+    const{data,error}=await db.from('referidos').select('*').order('created_at',{ascending:false});
+    if(error){console.warn('[sbGetAllReferidos]',error.message);return[];}
+    return data||[];
+  }catch(e){console.warn('[sbGetAllReferidos]',e);return[];}
+}
+
+async function sbGetUserByCode(code){
+  try{
+    const{data,error}=await db.from('clientes').select('email,nombre,apellido').eq('codigo',code.toUpperCase().trim()).maybeSingle();
+    if(error||!data)return null;
+    return data;
+  }catch(e){return null;}
+}
+
+async function sbCreateReferido(referrerEmail,referredEmail,referredName){
+  try{
+    const{error}=await db.from('referidos').insert({
+      referrer_email:referrerEmail.toLowerCase(),
+      referred_email:referredEmail.toLowerCase(),
+      referred_name:referredName,
+      created_at:tnowISO(),qualified:false,paid:false
+    });
+    if(error){console.warn('[sbCreateReferido]',error.message);return false;}
+    return true;
+  }catch(e){console.warn('[sbCreateReferido]',e);return false;}
+}
+
+async function sbQualifyReferido(referredEmail,opAmount){
+  try{
+    const{error}=await db.from('referidos')
+      .update({qualified:true,qualified_at:tnowISO(),op_amount:opAmount})
+      .eq('referred_email',referredEmail.toLowerCase()).eq('qualified',false);
+    if(error){console.warn('[sbQualifyReferido]',error.message);return false;}
+    return true;
+  }catch(e){return false;}
+}
+
+async function sbMarkReferidoPaid(id){
+  try{
+    const{error}=await db.from('referidos').update({paid:true,paid_at:tnowISO()}).eq('id',id);
+    if(error){console.warn('[sbMarkReferidoPaid]',error.message);return false;}
+    return true;
+  }catch(e){return false;}
+}
+
+async function checkAndQualifyReferido(email,opGetTxt){
+  try{
+    // Extract numeric USD amount from strings like "$45.00 (PayPal)" or "Bs 30.000..."
+    const match=(opGetTxt||'').match(/\$?([\d,]+\.?\d*)/);
+    if(!match)return;
+    const numAmt=parseFloat(match[1].replace(/,/g,''));
+    if(numAmt<30)return;
+    // Check if referred and not yet qualified
+    const{data,error}=await db.from('referidos').select('*')
+      .eq('referred_email',email.toLowerCase()).eq('qualified',false);
+    if(error||!data||!data.length)return;
+    const ok=await sbQualifyReferido(email,opGetTxt);
+    if(ok){
+      const ref=data[0];
+      tgNotify(`💸 <b>Referido Calificado</b>\n👤 Referido: ${ref.referred_name||email}\n📧 Email: ${email}\n💰 Recibe: ${opGetTxt}\n🎁 Referente: ${ref.referrer_email}\n💵 Comisión: $2 pendiente de pago`);
+      toast('🎉 ¡Tu referido acaba de calificar! Alguien ganó $2 gracias a ti.','ok');
+    }
+  }catch(e){console.warn('[checkAndQualifyReferido]',e);}
+}
+
+async function loadReferidos(){
+  const sess=gS(); if(!sess)return;
+  const ud=getUser(sess.email); if(!ud)return;
+  const refs=await sbGetReferidos(sess.email);
+  const total=refs.length;
+  const qualified=refs.filter(r=>r.qualified).length;
+  const pendingPay=refs.filter(r=>r.qualified&&!r.paid).length;
+  const earned=(refs.filter(r=>r.qualified&&r.paid).length*2);
+  const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+  s('ref-total',total);
+  s('ref-qualified',qualified);
+  s('ref-earned','$'+earned+(pendingPay>0?' (+$'+pendingPay*2+' por cobrar)':''));
+  const refCode=ud.code||'';
+  const refLink=window.location.origin+window.location.pathname+'?ref='+refCode;
+  const linkEl=document.getElementById('ref-link-txt');
+  if(linkEl)linkEl.textContent=refLink;
+  const badge=document.getElementById('si-ref-badge');
+  if(badge){badge.style.display=pendingPay>0?'inline':'none';badge.textContent='$'+pendingPay*2;}
+  const tbody=document.getElementById('ref-body');
+  if(!tbody)return;
+  if(!refs.length){tbody.innerHTML='<div class="empty">Aún no tienes referidos. ¡Comparte tu enlace y comienza a ganar!</div>';return;}
+  tbody.innerHTML=`<table class="tbl"><thead><tr><th>Amigo</th><th>Fecha</th><th>Estado</th><th>Comisión</th></tr></thead>
+  <tbody>${refs.map(r=>`<tr>
+    <td style="font-weight:600">${r.referred_name||r.referred_email||'—'}</td>
+    <td class="ui-fn-xs">${r.created_at?new Date(r.created_at).toLocaleDateString('es-VE'):'—'}</td>
+    <td>${r.qualified
+      ?(r.paid?'<span class="bdg d">✅ Pagado</span>':'<span class="bdg c">✅ Calificado</span>')
+      :'<span class="bdg p">⏳ Pendiente</span>'}</td>
+    <td style="font-weight:700;color:${r.paid?'var(--t2)':r.qualified?'var(--g)':'var(--t3)'}">${r.qualified?(r.paid?'$2 ✓':'$2 pendiente'):'—'}</td>
+  </tr>`).join('')}</tbody></table>`;
+}
+
+function copyRefLink(){
+  const sess=gS(); if(!sess)return;
+  const ud=getUser(sess.email); if(!ud)return;
+  const refLink=window.location.origin+window.location.pathname+'?ref='+(ud.code||'');
+  copyVal(refLink);
+}
+
+function shareRefWhatsApp(){
+  const sess=gS(); if(!sess)return;
+  const ud=getUser(sess.email); if(!ud)return;
+  const refLink=window.location.origin+window.location.pathname+'?ref='+(ud.code||'');
+  const msg=`¡Hola! Te recomiendo LS Cambios para cambiar PayPal, Binance, Zinli, Wally y más a Bolívares con las mejores tasas. Usa mi enlace para registrarte:\n${refLink}`;
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+}
+
+async function loadAdminReferidos(){
+  const refs=await sbGetAllReferidos();
+  const total=refs.length;
+  const qualified=refs.filter(r=>r.qualified).length;
+  const pendingPay=refs.filter(r=>r.qualified&&!r.paid).length;
+  const paid=refs.filter(r=>r.paid).length;
+  const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+  s('ar-total',total);
+  s('ar-qualified',qualified);
+  s('ar-pending',pendingPay);
+  s('ar-paid',paid);
+  const tbody=document.getElementById('ar-body');
+  if(!tbody)return;
+  if(!refs.length){tbody.innerHTML='<div class="empty">Sin referidos aún</div>';return;}
+  const totalCom=pendingPay*2;
+  const comBanner=pendingPay>0
+    ?`<div style="background:rgba(245,184,0,.08);border:1px solid rgba(245,184,0,.25);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--yellow);font-weight:600">💸 ${pendingPay} comisión${pendingPay>1?'es':''} pendiente${pendingPay>1?'s':''} de pagar · Total: $${totalCom}</div>`
+    :'';
+  tbody.innerHTML=comBanner+`<table class="tbl"><thead><tr><th>Referente</th><th>Amigo referido</th><th>Fecha</th><th>Estado</th><th>Monto op.</th><th>Comisión</th><th></th></tr></thead>
+  <tbody>${refs.map(r=>`<tr>
+    <td class="ui-fn-xs" style="font-size:11px">${r.referrer_email}</td>
+    <td style="font-weight:600">${r.referred_name||r.referred_email||'—'}</td>
+    <td class="ui-fn-xs">${r.created_at?new Date(r.created_at).toLocaleDateString('es-VE'):'—'}</td>
+    <td>${r.qualified?(r.paid?'<span class="bdg d">✅ Pagado</span>':'<span class="bdg c">✅ Calificado</span>'):'<span class="bdg p">⏳ Pendiente</span>'}</td>
+    <td class="ui-fn-xs">${r.op_amount||'—'}</td>
+    <td style="font-weight:700;color:${r.paid?'var(--t2)':r.qualified?'var(--g)':'var(--t3)'}">${r.qualified?(r.paid?'<span style="color:var(--t3)">✓ $2 pagado</span>':'<b style="color:var(--g)">$2</b>'):'—'}</td>
+    <td>${(r.qualified&&!r.paid)?`<button class="btn g sm" onclick="admPayRef(${r.id})">💸 Pagar</button>`:''}</td>
+  </tr>`).join('')}</tbody></table>`;
+}
+
+async function admPayRef(id){
+  if(!confirm('¿Marcar esta comisión de $2 como pagada?'))return;
+  const ok=await sbMarkReferidoPaid(id);
+  if(ok){toast('✅ Comisión marcada como pagada','ok');loadAdminReferidos();}
+  else toast('❌ Error al actualizar','err');
+}
+
+function getRefCodeFromURL(){
+  try{const p=new URLSearchParams(window.location.search);return(p.get('ref')||'').toUpperCase();}catch{return'';}
+}
+
 document.addEventListener('DOMContentLoaded',async()=>{
 
   // Registrar Service Worker para push notifications
@@ -3057,6 +3333,16 @@ document.addEventListener('DOMContentLoaded',async()=>{
     }else{clS()}
   }
   setTimeout(playIntro,400);
+  // ── Auto-rellenar código de referido desde URL ──────────────────────
+  const urlRef=getRefCodeFromURL();
+  if(urlRef){
+    setTimeout(()=>{
+      const inp=document.getElementById('rg-ref');
+      if(inp&&!inp.value){inp.value=urlRef;inp.style.borderColor='var(--g)';}
+      openAuth('register');
+      toast('🎁 Código de referido aplicado: '+urlRef,'ok');
+    },1200);
+  }
 });
 
 window.addEventListener('load',()=>{
