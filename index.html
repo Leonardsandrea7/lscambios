@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded',function(){
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#080c12">
 <title>LS Cambios — Tu dinero a tu destino</title>
-<meta name="description" content="Miles confían en nosotros. La mejor tasa del mercado — rápido, seguro y directo a tu cuenta.">
+<meta name="description" content="Casa de cambio digital. PayPal, Binance, Zinli, Airtm, Wally a Bolívares.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -297,6 +297,25 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .cpb{background:rgba(0,200,150,.1);border:1px solid rgba(0,200,150,.18);color:var(--g);padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--fn)}
 
 .trade-layout{display:grid;grid-template-columns:1fr 320px;gap:16px}
+
+/* ── Trade Tabs ── */
+.trade-tabs{display:none;gap:0;border-bottom:2px solid var(--brd);margin-bottom:16px}
+.trade-tab{
+  flex:1;padding:12px 8px;font-size:13px;font-weight:700;font-family:var(--fn);
+  background:none;border:none;color:var(--t2);cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-2px;
+  transition:color .15s,border-color .15s;display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.trade-tab.on{color:var(--g);border-bottom-color:var(--g)}
+.trade-tab i{font-size:16px}
+.trade-tab-badge{
+  background:var(--red);color:#fff;font-size:9px;font-weight:700;
+  border-radius:50px;padding:1px 5px;min-width:16px;text-align:center;
+  display:none;
+}
+.trade-tab-badge.on{display:inline-block}
+.trade-tab-pane{display:none;flex-direction:column;gap:14px}
+.trade-tab-pane.on{display:flex}
 .sum-row{display:flex;justify-content:space-between;align-items:center;padding:10px 18px;border-bottom:1px solid rgba(255,255,255,.03);font-size:12px}
 .sum-row:last-child{border-bottom:none}
 .sum-k{color:var(--t2)}
@@ -430,6 +449,16 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 @media(max-width:800px){
   /* ── Layout general ── */
   .trade-layout{grid-template-columns:1fr}
+  .trade-tabs{display:flex}
+  .trade-layout > div:first-child,.trade-layout > .card.chat-box{display:none}
+  .trade-tab-pane.on{display:flex}
+  #btn-go-chat{display:block!important}
+@media(min-width:801px){
+  #btn-go-chat{display:none!important}
+  #trade-tabs{display:none!important}
+  .trade-tab-pane{display:flex!important}
+  .trade-layout > div,.trade-layout > .card.chat-box{display:flex!important}
+}
   .a-chat-g{grid-template-columns:1fr;height:auto}
   .op-panel{max-height:200px}
   .dp-sb{display:none}
@@ -1114,10 +1143,26 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       </div>
       
       <div class="dv" id="dv-trade">
-        <div class="dv-h">Operación en curso 🔄</div><div class="dv-s">Adjunta el comprobante en el chat.</div>
+        <div class="dv-h">Operación en curso 🔄</div>
+        <div class="dv-s">Adjunta el comprobante en el chat.</div>
+
+        <!-- Pestañas — solo visibles en móvil -->
+        <div class="trade-tabs" id="trade-tabs">
+          <button class="trade-tab on" id="ttab-info" onclick="tradeTab('info')">
+            <i class="ph-fill ph-receipt"></i> Datos de Pago
+          </button>
+          <button class="trade-tab" id="ttab-chat" onclick="tradeTab('chat')">
+            <i class="ph-fill ph-chats-circle"></i> Chat P2P
+            <span class="trade-tab-badge" id="chat-unread-badge">0</span>
+          </button>
+        </div>
+
+        <!-- Desktop: grid 2 columnas — Mobile: pestañas -->
         <div class="trade-layout">
-          <div style="display:flex;flex-direction:column;gap:14px">
-            
+
+          <!-- Panel izquierdo / Pestaña "Datos de Pago" -->
+          <div class="trade-tab-pane on" id="tpane-info">
+
             <div class="card">
               <div class="card-hdr"><span class="card-title">Resumen</span><span id="trd-badge"></span></div>
               <div class="sum-row"><span class="sum-k">ID</span><span class="sum-v" id="trd-id" style="font-family:var(--mono);color:var(--g)">—</span></div>
@@ -1126,12 +1171,12 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
               <div class="sum-row"><span class="sum-k">Envías</span><span class="sum-v ui-col-y" id="trd-send">—</span></div>
               <div class="sum-row"><span class="sum-k">Recibes</span><span class="sum-v ui-col-g" id="trd-get">—</span></div>
             </div>
-            
+
             <div class="card" id="trd-payment-card">
               <div class="card-hdr" id="trd-payment-hdr"><span class="card-title" id="trd-payment-title">📲 Envía tu pago</span></div>
               <div id="trd-payment-body" style="padding:14px 18px;display:flex;flex-direction:column;gap:8px"></div>
             </div>
-            
+
             <div class="card">
               <div class="card-hdr"><span class="card-title">Estado de la operación</span></div>
               <div id="trd-timer-box" style="display:none;margin:14px 14px 0;padding:14px;background:rgba(245,184,0,.06);border:1px solid rgba(245,184,0,.2);border-radius:var(--r);text-align:center">
@@ -1144,7 +1189,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
               <div style="padding:8px 14px 14px"><button class="btn red full sm" onclick="dispute()">⚠️ Reportar problema</button></div>
             </div>
 
-            <!-- ── MENSAJE DE RESPONSABILIDAD ANTI-ESTAFA ─────────────── -->
             <div class="card" id="compliance-card" style="display:none;border-color:rgba(245,184,0,.25)">
               <div class="card-hdr" style="border-bottom-color:rgba(245,184,0,.2);background:rgba(245,184,0,.04)">
                 <span class="card-title" style="color:var(--yellow)">📋 Mensaje de Responsabilidad</span>
@@ -1159,10 +1203,23 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
                 <p style="font-size:10px;color:var(--red);font-weight:700;margin-top:10px;text-align:center;letter-spacing:.3px">⚠️ ENVIAR CON FACTURA DE PAGO QUE LLEGUE A SU CORREO</p>
               </div>
             </div>
+
+            <!-- Botón ir al chat — solo en móvil -->
+            <button class="btn g full" style="display:none" id="btn-go-chat" onclick="tradeTab('chat')">
+              <i class="ph-fill ph-chats-circle"></i> Ir al Chat P2P →
+            </button>
+
           </div>
-          
-          <div class="card chat-box">
-            <div class="card-hdr"><div><div class="card-title" id="chat-id">Chat P2P</div><div style="font-size:10px;color:var(--t2);margin-top:1px">Con LS Cambios</div></div><div id="chat-st"></div></div>
+
+          <!-- Panel derecho / Pestaña "Chat P2P" -->
+          <div class="card chat-box trade-tab-pane" id="tpane-chat">
+            <div class="card-hdr">
+              <div>
+                <div class="card-title" id="chat-id">Chat P2P</div>
+                <div style="font-size:10px;color:var(--t2);margin-top:1px">Con LS Cambios</div>
+              </div>
+              <div id="chat-st"></div>
+            </div>
             <div id="notif-banner" style="display:none;padding:8px 14px;background:rgba(0,102,255,.1);border-bottom:1px solid rgba(0,102,255,.2);font-size:11px;color:var(--blue);display:flex;align-items:center;justify-content:space-between;gap:8px">
               <span>🔔 Activa las notificaciones para saber cuando LS Cambios te responda</span>
               <button onclick="requestNotifPerm().then(updateNotifBanner)" style="font-size:10px;font-weight:700;background:var(--blue);color:#fff;border:none;border-radius:5px;padding:3px 10px;cursor:pointer;font-family:var(--fn)">Activar</button>
@@ -1175,6 +1232,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
               <button class="chat-send" onclick="sendMsg()"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
             </div>
           </div>
+
         </div>
       </div>
       
@@ -1430,7 +1488,14 @@ const _AH      = 'b0be4eccdbc807053775c62524f83067ead0f1b00579fefc5aab17778e81c1
 
 const SUPABASE_URL = 'https://pusrbmnxmgfwyatdkiql.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_wmh9SkAoIr6dbHE53YcY7w_QnvXdtJg';
-const db           = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let db = null;
+try {
+  if(typeof supabase !== 'undefined' && supabase.createClient){
+    db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  } else {
+    console.warn('[LS] Supabase CDN no cargó — modo offline activado');
+  }
+} catch(e){ console.warn('[LS] Error iniciando Supabase:', e.message); }
 
 // ── VAPID PUBLIC KEY (Web Push) ──────────────────────────────────────
 const VAPID_PUBLIC = 'BNtoW1UZBvdt0OIf-GlDLad-BGjh2FV0Kup8nHY4ORUEruG5dfZertSfOy6KBKkBsHyqdTwNW0mGwRJ844N5gVY';
@@ -1490,7 +1555,13 @@ function sbErr(fn, error){
   return true;
 }
 
+function _dbOk(fn){
+  if(!db){console.warn('['+fn+'] Supabase no disponible');return false;}
+  return true;
+}
+
 async function sbGetUser(email){
+  if(!_dbOk('sbGetUser')) return null;
   const{data,error}=await db.from('clientes').select('*').eq('email',email.toLowerCase()).maybeSingle();
   if(sbErr('sbGetUser',error)) return null;
   if(!data) return null;
@@ -1498,15 +1569,18 @@ async function sbGetUser(email){
 }
 
 async function sbSaveKyc(email,photoB64){
+  if(!_dbOk('sbSaveKyc')) return false;
   const{error}=await db.from('clientes').update({kyc_status:'pending',kyc_photo:photoB64,kyc_date:tnowISO(),kyc_reason:null}).eq('email',email.toLowerCase());
   return !error;
 }
 async function sbUpdateKyc(email,status,reason){
+  if(!_dbOk('sbUpdateKyc')) return false;
   const upd={kyc_status:status}; if(reason)upd.kyc_reason=reason;
   const{error}=await db.from('clientes').update(upd).eq('email',email.toLowerCase());
   return !error;
 }
 async function sbSaveUser(email, ud){
+  if(!_dbOk('sbSaveUser')) return false;
   const payload={
     email:       email.toLowerCase(),
     nombre:      ud.nombre,
@@ -1527,6 +1601,7 @@ async function sbSaveUser(email, ud){
 }
 
 async function sbGetAllUsers(){
+  if(!_dbOk('sbGetAllUsers')) return {};
   const{data,error}=await db.from('clientes').select('*').order('created_at',{ascending:false});
   if(sbErr('sbGetAllUsers',error)) return {};
   if(!data) return {};
@@ -1554,6 +1629,7 @@ function _mapUser(d){
 }
 
 async function sbGetOps(email){
+  if(!_dbOk('sbGetOps')) return [];
   const{data,error}=await db.from('operaciones')
     .select('*')
     .eq('cliente_email',email.toLowerCase())
@@ -1564,6 +1640,7 @@ async function sbGetOps(email){
 }
 
 async function sbCreateOp(email, op){
+  if(!_dbOk('sbCreateOp')) return false;
   const payload={
     id:            op.id,
     cliente_email: email.toLowerCase(),
@@ -1580,12 +1657,14 @@ async function sbCreateOp(email, op){
 }
 
 async function sbUpdateOpEstado(opId, estado){
+  if(!_dbOk('sbUpdateOpEstado')) return false;
   const{error}=await db.from('operaciones').update({estado,updated_at:tnowISO()}).eq('id',opId);
   if(sbErr('sbUpdateOpEstado',error)) return false;
   return true;
 }
 
 async function sbGetAllOps(){
+  if(!_dbOk('sbGetAllOps')) return [];
   const{data,error}=await db.from('operaciones')
     .select('*, clientes(nombre,apellido)')
     .order('created_at',{ascending:false});
@@ -1608,6 +1687,7 @@ function _mapOp(d){
 }
 
 async function sbGetMsgs(opId){
+  if(!_dbOk('sbGetMsgs')) return [];
   const{data,error}=await db.from('mensajes')
     .select('*').eq('op_id',opId)
     .order('ts',{ascending:true});
@@ -1617,6 +1697,7 @@ async function sbGetMsgs(opId){
 }
 
 async function sbSendMsg(opId, msg){
+  if(!_dbOk('sbSendMsg')) return false;
   const payload={
     op_id:     opId,
     from_role: msg.from,
@@ -1641,8 +1722,8 @@ function _mapMsg(d){
 }
 
 async function sbLoadRates(){
+  if(!_dbOk('sbLoadRates')) return;
   try{
-    
     const tout = new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),4000));
     const req  = db.from('tasas').select('data').eq('id',1).maybeSingle();
     const race = await Promise.race([req, tout]);
@@ -1662,6 +1743,7 @@ async function sbLoadRates(){
 }
 
 async function sbSaveRates(){
+  if(!_dbOk('sbSaveRates')) return false;
   const toSave={...RATES, adminPM:ADMIN_PM, horario:ADMIN_HORARIO, wlsUsdt:WLS.usdt?.val||''};
   const{error}=await db.from('tasas').upsert({id:1,data:toSave},{onConflict:'id'});
   if(sbErr('sbSaveRates',error)) return false;
@@ -1669,6 +1751,7 @@ async function sbSaveRates(){
 }
 
 async function logAct(type, data){
+  if(!_dbOk('logAct')) return;
   const payload={
     type,
     email:  data.email  || null,
@@ -1677,7 +1760,6 @@ async function logAct(type, data){
     ts:     tnowISO()
   };
   const{error}=await db.from('actividad').insert(payload);
-  
   if(error) console.warn('[logAct]', error.message);
 }
 
@@ -2406,6 +2488,7 @@ function openTradeUI(opId,op){
   }
   document.querySelectorAll('.dv').forEach(d=>d.classList.remove('on'));
   document.getElementById('dv-trade').classList.add('on');
+  _initTradeTabs();
   setupRealtime(opId);
   startStatusPoll(opId);
 }
@@ -3181,15 +3264,64 @@ document.addEventListener('visibilitychange', ()=>{
   if(document.visibilityState === 'visible') setBadgeTitle(0);
 });
 
+// ── Trade Tabs ────────────────────────────────────────────
+let _unreadChat=0;
+
+function tradeTab(tab){
+  // tabs
+  document.querySelectorAll('.trade-tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.trade-tab-pane').forEach(p=>p.classList.remove('on'));
+  const tabEl=document.getElementById('ttab-'+tab);
+  const paneEl=document.getElementById('tpane-'+tab);
+  if(tabEl)tabEl.classList.add('on');
+  if(paneEl)paneEl.classList.add('on');
+  // show "Ir al chat" btn on info tab only on mobile
+  const goChat=document.getElementById('btn-go-chat');
+  if(goChat)goChat.style.display=tab==='info'?'':'none';
+  // clear unread when opening chat
+  if(tab==='chat'){
+    _unreadChat=0;
+    const badge=document.getElementById('chat-unread-badge');
+    if(badge){badge.textContent='0';badge.classList.remove('on');}
+    // scroll to bottom
+    setTimeout(()=>{const m=document.getElementById('chat-msgs');if(m)m.scrollTop=m.scrollHeight;},100);
+  }
+}
+
+function _incUnread(){
+  // only count if not on chat tab
+  const chatTab=document.getElementById('ttab-chat');
+  if(chatTab&&chatTab.classList.contains('on'))return;
+  _unreadChat++;
+  const badge=document.getElementById('chat-unread-badge');
+  if(badge){badge.textContent=_unreadChat;badge.classList.add('on');}
+}
+
+function _initTradeTabs(){
+  // Reset to info tab when opening trade view
+  tradeTab('info');
+  _unreadChat=0;
+  const badge=document.getElementById('chat-unread-badge');
+  if(badge){badge.textContent='0';badge.classList.remove('on');}
+  // Show go-chat button on mobile
+  const goChat=document.getElementById('btn-go-chat');
+  if(goChat)goChat.style.display='';
+}
+
 function setupRealtime(opId){
-  if(realtimeChannel){db.removeChannel(realtimeChannel);realtimeChannel=null}
+  if(!_dbOk('setupRealtime')) return;
+  if(realtimeChannel){try{db.removeChannel(realtimeChannel)}catch(e){}; realtimeChannel=null}
   realtimeChannel=db.channel('lsc-op-'+opId)
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'mensajes',filter:'op_id=eq.'+opId},payload=>{
       const m=payload.new;
       const msg=_mapMsg(m);
       const el =document.getElementById('chat-msgs');
       const elA=document.getElementById('a-msgs');
-      if(el &&curOpId===opId){el.appendChild(buildMsgDiv(msg,false));el.scrollTop=el.scrollHeight}
+      if(el &&curOpId===opId){
+        el.appendChild(buildMsgDiv(msg,false));
+        el.scrollTop=el.scrollHeight;
+        if(msg.from==='admin'||msg.from==='sys') _incUnread();
+      }
       if(elA&&aCur&&aCur.opId===opId){elA.appendChild(buildMsgDiv(msg,true));elA.scrollTop=elA.scrollHeight}
       
       if(msg.from==='admin'&&el&&curOpId===opId){
@@ -3225,6 +3357,7 @@ function setupRealtime(opId){
 // ════ REFERIDOS ════════════════════════════════════════════════════════
 
 async function sbGetReferidos(referrerEmail){
+  if(!_dbOk('sbGetReferidos')) return [];
   try{
     const{data,error}=await db.from('referidos')
       .select('*').eq('referrer_email',referrerEmail.toLowerCase())
@@ -3235,6 +3368,7 @@ async function sbGetReferidos(referrerEmail){
 }
 
 async function sbGetAllReferidos(){
+  if(!_dbOk('sbGetAllReferidos')) return [];
   try{
     const{data,error}=await db.from('referidos').select('*').order('created_at',{ascending:false});
     if(error){console.warn('[sbGetAllReferidos]',error.message);return[];}
@@ -3243,6 +3377,7 @@ async function sbGetAllReferidos(){
 }
 
 async function sbGetUserByCode(code){
+  if(!_dbOk('sbGetUserByCode')) return null;
   try{
     const{data,error}=await db.from('clientes').select('email,nombre,apellido').eq('codigo',code.toUpperCase().trim()).maybeSingle();
     if(error||!data)return null;
@@ -3251,6 +3386,7 @@ async function sbGetUserByCode(code){
 }
 
 async function sbCreateReferido(referrerEmail,referredEmail,referredName){
+  if(!_dbOk('sbCreateReferido')) return false;
   try{
     const{error}=await db.from('referidos').insert({
       referrer_email:referrerEmail.toLowerCase(),
@@ -3264,6 +3400,7 @@ async function sbCreateReferido(referrerEmail,referredEmail,referredName){
 }
 
 async function sbQualifyReferido(referredEmail,opAmount){
+  if(!_dbOk('sbQualifyReferido')) return false;
   try{
     const{error}=await db.from('referidos')
       .update({qualified:true,qualified_at:tnowISO(),op_amount:opAmount})
@@ -3274,6 +3411,7 @@ async function sbQualifyReferido(referredEmail,opAmount){
 }
 
 async function sbMarkReferidoPaid(id){
+  if(!_dbOk('sbMarkReferidoPaid')) return false;
   try{
     const{error}=await db.from('referidos').update({paid:true,paid_at:tnowISO()}).eq('id',id);
     if(error){console.warn('[sbMarkReferidoPaid]',error.message);return false;}
