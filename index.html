@@ -1194,7 +1194,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
             <div class="card" id="compliance-card" style="display:none;border-color:rgba(245,184,0,.25)">
               <div class="card-hdr" style="border-bottom-color:rgba(245,184,0,.2);background:rgba(245,184,0,.04)">
                 <span class="card-title" style="color:var(--yellow)">📋 Mensaje de Responsabilidad</span>
-                <span style="font-size:10px;color:var(--t3)">Anti-estafa</span>
+                <span style="font-size:10px;color:var(--t3)"></span>
               </div>
               <div style="padding:14px 18px">
                 <p style="font-size:11px;color:var(--t2);line-height:1.65;margin-bottom:10px">
@@ -2270,7 +2270,7 @@ function calcOp(){
     const r=(RATES.usdt_compra&&RATES.usdt_compra[plat])||{t:0.97};
     if(rl)rl.textContent='RECIBIRÍAS EN '+PN[plat].toUpperCase();
     rv.textContent='$'+fmt(amt*r.t,2)+' USD';
-    rd.textContent=`Envías ${fmt(amt,4)} USDT (BEP20) · Tasa 1 USDT = $${r.t} en ${PN[plat]}`;
+    rd.textContent=`Envías ${fmt(amt,2)} USDT (BEP20) · Tasa 1 USDT = $${r.t} en ${PN[plat]}`;
   }else{
     const r=(RATES.usdt_venta&&RATES.usdt_venta[plat])||{t:0.96};
     if(rl)rl.textContent='RECIBIRÍAS EN USDT (BEP20)';
