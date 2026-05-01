@@ -331,7 +331,9 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .step-t{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px}
 .step-d{font-size:11px;color:var(--t2);line-height:1.55}
 
-.chat-box{display:flex;flex-direction:column;height:440px}
+.chat-box{flex-direction:column;height:440px}
+.chat-box:not(.trade-tab-pane){display:flex}
+.chat-box.trade-tab-pane{height:auto;min-height:440px}
 .chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin}
 .cm{display:flex;flex-direction:column;max-width:78%}
 .cm.me{align-self:flex-end;align-items:flex-end}
@@ -448,16 +450,16 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 
 @media(max-width:800px){
   /* ── Layout general ── */
-  .trade-layout{grid-template-columns:1fr}
+  .trade-layout{grid-template-columns:1fr;display:block}
   .trade-tabs{display:flex}
-  .trade-layout > div:first-child,.trade-layout > .card.chat-box{display:none}
-  .trade-tab-pane.on{display:flex}
+  .trade-tab-pane{display:none!important}
+  .trade-tab-pane.on{display:flex!important}
   #btn-go-chat{display:block!important}
 @media(min-width:801px){
   #btn-go-chat{display:none!important}
   #trade-tabs{display:none!important}
+  .trade-layout{display:grid!important}
   .trade-tab-pane{display:flex!important}
-  .trade-layout > div,.trade-layout > .card.chat-box{display:flex!important}
 }
   .a-chat-g{grid-template-columns:1fr;height:auto}
   .op-panel{max-height:200px}
