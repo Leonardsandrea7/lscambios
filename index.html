@@ -1515,8 +1515,8 @@ let _sess = null;
 const _SK  = 'lsc_s3';
 const _AK  = 'lsc_a3';
 
-const gS  = ()=>{ if(_sess) return _sess; try{const v=sessionStorage.getItem(_SK);_sess=v?JSON.parse(v):null;return _sess}catch{return null} };
-const sS  = u=>{ _sess=u; try{sessionStorage.setItem(_SK,JSON.stringify(u))}catch{} };
+const gS  = ()=>{ if(_sess) return _sess; try{const v=sessionStorage.getItem(_SK)||localStorage.getItem(_SK);_sess=v?JSON.parse(v):null;return _sess}catch{return null} };
+const sS  = u=>{ _sess=u; try{sessionStorage.setItem(_SK,JSON.stringify(u))}catch{}; try{localStorage.setItem(_SK,JSON.stringify(u))}catch{} };
 const clS = ()=>{ _sess=null; try{sessionStorage.removeItem(_SK)}catch{} };
 
 const isAdm  = ()=>{ try{if(sessionStorage.getItem(_AK)!=='1')return false;const ts=sessionStorage.getItem('lsc_ats');if(ts&&Date.now()-+ts>86400000){sessionStorage.removeItem(_AK);return false}return true}catch{return false} };
@@ -1565,7 +1565,7 @@ function sbErr(fn, error){
   return true;
 }
 
-async function _dbOk(fn){
+function _dbOk(fn){
   if(!db){console.warn('['+fn+'] Supabase no disponible');return false;}
   return true;
 }
@@ -1620,7 +1620,7 @@ async function sbGetAllUsers(){
   return map;
 }
 
-async function _mapUser(d){
+function _mapUser(d){
   return{
     nombre: d.nombre, apellido: d.apellido,
     name:   (d.nombre||'')+' '+(d.apellido||''),
@@ -1687,7 +1687,7 @@ async function sbGetAllOps(){
   }));
 }
 
-async function _mapOp(d){
+function _mapOp(d){
   return{
     id:   d.id, plat: d.plat, dir: d.dir,
     send: d.send_txt, get: d.get_txt, st: d.estado,
@@ -1720,7 +1720,7 @@ async function sbSendMsg(opId, msg){
   return true;
 }
 
-async function _mapMsg(d){
+function _mapMsg(d){
   const esImg = d.tipo==='img';
   return{
     from: d.from_role,
@@ -1882,7 +1882,7 @@ function copyVal(t){
 function openLB(s){document.getElementById('lbImg').src=s;document.getElementById('lb').classList.add('on')}
 const _eyeOpen=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
 const _eyeOff=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
-async function togglePw(id,btn){const inp=document.getElementById(id);if(!inp)return;const show=inp.type==='password';inp.type=show?'text':'password';btn.innerHTML=show?_eyeOff:_eyeOpen;}
+function togglePw(id,btn){const inp=document.getElementById(id);if(!inp)return;const show=inp.type==='password';inp.type=show?'text':'password';btn.innerHTML=show?_eyeOff:_eyeOpen;}
 
 async function tgNotify(msg){
   try{
@@ -2168,18 +2168,18 @@ async function resendCode(){
   setTimeout(()=>{_resendCooldown=false;if(link){link.style.opacity='1';link.textContent='Reenviar código';}},30000);
 }
 
-async function doLogout(){
+function doLogout(){
   unsubscribePush().catch(()=>{});
   clS(); nsSet('lsc_lv',null); nsSet('lsc_lo',null);
   updLPNav(); goL(); toast('👋 Hasta pronto!');
 }
 
-async function openAdminLogin(){
+function openAdminLogin(){
   try{history.replaceState(null,'',window.location.pathname+'#admin')}catch(e){}
   document.getElementById('admOv').classList.add('on');
   setTimeout(()=>{const el=document.getElementById('adm-pw');if(el)el.focus();},150);
 }
-async function closeAdmOv(){document.getElementById('admOv').classList.remove('on');if(window.location.hash==='#admin')history.pushState('',document.title,window.location.pathname+window.location.search)}
+function closeAdmOv(){document.getElementById('admOv').classList.remove('on');if(window.location.hash==='#admin')history.pushState('',document.title,window.location.pathname+window.location.search)}
 async function _h256(s){const b=new TextEncoder().encode(s);const hb=await crypto.subtle.digest('SHA-256',b);return Array.from(new Uint8Array(hb)).map(x=>x.toString(16).padStart(2,'0')).join('')}
 async function checkAdmin(){
   const pw=document.getElementById('adm-pw').value;
@@ -2188,9 +2188,9 @@ async function checkAdmin(){
   if(h===_AH){setAdm();document.getElementById('admOv').classList.remove('on');try{history.replaceState(null,'',window.location.pathname+'#admin')}catch(e){};goA()}
   else{err.textContent='Contraseña incorrecta.';err.classList.add('on');document.getElementById('adm-pw').value=''}
 }
-async function adminLogout(){clAdm();nsSet('lsc_av',null);window.location.hash='';goL();toast('👋 Sesión admin cerrada')}
+function adminLogout(){clAdm();nsSet('lsc_av',null);window.location.hash='';goL();toast('👋 Sesión admin cerrada')}
 
-async function showDV(name){
+function showDV(name){
   document.querySelectorAll('.dv').forEach(d=>d.classList.remove('on'));
   document.querySelectorAll('.sb-i,.mn-i').forEach(b=>b.classList.remove('on'));
   ['dv-','si-','mn-'].forEach(p=>{const e=document.getElementById(p+name);if(e)e.classList.add('on')});
@@ -2403,7 +2403,7 @@ function setMode(m){
   }
   calcOp();updWallet();
 }
-async function _getPlat(){
+function _getPlat(){
   const sel=document.getElementById(_opMode==='usdt'?'op-plat-usdt':'op-plat');
   return sel?sel.value:'paypal';
 }
@@ -2466,13 +2466,18 @@ async function startOp(){
 }
 
 async function openTrade(opId){
-  const sess=gS(); if(!sess)return;
-  const ops=await sbGetOps(sess.email);
-  const op=ops.find(o=>o.id===opId); if(!op)return;
-  op.chat=await sbGetMsgs(opId);
+  const sess=gS();
+  if(!sess){toast('Sesión expirada. Vuelve a iniciar sesión.','err');return;}
+  let ops=[];
+  try{ ops=await sbGetOps(sess.email); }catch(e){ toast('Error cargando operaciones.','err'); return; }
+  const op=ops.find(o=>String(o.id)===String(opId));
+  if(!op){toast('No se encontró la operación.','err');return;}
+  let chat=[];
+  try{ chat=await sbGetMsgs(opId); }catch(e){}
+  op.chat=chat;
   openTradeUI(opId,op);
   // Pedir permiso push silenciosamente la primera vez que entra al chat
-  if(Notification.permission === 'default'){
+  if('Notification' in window && Notification.permission === 'default'){
     setTimeout(()=>requestNotifPerm(), 2000);
   }
 }
@@ -2676,7 +2681,7 @@ function dispute(){
   sbSendMsg(curOpId,{from:'sys',text:'⚠️ Reporte enviado. Un asesor te contactará.',time:tnow()});
 }
 
-async function showAV(name){
+function showAV(name){
   document.querySelectorAll('.av').forEach(a=>a.classList.remove('on'));
   document.querySelectorAll('.ap-sb-i,.ap-mn-i').forEach(b=>b.classList.remove('on'));
   const av=document.getElementById('av-'+name), sb=document.getElementById('asi-'+name), mb=document.getElementById('ami-'+name);
@@ -2772,10 +2777,10 @@ function buildCliTbl(users){
   }).join('')}</tbody></table>`;
 }
 
-async function toggleUx(id){const e=document.getElementById(id);if(e)e.classList.toggle('on')}
+function toggleUx(id){const e=document.getElementById(id);if(e)e.classList.toggle('on')}
 
 let aCur=null;
-async function admGoChat(uem,opId){
+function admGoChat(uem,opId){
   showAV('chats');
   setTimeout(()=>{const el=document.getElementById('oli-'+opId);admOpenChatDB(uem,opId,el)},120);
 }
@@ -2926,10 +2931,10 @@ async function saveUsdtWallet(){
   const inp=document.getElementById('adm-usdt-wallet');if(!inp)return;
   WLS.usdt.val=inp.value.trim();await sbSaveRates();toast('💾 Wallet USDT guardada','ok');
 }
-async function loadZelleEmail(){
+function loadZelleEmail(){
   loadHorarioAdmin();
 }
-async function loadAdminPM(){
+function loadAdminPM(){
   const b=document.getElementById('adm-pm-banco'),t=document.getElementById('adm-pm-tel'),c=document.getElementById('adm-pm-ci');
   if(b)b.value=ADMIN_PM.banco||'';if(t)t.value=ADMIN_PM.tel||'';if(c)c.value=ADMIN_PM.cedula||'';
 }
@@ -2947,7 +2952,7 @@ async function saveZelleEmail(){
 }
 
 let actFilter='all';
-async function filterAct(f){
+function filterAct(f){
   actFilter=f;
   document.querySelectorAll('[id^="af-"]').forEach(b=>b.classList.remove('on'));
   const btn=document.getElementById('af-'+f); if(btn)btn.classList.add('on');
@@ -3111,7 +3116,7 @@ let _pushSub   = null;  // PushSubscription actual
 let _notifGranted = false;
 
 // ── Convierte base64url → Uint8Array (necesario para VAPID) ──────────
-async function _b64urlToUint8(base64String){
+function _b64urlToUint8(base64String){
   const p = (base64String + '===').slice(0, base64String.length + (4 - base64String.length % 4) % 4);
   const raw = atob(p.replace(/-/g,'+').replace(/_/g,'/'));
   return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
@@ -3189,12 +3194,12 @@ async function unsubscribePush(){
 }
 
 // ── Solicitar permiso y activar push ─────────────────────────────────
-async function showNotifPrompt(){
+function showNotifPrompt(){
   if(!('Notification' in window))return;
   if(Notification.permission!=='default')return;
   const ov=document.getElementById('notif-prompt-ov');if(ov)ov.style.display='flex';
 }
-async function closeNotifPrompt(){const ov=document.getElementById('notif-prompt-ov');if(ov)ov.style.display='none';}
+function closeNotifPrompt(){const ov=document.getElementById('notif-prompt-ov');if(ov)ov.style.display='none';}
 async function acceptNotifPrompt(){closeNotifPrompt();await requestNotifPerm();}
 
 async function requestNotifPerm(){
@@ -3214,10 +3219,10 @@ async function requestNotifPerm(){
 }
 
 // ── Actualizar banner según estado ───────────────────────────────────
-async function updateNotifBanner(){
+function updateNotifBanner(){
   const b=document.getElementById('notif-banner');
   if(b){const supported='Notification' in window&&'serviceWorker' in navigator;b.style.display=(!supported||Notification.permission==='granted')?'none':'flex';}
-  if(Notification.permission==='granted') closeNotifPrompt();
+  if('Notification' in window && Notification.permission==='granted') closeNotifPrompt();
 }
 
 // ── Notificación del sistema via SW ───────────────────────────────────
@@ -3505,14 +3510,14 @@ function solicitarCanje(){
   window.open('https://wa.me/584147408768?text='+encodeURIComponent(msg),'_blank');
 }
 
-async function copyRefLink(){
+function copyRefLink(){
   const sess=gS(); if(!sess)return;
   const ud=getUser(sess.email); if(!ud)return;
   const refLink=window.location.origin+window.location.pathname+'?ref='+(ud.code||'');
   copyVal(refLink);
 }
 
-async function shareRefWhatsApp(){
+function shareRefWhatsApp(){
   const sess=gS(); if(!sess)return;
   const ud=getUser(sess.email); if(!ud)return;
   const refLink=window.location.origin+window.location.pathname+'?ref='+(ud.code||'');
@@ -3557,7 +3562,7 @@ async function admPayRef(id){
   else toast('❌ Error al actualizar','err');
 }
 
-async function getRefCodeFromURL(){
+function getRefCodeFromURL(){
   try{const p=new URLSearchParams(window.location.search);return(p.get('ref')||'').toUpperCase();}catch{return'';}
 }
 
