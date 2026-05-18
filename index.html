@@ -232,7 +232,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
 /* Cajero panel */
-#cp{display:none}#cp.on{display:flex}
 .cv{display:none}.cv.on{display:block}
 .c-notif-card{padding:14px 16px;border-bottom:1px solid var(--brd);display:flex;gap:12px;align-items:flex-start;cursor:pointer;transition:background .15s}
 .c-notif-card:hover{background:var(--bg3)}
@@ -1099,6 +1098,10 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <span class="sb-badge ui-hidden" id="si-ref-badge">$</span>
       </button>
       <div style="flex:1"></div>
+      <!-- Botón Mi Caja: solo visible para cajeros -->
+      <button class="sb-i ui-hidden" id="si-caja" onclick="goC()" style="color:var(--g);border:1px solid rgba(0,200,150,.2);background:rgba(0,200,150,.06);margin-bottom:6px">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>Mi Caja 🏧
+      </button>
       <button class="sb-i" style="color:var(--red);margin-top:8px" onclick="doLogout()">
         <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Salir
       </button>
@@ -1851,7 +1854,7 @@ async function sbCreateOp(email, op){
     dir:           op.dir,
     send_txt:      op.send,
     get_txt:       op.get,
-    estado:        op.st||'searching',
+    estado:        op.st||'pending',
     created_at:    tnowISO()
   };
   const{error}=await db.from('operaciones').insert(payload);
@@ -2406,6 +2409,9 @@ async function loadDash(){
   const done=hist.filter(o=>o.st==='completed').length;
   const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
   s('dpGreet','Hola, '+ud.nombre+' 👋'); s('dpAv',ud.nombre.charAt(0).toUpperCase()); s('dpNm',ud.nombre);
+  // Mostrar botón Mi Caja si el usuario es cajero
+  const cajabtn=document.getElementById('si-caja');
+  if(cajabtn) cajabtn.classList.toggle('ui-hidden', ud.rol!=='cajero');
   s('ov-tot',hist.length); s('ov-pend',pend); s('ov-done',done);
   const badge=document.getElementById('si-pend');
   if(badge){badge.style.display=pend>0?'inline':'none';badge.textContent=pend}
@@ -2596,7 +2602,7 @@ async function sbAceptarOp(cajeroEmail, opId){
   // Marcar operación con cajero asignado
   const{error:e1}=await db.from('operaciones')
     .update({estado:'pending', cajero_email:cajeroEmail.toLowerCase(), updated_at:tnowISO()})
-    .eq('id',opId).eq('estado','searching');
+    .eq('id',opId).is('cajero_email',null);
   if(e1){console.warn('[sbAceptarOp op]',e1.message);return false;}
   // Marcar cajero ocupado
   await db.from('cajeros').update({op_activa:opId}).eq('email',cajeroEmail.toLowerCase());
@@ -2837,7 +2843,7 @@ async function aceptarOp(){
   clearInterval(_modalTimer);
   // Verificar que la op sigue en búsqueda
   const{data:op}=await db.from('operaciones').select('estado').eq('id',_modalNotif.op_id).maybeSingle();
-  if(!op||op.estado!=='searching'){
+  if(!op||op.cajero_email){
     toast('⚠️ Esta operación ya fue tomada por otro cajero.','err');
     document.getElementById('c-op-modal').style.display='none';
     return;
@@ -3118,7 +3124,7 @@ function showSearchingScreen(opId, op){
     elapsed+=3;
     if(msgEl&&elapsed>=15) msgEl.textContent='Buscando cajero disponible... ('+elapsed+'s)';
     const{data}=await db.from('operaciones').select('estado,cajero_email').eq('id',opId).maybeSingle();
-    if(data&&data.estado!=='searching'){
+    if(data&&data.cajero_email){
       clearInterval(_searchPoll);
       // Cajero encontrado — abrir trade normal
       const msgs=await sbGetMsgs(opId);
@@ -3353,7 +3359,7 @@ async function startOp(){
     sendTxt='$'+fmt(amt,2)+' ('+PN[plat]+')';getTxt=rv+' USDT (BEP20)';
   }
   const id=genId();
-  const op={id,date:new Date().toLocaleDateString('es-VE'),plat,dir,send:sendTxt,get:getTxt,st:'searching',chat:[]};
+  const op={id,date:new Date().toLocaleDateString('es-VE'),plat,dir,send:sendTxt,get:getTxt,st:'pending',chat:[]};
 
   const opOk=await sbCreateOp(sess.email,op);
   if(!opOk){toast('❌ No se pudo crear la operación. Verifica tu conexión.','err');return}
