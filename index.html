@@ -229,19 +229,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .dv{display:none}.dv.on{display:block}
 .dv-h{font-size:18px;font-weight:800;margin-bottom:2px;color:#fff}
 .dv-s{font-size:12px;color:var(--t2);margin-bottom:20px}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
-/* Cajero panel */
-.cv{display:none}.cv.on{display:block}
-.c-notif-card{padding:14px 16px;border-bottom:1px solid var(--brd);display:flex;gap:12px;align-items:flex-start;cursor:pointer;transition:background .15s}
-.c-notif-card:hover{background:var(--bg3)}
-.c-notif-dot{width:8px;height:8px;border-radius:50%;background:var(--g);flex-shrink:0;margin-top:4px;animation:blink 1.4s infinite}
-.c-liq-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--brd)}
-.c-liq-row:last-child{border-bottom:none}
-.cajero-badge-on{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;background:rgba(0,200,150,.12);color:var(--g);border:1px solid rgba(0,200,150,.25);font-size:10px;font-weight:700}
-.cajero-badge-off{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.05);color:var(--t3);border:1px solid var(--brd2);font-size:10px;font-weight:700}
-.ac-row{padding:14px 16px;border-bottom:1px solid var(--brd);display:flex;flex-direction:column;gap:6px}
-.ac-row:last-child{border-bottom:none}
 
 .kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
 .kpi{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r);padding:16px}
@@ -1098,10 +1085,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <span class="sb-badge ui-hidden" id="si-ref-badge">$</span>
       </button>
       <div style="flex:1"></div>
-      <!-- Botón Mi Caja: solo visible para cajeros -->
-      <button class="sb-i ui-hidden" id="si-caja" onclick="goC()" style="color:var(--g);border:1px solid rgba(0,200,150,.2);background:rgba(0,200,150,.06);margin-bottom:6px">
-        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>Mi Caja 🏧
-      </button>
       <button class="sb-i" style="color:var(--red);margin-top:8px" onclick="doLogout()">
         <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Salir
       </button>
@@ -1168,19 +1151,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
           <button class="btn g full" onclick="startOp()" style="font-size:14px;padding:13px">Confirmar operación →</button>
         </div>
       </div>
-
-      <!-- Pantalla: buscando cajero -->
-      <div class="dv" id="dv-searching">
-        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center;min-height:60vh">
-          <div id="search-spinner" style="width:72px;height:72px;border-radius:50%;border:4px solid rgba(0,200,150,.15);border-top-color:var(--g);animation:spin 1s linear infinite;margin-bottom:24px"></div>
-          <div style="font-size:18px;font-weight:800;color:var(--t1);margin-bottom:8px">Buscando cajero disponible</div>
-          <div style="font-size:13px;color:var(--t2);max-width:280px;line-height:1.6;margin-bottom:6px">Estamos conectando tu operación con un cajero activo. Por favor espera.</div>
-          <div id="search-op-id" style="font-size:11px;font-family:var(--mono);color:var(--g);margin-top:12px"></div>
-          <div style="margin-top:32px;font-size:11px;color:var(--t3)" id="search-timeout-msg"></div>
-          <button class="btn ghost sm" style="margin-top:20px;display:none" id="search-cancel-btn" onclick="cancelSearchOp()">Cancelar operación</button>
-        </div>
-      </div>
-
+      
       <div class="dv" id="dv-trade">
         <div class="dv-h">Operación en curso 🔄</div>
         <div class="dv-s">Adjunta el comprobante en el chat.</div>
@@ -1385,9 +1356,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <button class="ap-sb-i" id="asi-referidos" onclick="showAV('referidos')">
         <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Referidos 💸
       </button>
-      <button class="ap-sb-i" id="asi-cajeros" onclick="showAV('cajeros')">
-        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>Cajeros 🏧
-      </button>
     </aside>
     <!-- Nav móvil admin -->
     <div class="ap-mob" id="ap-mob">
@@ -1516,170 +1484,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         </div>
 
       </div>
-      <div class="av" id="av-cajeros">
-        <div class="dv-h">Cajeros 🏧</div>
-        <div class="dv-s">Gestión de operadores · membresía semanal · monitoreo en tiempo real</div>
-        <div class="kpi-row" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr));margin-bottom:16px">
-          <div class="kpi"><div class="kpi-v" id="ac-total">0</div><div class="kpi-l">TOTAL</div></div>
-          <div class="kpi"><div class="kpi-v ui-col-g" id="ac-activos">0</div><div class="kpi-l">ACTIVOS</div></div>
-          <div class="kpi"><div class="kpi-v" style="color:var(--yellow)" id="ac-online">0</div><div class="kpi-l">EN LÍNEA</div></div>
-          <div class="kpi"><div class="kpi-v" style="color:var(--red)" id="ac-vencidos">0</div><div class="kpi-l">VENCIDOS</div></div>
-        </div>
-        <div class="card" style="margin-bottom:14px">
-          <div class="card-hdr">
-            <span class="card-title">Todos los cajeros</span>
-            <button class="btn ghost sm" onclick="loadAdminCajeros()">🔄 Actualizar</button>
-          </div>
-          <div id="ac-body"><div class="empty">Cargando...</div></div>
-        </div>
-        <div style="padding:14px;background:rgba(0,200,150,.04);border:1px solid rgba(0,200,150,.12);border-radius:var(--r);font-size:11px;color:var(--t2);line-height:1.8">
-          <strong class="ui-col-g">ℹ️ Cómo funciona:</strong> Aprueba un cliente como cajero desde la tabla de Clientes. El cajero declara su liquidez y se activa automáticamente cuando hay operaciones que coincidan. La membresía vence a los 7 días; renuévala desde aquí.
-        </div>
-      </div>
-
     </main>
-  </div>
-</div>
-════════════════════════════════════════════════════════════ -->
-<div class="page" id="cp">
-  <div class="ap-layout">
-    <aside class="ap-sb">
-      <div class="ap-sb-logo">🏧 Caja</div>
-      <button class="ap-sb-i on" id="csi-inicio" onclick="showCV('inicio')">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Inicio 🏠
-      </button>
-      <button class="ap-sb-i" id="csi-liquidez" onclick="showCV('liquidez')">
-        <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Liquidez 💧
-      </button>
-      <button class="ap-sb-i" id="csi-ops" onclick="showCV('ops')">
-        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Operaciones 📋
-      </button>
-      <button class="ap-sb-i" id="csi-cuentas" onclick="showCV('cuentas')">
-        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Mis Cuentas 🏦
-      </button>
-      <button class="ap-sb-i" style="margin-top:auto;color:var(--red)" onclick="doLogout()">
-        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Salir
-      </button>
-    </aside>
-    <main class="ap-main">
-
-      <!-- INICIO -->
-      <div class="av on" id="cv-inicio">
-        <div class="dv-h" id="c-greet">Mi Caja 🏧</div>
-        <div class="dv-s">Panel de operador · LS Cambios</div>
-
-        <!-- Membresía -->
-        <div id="c-membresia-box" style="margin-bottom:16px;padding:14px 16px;border-radius:var(--r2);border:1px solid rgba(247,147,26,.3);background:rgba(247,147,26,.05)">
-          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-            <div>
-              <div style="font-size:11px;color:var(--red);font-weight:700;letter-spacing:.5px">MEMBRESÍA SEMANAL</div>
-              <div id="c-mem-status" style="font-size:13px;font-weight:700;color:var(--t1);margin-top:3px">Cargando...</div>
-            </div>
-            <div id="c-mem-dias" style="font-size:28px;font-weight:900;color:var(--yellow);font-family:var(--mono)">—</div>
-          </div>
-          <div id="c-mem-msg" style="font-size:11px;color:var(--t2);margin-top:6px"></div>
-        </div>
-
-        <!-- Switch disponible -->
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r2);margin-bottom:16px">
-          <div>
-            <div style="font-size:13px;font-weight:700">Estado</div>
-            <div id="c-estado-lbl" style="font-size:11px;color:var(--t2);margin-top:2px">Cargando...</div>
-          </div>
-          <button id="c-toggle-btn" onclick="toggleDisponible()" style="padding:8px 18px;border-radius:20px;border:none;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s">—</button>
-        </div>
-
-        <!-- KPIs -->
-        <div class="kpi-row" style="margin-bottom:16px">
-          <div class="kpi"><div class="kpi-v ui-col-g" id="c-kpi-hoy">0</div><div class="kpi-l">HOY</div></div>
-          <div class="kpi"><div class="kpi-v" style="color:var(--yellow)" id="c-kpi-semana">0</div><div class="kpi-l">SEMANA</div></div>
-          <div class="kpi"><div class="kpi-v" id="c-kpi-total">0</div><div class="kpi-l">TOTAL OPS</div></div>
-        </div>
-
-        <!-- Operación activa -->
-        <div class="card" id="c-op-activa-card" style="display:none;margin-bottom:16px;border-color:rgba(0,200,150,.3)">
-          <div class="card-hdr"><span class="card-title" style="color:var(--g)">⚡ Operación activa</span></div>
-          <div id="c-op-activa-body" style="padding:14px"></div>
-        </div>
-
-        <!-- Bandeja de notificaciones -->
-        <div class="card">
-          <div class="card-hdr">
-            <span class="card-title">📬 Solicitudes entrantes</span>
-            <span id="c-notif-count" style="font-size:10px;color:var(--t2)">esperando...</span>
-          </div>
-          <div id="c-notif-list" style="padding:0"><div class="empty" style="padding:24px">Sin solicitudes nuevas</div></div>
-        </div>
-      </div>
-
-      <!-- LIQUIDEZ -->
-      <div class="av" id="cv-liquidez">
-        <div class="dv-h">Liquidez 💧</div>
-        <div class="dv-s">Declara cuánto tienes disponible por moneda</div>
-        <div style="padding:10px 0 14px;font-size:12px;color:var(--t2);line-height:1.6">
-          ⚠️ La liquidez se <strong>descuenta automáticamente</strong> al completar cada operación. Mantén los montos actualizados.
-        </div>
-        <div id="c-liq-grid" style="display:grid;gap:10px"></div>
-        <button class="btn g full" style="margin-top:18px" onclick="saveLiquidez()">💾 Guardar liquidez</button>
-      </div>
-
-      <!-- OPERACIONES -->
-      <div class="av" id="cv-ops">
-        <div class="dv-h">Mis Operaciones 📋</div>
-        <div class="dv-s">Historial completo como cajero</div>
-        <div class="card"><div id="c-ops-body"><div class="empty">Cargando...</div></div></div>
-      </div>
-
-      <!-- CUENTAS -->
-      <div class="av" id="cv-cuentas">
-        <div class="dv-h">Mis Cuentas 🏦</div>
-        <div class="dv-s">Datos que verán los clientes al pagarte</div>
-        <div style="display:grid;gap:12px" id="c-cuentas-grid"></div>
-        <button class="btn g full" style="margin-top:18px" onclick="saveCuentasCajero()">💾 Guardar cuentas</button>
-      </div>
-
-    </main>
-  </div>
-</div>
-
-<!-- Modal: nueva operación llega al cajero -->
-<div id="c-op-modal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center">
-  <div style="background:var(--bg1);border:1px solid rgba(0,200,150,.35);border-radius:var(--r2);padding:24px;max-width:380px;width:90%;animation:slideUp .3s ease">
-    <div style="text-align:center;margin-bottom:16px">
-      <div style="font-size:32px;margin-bottom:6px">🔔</div>
-      <div style="font-size:15px;font-weight:800;color:var(--g)">Nueva operación disponible</div>
-    </div>
-    <div id="c-op-modal-body" style="background:var(--bg2);border-radius:var(--r);padding:14px;margin-bottom:16px;font-size:12px;line-height:1.8"></div>
-    <div id="c-op-timer-bar" style="height:4px;background:rgba(0,200,150,.15);border-radius:2px;margin-bottom:14px;overflow:hidden">
-      <div id="c-op-timer-fill" style="height:100%;background:var(--g);transition:width 1s linear;width:100%"></div>
-    </div>
-    <div id="c-op-timer-lbl" style="text-align:center;font-size:11px;color:var(--t2);margin-bottom:14px">Tienes <strong id="c-op-secs">45</strong> segundos para decidir</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <button class="btn ghost" onclick="rechazarOp()">✖ Rechazar</button>
-      <button class="btn g" onclick="aceptarOp()">✔ Aceptar</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal: chat cajero-cliente -->
-<div id="c-chat-modal" style="display:none;position:fixed;inset:0;z-index:9100;background:var(--bg0);flex-direction:column">
-  <div style="background:var(--bg1);border-bottom:1px solid var(--brd);padding:12px 16px;display:flex;align-items:center;gap:12px">
-    <button onclick="closeCChat()" style="background:none;border:none;color:var(--t1);font-size:18px;cursor:pointer;line-height:1">←</button>
-    <div style="flex:1">
-      <div style="font-size:13px;font-weight:700" id="cc-title">Chat operación</div>
-      <div style="font-size:10px;color:var(--t2)" id="cc-sub"></div>
-    </div>
-    <div id="cc-badge"></div>
-    <div style="display:flex;gap:8px">
-      <button class="btn g sm" id="cc-confirm-btn" onclick="cajeroConfirmar()" style="display:none">✅ Confirmar pago</button>
-      <button class="btn ghost sm" id="cc-complete-btn" onclick="cajeroCompletar()" style="display:none">🏁 Completar</button>
-    </div>
-  </div>
-  <div id="cc-msgs" style="flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px"></div>
-  <div style="padding:10px 12px;background:var(--bg1);border-top:1px solid var(--brd);display:flex;gap:8px">
-    <label style="cursor:pointer;display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;border:1px solid var(--brd2);color:var(--t2);flex-shrink:0">📎<input type="file" accept="image/*" class="ui-hidden" onchange="cajeroSendImg(event)"></label>
-    <input id="cc-inp" type="text" placeholder="Mensaje al cliente..." style="flex:1;background:var(--bg2);border:1px solid var(--brd2);border-radius:8px;padding:8px 12px;color:var(--t1);font-size:13px" onkeydown="if(event.key==='Enter')cajeroSend()">
-    <button onclick="cajeroSend()" style="background:var(--g);border:none;border-radius:8px;width:36px;height:36px;color:#000;font-size:16px;cursor:pointer;flex-shrink:0">➤</button>
   </div>
 </div>
 
@@ -1829,8 +1634,7 @@ function _mapUser(d){
     kycStatus: d.kyc_status  || null,
     kycPhoto:  d.kyc_photo   || null,
     kycDate:   d.kyc_date    || null,
-    kycReason: d.kyc_reason  || null,
-    rol:       d.rol         || 'cliente'
+    kycReason: d.kyc_reason  || null
   };
 }
 
@@ -1854,7 +1658,7 @@ async function sbCreateOp(email, op){
     dir:           op.dir,
     send_txt:      op.send,
     get_txt:       op.get,
-    estado:        op.st||'pending',
+    estado:        'pending',
     created_at:    tnowISO()
   };
   const{error}=await db.from('operaciones').insert(payload);
@@ -2177,7 +1981,6 @@ function goD(){
     if('Notification' in window && Notification.permission==='default') showNotifPrompt();
   },1500);
 }
-function goC(){showPage('cp');loadCajeroPanel();}
 function goA(){showPage('ap');loadAdmin();requestNotifPerm();}
 
 window.addEventListener('hashchange',()=>{
@@ -2257,9 +2060,7 @@ async function doLogin(){
     user.hist=await sbGetOps(email);
     sS({email,...user});
     await logAct('login',{email,name:user.name,date:tnowISO()});
-    updLPNav(); closeAuth(); toast('✅ Bienvenido, '+user.nombre+'!','ok');
-    if(user.rol==='cajero') setTimeout(goC,300);
-    else setTimeout(goD,300);
+    updLPNav(); closeAuth(); toast('✅ Bienvenido, '+user.nombre+'!','ok'); setTimeout(goD,300);
   }finally{btn.textContent='Entrar →'; btn.disabled=false}
 }
 
@@ -2409,9 +2210,6 @@ async function loadDash(){
   const done=hist.filter(o=>o.st==='completed').length;
   const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
   s('dpGreet','Hola, '+ud.nombre+' 👋'); s('dpAv',ud.nombre.charAt(0).toUpperCase()); s('dpNm',ud.nombre);
-  // Mostrar botón Mi Caja si el usuario es cajero
-  const cajabtn=document.getElementById('si-caja');
-  if(cajabtn) cajabtn.classList.toggle('ui-hidden', ud.rol!=='cajero');
   s('ov-tot',hist.length); s('ov-pend',pend); s('ov-done',done);
   const badge=document.getElementById('si-pend');
   if(badge){badge.style.display=pend>0?'inline':'none';badge.textContent=pend}
@@ -2529,724 +2327,7 @@ function updWallet(){
 let curOpId=null;
 
 
-// ════════════════════════════════════════════════════════════
-// SISTEMA CAJEROS
-// ════════════════════════════════════════════════════════════
-
-// ── Supabase: cajeros ────────────────────────────────────────
-async function sbGetCajero(email){
-  if(!_dbOk('sbGetCajero')) return null;
-  const{data,error}=await db.from('cajeros').select('*').eq('email',email.toLowerCase()).maybeSingle();
-  if(error){console.warn('[sbGetCajero]',error.message);return null;}
-  return data;
-}
-async function sbGetAllCajeros(){
-  if(!_dbOk('sbGetAllCajeros')) return [];
-  const{data,error}=await db.from('cajeros').select('*').order('created_at',{ascending:false});
-  if(error){console.warn('[sbGetAllCajeros]',error.message);return [];}
-  return data||[];
-}
-async function sbSaveCajero(email, fields){
-  if(!_dbOk('sbSaveCajero')) return false;
-  const{error}=await db.from('cajeros').upsert({email:email.toLowerCase(),...fields},{onConflict:'email'});
-  if(error){console.warn('[sbSaveCajero]',error.message);return false;}
-  return true;
-}
-async function sbSetCajeroRol(email, rol){
-  if(!_dbOk('sbSetCajeroRol')) return false;
-  const{error}=await db.from('clientes').update({rol}).eq('email',email.toLowerCase());
-  if(error){console.warn('[sbSetCajeroRol]',error.message);return false;}
-  return true;
-}
-async function sbGetCajeroNotifs(cajeroEmail){
-  if(!_dbOk('sbGetCajeroNotifs')) return [];
-  const{data,error}=await db.from('cajero_notifs')
-    .select('*').eq('cajero_email',cajeroEmail.toLowerCase())
-    .eq('estado','pendiente').order('created_at',{ascending:false});
-  if(error){console.warn('[sbGetCajeroNotifs]',error.message);return [];}
-  return data||[];
-}
-async function sbNotifyCajeros(opId, plat, dir, amt){
-  if(!_dbOk('sbNotifyCajeros')) return;
-  // Buscar cajeros activos con liquidez suficiente
-  const allCajeros=await sbGetAllCajeros();
-  const ahora=Date.now();
-  const candidatos=allCajeros.filter(c=>{
-    if(!c.activo||!c.disponible) return false;
-    if(c.membresia_vence && new Date(c.membresia_vence).getTime() < ahora) return false;
-    if(c.op_activa) return false; // ya tiene operación
-    const liq=c.liquidez||{};
-    if(dir==='compra'){
-      // Cliente vende divisa → cajero necesita Bs para comprar
-      const tasa=RATES.compra[plat]?.t||660;
-      const bsNecesarios=amt*tasa;
-      return (liq.bs||0) >= bsNecesarios;
-    }else{
-      // Cliente compra divisa → cajero necesita esa divisa
-      return (liq[plat]||0) >= amt;
-    }
-  });
-  for(const c of candidatos){
-    await db.from('cajero_notifs').insert({
-      cajero_email: c.email,
-      op_id:        opId,
-      plat,dir,
-      monto:        amt,
-      estado:       'pendiente',
-      created_at:   tnowISO()
-    });
-  }
-}
-async function sbAceptarOp(cajeroEmail, opId){
-  if(!_dbOk('sbAceptarOp')) return false;
-  // Marcar operación con cajero asignado
-  const{error:e1}=await db.from('operaciones')
-    .update({estado:'pending', cajero_email:cajeroEmail.toLowerCase(), updated_at:tnowISO()})
-    .eq('id',opId).is('cajero_email',null);
-  if(e1){console.warn('[sbAceptarOp op]',e1.message);return false;}
-  // Marcar cajero ocupado
-  await db.from('cajeros').update({op_activa:opId}).eq('email',cajeroEmail.toLowerCase());
-  // Cancelar otras notifs para esta op
-  await db.from('cajero_notifs').update({estado:'cancelada'}).eq('op_id',opId).neq('cajero_email',cajeroEmail.toLowerCase());
-  // Marcar esta notif como aceptada
-  await db.from('cajero_notifs').update({estado:'aceptada'}).eq('op_id',opId).eq('cajero_email',cajeroEmail.toLowerCase());
-  return true;
-}
-async function sbRechazarNotif(cajeroEmail, opId){
-  if(!_dbOk('sbRechazarNotif')) return;
-  await db.from('cajero_notifs').update({estado:'rechazada'})
-    .eq('op_id',opId).eq('cajero_email',cajeroEmail.toLowerCase());
-}
-async function sbLibrarCajero(cajeroEmail){
-  if(!_dbOk('sbLibrarCajero')) return;
-  await db.from('cajeros').update({op_activa:null}).eq('email',cajeroEmail.toLowerCase());
-}
-async function sbDescuentoLiquidez(cajeroEmail, plat, dir, monto){
-  if(!_dbOk('sbDescuentoLiquidez')) return;
-  const c=await sbGetCajero(cajeroEmail); if(!c) return;
-  const liq={...( c.liquidez||{} )};
-  if(dir==='compra'){
-    // cajero pagó Bs para comprar divisa
-    const tasa=RATES.compra[plat]?.t||660;
-    liq.bs=Math.max(0,(liq.bs||0)-monto*tasa);
-  }else{
-    // cajero entregó divisa
-    liq[plat]=Math.max(0,(liq[plat]||0)-monto);
-  }
-  await db.from('cajeros').update({liquidez:liq}).eq('email',cajeroEmail.toLowerCase());
-}
-
-// ── Panel cajero: navegación ─────────────────────────────────
-let _cajeroData=null;
-let _cajeroOpActiva=null;
-let _cajeroNotifPoll=null;
-
-function showCV(name){
-  document.querySelectorAll('.cv').forEach(d=>d.classList.remove('on'));
-  document.querySelectorAll('.ap-sb-i[id^="csi-"]').forEach(b=>b.classList.remove('on'));
-  const cv=document.getElementById('cv-'+name);
-  const btn=document.getElementById('csi-'+name);
-  if(cv)cv.classList.add('on');
-  if(btn)btn.classList.add('on');
-  if(name==='liquidez') renderLiquidezForm();
-  if(name==='ops') loadCajeroOps();
-  if(name==='cuentas') renderCuentasCajero();
-}
-
-async function loadCajeroPanel(){
-  const sess=gS(); if(!sess) return;
-  // Verificar membresía vigente
-  _cajeroData=await sbGetCajero(sess.email);
-  if(!_cajeroData){
-    // Crear registro cajero si no existe
-    await sbSaveCajero(sess.email,{activo:false,disponible:false,liquidez:{},cuentas:{},created_at:tnowISO()});
-    _cajeroData=await sbGetCajero(sess.email);
-  }
-  const ud=getUser(sess.email)||{};
-  const el=document.getElementById('c-greet');
-  if(el) el.textContent='Hola, '+ud.nombre+' 🏧';
-  renderMembresia();
-  renderEstado();
-  renderCajeroKPIs();
-  // Verificar op activa
-  if(_cajeroData.op_activa) await loadOpActiva(_cajeroData.op_activa);
-  // Iniciar polling de notificaciones
-  startCajeroPolling();
-}
-
-function renderMembresia(){
-  const box=document.getElementById('c-membresia-box');
-  const statusEl=document.getElementById('c-mem-status');
-  const diasEl=document.getElementById('c-mem-dias');
-  const msgEl=document.getElementById('c-mem-msg');
-  if(!_cajeroData||!box) return;
-  const vence=_cajeroData.membresia_vence?new Date(_cajeroData.membresia_vence):null;
-  const ahora=new Date();
-  if(!vence||vence<ahora){
-    box.style.borderColor='rgba(247,147,26,.4)';
-    if(statusEl) statusEl.textContent='⚠️ Membresía vencida';
-    if(diasEl){diasEl.textContent='0';diasEl.style.color='var(--red)';}
-    if(msgEl) msgEl.textContent='Contacta al administrador para renovar. Costo: $5/semana.';
-  }else{
-    const dias=Math.ceil((vence-ahora)/(1000*60*60*24));
-    box.style.borderColor='rgba(0,200,150,.3)';
-    if(statusEl) statusEl.textContent='✅ Membresía activa';
-    if(diasEl){diasEl.textContent=dias+'d';diasEl.style.color=dias<=2?'var(--red)':'var(--yellow)';}
-    if(msgEl) msgEl.textContent='Vence: '+vence.toLocaleDateString('es-VE')+' · '+vence.toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'});
-  }
-}
-
-function renderEstado(){
-  const lbl=document.getElementById('c-estado-lbl');
-  const btn=document.getElementById('c-toggle-btn');
-  if(!_cajeroData||!lbl||!btn) return;
-  const disp=_cajeroData.disponible&&_cajeroData.activo;
-  if(disp){
-    lbl.textContent='🟢 Disponible · Recibirás solicitudes';
-    btn.textContent='Pausar';
-    btn.style.background='rgba(247,147,26,.12)';
-    btn.style.color='var(--red)';
-    btn.style.border='1px solid rgba(247,147,26,.25)';
-  }else{
-    lbl.textContent='⚫ No disponible · Sin solicitudes';
-    btn.textContent='Activarme';
-    btn.style.background='rgba(0,200,150,.12)';
-    btn.style.color='var(--g)';
-    btn.style.border='1px solid rgba(0,200,150,.25)';
-  }
-}
-
-async function toggleDisponible(){
-  if(!_cajeroData) return;
-  const sess=gS(); if(!sess) return;
-  // Verificar membresía antes de activarse
-  const vence=_cajeroData.membresia_vence?new Date(_cajeroData.membresia_vence):null;
-  if(!_cajeroData.disponible && (!vence||vence<new Date())){
-    toast('⚠️ Tu membresía está vencida. Contacta al admin para renovar.','err');
-    return;
-  }
-  const nuevo=!_cajeroData.disponible;
-  await sbSaveCajero(sess.email,{disponible:nuevo, ultimo_ping:tnowISO()});
-  _cajeroData.disponible=nuevo;
-  renderEstado();
-  toast(nuevo?'🟢 Ahora estás disponible':'⚫ Pausado — no recibirás solicitudes',nuevo?'ok':'');
-}
-
-async function renderCajeroKPIs(){
-  if(!_cajeroData) return;
-  const sess=gS(); if(!sess) return;
-  // Cargar ops cajero
-  const{data}=await db.from('operaciones').select('*').eq('cajero_email',sess.email.toLowerCase());
-  const ops=data||[];
-  const hoy=new Date().toLocaleDateString('es-VE');
-  const semanaMs=7*24*60*60*1000;
-  const ahora=Date.now();
-  const s=id=>{const e=document.getElementById(id);return e};
-  const eHoy=ops.filter(o=>new Date(o.created_at).toLocaleDateString('es-VE')===hoy).length;
-  const eSem=ops.filter(o=>ahora-new Date(o.created_at).getTime()<semanaMs).length;
-  if(s('c-kpi-hoy')) s('c-kpi-hoy').textContent=eHoy;
-  if(s('c-kpi-semana')) s('c-kpi-semana').textContent=eSem;
-  if(s('c-kpi-total')) s('c-kpi-total').textContent=ops.length;
-}
-
-async function loadOpActiva(opId){
-  if(!_dbOk('loadOpActiva')) return;
-  const{data}=await db.from('operaciones').select('*').eq('id',opId).maybeSingle();
-  if(!data){_cajeroOpActiva=null;return;}
-  _cajeroOpActiva=data;
-  const card=document.getElementById('c-op-activa-card');
-  const body=document.getElementById('c-op-activa-body');
-  if(!card||!body) return;
-  card.style.display='block';
-  body.innerHTML=`
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-      <div>
-        <div style="font-size:11px;color:var(--t2);margin-bottom:4px">OP · <span style="font-family:var(--mono);color:var(--g)">${data.id}</span></div>
-        <div style="font-size:13px;font-weight:700">${PN[data.plat]||data.plat} · ${data.dir==='compra'?'Compra':'Venta'}</div>
-        <div style="font-size:11px;color:var(--t2);margin-top:3px">📤 ${data.send_txt} → 📥 ${data.get_txt}</div>
-      </div>
-      <button class="btn g sm" onclick="abrirCChatDesdePanel('${data.id}')">💬 Abrir chat</button>
-    </div>`;
-}
-
-// ── Polling de notificaciones cajero ────────────────────────
-function startCajeroPolling(){
-  if(_cajeroNotifPoll) clearInterval(_cajeroNotifPoll);
-  pollCajeroNotifs();
-  _cajeroNotifPoll=setInterval(pollCajeroNotifs, 5000);
-}
-let _lastNotifIds=new Set();
-async function pollCajeroNotifs(){
-  const sess=gS(); if(!sess) return;
-  // Actualizar ping
-  await db.from('cajeros').update({ultimo_ping:tnowISO()}).eq('email',sess.email.toLowerCase());
-  const notifs=await sbGetCajeroNotifs(sess.email);
-  const list=document.getElementById('c-notif-list');
-  const count=document.getElementById('c-notif-count');
-  if(count) count.textContent=notifs.length+' solicitud'+(notifs.length!==1?'es':'');
-  if(list){
-    if(!notifs.length){list.innerHTML='<div class="empty" style="padding:24px">Sin solicitudes nuevas</div>';return;}
-    list.innerHTML=notifs.map(n=>`
-      <div class="c-notif-card" onclick="showOpModal(${JSON.stringify(n).replace(/"/g,'&quot;')})">
-        <div class="c-notif-dot"></div>
-        <div style="flex:1">
-          <div style="font-size:12px;font-weight:700;margin-bottom:3px">${PN[n.plat]||n.plat} · ${n.dir==='compra'?'Cliente vende':'Cliente compra'} $${n.monto}</div>
-          <div style="font-size:11px;color:var(--t2)">OP: <span style="font-family:var(--mono);color:var(--g)">${n.op_id}</span> · ${new Date(n.created_at).toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'})}</div>
-        </div>
-        <div style="font-size:11px;color:var(--g);font-weight:700">→ Ver</div>
-      </div>`).join('');
-    // Notif de sistema si hay nuevas
-    for(const n of notifs){
-      if(!_lastNotifIds.has(n.id)){
-        _lastNotifIds.add(n.id);
-        try{if(Notification.permission==='granted')new Notification('🔔 Nueva operación',{body:PN[n.plat]+' · $'+n.monto});}catch{}
-        try{playSuccess();}catch{}
-      }
-    }
-  }
-}
-
-// ── Modal: operación entrante ─────────────────────────────────
-let _modalNotif=null;
-let _modalTimer=null;
-const CAJERO_TIMEOUT=45;
-
-function showOpModal(notif){
-  _modalNotif=notif;
-  const modal=document.getElementById('c-op-modal');
-  const body=document.getElementById('c-op-modal-body');
-  if(!modal||!body) return;
-  body.innerHTML=`
-    <div style="margin-bottom:8px;font-weight:700;color:var(--t1)">${PN[notif.plat]||notif.plat} · ${notif.dir==='compra'?'El cliente vende divisas':'El cliente compra divisas'}</div>
-    <div style="color:var(--t2);margin-bottom:4px">🆔 Operación: <span style="font-family:var(--mono);color:var(--g)">${notif.op_id}</span></div>
-    <div style="color:var(--t2);margin-bottom:4px">💵 Monto: <strong style="color:var(--t1)">$${notif.monto}</strong></div>
-    <div style="color:var(--t2)">📅 ${new Date(notif.created_at).toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'})}</div>`;
-  modal.style.display='flex';
-  // Timer
-  let secs=CAJERO_TIMEOUT;
-  const secsEl=document.getElementById('c-op-secs');
-  const fill=document.getElementById('c-op-timer-fill');
-  if(secsEl) secsEl.textContent=secs;
-  if(fill) fill.style.width='100%';
-  if(_modalTimer) clearInterval(_modalTimer);
-  _modalTimer=setInterval(()=>{
-    secs--;
-    if(secsEl) secsEl.textContent=secs;
-    if(fill) fill.style.width=(secs/CAJERO_TIMEOUT*100)+'%';
-    if(secs<=0){clearInterval(_modalTimer);rechazarOp();}
-  },1000);
-}
-
-async function aceptarOp(){
-  if(!_modalNotif) return;
-  const sess=gS(); if(!sess) return;
-  clearInterval(_modalTimer);
-  // Verificar que la op sigue en búsqueda
-  const{data:op}=await db.from('operaciones').select('estado').eq('id',_modalNotif.op_id).maybeSingle();
-  if(!op||op.cajero_email){
-    toast('⚠️ Esta operación ya fue tomada por otro cajero.','err');
-    document.getElementById('c-op-modal').style.display='none';
-    return;
-  }
-  const ok=await sbAceptarOp(sess.email, _modalNotif.op_id);
-  if(!ok){toast('❌ No se pudo aceptar. Intenta de nuevo.','err');return;}
-  // Enviar mensaje al chat
-  await sbSendMsg(_modalNotif.op_id,{from:'cajero',text:'🏧 Cajero asignado. En breve te atiendo.',time:tnow()});
-  // Enviar info de pago del cajero al chat
-  await enviarInfoPagoCajero(sess.email, _modalNotif);
-  _cajeroData.op_activa=_modalNotif.op_id;
-  _cajeroOpActiva=_modalNotif;
-  document.getElementById('c-op-modal').style.display='none';
-  toast('✅ Operación aceptada!','ok');
-  loadOpActiva(_modalNotif.op_id);
-  tgNotify(`🏧 <b>Cajero asignado</b>\n🆔 OP: ${_modalNotif.op_id}\n👤 Cajero: ${sess.email}\n💱 ${PN[_modalNotif.plat]} · $${_modalNotif.monto}`);
-  abrirCChatDesdePanel(_modalNotif.op_id);
-  _modalNotif=null;
-}
-
-async function enviarInfoPagoCajero(cajeroEmail, notif){
-  const c=await sbGetCajero(cajeroEmail); if(!c) return;
-  const cuentas=c.cuentas||{};
-  const plat=notif.plat, dir=notif.dir;
-  let msg='📲 DATOS DE PAGO DEL CAJERO:\n';
-  if(dir==='compra'){
-    // Cliente paga al cajero en esa plataforma
-    const cuenta=cuentas[plat]||'No configurado';
-    msg+=`\n🏦 ${PN[plat]||plat}: ${cuenta}`;
-    msg+='\n\n⚠️ Envía el monto exacto y sube el comprobante en el chat.';
-  }else{
-    // Cliente envía Bs al cajero (pago móvil)
-    const pm=cuentas.pagoMovil||{};
-    msg+=`\n📲 Pago Móvil:\nBanco: ${pm.banco||'—'}\nTeléfono: ${pm.tel||'—'}\nCédula: ${pm.cedula||'—'}`;
-    msg+='\n\n⚠️ Envía los Bs exactos y adjunta el comprobante aquí.';
-  }
-  await sbSendMsg(notif.op_id,{from:'sys',text:msg,time:tnow()});
-  // Mensaje de responsabilidad
-  const{data:op}=await db.from('operaciones').select('*,clientes(nombre,apellido,cedula,email)').eq('id',notif.op_id).maybeSingle();
-  if(op&&op.clientes){
-    const ud={nombre:op.clientes.nombre,apellido:op.clientes.apellido,cedula:op.clientes.cedula};
-    const sess={email:op.clientes.email};
-    const compTxt=buildComplianceText(ud,sess,plat);
-    await sbSendMsg(notif.op_id,{from:'sys',text:'📋 MENSAJE DE RESPONSABILIDAD:\n\n'+compTxt+'\n\n⚠️ ENVIAR CON FACTURA DE PAGO',time:tnow()});
-  }
-}
-
-async function rechazarOp(){
-  if(!_modalNotif) return;
-  clearInterval(_modalTimer);
-  const sess=gS(); if(!sess) return;
-  await sbRechazarNotif(sess.email, _modalNotif.op_id);
-  document.getElementById('c-op-modal').style.display='none';
-  _modalNotif=null;
-}
-
-// ── Chat cajero-cliente ──────────────────────────────────────
-let _ccOpId=null;
-let _ccPoll=null;
-
-async function abrirCChatDesdePanel(opId){
-  _ccOpId=opId;
-  const{data:op}=await db.from('operaciones').select('*,clientes(nombre,apellido)').eq('id',opId).maybeSingle();
-  if(!op) return;
-  const titleEl=document.getElementById('cc-title');
-  const subEl=document.getElementById('cc-sub');
-  const badgeEl=document.getElementById('cc-badge');
-  if(titleEl) titleEl.textContent='Chat · OP '+opId;
-  if(subEl) subEl.textContent=(op.clientes?op.clientes.nombre+' '+op.clientes.apellido:'')+' · '+PN[op.plat]+' · $'+op.send_txt;
-  if(badgeEl) badgeEl.innerHTML=stBdg(op.estado);
-  // Botones
-  const confBtn=document.getElementById('cc-confirm-btn');
-  const compBtn=document.getElementById('cc-complete-btn');
-  if(confBtn) confBtn.style.display=op.estado==='voucher_sent'?'inline-flex':'none';
-  if(compBtn) compBtn.style.display=op.estado==='confirmed'?'inline-flex':'none';
-  await loadCCMsgs();
-  document.getElementById('c-chat-modal').style.display='flex';
-  if(_ccPoll) clearInterval(_ccPoll);
-  _ccPoll=setInterval(loadCCMsgs,3500);
-}
-
-function closeCChat(){
-  document.getElementById('c-chat-modal').style.display='none';
-  if(_ccPoll){clearInterval(_ccPoll);_ccPoll=null;}
-}
-
-async function loadCCMsgs(){
-  if(!_ccOpId) return;
-  const msgs=await sbGetMsgs(_ccOpId);
-  const el=document.getElementById('cc-msgs');
-  if(!el) return;
-  el.innerHTML=msgs.map(m=>{
-    const isMe=m.from==='cajero';
-    const isSys=m.from==='sys';
-    if(isSys) return`<div style="text-align:center;font-size:10px;color:var(--t3);padding:4px 8px;background:var(--bg2);border-radius:6px;white-space:pre-wrap">${m.text}</div>`;
-    return`<div style="display:flex;flex-direction:column;align-items:${isMe?'flex-end':'flex-start'};gap:2px">
-      <div style="background:${isMe?'var(--gd)':'var(--bg2)'};color:${isMe?'#fff':'var(--t1)'};padding:9px 13px;border-radius:${isMe?'14px 14px 4px 14px':'14px 14px 14px 4px'};font-size:13px;max-width:80%;word-break:break-word;${m.type==='img'?'padding:4px':''}">${m.type==='img'?`<img src="${m.src}" style="max-width:220px;border-radius:8px;cursor:pointer" onclick="openLB('${m.src}')">`:m.text}</div>
-      <div style="font-size:9px;color:var(--t3)">${m.time}</div>
-    </div>`;
-  }).join('');
-  el.scrollTop=el.scrollHeight;
-  // Actualizar botones según estado
-  const{data:op}=await db.from('operaciones').select('estado').eq('id',_ccOpId).maybeSingle();
-  if(op){
-    const confBtn=document.getElementById('cc-confirm-btn');
-    const compBtn=document.getElementById('cc-complete-btn');
-    if(confBtn) confBtn.style.display=op.estado==='voucher_sent'?'inline-flex':'none';
-    if(compBtn) compBtn.style.display=op.estado==='confirmed'?'inline-flex':'none';
-    const badgeEl=document.getElementById('cc-badge');
-    if(badgeEl) badgeEl.innerHTML=stBdg(op.estado);
-  }
-}
-
-async function cajeroSend(){
-  const inp=document.getElementById('cc-inp'); if(!inp||!_ccOpId) return;
-  const txt=inp.value.trim(); if(!txt) return;
-  inp.value='';
-  await sbSendMsg(_ccOpId,{from:'cajero',text:txt,time:tnow()});
-  await loadCCMsgs();
-}
-
-async function cajeroSendImg(e){
-  const file=e.target.files[0]; if(!file||!_ccOpId) return;
-  const reader=new FileReader();
-  reader.onload=async ev=>{
-    const img=new Image();
-    img.onload=async()=>{
-      const c=document.createElement('canvas');
-      const M=1200;let w=img.width,h=img.height;
-      if(w>M){h=Math.round(h*M/w);w=M;}if(h>M){w=Math.round(w*M/h);h=M;}
-      c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
-      const b64=c.toDataURL('image/jpeg',0.82);
-      await sbSendMsg(_ccOpId,{from:'cajero',type:'img',src:b64,text:'📎 Comprobante',time:tnow()});
-      await loadCCMsgs();
-    };img.src=ev.target.result;
-  };reader.readAsDataURL(file);
-}
-
-async function cajeroConfirmar(){
-  if(!_ccOpId) return;
-  if(!confirm('¿Confirmar que recibiste el pago del cliente?')) return;
-  await sbUpdateOpEstado(_ccOpId,'confirmed');
-  await sbSendMsg(_ccOpId,{from:'cajero',text:'✅ Pago confirmado. Procesando tu operación...',time:tnow()});
-  toast('✅ Pago confirmado','ok');
-  loadCCMsgs();
-}
-
-async function cajeroCompletar(){
-  if(!_ccOpId||!_cajeroOpActiva) return;
-  if(!confirm('¿Marcar operación como completada? Se descontará la liquidez.')) return;
-  const sess=gS(); if(!sess) return;
-  await sbUpdateOpEstado(_ccOpId,'completed');
-  await sbSendMsg(_ccOpId,{from:'cajero',text:'🏁 Operación completada. ¡Gracias por operar con LS Cambios!',time:tnow()});
-  // Descontar liquidez
-  const{data:op}=await db.from('operaciones').select('*').eq('id',_ccOpId).maybeSingle();
-  if(op) await sbDescuentoLiquidez(sess.email, op.plat, op.dir, parseFloat(op.send_txt)||0);
-  // Liberar cajero
-  await sbLibrarCajero(sess.email);
-  _cajeroData.op_activa=null;
-  _cajeroOpActiva=null;
-  const card=document.getElementById('c-op-activa-card');
-  if(card) card.style.display='none';
-  toast('🏁 Operación completada!','ok');
-  closeCChat();
-  tgNotify(`✅ <b>Operación completada por cajero</b>\n🆔 ${_ccOpId}\n👤 Cajero: ${sess.email}`);
-}
-
-// ── Liquidez form ────────────────────────────────────────────
-const PLATS_LIQ=[
-  {key:'bs',    label:'Bolívares (Bs)',  prefix:'Bs'},
-  {key:'binance',label:'Binance',        prefix:'$'},
-  {key:'paypal', label:'PayPal',         prefix:'$'},
-  {key:'zinli',  label:'Zinli',          prefix:'$'},
-  {key:'wally',  label:'Wally',          prefix:'$'},
-  {key:'airtm',  label:'Airtm',          prefix:'$'},
-  {key:'usdc',   label:'USDC',           prefix:'$'},
-];
-function renderLiquidezForm(){
-  const grid=document.getElementById('c-liq-grid'); if(!grid) return;
-  const liq=(_cajeroData&&_cajeroData.liquidez)||{};
-  grid.innerHTML=PLATS_LIQ.map(p=>`
-    <div class="c-liq-row">
-      <div>
-        <div style="font-size:13px;font-weight:700">${p.label}</div>
-        <div style="font-size:10px;color:var(--t2)">Disponible actualmente</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:6px">
-        <span style="font-size:12px;color:var(--t2)">${p.prefix}</span>
-        <input type="number" min="0" step="0.01" value="${liq[p.key]||0}" id="liq-${p.key}"
-          style="width:110px;background:var(--bg3);border:1px solid var(--brd2);border-radius:7px;padding:7px 10px;color:var(--t1);font-size:13px;font-family:var(--mono);text-align:right">
-      </div>
-    </div>`).join('');
-}
-async function saveLiquidez(){
-  if(!_cajeroData) return;
-  const sess=gS(); if(!sess) return;
-  const liq={};
-  PLATS_LIQ.forEach(p=>{const el=document.getElementById('liq-'+p.key);if(el)liq[p.key]=parseFloat(el.value)||0;});
-  const ok=await sbSaveCajero(sess.email,{liquidez:liq});
-  if(ok){_cajeroData.liquidez=liq;toast('💾 Liquidez guardada','ok');}
-  else toast('❌ Error guardando','err');
-}
-
-// ── Cuentas cajero ───────────────────────────────────────────
-const CUENTAS_LIQ=[
-  {key:'binance', label:'ID Binance',      placeholder:'906509124'},
-  {key:'paypal',  label:'Correo PayPal',   placeholder:'tu@correo.com'},
-  {key:'zinli',   label:'Correo Zinli',    placeholder:'tu@correo.com'},
-  {key:'wally',   label:'Usuario Wally',   placeholder:'@usuario'},
-  {key:'airtm',   label:'Correo Airtm',    placeholder:'tu@correo.com'},
-  {key:'usdc',    label:'Dirección USDC',  placeholder:'0x...'},
-];
-function renderCuentasCajero(){
-  const grid=document.getElementById('c-cuentas-grid'); if(!grid) return;
-  const cu=(_cajeroData&&_cajeroData.cuentas)||{};
-  const pm=cu.pagoMovil||{};
-  grid.innerHTML=`
-    <div class="card" style="padding:16px">
-      <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:12px;letter-spacing:.5px">📲 PAGO MÓVIL (para recibir Bs)</div>
-      ${['banco','tel','cedula'].map(k=>`<div class="fg"><label>${k.toUpperCase()}</label><input class="fi" id="caj-pm-${k}" type="text" value="${pm[k]||''}" placeholder="${k==='banco'?'Ej: Banesco':k==='tel'?'0414-0000000':'V-12345678'}"></div>`).join('')}
-    </div>
-    <div class="card" style="padding:16px">
-      <div style="font-size:11px;font-weight:700;color:var(--g);margin-bottom:12px;letter-spacing:.5px">💳 CUENTAS DIVISAS</div>
-      ${CUENTAS_LIQ.map(c=>`<div class="fg"><label>${c.label}</label><input class="fi" id="caj-cu-${c.key}" type="text" value="${cu[c.key]||''}" placeholder="${c.placeholder}"></div>`).join('')}
-    </div>`;
-}
-async function saveCuentasCajero(){
-  if(!_cajeroData) return;
-  const sess=gS(); if(!sess) return;
-  const g=id=>{const e=document.getElementById(id);return e?e.value.trim():''};
-  const pm={banco:g('caj-pm-banco'),tel:g('caj-pm-tel'),cedula:g('caj-pm-cedula')};
-  const cu={pagoMovil:pm};
-  CUENTAS_LIQ.forEach(c=>{cu[c.key]=g('caj-cu-'+c.key);});
-  const ok=await sbSaveCajero(sess.email,{cuentas:cu});
-  if(ok){_cajeroData.cuentas=cu;toast('💾 Cuentas guardadas','ok');}
-  else toast('❌ Error guardando','err');
-}
-
-// ── Ops cajero ───────────────────────────────────────────────
-async function loadCajeroOps(){
-  const sess=gS(); if(!sess) return;
-  const{data}=await db.from('operaciones').select('*,clientes(nombre,apellido)')
-    .eq('cajero_email',sess.email.toLowerCase()).order('created_at',{ascending:false});
-  const ops=data||[];
-  const body=document.getElementById('c-ops-body');
-  if(!body) return;
-  if(!ops.length){body.innerHTML='<div class="empty">Sin operaciones aún</div>';return;}
-  body.innerHTML=`<table class="tbl"><thead><tr><th>ID</th><th>Cliente</th><th>Plataforma</th><th>Monto</th><th>Estado</th><th></th></tr></thead><tbody>
-  ${ops.map(o=>`<tr>
-    <td style="font-family:var(--mono);font-size:11px;color:var(--g)">${o.id}</td>
-    <td style="font-size:12px">${o.clientes?o.clientes.nombre+' '+o.clientes.apellido:o.cliente_email}</td>
-    <td>${PN[o.plat]||o.plat}</td>
-    <td style="color:var(--yellow);font-weight:600;font-size:11px">${o.send_txt}</td>
-    <td>${stBdg(o.estado)}</td>
-    <td>${o.estado!=='completed'&&o.estado!=='rejected'?`<button class="btn ghost sm" onclick="abrirCChatDesdePanel('${o.id}')">Chat</button>`:'—'}</td>
-  </tr>`).join('')}</tbody></table>`;
-}
-
-// ── Pantalla buscando cajero (cliente) ───────────────────────
-let _searchPoll=null;
-let _searchOpId=null;
-
-function showSearchingScreen(opId, op){
-  _searchOpId=opId;
-  document.querySelectorAll('.dv').forEach(d=>d.classList.remove('on'));
-  const dv=document.getElementById('dv-searching');
-  if(dv) dv.classList.add('on');
-  const idEl=document.getElementById('search-op-id');
-  if(idEl) idEl.textContent='OP: '+opId;
-  const cancelBtn=document.getElementById('search-cancel-btn');
-  const msgEl=document.getElementById('search-timeout-msg');
-  // Mostrar botón cancelar luego de 30s
-  setTimeout(()=>{if(cancelBtn) cancelBtn.style.display='block';},30000);
-  // Poll hasta que la op sea aceptada
-  if(_searchPoll) clearInterval(_searchPoll);
-  let elapsed=0;
-  _searchPoll=setInterval(async()=>{
-    elapsed+=3;
-    if(msgEl&&elapsed>=15) msgEl.textContent='Buscando cajero disponible... ('+elapsed+'s)';
-    const{data}=await db.from('operaciones').select('estado,cajero_email').eq('id',opId).maybeSingle();
-    if(data&&data.cajero_email){
-      clearInterval(_searchPoll);
-      // Cajero encontrado — abrir trade normal
-      const msgs=await sbGetMsgs(opId);
-      op.st=data.estado;
-      op.chat=msgs;
-      openTradeUI(opId,op);
-    }
-  },3000);
-}
-
-async function cancelSearchOp(){
-  if(!_searchOpId) return;
-  if(!confirm('¿Cancelar la operación?')) return;
-  clearInterval(_searchPoll);
-  await sbUpdateOpEstado(_searchOpId,'rejected');
-  await sbSendMsg(_searchOpId,{from:'sys',text:'❌ Operación cancelada por el cliente.',time:tnow()});
-  _searchOpId=null;
-  showDV('newop');
-  toast('Operación cancelada.','err');
-}
-
-// ── Admin: gestión cajeros ───────────────────────────────────
-function showAV(name){
-  document.querySelectorAll('.av').forEach(d=>d.classList.remove('on'));
-  document.querySelectorAll('.ap-sb-i').forEach(b=>b.classList.remove('on'));
-  const av=document.getElementById('av-'+name);
-  const btn=document.getElementById('asi-'+name);
-  if(av)av.classList.add('on');
-  if(btn)btn.classList.add('on');
-  if(name==='cajeros') loadAdminCajeros();
-}
-
-async function loadAdminCajeros(){
-  const cajeros=await sbGetAllCajeros();
-  const ahora=Date.now();
-  const pingLimit=2*60*1000; // 2 min = "en línea"
-  let total=cajeros.length, activos=0, online=0, vencidos=0;
-  cajeros.forEach(c=>{
-    if(c.activo) activos++;
-    if(c.ultimo_ping&&(ahora-new Date(c.ultimo_ping).getTime())<pingLimit) online++;
-    if(!c.membresia_vence||new Date(c.membresia_vence).getTime()<ahora) vencidos++;
-  });
-  const s=id=>{const e=document.getElementById(id);if(e)e.textContent=arguments[1]};
-  document.getElementById('ac-total')&&(document.getElementById('ac-total').textContent=total);
-  document.getElementById('ac-activos')&&(document.getElementById('ac-activos').textContent=activos);
-  document.getElementById('ac-online')&&(document.getElementById('ac-online').textContent=online);
-  document.getElementById('ac-vencidos')&&(document.getElementById('ac-vencidos').textContent=vencidos);
-  const body=document.getElementById('ac-body');
-  if(!body) return;
-  if(!cajeros.length){body.innerHTML='<div class="empty">No hay cajeros registrados aún.<br>Aprueba uno desde la tabla de Clientes.</div>';return;}
-  body.innerHTML=cajeros.map(c=>{
-    const vence=c.membresia_vence?new Date(c.membresia_vence):null;
-    const vencida=!vence||vence<new Date();
-    const esOnline=c.ultimo_ping&&(ahora-new Date(c.ultimo_ping).getTime())<pingLimit;
-    const dias=vence?Math.ceil((vence-new Date())/(1000*60*60*24)):0;
-    const liq=c.liquidez||{};
-    const liqStr=Object.entries(liq).filter(([,v])=>v>0).map(([k,v])=>`${k==='bs'?'Bs':'$'}${v} ${k}`).join(' · ')||'Sin liquidez';
-    return`<div class="ac-row">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:10px;height:10px;border-radius:50%;background:${esOnline?'var(--g)':'var(--brd2)'}"></div>
-          <div>
-            <div style="font-size:13px;font-weight:700">${c.email}</div>
-            <div style="font-size:10px;color:var(--t2)">${esOnline?'🟢 En línea':'⚫ Desconectado'} · Liquidez: ${liqStr}</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap">
-          ${vencida
-            ?`<button class="btn g sm" onclick="renovarMembresia('${c.email}')">🔄 Renovar ($5)</button>`
-            :`<span style="font-size:10px;color:var(--g);padding:4px 10px;background:rgba(0,200,150,.08);border-radius:6px;border:1px solid rgba(0,200,150,.2)">${dias}d restantes</span>`}
-          ${c.activo
-            ?`<button class="btn red sm" onclick="desactivarCajero('${c.email}')">⛔ Desactivar</button>`
-            :`<button class="btn ghost sm" onclick="activarCajero('${c.email}')">✅ Activar</button>`}
-          <button class="btn ghost sm" onclick="verOpsCajero('${c.email}')">📋 Ops</button>
-        </div>
-      </div>
-      ${c.op_activa?`<div style="margin-top:8px;font-size:11px;color:var(--g)">⚡ Op activa: <span style="font-family:var(--mono)">${c.op_activa}</span></div>`:''}
-    </div>`;
-  }).join('');
-}
-
-async function activarCajero(email){
-  if(!confirm('¿Activar cajero '+email+'? Se le asignará rol cajero.')) return;
-  const vence=new Date(Date.now()+7*24*60*60*1000).toISOString();
-  await sbSaveCajero(email,{activo:true,membresia_vence:vence,created_at:tnowISO()});
-  await sbSetCajeroRol(email,'cajero');
-  toast('✅ Cajero activado · Membresía: 7 días','ok');
-  tgNotify(`🏧 <b>Cajero activado</b>\n📧 ${email}\n📅 Membresía hasta: ${new Date(vence).toLocaleDateString('es-VE')}`);
-  loadAdminCajeros();
-}
-
-async function renovarMembresia(email){
-  if(!confirm('¿Renovar membresía de '+email+' por $5 (7 días más)?')) return;
-  const vence=new Date(Date.now()+7*24*60*60*1000).toISOString();
-  await sbSaveCajero(email,{activo:true,membresia_vence:vence});
-  toast('🔄 Membresía renovada · 7 días más','ok');
-  loadAdminCajeros();
-}
-
-async function desactivarCajero(email){
-  if(!confirm('¿Desactivar cajero '+email+'? No recibirá más operaciones.')) return;
-  await sbSaveCajero(email,{activo:false,disponible:false});
-  await sbSetCajeroRol(email,'cliente');
-  toast('⛔ Cajero desactivado','ok');
-  loadAdminCajeros();
-}
-
-async function verOpsCajero(email){
-  const{data}=await db.from('operaciones').select('*').eq('cajero_email',email.toLowerCase()).order('created_at',{ascending:false}).limit(10);
-  const ops=data||[];
-  alert(ops.length?ops.map(o=>`${o.id} · ${PN[o.plat]} · ${o.send_txt} · ${o.estado}`).join('\n'):'Sin operaciones aún.');
-}
-
-// ── Aprobar cajero desde tabla de clientes ───────────────────
-async function promoverACajero(email){
-  if(!confirm('¿Convertir a '+email+' en cajero?\n\nSe le activará la membresía por 7 días.')) return;
-  await activarCajero(email);
-}
-
-// ══════════════════════════════════════════════════════════════
-// FIN SISTEMA CAJEROS
-// ══════════════════════════════════════════════════════════════════════
+// ════ KYC ════════════════════════════════════════════════════════════
 function showKycModal(rejectedReason){
   document.getElementById('kyc-modal').style.display='flex';
   const info=document.getElementById('kyc-info');
@@ -3361,22 +2442,25 @@ async function startOp(){
   const id=genId();
   const op={id,date:new Date().toLocaleDateString('es-VE'),plat,dir,send:sendTxt,get:getTxt,st:'pending',chat:[]};
 
+  
   const opOk=await sbCreateOp(sess.email,op);
   if(!opOk){toast('❌ No se pudo crear la operación. Verifica tu conexión.','err');return}
 
-  const m1={from:'sys',text:'Operación '+id+' iniciada. Buscando cajero disponible...',time:tnow()};
+  
+  const m1={from:'sys',text:'Operación '+id+' iniciada.',time:tnow()};
+  const m2={from:'sys',text:'📌 Realiza el pago y adjunta el comprobante aquí. LS Cambios lo verificará en breve.',time:tnow()};
   await sbSendMsg(id,m1);
-  op.chat=[m1];
+  await sbSendMsg(id,m2);
+  // ── Mensaje de responsabilidad anti-estafa ──────────────────────────
+  const compTxt=buildComplianceText(ud, sess, plat);
+  const m3={from:'sys',text:'📋 MENSAJE DE RESPONSABILIDAD — Copia y envía junto a tu factura de pago:\n\n'+compTxt+'\n\n⚠️ ENVIAR CON FACTURA DE PAGO QUE LLEGUE A SU CORREO',time:tnow()};
+  await sbSendMsg(id,m3);
+  op.chat=[m1,m2,m3];
 
   sS({email:sess.email,...ud});
   await logAct('operation',{id,email:sess.email,name:ud.name,dir,plat,send:sendTxt,get:getTxt,date:tnowISO()});
   tgNotify(`🔔 <b>Nueva operación</b>\n🆔 ${id}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n💱 ${dir==='compra'?'Compra':'Venta'} · ${PN[plat]}\n📤 Envía: ${sendTxt}\n📥 Recibe: ${getTxt}\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
-
-  // Notificar a cajeros disponibles
-  await sbNotifyCajeros(id, plat, dir, amt);
-
-  // Mostrar pantalla "buscando cajero"
-  showSearchingScreen(id, op);
+  openTradeUI(id,op);
 }
 
 async function openTrade(opId){
@@ -3685,7 +2769,6 @@ function buildCliTbl(users){
       ${ud.kycReason?`<div style="margin-top:6px;font-size:11px;color:var(--red)">⚠️ Rechazo: ${ud.kycReason}</div>`:''}
       <div class="u-acts" style="flex-wrap:wrap;gap:6px;margin-top:8px">
         <button class="u-btn wa" onclick="window.open('${_cWaUrl}','_blank')">💬 WhatsApp</button>
-        <button class="u-btn" style="background:rgba(0,200,150,.08);border-color:rgba(0,200,150,.2);color:var(--g)" onclick="promoverACajero('${em}')">🏧 Cajero</button>
         <button class="u-btn vw" onclick="showAV('chats')">Ver chats</button>
         ${ud.kycPhoto?`<button class="btn g sm" onclick="admKycView('${ud.kycPhoto}')">🆔 Ver KYC</button>`:''}
         ${ks==='pending'?`<button class="btn g sm" onclick="admKycApprove('${em}')">✅ Aprobar</button><button class="btn ghost sm" style="color:var(--red)" onclick="admKycReject('${em}')">❌ Rechazar</button>`:''}
