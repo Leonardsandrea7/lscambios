@@ -1696,7 +1696,7 @@ async function sbUpdateOpEstado(opId, estado){
 async function sbGetAllOps(){
   if(!_dbOk('sbGetAllOps')) return [];
   const{data,error}=await db.from('operaciones')
-    .select('*, clientes(nombre,apellido)')
+    .select('*, clientes!operaciones_cliente_email_fkey(nombre,apellido)')
     .order('created_at',{ascending:false});
   if(sbErr('sbGetAllOps',error)) return [];
   if(!data) return [];
