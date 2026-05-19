@@ -1550,17 +1550,37 @@ function toast(msg,t=''){
 function sbErr(fn, error){
   if(!error) return false;
   const msg = error.message || JSON.stringify(error);
-  console.error(`[${fn}]`, msg);
+  const code = error.code || '';
+  const details = error.details || '';
+  const hint = error.hint || '';
+
+  // Mostrar error completo en pantalla para diagnóstico
+  const fullMsg = `[${fn}] ${msg}${code?' | code:'+code:''}${details?' | details:'+details:''}${hint?' | hint:'+hint:''}`;
   
+  // Crear o reutilizar div de error visible
+  let dbgDiv = document.getElementById('_sberr_dbg');
+  if(!dbgDiv){
+    dbgDiv = document.createElement('div');
+    dbgDiv.id = '_sberr_dbg';
+    dbgDiv.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#1a0000;color:#ff6b6b;font-family:monospace;font-size:11px;padding:10px 14px;max-height:160px;overflow-y:auto;border-top:2px solid #ff4444;';
+    dbgDiv.innerHTML = '<div style="display:flex;justify-content:space-between;margin-bottom:6px"><b>🔴 ERROR SUPABASE</b><button onclick="document.getElementById(\'_sberr_dbg\').remove()" style="background:none;border:none;color:#ff6b6b;cursor:pointer;font-size:14px">✕</button></div>';
+    document.body.appendChild(dbgDiv);
+  }
+  const line = document.createElement('div');
+  line.style.cssText = 'padding:3px 0;border-bottom:1px solid rgba(255,100,100,.2);word-break:break-all;';
+  line.textContent = fullMsg;
+  dbgDiv.appendChild(line);
+  dbgDiv.scrollTop = dbgDiv.scrollHeight;
+
   if(msg.includes('violates check constraint')||msg.includes('check_')){
     return true; 
   }
-  if(msg.includes('violates row-level security')||msg.includes('RLS')){
-    toast(`❌ Error de permisos Supabase en ${fn}. Revisa las políticas RLS.`, 'err');
+  if(msg.includes('violates row-level security')||msg.includes('RLS')||msg.includes('policy')){
+    toast(`❌ Error RLS (${fn}): ${msg.slice(0,80)}`, 'err');
   } else if(msg.includes('Failed to fetch')||msg.includes('NetworkError')){
     toast('❌ Sin conexión a Supabase. Verifica tu internet.', 'err');
   } else {
-    toast(`❌ Error DB (${fn}): ${msg.slice(0,60)}`, 'err');
+    toast(`❌ Error DB (${fn}): ${msg.slice(0,80)}`, 'err');
   }
   return true;
 }
