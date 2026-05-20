@@ -1549,19 +1549,31 @@ function toast(msg,t=''){
 
 function sbErr(fn, error){
   if(!error) return false;
-  const msg = error.message || JSON.stringify(error);
-  console.error(`[${fn}]`, msg);
-  
-  if(msg.includes('violates check constraint')||msg.includes('check_')){
-    return true; 
+  const msg     = error.message  || JSON.stringify(error);
+  const code    = error.code     || '';
+  const details = error.details  || '';
+  const hint    = error.hint     || '';
+  const full    = `[${fn}] ${msg}${code?' | code:'+code:''}${details?' | details:'+details:''}${hint?' | hint:'+hint:''}`;
+
+  // Barra roja visible en pantalla
+  let box = document.getElementById('_sberr_box');
+  if(!box){
+    box = document.createElement('div');
+    box.id = '_sberr_box';
+    box.style.cssText='position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#1a0000;color:#ff8080;font:11px/1.5 monospace;padding:10px 14px;max-height:180px;overflow-y:auto;border-top:2px solid #ff3333;';
+    box.innerHTML='<div style="display:flex;justify-content:space-between;margin-bottom:4px"><b>🔴 ERROR SUPABASE</b><button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:#ff8080;cursor:pointer;font-size:15px">✕</button></div>';
+    document.body.appendChild(box);
   }
-  if(msg.includes('violates row-level security')||msg.includes('RLS')){
-    toast(`❌ Error de permisos Supabase en ${fn}. Revisa las políticas RLS.`, 'err');
-  } else if(msg.includes('Failed to fetch')||msg.includes('NetworkError')){
-    toast('❌ Sin conexión a Supabase. Verifica tu internet.', 'err');
-  } else {
-    toast(`❌ Error DB (${fn}): ${msg.slice(0,60)}`, 'err');
-  }
+  const line = document.createElement('div');
+  line.style.cssText='padding:2px 0;border-bottom:1px solid rgba(255,80,80,.2);word-break:break-all';
+  line.textContent = full;
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+
+  // Toast con mensaje completo (no genérico)
+  toast('❌ ' + full.slice(0, 120), 'err');
+
+  if(msg.includes('violates check constraint')||msg.includes('check_')) return true;
   return true;
 }
 
