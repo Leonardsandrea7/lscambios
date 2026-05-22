@@ -1182,7 +1182,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
               <div class="sum-row"><span class="sum-k">Recibes</span><span class="sum-v ui-col-g" id="trd-get">—</span></div>
             </div>
 
-            <div class="card" id="trd-payment-card" style="display:none">
+            <div class="card" id="trd-payment-card">
               <div class="card-hdr" id="trd-payment-hdr"><span class="card-title" id="trd-payment-title">📲 Envía tu pago</span></div>
               <div id="trd-payment-body" style="padding:14px 18px;display:flex;flex-direction:column;gap:8px"></div>
             </div>
@@ -2304,6 +2304,9 @@ function updWallet(){
   const dir=document.getElementById('op-dir').value, plat=_getPlat();
   const box=document.getElementById('wall-box'),cnt=document.getElementById('wall-cnt');
   if(!box||!cnt)return;
+  // Los datos de pago solo se muestran DESPUÉS de confirmar la operación
+  box.style.display='none';
+  return;
   const sess=gS(),ud=sess?getUser(sess.email):null,w=WLS[plat]||{},wu=WLS.usdt||{};
   if(dir==='compra'){
     box.style.display='block';box.style.borderColor='rgba(0,200,150,.18)';
@@ -2771,7 +2774,7 @@ function buildCliTbl(users){
       </div>
       ${ud.kycReason?`<div style="margin-top:6px;font-size:11px;color:var(--red)">⚠️ Rechazo: ${ud.kycReason}</div>`:''}
       <div class="u-acts" style="flex-wrap:wrap;gap:6px;margin-top:8px">
-        <button class="u-btn wa" onclick="(function(){const t=('${ud.tel||''}'.replace(/[^0-9]/g,''));window.open('https://wa.me/'+t+'?text='+encodeURIComponent('Hola ${ud.nombre||em}, te contactamos de LS Cambios.'),'_blank');})()" >💬 WhatsApp</button>
+        <button class="u-btn wa" onclick="(function(){const t=('${ud.tel||''}'.replace(/[^0-9]/g,''));if(t)window.open('https://wa.me/'+t+'?text='+encodeURIComponent('Hola ${ud.nombre||em}, te contactamos de LS Cambios.'),'_blank');else alert('El cliente no tiene teléfono registrado');})()" >💬 WhatsApp</button>
         <button class="u-btn vw" onclick="showAV('chats')">Ver chats</button>
         ${ud.kycPhoto?`<button class="btn g sm" onclick="admKycView('${ud.kycPhoto}')">🆔 Ver KYC</button>`:''}
         ${ks==='pending'?`<button class="btn g sm" onclick="admKycApprove('${em}')">✅ Aprobar</button><button class="btn ghost sm" style="color:var(--red)" onclick="admKycReject('${em}')">❌ Rechazar</button>`:''}
