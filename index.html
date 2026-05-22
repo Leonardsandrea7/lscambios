@@ -1182,7 +1182,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
               <div class="sum-row"><span class="sum-k">Recibes</span><span class="sum-v ui-col-g" id="trd-get">—</span></div>
             </div>
 
-            <div class="card" id="trd-payment-card">
+            <div class="card" id="trd-payment-card" style="display:none">
               <div class="card-hdr" id="trd-payment-hdr"><span class="card-title" id="trd-payment-title">📲 Envía tu pago</span></div>
               <div id="trd-payment-body" style="padding:14px 18px;display:flex;flex-direction:column;gap:8px"></div>
             </div>
@@ -1555,16 +1555,14 @@ function sbErr(fn, error){
   const full = `[${fn}] ${msg}${code?' ('+code+')':''}${hint?' → '+hint:''}`;
   let box=document.getElementById('_sberr_box');
   if(!box){
-    box=document.createElement('div');
-    box.id='_sberr_box';
+    box=document.createElement('div');box.id='_sberr_box';
     box.style.cssText='position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#1a0000;color:#ff8080;font:11px monospace;padding:10px 14px;max-height:160px;overflow-y:auto;border-top:2px solid #ff3333';
     box.innerHTML='<div style="display:flex;justify-content:space-between;margin-bottom:4px"><b>🔴 ERROR SUPABASE</b><button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:#ff8080;cursor:pointer;font-size:15px">✕</button></div>';
     document.body.appendChild(box);
   }
   const line=document.createElement('div');
   line.style.cssText='padding:2px 0;border-bottom:1px solid rgba(255,80,80,.2);word-break:break-all';
-  line.textContent=full;
-  box.appendChild(line);box.scrollTop=box.scrollHeight;
+  line.textContent=full;box.appendChild(line);box.scrollTop=box.scrollHeight;
   if(msg.includes('violates check constraint')||msg.includes('check_')) return true;
   toast('❌ '+full.slice(0,120),'err');
   return true;
@@ -2516,6 +2514,7 @@ function openTradeUI(opId,op){
 function renderTradePayment(op){
   const w=WLS[op.plat]; if(!w) return;
   const card=document.getElementById('trd-payment-card');
+  if(card) card.style.display='block';
   const titleEl=document.getElementById('trd-payment-title');
   const hdrEl=document.getElementById('trd-payment-hdr');
   const body=document.getElementById('trd-payment-body');
@@ -2772,7 +2771,7 @@ function buildCliTbl(users){
       </div>
       ${ud.kycReason?`<div style="margin-top:6px;font-size:11px;color:var(--red)">⚠️ Rechazo: ${ud.kycReason}</div>`:''}
       <div class="u-acts" style="flex-wrap:wrap;gap:6px;margin-top:8px">
-        <button class="u-btn wa" onclick="window.open('${WA}?text='+encodeURIComponent('Hola ${ud.nombre||em}, te contactamos de LS Cambios.'),'_blank')">💬 WhatsApp</button>
+        <button class="u-btn wa" onclick="(function(){const t=('${ud.tel||''}'.replace(/[^0-9]/g,''));window.open('https://wa.me/'+t+'?text='+encodeURIComponent('Hola ${ud.nombre||em}, te contactamos de LS Cambios.'),'_blank');})()" >💬 WhatsApp</button>
         <button class="u-btn vw" onclick="showAV('chats')">Ver chats</button>
         ${ud.kycPhoto?`<button class="btn g sm" onclick="admKycView('${ud.kycPhoto}')">🆔 Ver KYC</button>`:''}
         ${ks==='pending'?`<button class="btn g sm" onclick="admKycApprove('${em}')">✅ Aprobar</button><button class="btn ghost sm" style="color:var(--red)" onclick="admKycReject('${em}')">❌ Rechazar</button>`:''}
