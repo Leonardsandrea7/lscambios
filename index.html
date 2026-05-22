@@ -1549,31 +1549,24 @@ function toast(msg,t=''){
 
 function sbErr(fn, error){
   if(!error) return false;
-  const msg     = error.message  || JSON.stringify(error);
-  const code    = error.code     || '';
-  const details = error.details  || '';
-  const hint    = error.hint     || '';
-  const full    = `[${fn}] ${msg}${code?' | code:'+code:''}${details?' | details:'+details:''}${hint?' | hint:'+hint:''}`;
-
-  // Barra roja visible en pantalla
-  let box = document.getElementById('_sberr_box');
+  const msg  = error.message || JSON.stringify(error);
+  const code = error.code    || '';
+  const hint = error.hint    || '';
+  const full = `[${fn}] ${msg}${code?' ('+code+')':''}${hint?' → '+hint:''}`;
+  let box=document.getElementById('_sberr_box');
   if(!box){
-    box = document.createElement('div');
-    box.id = '_sberr_box';
-    box.style.cssText='position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#1a0000;color:#ff8080;font:11px/1.5 monospace;padding:10px 14px;max-height:180px;overflow-y:auto;border-top:2px solid #ff3333;';
+    box=document.createElement('div');
+    box.id='_sberr_box';
+    box.style.cssText='position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#1a0000;color:#ff8080;font:11px monospace;padding:10px 14px;max-height:160px;overflow-y:auto;border-top:2px solid #ff3333';
     box.innerHTML='<div style="display:flex;justify-content:space-between;margin-bottom:4px"><b>🔴 ERROR SUPABASE</b><button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:#ff8080;cursor:pointer;font-size:15px">✕</button></div>';
     document.body.appendChild(box);
   }
-  const line = document.createElement('div');
+  const line=document.createElement('div');
   line.style.cssText='padding:2px 0;border-bottom:1px solid rgba(255,80,80,.2);word-break:break-all';
-  line.textContent = full;
-  box.appendChild(line);
-  box.scrollTop = box.scrollHeight;
-
-  // Toast con mensaje completo (no genérico)
-  toast('❌ ' + full.slice(0, 120), 'err');
-
+  line.textContent=full;
+  box.appendChild(line);box.scrollTop=box.scrollHeight;
   if(msg.includes('violates check constraint')||msg.includes('check_')) return true;
+  toast('❌ '+full.slice(0,120),'err');
   return true;
 }
 
@@ -2313,23 +2306,25 @@ function updWallet(){
   const dir=document.getElementById('op-dir').value, plat=_getPlat();
   const box=document.getElementById('wall-box'),cnt=document.getElementById('wall-cnt');
   if(!box||!cnt)return;
-  // Los datos de pago solo se muestran DESPUÉS de confirmar la operación (en el chat P2P)
-  box.style.display='none';
   const sess=gS(),ud=sess?getUser(sess.email):null,w=WLS[plat]||{},wu=WLS.usdt||{};
   if(dir==='compra'){
+    box.style.display='block';box.style.borderColor='rgba(0,200,150,.18)';
     let ci='';
     if(ud&&ud.cuentas){const acc=plat==='binance'?ud.cuentas.binanceId:ud.cuentas.correo;if(acc)ci=`<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(0,200,150,.08)"><div style="font-size:9px;color:var(--t3);letter-spacing:.8px;font-weight:700;margin-bottom:6px">TU CUENTA DE ENVÍO</div><div class="wall-row"><span class="wall-k">${plat==='binance'?'Tu ID Binance':'Tu correo'}</span><span class="wall-v">${acc}</span></div></div>`;}
     cnt.innerHTML=`<div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button></span></div><div class="wall-row"><span class="wall-k">Nota</span><span class="wall-v">${w.note}</span></div>${ci}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(0,200,150,.06)">⚠️ Envía el monto exacto y sube el comprobante en el chat.</div>`;
   }else if(dir==='venta'){
-    let pm_html='';
+    box.style.display='block';box.style.borderColor='rgba(247,147,26,.2)';
+    let pm_html='<div style="margin-top:8px;padding:10px;background:rgba(247,147,26,.05);border-radius:7px;font-size:11px;color:var(--t2)">⚠️ Pago Móvil no configurado. Consulta en el chat.</div>';
     if(ADMIN_PM&&ADMIN_PM.tel){const pm=ADMIN_PM;pm_html=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(247,147,26,.08)"><div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:6px">📲 PAGO MÓVIL LS CAMBIOS</div><div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco||'—'}</span></div><div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel}<button class="cpb" onclick="copyVal('${pm.tel}')">COPIAR</button></span></div><div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula||'—'}</span></div></div>`;}
     cnt.innerHTML=`<div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:8px">💸 ENVÍA LAS DIVISAS A LS CAMBIOS</div><div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button></span></div>${pm_html}<div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:6px;border-top:1px solid rgba(247,147,26,.06)">⚠️ Envía el monto exacto. Te enviamos los Bs una vez confirmado.</div>`;
   }else if(dir==='usdt_compra'){
+    box.style.display='block';box.style.borderColor='rgba(38,161,123,.35)';
     cnt.innerHTML=`<div style="font-size:9px;color:#26a17b;letter-spacing:.8px;font-weight:700;margin-bottom:8px">🪙 ENVÍA USDT (BEP20) A LS CAMBIOS</div>
       <div class="wall-row"><span class="wall-k">Wallet USDT</span><span class="wall-v" style="font-family:var(--mono);font-size:10px">${wu.val||'—'}<button class="cpb" style="background:rgba(38,161,123,.12);border-color:rgba(38,161,123,.3);color:#26a17b" onclick="copyVal('${wu.val||''}')">COPIAR</button></span></div>
       <div class="wall-row"><span class="wall-k">Red</span><span class="wall-v" style="color:#26a17b;font-weight:700">BEP20 · Binance Smart Chain ✅</span></div>
       <div style="margin-top:8px;padding:8px;background:rgba(38,161,123,.06);border-radius:7px;font-size:10px;color:var(--t2)">⚠️ <strong>Solo BEP20.</strong> No envíes por TRC20 ni ERC20. Adjunta el hash en el chat.</div>`;
   }else{
+    box.style.display='block';box.style.borderColor='rgba(247,147,26,.2)';
     const cw=(ud&&ud.cuentas&&ud.cuentas.usdtWallet)||'';
     const wi=cw?`<div class="wall-row"><span class="wall-k">Tu wallet USDT</span><span class="wall-v" style="font-family:var(--mono);font-size:10px">${cw}<button class="cpb" onclick="copyVal('${cw}')">COPIAR</button></span></div><div style="font-size:10px;color:var(--t3);margin-top:4px">✅ Enviaremos el USDT a esta dirección (BEP20).</div>`:`<div style="margin-top:6px;padding:8px;background:rgba(247,147,26,.06);border-radius:7px;font-size:10px;color:var(--t2)">⚠️ No tienes wallet USDT registrada. Indícanos tu dirección BEP20 en el chat.</div>`;
     cnt.innerHTML=`<div style="font-size:9px;color:var(--red);letter-spacing:.8px;font-weight:700;margin-bottom:8px">💸 ENVÍA LAS DIVISAS A LS CAMBIOS</div><div class="wall-row"><span class="wall-k">${w.label}</span><span class="wall-v">${w.val}<button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button></span></div>${wi}`;
@@ -2756,9 +2751,6 @@ function buildCliTbl(users){
     const sid='ux_'+em.replace(/[^a-z0-9]/gi,'_');
     let pw='—';try{pw=decodeURIComponent(escape(atob(ud.pw||'')))}catch{}
     const pm=ud.pagoMovil||{},cu=ud.cuentas||{},ks=ud.kycStatus;
-    const _cTel=(ud.tel||'').replace(/\D/g,'');
-    const _cWaN=_cTel.startsWith('0')?'58'+_cTel.slice(1):_cTel;
-    const _cWaUrl='https://wa.me/'+_cWaN+'?text='+encodeURIComponent('Hola '+(ud.nombre||em)+', te contactamos de LS Cambios.');
     return`<tr class="ui-pointer" onclick="toggleUx('${sid}')">
       <td style="font-weight:700">${ud.nombre||''} ${ud.apellido||''}</td>
       <td>${ud.cedula||'—'}</td><td style="font-size:11px">${em}</td>
@@ -2780,7 +2772,7 @@ function buildCliTbl(users){
       </div>
       ${ud.kycReason?`<div style="margin-top:6px;font-size:11px;color:var(--red)">⚠️ Rechazo: ${ud.kycReason}</div>`:''}
       <div class="u-acts" style="flex-wrap:wrap;gap:6px;margin-top:8px">
-        <button class="u-btn wa" onclick="window.open('${_cWaUrl}','_blank')">💬 WhatsApp</button>
+        <button class="u-btn wa" onclick="window.open('${WA}?text='+encodeURIComponent('Hola ${ud.nombre||em}, te contactamos de LS Cambios.'),'_blank')">💬 WhatsApp</button>
         <button class="u-btn vw" onclick="showAV('chats')">Ver chats</button>
         ${ud.kycPhoto?`<button class="btn g sm" onclick="admKycView('${ud.kycPhoto}')">🆔 Ver KYC</button>`:''}
         ${ks==='pending'?`<button class="btn g sm" onclick="admKycApprove('${em}')">✅ Aprobar</button><button class="btn ghost sm" style="color:var(--red)" onclick="admKycReject('${em}')">❌ Rechazar</button>`:''}
