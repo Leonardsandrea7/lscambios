@@ -35,6 +35,99 @@ document.addEventListener('DOMContentLoaded',function(){
   --t1:#e0eaf5;--t2:#7a92a8;--t3:#3d5168;
   --r:8px;--r2:12px;--fn:'Outfit',sans-serif;--mono:'Space Mono',monospace;
 }
+/* ── MODO CLARO — paleta azul LS Cambios ── */
+.light{
+  --bg:#eef2f8;--bg1:#f8fafd;--bg2:#dde6f0;--bg3:#c8d8e8;
+  --brd:rgba(26,108,255,.12);--brd2:rgba(26,108,255,.22);
+  --t1:#0a1628;--t2:#1a4a8a;--t3:#5580b0;
+}
+/* Base */
+.light body{background:var(--bg);color:var(--t1)}
+
+/* Nav */
+.light .nav{background:rgba(248,250,253,.97);border-bottom:1px solid var(--brd2)}
+.light .nav-brand-name{background:var(--gd);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.light .nav-btn-ghost{background:var(--bg2);color:#0a1628;border-color:var(--brd2)}
+.light .nav-btn-ghost:hover{background:var(--bg3);color:#0a1628}
+.light #theme-btn{background:var(--bg2);border-color:var(--brd2)}
+
+/* Cards y contenedores */
+.light .card{background:var(--bg1);border-color:var(--brd2);color:var(--t1)}
+.light .card-title{color:#0a1628}
+.light .card-hdr{border-bottom-color:var(--brd2);background:rgba(26,108,255,.03)}
+.light .kpi{background:var(--bg2);border-color:var(--brd2)}
+.light .wall-box{background:rgba(26,108,255,.04);border-color:rgba(26,108,255,.18)}
+.light .wall-k{color:#1a4a8a}
+.light .wall-v{color:#0a1628}
+
+/* Textos generales */
+.light .dv-h{color:#0a1628}
+.light .dv-s{color:#1a4a8a}
+.light .sum-k{color:#1a4a8a}
+.light .sum-v{color:#0a1628}
+.light .rr-t{color:#0a1628}
+.light .rr-comm{color:#1a4a8a}
+.light .rr-unit{color:#1a4a8a}
+.light .hero-h1{color:#0a1628}
+.light .hero-sub{color:#1a4a8a}
+.light .how-t{color:#0a1628}
+.light .how-d{color:#1a4a8a}
+.light .sec-h{color:#0a1628}
+
+/* Inputs */
+.light input,.light select,.light textarea{background:var(--bg2);color:#0a1628;border-color:var(--brd2)}
+.light input::placeholder,.light textarea::placeholder{color:#5580b0}
+.light label,.light .inp-lbl{color:#1a4a8a}
+
+/* Tasas landing */
+.light .rate-row{border-color:var(--brd2);color:#0a1628}
+.light .rate-row:hover{background:var(--bg2)}
+.light .rs-tabs{background:var(--bg2);border-color:var(--brd2)}
+.light .rs-tab{color:#1a4a8a}
+.light .rs-tab.on{background:var(--bg3);color:#0a1628;border-color:var(--brd2)}
+
+/* Chat */
+.light .chat-msgs{background:var(--bg2)}
+.light .chat-bar{background:var(--bg1);border-top-color:var(--brd2)}
+.light .chat-inp{background:var(--bg2);color:#0a1628;border-color:var(--brd2)}
+.light .msg-them .msg-b{background:var(--bg3);color:#0a1628}
+.light .chat-id{color:#0a1628}
+
+/* Sidebar admin */
+.light .ap-sidebar{background:var(--bg1);border-right-color:var(--brd2)}
+.light .ap-nav{background:var(--bg1);border-bottom-color:var(--brd2)}
+.light .sb-i{color:#1a4a8a}
+.light .sb-i.on,.light .sb-i:hover{background:var(--bg3);color:#0a1628}
+.light .sb-sec{color:#5580b0}
+.light .dp-nav{background:var(--bg1);border-bottom-color:var(--brd2)}
+
+/* Modal */
+.light .modal{background:var(--bg1);border-color:var(--brd2)}
+.light .modal-hdr{border-bottom-color:var(--brd2);color:#0a1628}
+.light .ov-bg{background:rgba(10,22,40,.5)}
+
+/* Tablas */
+.light .ui-table th{background:var(--bg2);color:#1a4a8a}
+.light .ui-table td{color:#0a1628;border-color:var(--brd2)}
+.light .ui-table tr:hover td{background:var(--bg2)}
+
+/* Steps / progress */
+.light .step-off{color:#5580b0}
+
+/* Scrollbar */
+.light ::-webkit-scrollbar-thumb{background:var(--bg3)}
+.light ::-webkit-scrollbar-track{background:var(--bg2)}
+
+/* Misceláneos */
+.light #dp{background:var(--bg)}
+.light .intro-screen{background:var(--bg1)}
+.light .live-chip{background:rgba(26,108,255,.08);border-color:rgba(26,108,255,.2);color:#1a4a8a}
+.light .footer-links a{color:#5580b0}
+.light .footer-links a:hover{color:#1a4a8a}
+.light .horario-chip{background:rgba(26,108,255,.07);border-color:rgba(26,108,255,.18);color:#1a4a8a}
+.light .trade-tab{color:#1a4a8a;border-color:var(--brd2)}
+.light .trade-tab.on{background:var(--bg3);color:#0a1628}
+.light .compliance-card{background:rgba(26,108,255,.04)}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-scroll-behavior:smooth;scroll-behavior:smooth;height:100%}
 body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh;min-height:100dvh;overflow-x:hidden;overscroll-behavior:none;-webkit-overflow-scrolling:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
@@ -693,6 +786,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <div class="nav-brand-name">LS CAMBIOS</div>
     </div>
     <div class="nav-actions" id="navActs">
+      <button id="theme-btn" onclick="toggleTheme()" title="Cambiar tema" style="background:var(--bg3);border:1px solid var(--brd2);border-radius:6px;padding:7px 10px;font-size:15px;cursor:pointer;transition:.2s;line-height:1">🌙</button>
       <button class="nav-btn nav-btn-ghost" onclick="openAuth('login')">Entrar</button>
       <button class="nav-btn nav-btn-solid" onclick="openAuth('register')">Crear cuenta</button>
     </div>
@@ -1490,6 +1584,26 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 
 <script>
 'use strict';
+
+// ── TEMA CLARO / OSCURO ─────────────────────────────────────────────────────
+function toggleTheme(){
+  const isLight=document.documentElement.classList.toggle('light');
+  const btn=document.getElementById('theme-btn');
+  if(btn) btn.textContent=isLight?'☀️':'🌙';
+  try{localStorage.setItem('lsc_theme',isLight?'light':'dark');}catch{}
+}
+(function initTheme(){
+  try{
+    const t=localStorage.getItem('lsc_theme');
+    if(t==='light'){
+      document.documentElement.classList.add('light');
+      document.addEventListener('DOMContentLoaded',()=>{
+        const btn=document.getElementById('theme-btn');
+        if(btn)btn.textContent='☀️';
+      });
+    }
+  }catch{}
+})();
 
 const WA       = 'https://wa.me/584147408768';
 const TG_TOKEN = '8545688733:AAGUVpqSGdLH5A27RtwwxCPQFmlWBhZEj6A';
