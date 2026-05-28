@@ -2173,7 +2173,12 @@ async function doLogin(){
   try{
     const user=await sbGetUser(email);
     if(!user){err.textContent='Correo no registrado.';err.classList.add('on');return}
-    if(user.pw!==btoa(unescape(encodeURIComponent(pass)))){err.textContent='Contraseña incorrecta.';err.classList.add('on');return}
+    const passHash = await _h256(pass);
+    if(user.pw!==passHash && user.pw!==btoa(unescape(encodeURIComponent(pass)))){err.textContent='Contraseña incorrecta.';err.classList.add('on');return}
+    // migrar contraseña antigua a SHA-256 si todavía estaba en btoa
+    if(user.pw===btoa(unescape(encodeURIComponent(pass))) && user.pw!==passHash){
+      await db.from('clientes').update({pw_hash:passHash}).eq('email',email.toLowerCase());
+    }
     user.hist=await sbGetOps(email);
     sS({email,...user});
     await logAct('login',{email,name:user.name,date:tnowISO()});
@@ -2240,7 +2245,7 @@ async function doVerifyCode(){
     const ud={
       nombre:d.nombre,apellido:d.apellido,name:d.nombre+' '+d.apellido,
       cedula:d.cedula,email:d.email,tel:d.tel,code,
-      pw:btoa(unescape(encodeURIComponent(d.pass))),
+      pw:await _h256(d.pass),
       pagoMovil:{banco:d.banco,tel:d.pmTel,cedula:d.pmCi},
       cuentas:{correo:d.cDiv,binanceId:d.bid,usdtWallet:d.usdtWallet||''},
       joined:new Date().toLocaleDateString('es-VE'),created:tnowISO(),hist:[]
