@@ -2621,16 +2621,11 @@ async function tgNotify(msg){
 //  Base USDT interna · depósito · conversión · retiro
 // ═══════════════════════════════════════════════════════════
 
-// ── Supabase wallet helpers ─────────────────────────────────
-// Usa la tabla 'tasas' (ya funciona con RLS correcto en tu proyecto)
-// Sin tablas nuevas = sin errores de permisos
+// ── Supabase wallet helpers — usa tabla tasas (sin tablas nuevas) ──
 
-function _wk(email){ 
-  // Convierte email a clave segura para Supabase
-  return email.toLowerCase().replace(/@/g,'__at__').replace(/[^a-z0-9_]/g,'_'); 
-}
+function _wk(e){ return e.toLowerCase().replace(/@/g,'__at__').replace(/[^a-z0-9_]/g,'_'); }
 
-async function _tasasGet(key){
+async function _tGet(key){
   try{
     const{data,error}=await db.from('tasas').select('data').eq('id',key).maybeSingle();
     if(error||!data) return null;
@@ -2638,112 +2633,88 @@ async function _tasasGet(key){
   }catch(e){ return null; }
 }
 
-async function _tasasSet(key,val){
+async function _tSet(key,val){
   try{
     const{error}=await db.from('tasas').upsert({id:key,data:val},{onConflict:'id'});
-    return !error;
-  }catch(e){ return false; }
+    if(error){ console.error('[_tSet]',key,error.message); return false; }
+    return true;
+  }catch(e){ console.error('[_tSet]',e); return false; }
 }
 
 async function sbGetWallet(email){
-  const d=await _tasasGet('wlt__'+_wk(email));
-  if(!d) return {usdt:0,bs:0,usd:0};
-  return {usdt:parseFloat(d.usdt)||0, bs:parseFloat(d.bs)||0, usd:parseFloat(d.usd)||0};
+  const d=await _tGet('wlt__'+_wk(email));
+  return {usdt:parseFloat(d?.usdt)||0, bs:parseFloat(d?.bs)||0, usd:parseFloat(d?.usd)||0};
 }
 
 async function sbUpsertWallet(email,usdt,bs,usd){
-  return _tasasSet('wlt__'+_wk(email),{
-    usdt:parseFloat(usdt)||0, bs:parseFloat(bs)||0, usd:parseFloat(usd)||0,
-    email:email.toLowerCase(), updated_at:tnowISO()
-  });
+  return _tSet('wlt__'+_wk(email),{email:email.toLowerCase(),usdt:parseFloat(usdt)||0,bs:parseFloat(bs)||0,usd:parseFloat(usd)||0,updated_at:tnowISO()});
 }
 
 async function sbAddTransaction(email,tipo,monto_usdt,descripcion,extra={}){
   const k='wtx__'+_wk(email);
-  const list=(await _tasasGet(k))||[];
-  list.unshift({
-    id:'TX'+Date.now(), email:email.toLowerCase(), tipo,
-    monto_usdt:parseFloat(monto_usdt)||0, descripcion,
-    metodo:extra.metodo||null, estado:extra.estado||'completado',
-    created_at:tnowISO()
-  });
-  return _tasasSet(k, list.slice(0,100));
+  const list=(await _tGet(k))||[];
+  list.unshift({id:'TX'+Date.now(),email:email.toLowerCase(),tipo,monto_usdt:parseFloat(monto_usdt)||0,descripcion,metodo:extra.metodo||null,estado:extra.estado||'completado',created_at:tnowISO()});
+  return _tSet(k,list.slice(0,100));
 }
 
 async function sbGetTransactions(email){
-  const d=await _tasasGet('wtx__'+_wk(email));
+  const d=await _tGet('wtx__'+_wk(email));
   return Array.isArray(d)?d:[];
 }
 
 async function sbCreateDeposit(email,metodo,monto,moneda,voucher_b64){
-  const dep={
-    id:'DEP'+Date.now().toString().slice(-8),
-    email:email.toLowerCase(), metodo,
-    monto:parseFloat(monto)||0, moneda:moneda||'usd',
-    voucher:voucher_b64||null, estado:'pendiente',
-    usdt_acreditado:0, created_at:tnowISO()
-  };
-  const list=(await _tasasGet('wdep__all'))||[];
+  const dep={id:'DEP'+Date.now().toString().slice(-8),email:email.toLowerCase(),metodo,monto:parseFloat(monto)||0,moneda:moneda||'usd',voucher:voucher_b64||null,estado:'pendiente',usdt_acreditado:0,created_at:tnowISO()};
+  const list=(await _tGet('wdep__all'))||[];
   list.unshift(dep);
-  const ok=await _tasasSet('wdep__all', list.slice(0,500));
+  const ok=await _tSet('wdep__all',list.slice(0,500));
   return ok?dep:null;
 }
 
 async function sbGetDeposits(email){
-  const list=(await _tasasGet('wdep__all'))||[];
+  const list=(await _tGet('wdep__all'))||[];
   return list.filter(d=>d.email===email.toLowerCase());
 }
 
 async function sbGetAllDeposits(estado){
-  const list=(await _tasasGet('wdep__all'))||[];
+  const list=(await _tGet('wdep__all'))||[];
   return estado?list.filter(d=>d.estado===estado):list;
 }
 
 async function sbUpdateDeposit(id,estado,usdt_acreditado){
-  const list=(await _tasasGet('wdep__all'))||[];
+  const list=(await _tGet('wdep__all'))||[];
   const i=list.findIndex(d=>d.id===id);
   if(i===-1) return false;
-  list[i]={...list[i], estado, updated_at:tnowISO()};
+  list[i]={...list[i],estado,updated_at:tnowISO()};
   if(usdt_acreditado!==undefined) list[i].usdt_acreditado=usdt_acreditado;
-  return _tasasSet('wdep__all', list);
+  return _tSet('wdep__all',list);
 }
 
 async function sbCreateWithdraw(email,destino,monto_usdt,cuenta){
-  const ret={
-    id:'RET'+Date.now().toString().slice(-8),
-    email:email.toLowerCase(), destino,
-    monto_usdt:parseFloat(monto_usdt)||0,
-    cuenta_destino:cuenta||'', estado:'pendiente',
-    created_at:tnowISO()
-  };
-  const list=(await _tasasGet('wret__all'))||[];
+  const ret={id:'RET'+Date.now().toString().slice(-8),email:email.toLowerCase(),destino,monto_usdt:parseFloat(monto_usdt)||0,cuenta_destino:cuenta||'',estado:'pendiente',created_at:tnowISO()};
+  const list=(await _tGet('wret__all'))||[];
   list.unshift(ret);
-  const ok=await _tasasSet('wret__all', list.slice(0,500));
+  const ok=await _tSet('wret__all',list.slice(0,500));
   return ok?ret:null;
 }
 
 async function sbGetAllWithdraws(estado){
-  const list=(await _tasasGet('wret__all'))||[];
+  const list=(await _tGet('wret__all'))||[];
   return estado?list.filter(w=>w.estado===estado):list;
 }
 
 async function sbUpdateWithdraw(id,estado){
-  const list=(await _tasasGet('wret__all'))||[];
+  const list=(await _tGet('wret__all'))||[];
   const i=list.findIndex(w=>w.id===id);
   if(i===-1) return false;
-  list[i]={...list[i], estado, updated_at:tnowISO()};
-  return _tasasSet('wret__all', list);
+  list[i]={...list[i],estado,updated_at:tnowISO()};
+  return _tSet('wret__all',list);
 }
 
 async function sbGetAllWallets(){
   try{
     const{data,error}=await db.from('tasas').select('id,data').like('id','wlt__%');
     if(error||!data) return [];
-    return data
-      .filter(r=>r.id.startsWith('wlt__') && r.data?.email)
-      .map(r=>r.data)
-      .filter(w=>(parseFloat(w.usdt)||0)+(parseFloat(w.bs)||0)>0)
-      .sort((a,b)=>(parseFloat(b.usdt)||0)-(parseFloat(a.usdt)||0));
+    return data.filter(r=>r.data?.email).map(r=>r.data).filter(w=>(w.usdt||0)+(w.bs||0)>0).sort((a,b)=>(b.usdt||0)-(a.usdt||0));
   }catch(e){ return []; }
 }
 
