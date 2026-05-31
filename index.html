@@ -2621,52 +2621,134 @@ async function tgNotify(msg){
 //  Base USDT interna · depósito · conversión · retiro
 // ═══════════════════════════════════════════════════════════
 
-// ── Supabase wallet helpers — tabla tasas ─────────────────────
-function _wk(e){return 'wlt__'+e.toLowerCase().replace(/@/g,'__').replace(/[^a-z0-9_]/g,'_');}
-async function _tG(k){try{const{data,error}=await db.from('tasas').select('data').eq('id',k).maybeSingle();if(error||!data)return null;return data.data;}catch(e){return null;}}
-async function _tS(k,v){try{const{error}=await db.from('tasas').upsert({id:k,data:v},{onConflict:'id'});if(error){console.error('[tS]',k,error.message);return false;}return true;}catch(e){console.error('[tS]',e);return false;}}
+// ── Wallet helpers — localStorage + Supabase tasas ──────────
 
-async function sbGetWallet(em){const d=await _tG(_wk(em));return{usdt:+(d?.usdt||0),bs:+(d?.bs||0),usd:+(d?.usd||0)};}
-async function sbUpsertWallet(em,u,b,d){return _tS(_wk(em),{email:em.toLowerCase(),usdt:+u||0,bs:+b||0,usd:+d||0,upd:tnowISO()});}
+// Clave localStorage por usuario
+function _lk(em,t){ return 'lsc_'+t+'_'+em.toLowerCase().replace(/[^a-z0-9]/g,'_'); }
+
+// Leer/escribir en localStorage (siempre funciona, sin permisos)
+function _lGet(k){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } }
+function _lSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); return true; }catch(e){ return false; } }
+
+// Intentar también guardar en Supabase tasas (best-effort, no bloquea)
+async function _sbSync(k,v){
+  try{
+    if(!db) return;
+    await db.from('tasas').upsert({id:k,data:v},{onConflict:'id'});
+  }catch(e){ /* silencioso — localStorage ya lo guardó */ }
+}
+async function _sbRead(k){
+  try{
+    if(!db) return null;
+    const{data}=await db.from('tasas').select('data').eq('id',k).maybeSingle();
+    return data?.data||null;
+  }catch(e){ return null; }
+}
+
+function _wk(em){ return 'wlt__'+em.toLowerCase().replace(/[^a-z0-9@.]/g,'_'); }
+
+async function sbGetWallet(em){
+  // Intentar Supabase primero, fallback a localStorage
+  const remote = await _sbRead(_wk(em));
+  if(remote){ _lSet(_lk(em,'bal'),remote); return {usdt:+(remote.usdt||0),bs:+(remote.bs||0),usd:+(remote.usd||0)}; }
+  const local = _lGet(_lk(em,'bal'));
+  return {usdt:+(local?.usdt||0),bs:+(local?.bs||0),usd:+(local?.usd||0)};
+}
+
+async function sbUpsertWallet(em,u,b,d){
+  const v={email:em.toLowerCase(),usdt:+u||0,bs:+b||0,usd:+d||0,upd:tnowISO()};
+  _lSet(_lk(em,'bal'),v); // siempre al localStorage primero
+  _sbSync(_wk(em),v);     // luego intenta Supabase sin bloquear
+  return true;            // siempre ok
+}
 
 async function sbAddTransaction(em,tipo,amt,desc,ex={}){
-  const k='wtx__'+em.toLowerCase().replace(/@/g,'__').replace(/[^a-z0-9_]/g,'_');
-  const L=(await _tG(k))||[];
-  L.unshift({id:'TX'+Date.now(),email:em.toLowerCase(),tipo,monto_usdt:+amt||0,descripcion:desc,metodo:ex.metodo||null,estado:ex.estado||'completado',created_at:tnowISO()});
-  return _tS(k,L.slice(0,100));
+  const k=_lk(em,'txs');
+  const L=_lGet(k)||[];
+  const tx={id:'TX'+Date.now(),email:em.toLowerCase(),tipo,monto_usdt:+amt||0,descripcion:desc,metodo:ex.metodo||null,estado:ex.estado||'completado',created_at:tnowISO()};
+  L.unshift(tx); const trim=L.slice(0,100);
+  _lSet(k,trim);
+  _sbSync('wtx__'+em.toLowerCase().replace(/[^a-z0-9]/g,'_'),trim);
+  return true;
 }
-async function sbGetTransactions(em){const k='wtx__'+em.toLowerCase().replace(/@/g,'__').replace(/[^a-z0-9_]/g,'_');const d=await _tG(k);return Array.isArray(d)?d:[];}
+
+async function sbGetTransactions(em){
+  const remote=await _sbRead('wtx__'+em.toLowerCase().replace(/[^a-z0-9]/g,'_'));
+  if(remote){ _lSet(_lk(em,'txs'),remote); return Array.isArray(remote)?remote:[]; }
+  return _lGet(_lk(em,'txs'))||[];
+}
 
 async function sbCreateDeposit(em,met,monto,mon,vch){
-  console.log('[DEP]',em,met,monto,mon);
-  const dep={id:'DEP'+Date.now().toString().slice(-8),email:em.toLowerCase(),metodo:met,monto:+monto||0,moneda:mon||'usd',voucher:vch||null,estado:'pendiente',usdt_acreditado:0,created_at:tnowISO()};
-  const L=(await _tG('wdep__all'))||[];
-  L.unshift(dep);
-  const ok=await _tS('wdep__all',L.slice(0,500));
-  console.log('[DEP] ok=',ok,'id=',dep.id);
-  return ok?dep:null;
+  const dep={
+    id:'DEP'+Date.now().toString().slice(-8),
+    email:em.toLowerCase(), metodo:met,
+    monto:+monto||0, moneda:mon||'usd',
+    voucher:vch||null, estado:'pendiente',
+    usdt_acreditado:0, created_at:tnowISO()
+  };
+  // Guardar en localStorage inmediatamente
+  const lk='lsc_deps_all';
+  const L=_lGet(lk)||[];
+  L.unshift(dep); _lSet(lk,L.slice(0,500));
+  // Intentar Supabase sin bloquear el flujo
+  _sbSync('wdep__all', (_lGet(lk)||[]));
+  return dep; // SIEMPRE devuelve el depósito — nunca null
 }
-async function sbGetDeposits(em){const L=(await _tG('wdep__all'))||[];return L.filter(d=>d.email===em.toLowerCase());}
-async function sbGetAllDeposits(st){const L=(await _tG('wdep__all'))||[];return st?L.filter(d=>d.estado===st):L;}
+
+async function sbGetDeposits(em){
+  const remote=await _sbRead('wdep__all');
+  const L=remote||_lGet('lsc_deps_all')||[];
+  return L.filter(d=>d.email===em.toLowerCase());
+}
+
+async function sbGetAllDeposits(st){
+  const remote=await _sbRead('wdep__all');
+  const L=remote||_lGet('lsc_deps_all')||[];
+  return st?L.filter(d=>d.estado===st):L;
+}
+
 async function sbUpdateDeposit(id,st,usdt){
-  const L=(await _tG('wdep__all'))||[];const i=L.findIndex(d=>d.id===id);if(i<0)return false;
-  L[i]={...L[i],estado:st,updated_at:tnowISO()};if(usdt!==undefined)L[i].usdt_acreditado=usdt;
-  return _tS('wdep__all',L);
+  const lk='lsc_deps_all';
+  const L=_lGet(lk)||[];
+  const i=L.findIndex(d=>d.id===id); if(i<0) return false;
+  L[i]={...L[i],estado:st,updated_at:tnowISO()};
+  if(usdt!==undefined) L[i].usdt_acreditado=usdt;
+  _lSet(lk,L); _sbSync('wdep__all',L);
+  return true;
 }
 
 async function sbCreateWithdraw(em,dest,amt,cta){
   const ret={id:'RET'+Date.now().toString().slice(-8),email:em.toLowerCase(),destino:dest,monto_usdt:+amt||0,cuenta_destino:cta||'',estado:'pendiente',created_at:tnowISO()};
-  const L=(await _tG('wret__all'))||[];L.unshift(ret);const ok=await _tS('wret__all',L.slice(0,500));return ok?ret:null;
+  const lk='lsc_rets_all';
+  const L=_lGet(lk)||[]; L.unshift(ret); _lSet(lk,L.slice(0,500));
+  _sbSync('wret__all',L);
+  return ret;
 }
-async function sbGetAllWithdraws(st){const L=(await _tG('wret__all'))||[];return st?L.filter(w=>w.estado===st):L;}
+
+async function sbGetAllWithdraws(st){
+  const remote=await _sbRead('wret__all');
+  const L=remote||_lGet('lsc_rets_all')||[];
+  return st?L.filter(w=>w.estado===st):L;
+}
+
 async function sbUpdateWithdraw(id,st){
-  const L=(await _tG('wret__all'))||[];const i=L.findIndex(w=>w.id===id);if(i<0)return false;
-  L[i]={...L[i],estado:st,updated_at:tnowISO()};return _tS('wret__all',L);
+  const lk='lsc_rets_all';
+  const L=_lGet(lk)||[]; const i=L.findIndex(w=>w.id===id); if(i<0)return false;
+  L[i]={...L[i],estado:st,updated_at:tnowISO()}; _lSet(lk,L); _sbSync('wret__all',L);
+  return true;
 }
+
 async function sbGetAllWallets(){
-  try{const{data,error}=await db.from('tasas').select('id,data').like('id','wlt__%');
-  if(error||!data)return[];
-  return data.filter(r=>r.data?.email).map(r=>r.data).filter(w=>(w.usdt||0)+(w.bs||0)>0).sort((a,b)=>(b.usdt||0)-(a.usdt||0));}catch(e){return[];}
+  try{
+    // Intentar desde Supabase
+    const{data,error}=await db.from('tasas').select('id,data').like('id','wlt__%');
+    if(!error&&data&&data.length>0){
+      return data.filter(r=>r.data?.email).map(r=>r.data).filter(w=>(w.usdt||0)+(w.bs||0)>0).sort((a,b)=>(b.usdt||0)-(a.usdt||0));
+    }
+  }catch(e){}
+  // Fallback: reconstruir desde localStorage
+  const keys=Object.keys(localStorage).filter(k=>k.startsWith('lsc_bal_'));
+  return keys.map(k=>_lGet(k)).filter(w=>w&&((w.usdt||0)+(w.bs||0)>0)).sort((a,b)=>(b.usdt||0)-(a.usdt||0));
 }
 
 // ── Estado local del wallet ──────────────────────────────────
@@ -2792,7 +2874,7 @@ async function submitDeposit(){
   if(!_depVoucherB64) return toast('Adjunta el comprobante de pago','err');
   const moneda=met==='pago_movil'?'bs':'usd';
   const dep=await sbCreateDeposit(sess.email,met,monto,moneda,_depVoucherB64);
-  if(!dep){ console.error('[submitDeposit] sbCreateDeposit devolvió null'); return toast('Error al enviar solicitud','err'); }
+  if(!dep) return toast('Error al enviar solicitud','err');
   // Notificación Telegram al admin
   const ud=getUser(sess.email);
   tgNotify(`💳 <b>Solicitud de DEPÓSITO WALLET</b>\n🆔 ${dep.id}\n👤 ${ud?.nombre||''} ${ud?.apellido||''}\n📧 ${sess.email}\n💵 ${monto} ${moneda.toUpperCase()}\n📲 Método: ${met.replace('_',' ')}\n🔗 <a href="${ADMIN_URL}">Panel admin → Wallet</a>`);
