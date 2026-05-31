@@ -2621,63 +2621,55 @@ async function tgNotify(msg){
 //  Base USDT interna · depósito · conversión · retiro
 // ═══════════════════════════════════════════════════════════
 
-// ── Wallet helpers — localStorage + Supabase tasas ──────────
+// ── Supabase wallet helpers ─────────────────────────────────
+// localStorage como almacén principal (nunca falla)
+// Supabase tasas como sync secundario (best-effort)
 
-// Clave localStorage por usuario
-function _lk(em,t){ return 'lsc_'+t+'_'+em.toLowerCase().replace(/[^a-z0-9]/g,'_'); }
+function _lGet(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
+function _lSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){return false;}}
+function _emKey(em){return em.toLowerCase().replace(/[^a-z0-9]/g,'_');}
 
-// Leer/escribir en localStorage (siempre funciona, sin permisos)
-function _lGet(k){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } }
-function _lSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); return true; }catch(e){ return false; } }
-
-// Intentar también guardar en Supabase tasas (best-effort, no bloquea)
-async function _sbSync(k,v){
-  try{
-    if(!db) return;
-    await db.from('tasas').upsert({id:k,data:v},{onConflict:'id'});
-  }catch(e){ /* silencioso — localStorage ya lo guardó */ }
+async function _sbPush(k,v){
+  // Sincroniza con Supabase sin bloquear — silencioso si falla
+  try{ if(db) await db.from('tasas').upsert({id:k,data:v},{onConflict:'id'}); }catch(e){}
 }
-async function _sbRead(k){
-  try{
-    if(!db) return null;
-    const{data}=await db.from('tasas').select('data').eq('id',k).maybeSingle();
-    return data?.data||null;
-  }catch(e){ return null; }
+async function _sbPull(k){
+  try{ if(!db)return null; const{data}=await db.from('tasas').select('data').eq('id',k).maybeSingle(); return data?.data||null; }catch(e){return null;}
 }
 
-function _wk(em){ return 'wlt__'+em.toLowerCase().replace(/[^a-z0-9@.]/g,'_'); }
-
+// ── Wallet saldo ──────────────────────────────────────────────
 async function sbGetWallet(em){
-  // Intentar Supabase primero, fallback a localStorage
-  const remote = await _sbRead(_wk(em));
-  if(remote){ _lSet(_lk(em,'bal'),remote); return {usdt:+(remote.usdt||0),bs:+(remote.bs||0),usd:+(remote.usd||0)}; }
-  const local = _lGet(_lk(em,'bal'));
+  const lk='wbal_'+_emKey(em);
+  // Intentar Supabase, si falla usar localStorage
+  const remote=await _sbPull('wlt__'+_emKey(em));
+  if(remote){_lSet(lk,remote); return {usdt:+(remote.usdt||0),bs:+(remote.bs||0),usd:+(remote.usd||0)};}
+  const local=_lGet(lk);
   return {usdt:+(local?.usdt||0),bs:+(local?.bs||0),usd:+(local?.usd||0)};
 }
-
 async function sbUpsertWallet(em,u,b,d){
-  const v={email:em.toLowerCase(),usdt:+u||0,bs:+b||0,usd:+d||0,upd:tnowISO()};
-  _lSet(_lk(em,'bal'),v); // siempre al localStorage primero
-  _sbSync(_wk(em),v);     // luego intenta Supabase sin bloquear
-  return true;            // siempre ok
-}
-
-async function sbAddTransaction(em,tipo,amt,desc,ex={}){
-  const k=_lk(em,'txs');
-  const L=_lGet(k)||[];
-  const tx={id:'TX'+Date.now(),email:em.toLowerCase(),tipo,monto_usdt:+amt||0,descripcion:desc,metodo:ex.metodo||null,estado:ex.estado||'completado',created_at:tnowISO()};
-  L.unshift(tx); const trim=L.slice(0,100);
-  _lSet(k,trim);
-  _sbSync('wtx__'+em.toLowerCase().replace(/[^a-z0-9]/g,'_'),trim);
+  const v={email:em.toLowerCase(),usdt:+u||0,bs:+b||0,usd:+d||0,updated_at:tnowISO()};
+  _lSet('wbal_'+_emKey(em),v);
+  _sbPush('wlt__'+_emKey(em),v);
   return true;
 }
 
+// ── Transacciones ─────────────────────────────────────────────
+async function sbAddTransaction(em,tipo,amt,desc,ex={}){
+  const lk='wtx_'+_emKey(em);
+  const L=_lGet(lk)||[];
+  L.unshift({id:'TX'+Date.now(),email:em.toLowerCase(),tipo,monto_usdt:+amt||0,descripcion:desc,metodo:ex.metodo||null,estado:ex.estado||'completado',created_at:tnowISO()});
+  const trim=L.slice(0,100);
+  _lSet(lk,trim); _sbPush('wtx__'+_emKey(em),trim);
+  return true;
+}
 async function sbGetTransactions(em){
-  const remote=await _sbRead('wtx__'+em.toLowerCase().replace(/[^a-z0-9]/g,'_'));
-  if(remote){ _lSet(_lk(em,'txs'),remote); return Array.isArray(remote)?remote:[]; }
-  return _lGet(_lk(em,'txs'))||[];
+  const lk='wtx_'+_emKey(em);
+  const remote=await _sbPull('wtx__'+_emKey(em));
+  if(remote){_lSet(lk,remote);return Array.isArray(remote)?remote:[];}
+  return _lGet(lk)||[];
 }
 
+// ── Depósitos ─────────────────────────────────────────────────
 async function sbCreateDeposit(em,met,monto,mon,vch){
   const dep={
     id:'DEP'+Date.now().toString().slice(-8),
@@ -2686,70 +2678,102 @@ async function sbCreateDeposit(em,met,monto,mon,vch){
     voucher:vch||null, estado:'pendiente',
     usdt_acreditado:0, created_at:tnowISO()
   };
-  // Guardar en localStorage inmediatamente
-  const lk='lsc_deps_all';
-  const L=_lGet(lk)||[];
-  L.unshift(dep); _lSet(lk,L.slice(0,500));
-  // Intentar Supabase sin bloquear el flujo
-  _sbSync('wdep__all', (_lGet(lk)||[]));
-  return dep; // SIEMPRE devuelve el depósito — nunca null
+  // 1. Guardar en localStorage — SIEMPRE funciona
+  const L=_lGet('deps_all')||[];
+  L.unshift(dep); _lSet('deps_all',L.slice(0,500));
+  // 2. Sincronizar con Supabase en background
+  _sbPush('wdep__all',_lGet('deps_all'));
+  // SIEMPRE retorna el depósito — nunca null, nunca falla
+  return dep;
 }
-
 async function sbGetDeposits(em){
-  const remote=await _sbRead('wdep__all');
-  const L=remote||_lGet('lsc_deps_all')||[];
+  // Mezclar local + remote
+  const remote=await _sbPull('wdep__all');
+  if(remote&&remote.length>0){_lSet('deps_all',remote);}
+  const L=_lGet('deps_all')||[];
   return L.filter(d=>d.email===em.toLowerCase());
 }
-
-async function sbGetAllDeposits(st){
-  const remote=await _sbRead('wdep__all');
-  const L=remote||_lGet('lsc_deps_all')||[];
-  return st?L.filter(d=>d.estado===st):L;
+async function sbGetAllDeposits(estado){
+  const remote=await _sbPull('wdep__all');
+  if(remote&&remote.length>0){_lSet('deps_all',remote);}
+  const L=_lGet('deps_all')||[];
+  return estado?L.filter(d=>d.estado===estado):L;
 }
-
-async function sbUpdateDeposit(id,st,usdt){
-  const lk='lsc_deps_all';
-  const L=_lGet(lk)||[];
-  const i=L.findIndex(d=>d.id===id); if(i<0) return false;
-  L[i]={...L[i],estado:st,updated_at:tnowISO()};
-  if(usdt!==undefined) L[i].usdt_acreditado=usdt;
-  _lSet(lk,L); _sbSync('wdep__all',L);
+async function sbUpdateDeposit(id,estado,usdt_acreditado){
+  const L=_lGet('deps_all')||[];
+  const i=L.findIndex(d=>d.id===id); if(i<0)return false;
+  L[i]={...L[i],estado,updated_at:tnowISO()};
+  if(usdt_acreditado!==undefined)L[i].usdt_acreditado=usdt_acreditado;
+  _lSet('deps_all',L); _sbPush('wdep__all',L);
   return true;
 }
 
+// ── Retiros ───────────────────────────────────────────────────
 async function sbCreateWithdraw(em,dest,amt,cta){
-  const ret={id:'RET'+Date.now().toString().slice(-8),email:em.toLowerCase(),destino:dest,monto_usdt:+amt||0,cuenta_destino:cta||'',estado:'pendiente',created_at:tnowISO()};
-  const lk='lsc_rets_all';
-  const L=_lGet(lk)||[]; L.unshift(ret); _lSet(lk,L.slice(0,500));
-  _sbSync('wret__all',L);
+  const ret={
+    id:'RET'+Date.now().toString().slice(-8),
+    email:em.toLowerCase(), destino:dest,
+    monto_usdt:+amt||0, cuenta_destino:cta||'',
+    estado:'pendiente', created_at:tnowISO()
+  };
+  const L=_lGet('rets_all')||[];
+  L.unshift(ret); _lSet('rets_all',L.slice(0,500));
+  _sbPush('wret__all',_lGet('rets_all'));
   return ret;
 }
-
-async function sbGetAllWithdraws(st){
-  const remote=await _sbRead('wret__all');
-  const L=remote||_lGet('lsc_rets_all')||[];
-  return st?L.filter(w=>w.estado===st):L;
+async function sbGetAllWithdraws(estado){
+  const remote=await _sbPull('wret__all');
+  if(remote&&remote.length>0){_lSet('rets_all',remote);}
+  const L=_lGet('rets_all')||[];
+  return estado?L.filter(w=>w.estado===estado):L;
 }
-
-async function sbUpdateWithdraw(id,st){
-  const lk='lsc_rets_all';
-  const L=_lGet(lk)||[]; const i=L.findIndex(w=>w.id===id); if(i<0)return false;
-  L[i]={...L[i],estado:st,updated_at:tnowISO()}; _lSet(lk,L); _sbSync('wret__all',L);
+async function sbUpdateWithdraw(id,estado){
+  const L=_lGet('rets_all')||[];
+  const i=L.findIndex(w=>w.id===id); if(i<0)return false;
+  L[i]={...L[i],estado,updated_at:tnowISO()};
+  _lSet('rets_all',L); _sbPush('wret__all',L);
   return true;
 }
-
 async function sbGetAllWallets(){
+  // Leer todos los saldos desde localStorage
+  const keys=Object.keys(localStorage).filter(k=>k.startsWith('wbal_'));
+  const local=keys.map(k=>_lGet(k)).filter(w=>w&&w.email&&((w.usdt||0)+(w.bs||0)>0));
+  // Intentar también desde Supabase
   try{
-    // Intentar desde Supabase
-    const{data,error}=await db.from('tasas').select('id,data').like('id','wlt__%');
-    if(!error&&data&&data.length>0){
-      return data.filter(r=>r.data?.email).map(r=>r.data).filter(w=>(w.usdt||0)+(w.bs||0)>0).sort((a,b)=>(b.usdt||0)-(a.usdt||0));
+    if(db){
+      const{data}=await db.from('tasas').select('id,data').like('id','wlt__%');
+      if(data&&data.length>0){
+        const remote=data.filter(r=>r.data?.email).map(r=>r.data).filter(w=>(w.usdt||0)+(w.bs||0)>0);
+        if(remote.length>0) return remote.sort((a,b)=>(b.usdt||0)-(a.usdt||0));
+      }
     }
   }catch(e){}
-  // Fallback: reconstruir desde localStorage
-  const keys=Object.keys(localStorage).filter(k=>k.startsWith('lsc_bal_'));
-  return keys.map(k=>_lGet(k)).filter(w=>w&&((w.usdt||0)+(w.bs||0)>0)).sort((a,b)=>(b.usdt||0)-(a.usdt||0));
+  return local.sort((a,b)=>(b.usdt||0)-(a.usdt||0));
 }
+
+// ── Helpers de conversión ────────────────────────────────────
+
+function getBsRate(dir){
+  // dir: 'compra' (divisas→Bs), 'venta' (Bs→divisas)
+  const plat='binance';
+  const r=RATES[dir]?.[plat];
+  return r?.t ? parseFloat(r.t) : (dir==='compra'?38:36);
+}
+
+function usdtToBs(usdt){ return usdt * getBsRate('compra'); }
+function bsToUsdt(bs){ return bs / getBsRate('venta'); }
+function usdtToUsd(usdt){ return usdt * 0.99; }  // 1% fee implícita
+function usdToUsdt(usd){ return usd / 1.01; }
+
+function getUsdtEquiv(monto, moneda){
+  if(moneda==='bs')    return bsToUsdt(monto);
+  if(moneda==='usd')   return usdToUsdt(monto);
+  if(moneda==='usdt')  return monto;
+  return 0;
+}
+
+function fmtUsdt(n){ return parseFloat(n||0).toFixed(2); }
+function fmtBs(n)  { return fmt(parseFloat(n||0),2); }
 
 // ── Estado local del wallet ──────────────────────────────────
 let _wltBal = {usdt:0, bs:0, usd:0};
