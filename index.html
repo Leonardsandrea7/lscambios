@@ -2198,7 +2198,7 @@ const TG_CHAT  = '8180852500';
 const _AH      = 'b0be4eccdbc807053775c62524f83067ead0f1b00579fefc5aab17778e81c1e7';
 
 const SUPABASE_URL = 'https://pusrbmnxmgfwyatdkiql.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1c3JibW54bWdmd3lhdGRraXFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyMjk4OTYsImV4cCI6MjA4OTgwNTg5Nn0.AJcquNKkTBYbTdnN_4OD7DzwXpwJD1BKw_aXnL-K4FY';
+const SUPABASE_KEY = 'sb_publishable_wmh9SkAoIr6dbHE53YcY7w_QnvXdtJg';
 let db = null;
 try {
   if(typeof supabase !== 'undefined' && supabase.createClient){
@@ -2660,12 +2660,15 @@ async function sbGetTransactions(email){
 async function sbCreateDeposit(email,metodo,monto,moneda,voucher_b64){
   if(!_dbOk('sbCreateDeposit')) return null;
   const id='DEP'+Date.now().toString().slice(-7);
-  const{data,error}=await db.from('wallet_depositos').insert({
-    id, email:email.toLowerCase(), metodo, monto:parseFloat(monto)||0,
-    moneda, voucher:voucher_b64||null, estado:'pendiente', created_at:tnowISO()
-  }).select().single();
+  const row={
+    id, email:email.toLowerCase(), metodo,
+    monto:parseFloat(monto)||0, moneda:moneda||'usd',
+    voucher:voucher_b64||null, estado:'pendiente',
+    created_at:tnowISO()
+  };
+  const{error}=await db.from('wallet_depositos').insert(row);
   if(sbErr('sbCreateDeposit',error)) return null;
-  return data;
+  return row; // devolvemos el objeto que insertamos
 }
 
 async function sbGetDeposits(email){
@@ -2696,12 +2699,15 @@ async function sbUpdateDeposit(id,estado,usdt_acreditado){
 async function sbCreateWithdraw(email,destino,monto_usdt,cuenta){
   if(!_dbOk('sbCreateWithdraw')) return null;
   const id='RET'+Date.now().toString().slice(-7);
-  const{data,error}=await db.from('wallet_retiros').insert({
-    id, email:email.toLowerCase(), destino, monto_usdt:parseFloat(monto_usdt)||0,
-    cuenta_destino:cuenta, estado:'pendiente', created_at:tnowISO()
-  }).select().single();
+  const row={
+    id, email:email.toLowerCase(), destino,
+    monto_usdt:parseFloat(monto_usdt)||0,
+    cuenta_destino:cuenta||'', estado:'pendiente',
+    created_at:tnowISO()
+  };
+  const{error}=await db.from('wallet_retiros').insert(row);
   if(sbErr('sbCreateWithdraw',error)) return null;
-  return data;
+  return row;
 }
 
 async function sbGetAllWithdraws(estado){
