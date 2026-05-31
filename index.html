@@ -2621,114 +2621,53 @@ async function tgNotify(msg){
 //  Base USDT interna · depósito · conversión · retiro
 // ═══════════════════════════════════════════════════════════
 
-// ── Supabase wallet helpers — usa tabla tasas (sin tablas nuevas) ──
+// ── Supabase wallet helpers — tabla tasas ─────────────────────
+function _wk(e){return 'wlt__'+e.toLowerCase().replace(/@/g,'__').replace(/[^a-z0-9_]/g,'_');}
+async function _tG(k){try{const{data,error}=await db.from('tasas').select('data').eq('id',k).maybeSingle();if(error||!data)return null;return data.data;}catch(e){return null;}}
+async function _tS(k,v){try{const{error}=await db.from('tasas').upsert({id:k,data:v},{onConflict:'id'});if(error){console.error('[tS]',k,error.message);return false;}return true;}catch(e){console.error('[tS]',e);return false;}}
 
-function _wk(e){ return e.toLowerCase().replace(/@/g,'__at__').replace(/[^a-z0-9_]/g,'_'); }
+async function sbGetWallet(em){const d=await _tG(_wk(em));return{usdt:+(d?.usdt||0),bs:+(d?.bs||0),usd:+(d?.usd||0)};}
+async function sbUpsertWallet(em,u,b,d){return _tS(_wk(em),{email:em.toLowerCase(),usdt:+u||0,bs:+b||0,usd:+d||0,upd:tnowISO()});}
 
-async function _tGet(key){
-  try{
-    const{data,error}=await db.from('tasas').select('data').eq('id',key).maybeSingle();
-    if(error||!data) return null;
-    return data.data;
-  }catch(e){ return null; }
+async function sbAddTransaction(em,tipo,amt,desc,ex={}){
+  const k='wtx__'+em.toLowerCase().replace(/@/g,'__').replace(/[^a-z0-9_]/g,'_');
+  const L=(await _tG(k))||[];
+  L.unshift({id:'TX'+Date.now(),email:em.toLowerCase(),tipo,monto_usdt:+amt||0,descripcion:desc,metodo:ex.metodo||null,estado:ex.estado||'completado',created_at:tnowISO()});
+  return _tS(k,L.slice(0,100));
 }
+async function sbGetTransactions(em){const k='wtx__'+em.toLowerCase().replace(/@/g,'__').replace(/[^a-z0-9_]/g,'_');const d=await _tG(k);return Array.isArray(d)?d:[];}
 
-async function _tSet(key,val){
-  try{
-    const{error}=await db.from('tasas').upsert({id:key,data:val},{onConflict:'id'});
-    if(error){ console.error('[_tSet]',key,error.message); return false; }
-    return true;
-  }catch(e){ console.error('[_tSet]',e); return false; }
-}
-
-async function sbGetWallet(email){
-  const d=await _tGet('wlt__'+_wk(email));
-  return {usdt:parseFloat(d?.usdt)||0, bs:parseFloat(d?.bs)||0, usd:parseFloat(d?.usd)||0};
-}
-
-async function sbUpsertWallet(email,usdt,bs,usd){
-  return _tSet('wlt__'+_wk(email),{email:email.toLowerCase(),usdt:parseFloat(usdt)||0,bs:parseFloat(bs)||0,usd:parseFloat(usd)||0,updated_at:tnowISO()});
-}
-
-async function sbAddTransaction(email,tipo,monto_usdt,descripcion,extra={}){
-  const k='wtx__'+_wk(email);
-  const list=(await _tGet(k))||[];
-  list.unshift({id:'TX'+Date.now(),email:email.toLowerCase(),tipo,monto_usdt:parseFloat(monto_usdt)||0,descripcion,metodo:extra.metodo||null,estado:extra.estado||'completado',created_at:tnowISO()});
-  return _tSet(k,list.slice(0,100));
-}
-
-async function sbGetTransactions(email){
-  const d=await _tGet('wtx__'+_wk(email));
-  return Array.isArray(d)?d:[];
-}
-
-async function sbCreateDeposit(email,metodo,monto,moneda,voucher_b64){
-  const dep={id:'DEP'+Date.now().toString().slice(-8),email:email.toLowerCase(),metodo,monto:parseFloat(monto)||0,moneda:moneda||'usd',voucher:voucher_b64||null,estado:'pendiente',usdt_acreditado:0,created_at:tnowISO()};
-  const list=(await _tGet('wdep__all'))||[];
-  list.unshift(dep);
-  const ok=await _tSet('wdep__all',list.slice(0,500));
+async function sbCreateDeposit(em,met,monto,mon,vch){
+  console.log('[DEP]',em,met,monto,mon);
+  const dep={id:'DEP'+Date.now().toString().slice(-8),email:em.toLowerCase(),metodo:met,monto:+monto||0,moneda:mon||'usd',voucher:vch||null,estado:'pendiente',usdt_acreditado:0,created_at:tnowISO()};
+  const L=(await _tG('wdep__all'))||[];
+  L.unshift(dep);
+  const ok=await _tS('wdep__all',L.slice(0,500));
+  console.log('[DEP] ok=',ok,'id=',dep.id);
   return ok?dep:null;
 }
-
-async function sbGetDeposits(email){
-  const list=(await _tGet('wdep__all'))||[];
-  return list.filter(d=>d.email===email.toLowerCase());
+async function sbGetDeposits(em){const L=(await _tG('wdep__all'))||[];return L.filter(d=>d.email===em.toLowerCase());}
+async function sbGetAllDeposits(st){const L=(await _tG('wdep__all'))||[];return st?L.filter(d=>d.estado===st):L;}
+async function sbUpdateDeposit(id,st,usdt){
+  const L=(await _tG('wdep__all'))||[];const i=L.findIndex(d=>d.id===id);if(i<0)return false;
+  L[i]={...L[i],estado:st,updated_at:tnowISO()};if(usdt!==undefined)L[i].usdt_acreditado=usdt;
+  return _tS('wdep__all',L);
 }
 
-async function sbGetAllDeposits(estado){
-  const list=(await _tGet('wdep__all'))||[];
-  return estado?list.filter(d=>d.estado===estado):list;
+async function sbCreateWithdraw(em,dest,amt,cta){
+  const ret={id:'RET'+Date.now().toString().slice(-8),email:em.toLowerCase(),destino:dest,monto_usdt:+amt||0,cuenta_destino:cta||'',estado:'pendiente',created_at:tnowISO()};
+  const L=(await _tG('wret__all'))||[];L.unshift(ret);const ok=await _tS('wret__all',L.slice(0,500));return ok?ret:null;
 }
-
-async function sbUpdateDeposit(id,estado,usdt_acreditado){
-  const list=(await _tGet('wdep__all'))||[];
-  const i=list.findIndex(d=>d.id===id);
-  if(i===-1) return false;
-  list[i]={...list[i],estado,updated_at:tnowISO()};
-  if(usdt_acreditado!==undefined) list[i].usdt_acreditado=usdt_acreditado;
-  return _tSet('wdep__all',list);
+async function sbGetAllWithdraws(st){const L=(await _tG('wret__all'))||[];return st?L.filter(w=>w.estado===st):L;}
+async function sbUpdateWithdraw(id,st){
+  const L=(await _tG('wret__all'))||[];const i=L.findIndex(w=>w.id===id);if(i<0)return false;
+  L[i]={...L[i],estado:st,updated_at:tnowISO()};return _tS('wret__all',L);
 }
-
-async function sbCreateWithdraw(email,destino,monto_usdt,cuenta){
-  const ret={id:'RET'+Date.now().toString().slice(-8),email:email.toLowerCase(),destino,monto_usdt:parseFloat(monto_usdt)||0,cuenta_destino:cuenta||'',estado:'pendiente',created_at:tnowISO()};
-  const list=(await _tGet('wret__all'))||[];
-  list.unshift(ret);
-  const ok=await _tSet('wret__all',list.slice(0,500));
-  return ok?ret:null;
-}
-
-async function sbGetAllWithdraws(estado){
-  const list=(await _tGet('wret__all'))||[];
-  return estado?list.filter(w=>w.estado===estado):list;
-}
-
-async function sbUpdateWithdraw(id,estado){
-  const list=(await _tGet('wret__all'))||[];
-  const i=list.findIndex(w=>w.id===id);
-  if(i===-1) return false;
-  list[i]={...list[i],estado,updated_at:tnowISO()};
-  return _tSet('wret__all',list);
-}
-
 async function sbGetAllWallets(){
-  try{
-    const{data,error}=await db.from('tasas').select('id,data').like('id','wlt__%');
-    if(error||!data) return [];
-    return data.filter(r=>r.data?.email).map(r=>r.data).filter(w=>(w.usdt||0)+(w.bs||0)>0).sort((a,b)=>(b.usdt||0)-(a.usdt||0));
-  }catch(e){ return []; }
+  try{const{data,error}=await db.from('tasas').select('id,data').like('id','wlt__%');
+  if(error||!data)return[];
+  return data.filter(r=>r.data?.email).map(r=>r.data).filter(w=>(w.usdt||0)+(w.bs||0)>0).sort((a,b)=>(b.usdt||0)-(a.usdt||0));}catch(e){return[];}
 }
-
-function usdToUsdt(usd){ return usd / 1.01; }
-
-function getUsdtEquiv(monto, moneda){
-  if(moneda==='bs')    return bsToUsdt(monto);
-  if(moneda==='usd')   return usdToUsdt(monto);
-  if(moneda==='usdt')  return monto;
-  return 0;
-}
-
-function fmtUsdt(n){ return parseFloat(n||0).toFixed(2); }
-function fmtBs(n)  { return fmt(parseFloat(n||0),2); }
 
 // ── Estado local del wallet ──────────────────────────────────
 let _wltBal = {usdt:0, bs:0, usd:0};
@@ -2853,7 +2792,7 @@ async function submitDeposit(){
   if(!_depVoucherB64) return toast('Adjunta el comprobante de pago','err');
   const moneda=met==='pago_movil'?'bs':'usd';
   const dep=await sbCreateDeposit(sess.email,met,monto,moneda,_depVoucherB64);
-  if(!dep) return toast('Error al enviar solicitud','err');
+  if(!dep){ console.error('[submitDeposit] sbCreateDeposit devolvió null'); return toast('Error al enviar solicitud','err'); }
   // Notificación Telegram al admin
   const ud=getUser(sess.email);
   tgNotify(`💳 <b>Solicitud de DEPÓSITO WALLET</b>\n🆔 ${dep.id}\n👤 ${ud?.nombre||''} ${ud?.apellido||''}\n📧 ${sess.email}\n💵 ${monto} ${moneda.toUpperCase()}\n📲 Método: ${met.replace('_',' ')}\n🔗 <a href="${ADMIN_URL}">Panel admin → Wallet</a>`);
