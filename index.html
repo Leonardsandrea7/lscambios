@@ -2621,115 +2621,134 @@ async function tgNotify(msg){
 //  Base USDT interna · depósito · conversión · retiro
 // ═══════════════════════════════════════════════════════════
 
-// ── Supabase wallet helpers ──────────────────────────────────
+// ── Supabase wallet helpers — usa tabla 'tasas' (sin tablas nuevas) ──
+// Todo se guarda como JSON en la tabla tasas que ya funciona.
+// Claves: wallet__{email_safe}, wtx__{email_safe}, wdep__all, wret__all
+
+function _emailKey(email){ return email.toLowerCase().replace(/@/g,'__at__').replace(/[^a-z0-9_]/g,'_'); }
 
 async function sbGetWallet(email){
-  if(!_dbOk('sbGetWallet')) return {usdt:0,bs:0,usd:0};
-  const{data,error}=await db.from('wallets').select('*').eq('email',email.toLowerCase()).maybeSingle();
-  if(sbErr('sbGetWallet',error)) return {usdt:0,bs:0,usd:0};
-  if(!data) return {usdt:0,bs:0,usd:0};
-  return {usdt:parseFloat(data.usdt_balance)||0, bs:parseFloat(data.bs_balance)||0, usd:parseFloat(data.usd_balance)||0};
+  try{
+    const{data,error}=await db.from('tasas').select('data').eq('id','wallet__'+_emailKey(email)).maybeSingle();
+    if(error||!data) return {usdt:0,bs:0,usd:0};
+    return {usdt:parseFloat(data.data?.usdt)||0, bs:parseFloat(data.data?.bs)||0, usd:parseFloat(data.data?.usd)||0};
+  }catch(e){ return {usdt:0,bs:0,usd:0}; }
 }
 
 async function sbUpsertWallet(email,usdt,bs,usd){
-  if(!_dbOk('sbUpsertWallet')) return false;
-  const{error}=await db.from('wallets').upsert({
-    email:email.toLowerCase(), usdt_balance:usdt, bs_balance:bs, usd_balance:usd, updated_at:tnowISO()
-  },{onConflict:'email'});
-  return !sbErr('sbUpsertWallet',error);
+  try{
+    const{error}=await db.from('tasas').upsert(
+      {id:'wallet__'+_emailKey(email), data:{usdt:parseFloat(usdt)||0, bs:parseFloat(bs)||0, usd:parseFloat(usd)||0, updated_at:tnowISO()}},
+      {onConflict:'id'}
+    );
+    return !error;
+  }catch(e){ return false; }
 }
 
 async function sbAddTransaction(email,tipo,monto_usdt,descripcion,extra={}){
-  if(!_dbOk('sbAddTransaction')) return false;
-  const{error}=await db.from('wallet_transacciones').insert({
-    email:email.toLowerCase(), tipo, monto_usdt:parseFloat(monto_usdt)||0,
-    descripcion, metodo:extra.metodo||null, estado:extra.estado||'completado',
-    created_at:tnowISO()
-  });
-  return !sbErr('sbAddTransaction',error);
+  try{
+    const k='wtx__'+_emailKey(email);
+    const{data}=await db.from('tasas').select('data').eq('id',k).maybeSingle();
+    const list=Array.isArray(data?.data)?data.data:[];
+    list.unshift({id:'TX'+Date.now(),email:email.toLowerCase(),tipo,monto_usdt:parseFloat(monto_usdt)||0,descripcion,metodo:extra.metodo||null,estado:extra.estado||'completado',created_at:tnowISO()});
+    const{error}=await db.from('tasas').upsert({id:k,data:list.slice(0,100)},{onConflict:'id'});
+    return !error;
+  }catch(e){ return false; }
 }
 
 async function sbGetTransactions(email){
-  if(!_dbOk('sbGetTransactions')) return [];
-  const{data,error}=await db.from('wallet_transacciones').select('*')
-    .eq('email',email.toLowerCase()).order('created_at',{ascending:false}).limit(50);
-  if(sbErr('sbGetTransactions',error)) return [];
-  return data||[];
+  try{
+    const{data,error}=await db.from('tasas').select('data').eq('id','wtx__'+_emailKey(email)).maybeSingle();
+    if(error||!data) return [];
+    return Array.isArray(data.data)?data.data:[];
+  }catch(e){ return []; }
 }
 
 async function sbCreateDeposit(email,metodo,monto,moneda,voucher_b64){
-  if(!_dbOk('sbCreateDeposit')) return null;
-  const id='DEP'+Date.now().toString().slice(-7);
-  const row={
-    id, email:email.toLowerCase(), metodo,
-    monto:parseFloat(monto)||0, moneda:moneda||'usd',
-    voucher:voucher_b64||null, estado:'pendiente',
-    created_at:tnowISO()
-  };
-  const{error}=await db.from('wallet_depositos').insert(row);
-  if(sbErr('sbCreateDeposit',error)) return null;
-  return row; // devolvemos el objeto que insertamos
+  try{
+    const dep={id:'DEP'+Date.now().toString().slice(-8),email:email.toLowerCase(),metodo,monto:parseFloat(monto)||0,moneda:moneda||'usd',voucher:voucher_b64||null,estado:'pendiente',usdt_acreditado:0,created_at:tnowISO()};
+    const{data}=await db.from('tasas').select('data').eq('id','wdep__all').maybeSingle();
+    const list=Array.isArray(data?.data)?data.data:[];
+    list.unshift(dep);
+    const{error}=await db.from('tasas').upsert({id:'wdep__all',data:list.slice(0,500)},{onConflict:'id'});
+    if(error){ console.error('[sbCreateDeposit]',error); return null; }
+    return dep;
+  }catch(e){ console.error('[sbCreateDeposit]',e); return null; }
 }
 
 async function sbGetDeposits(email){
-  if(!_dbOk('sbGetDeposits')) return [];
-  const{data,error}=await db.from('wallet_depositos').select('*')
-    .eq('email',email.toLowerCase()).order('created_at',{ascending:false}).limit(20);
-  if(sbErr('sbGetDeposits',error)) return [];
-  return data||[];
+  try{
+    const{data,error}=await db.from('tasas').select('data').eq('id','wdep__all').maybeSingle();
+    if(error||!data) return [];
+    return (Array.isArray(data.data)?data.data:[]).filter(d=>d.email===email.toLowerCase());
+  }catch(e){ return []; }
 }
 
 async function sbGetAllDeposits(estado){
-  if(!_dbOk('sbGetAllDeposits')) return [];
-  let q=db.from('wallet_depositos').select('*').order('created_at',{ascending:false});
-  if(estado) q=q.eq('estado',estado);
-  const{data,error}=await q.limit(100);
-  if(sbErr('sbGetAllDeposits',error)) return [];
-  return data||[];
+  try{
+    const{data,error}=await db.from('tasas').select('data').eq('id','wdep__all').maybeSingle();
+    if(error||!data) return [];
+    const list=Array.isArray(data.data)?data.data:[];
+    return estado?list.filter(d=>d.estado===estado):list;
+  }catch(e){ return []; }
 }
 
 async function sbUpdateDeposit(id,estado,usdt_acreditado){
-  if(!_dbOk('sbUpdateDeposit')) return false;
-  const upd={estado, updated_at:tnowISO()};
-  if(usdt_acreditado!==undefined) upd.usdt_acreditado=usdt_acreditado;
-  const{error}=await db.from('wallet_depositos').update(upd).eq('id',id);
-  return !sbErr('sbUpdateDeposit',error);
+  try{
+    const{data}=await db.from('tasas').select('data').eq('id','wdep__all').maybeSingle();
+    const list=Array.isArray(data?.data)?data.data:[];
+    const idx=list.findIndex(d=>d.id===id);
+    if(idx===-1) return false;
+    list[idx].estado=estado; list[idx].updated_at=tnowISO();
+    if(usdt_acreditado!==undefined) list[idx].usdt_acreditado=usdt_acreditado;
+    const{error}=await db.from('tasas').upsert({id:'wdep__all',data:list},{onConflict:'id'});
+    return !error;
+  }catch(e){ return false; }
 }
 
 async function sbCreateWithdraw(email,destino,monto_usdt,cuenta){
-  if(!_dbOk('sbCreateWithdraw')) return null;
-  const id='RET'+Date.now().toString().slice(-7);
-  const row={
-    id, email:email.toLowerCase(), destino,
-    monto_usdt:parseFloat(monto_usdt)||0,
-    cuenta_destino:cuenta||'', estado:'pendiente',
-    created_at:tnowISO()
-  };
-  const{error}=await db.from('wallet_retiros').insert(row);
-  if(sbErr('sbCreateWithdraw',error)) return null;
-  return row;
+  try{
+    const ret={id:'RET'+Date.now().toString().slice(-8),email:email.toLowerCase(),destino,monto_usdt:parseFloat(monto_usdt)||0,cuenta_destino:cuenta||'',estado:'pendiente',created_at:tnowISO()};
+    const{data}=await db.from('tasas').select('data').eq('id','wret__all').maybeSingle();
+    const list=Array.isArray(data?.data)?data.data:[];
+    list.unshift(ret);
+    const{error}=await db.from('tasas').upsert({id:'wret__all',data:list.slice(0,500)},{onConflict:'id'});
+    if(error){ console.error('[sbCreateWithdraw]',error); return null; }
+    return ret;
+  }catch(e){ console.error('[sbCreateWithdraw]',e); return null; }
 }
 
 async function sbGetAllWithdraws(estado){
-  if(!_dbOk('sbGetAllWithdraws')) return [];
-  let q=db.from('wallet_retiros').select('*').order('created_at',{ascending:false});
-  if(estado) q=q.eq('estado',estado);
-  const{data,error}=await q.limit(100);
-  if(sbErr('sbGetAllWithdraws',error)) return [];
-  return data||[];
+  try{
+    const{data,error}=await db.from('tasas').select('data').eq('id','wret__all').maybeSingle();
+    if(error||!data) return [];
+    const list=Array.isArray(data.data)?data.data:[];
+    return estado?list.filter(w=>w.estado===estado):list;
+  }catch(e){ return []; }
 }
 
 async function sbUpdateWithdraw(id,estado){
-  if(!_dbOk('sbUpdateWithdraw')) return false;
-  const{error}=await db.from('wallet_retiros').update({estado,updated_at:tnowISO()}).eq('id',id);
-  return !sbErr('sbUpdateWithdraw',error);
+  try{
+    const{data}=await db.from('tasas').select('data').eq('id','wret__all').maybeSingle();
+    const list=Array.isArray(data?.data)?data.data:[];
+    const idx=list.findIndex(w=>w.id===id);
+    if(idx===-1) return false;
+    list[idx].estado=estado; list[idx].updated_at=tnowISO();
+    const{error}=await db.from('tasas').upsert({id:'wret__all',data:list},{onConflict:'id'});
+    return !error;
+  }catch(e){ return false; }
 }
 
 async function sbGetAllWallets(){
-  if(!_dbOk('sbGetAllWallets')) return [];
-  const{data,error}=await db.from('wallets').select('*').order('usdt_balance',{ascending:false}).limit(200);
-  if(sbErr('sbGetAllWallets',error)) return [];
-  return data||[];
+  try{
+    const{data,error}=await db.from('tasas').select('id,data').like('id','wallet__%');
+    if(error||!data) return [];
+    return data
+      .filter(r=>r.id.startsWith('wallet__'))
+      .map(r=>({email:r.id.replace('wallet__',''), ...r.data}))
+      .filter(w=>(parseFloat(w.usdt)||0)>0||(parseFloat(w.bs)||0)>0)
+      .sort((a,b)=>(parseFloat(b.usdt)||0)-(parseFloat(a.usdt)||0));
+  }catch(e){ return []; }
 }
 
 // ── Helpers de conversión ────────────────────────────────────
