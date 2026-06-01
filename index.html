@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="light">
+<html lang="es">
 <head>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -13,16 +13,16 @@ document.addEventListener('DOMContentLoaded',function(){
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#eef2f8">
+<meta name="theme-color" content="#080c12">
 <title>LS Cambios — Tu dinero a tu destino</title>
-<meta name="description" content="Tu neobanco digital venezolano. Deposita en Pago Móvil y cambia a PayPal, Binance, Zinli, Airtm, Wally al instante.">
+<meta name="description" content="Casa de cambio digital. PayPal, Binance, Zinli, Airtm, Wally a Bolívares.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="LS Cambios — Tu dinero, tu destino">
-<meta property="og:description" content="Tu neobanco digital venezolano. Deposita en Pago Móvil y cambia a PayPal, Binance, Zinli, Airtm, Wally al instante.">
+<meta property="og:title" content="LS Cambios — Tu dinero a tu destino">
+<meta property="og:description" content="Casa de cambio digital. PayPal, Binance, Zinli, Airtm, Wally a Bolívares.">
 <meta property="og:site_name" content="LS Cambios">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LS Cambios — Tu dinero, tu destino">
-<meta name="twitter:description" content="Tu neobanco digital venezolano. Deposita en Pago Móvil y cambia a PayPal, Binance, Zinli, Airtm, Wally al instante.">
+<meta name="twitter:title" content="LS Cambios — Tu dinero a tu destino">
+<meta name="twitter:description" content="Casa de cambio digital. PayPal, Binance, Zinli, Airtm, Wally a Bolívares.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -128,121 +128,6 @@ document.addEventListener('DOMContentLoaded',function(){
 .light .trade-tab{color:#1a4a8a;border-color:var(--brd2)}
 .light .trade-tab.on{background:var(--bg3);color:#0a1628}
 .light .compliance-card{background:rgba(26,108,255,.04)}
-
-/* ══════════════════════════════════════════════════
-   PLATAFORMA ENHANCEMENTS — LS Cambios
-   ══════════════════════════════════════════════════ */
-
-/* Light mode overrides for neobanco feel */
-.light .hero-h1{
-  color:#0a1628 !important;
-  text-shadow:0 1px 3px rgba(26,108,255,.06);
-}
-.light .hero-h1 span{
-  background:linear-gradient(135deg,#1a6cff,#00c896);
-  background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.light .hero-sub{color:#2a4a7a !important}
-.light .hero::before{
-  background:radial-gradient(ellipse at top,rgba(26,108,255,.1) 0%,rgba(0,200,150,.06) 40%,transparent 65%) !important;
-}
-.light .hero{background:linear-gradient(175deg,#f0f5fd 0%,#eef2f8 100%)}
-
-/* Neobanco deposit badge */
-.neo-pagomovil-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  background:linear-gradient(135deg,rgba(26,108,255,.1),rgba(0,200,150,.08));
-  border:1px solid rgba(26,108,255,.2);border-radius:20px;
-  padding:6px 14px;font-size:11px;font-weight:700;letter-spacing:.8px;
-  color:#1a4a8a;margin-bottom:16px;
-}
-.light .neo-pagomovil-badge{color:#1a4a8a;border-color:rgba(26,108,255,.25)}
-:not(.light) .neo-pagomovil-badge{color:var(--g);border-color:rgba(0,200,150,.2);background:rgba(0,200,150,.05)}
-
-/* How section neobanco cards */
-.light .how-step{
-  background:var(--bg1) !important;
-  border:1px solid var(--brd2) !important;
-  box-shadow:0 2px 12px rgba(26,108,255,.06) !important;
-}
-.light .how-n{
-  background:linear-gradient(135deg,#1a6cff,#00c896) !important;
-  color:#fff !important;
-}
-.light .how-t{color:#0a1628 !important}
-.light .how-d{color:#2a4a7a !important}
-
-/* Neobanco platform pills */
-.plat-pills{
-  display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;justify-content:center;
-}
-.plat-pill{
-  display:flex;align-items:center;gap:6px;
-  padding:6px 14px;border-radius:20px;
-  font-size:11px;font-weight:700;letter-spacing:.3px;
-  border:1px solid;cursor:default;
-  transition:transform .15s;
-}
-.plat-pill:hover{transform:translateY(-1px)}
-.plat-pill.paypal{background:rgba(0,48,135,.08);border-color:rgba(0,48,135,.2);color:#003087}
-.plat-pill.zinli{background:rgba(0,200,100,.08);border-color:rgba(0,200,100,.2);color:#007a40}
-.plat-pill.wally{background:rgba(100,50,200,.08);border-color:rgba(100,50,200,.2);color:#6432c8}
-.plat-pill.airtm{background:rgba(255,100,0,.08);border-color:rgba(255,100,0,.2);color:#cc4400}
-.plat-pill.binance{background:rgba(240,185,11,.08);border-color:rgba(240,185,11,.3);color:#8a6500}
-
-:not(.light) .plat-pill.paypal{color:#7aa8ff;border-color:rgba(122,168,255,.25);background:rgba(122,168,255,.06)}
-:not(.light) .plat-pill.zinli{color:#00e08a;border-color:rgba(0,224,138,.2);background:rgba(0,224,138,.05)}
-:not(.light) .plat-pill.wally{color:#a882ff;border-color:rgba(168,130,255,.2);background:rgba(168,130,255,.05)}
-:not(.light) .plat-pill.airtm{color:#ff9a5c;border-color:rgba(255,154,92,.2);background:rgba(255,154,92,.05)}
-:not(.light) .plat-pill.binance{color:#f0b90b;border-color:rgba(240,185,11,.2);background:rgba(240,185,11,.04)}
-
-/* Nav neobanco chip */
-.neo-chip{
-  display:inline-flex;align-items:center;gap:5px;
-  background:linear-gradient(135deg,rgba(26,108,255,.12),rgba(0,200,150,.08));
-  border:1px solid rgba(26,108,255,.2);border-radius:4px;
-  padding:2px 8px;font-size:9px;font-weight:800;letter-spacing:1px;
-  color:#1a6cff;vertical-align:middle;margin-left:4px;
-}
-:not(.light) .neo-chip{
-  color:var(--g);background:rgba(0,200,150,.08);border-color:rgba(0,200,150,.2);
-}
-
-/* Pago Movil deposit highlight */
-.light .pagomovil-box{
-  background:linear-gradient(135deg,rgba(26,108,255,.06),rgba(0,200,150,.04));
-  border:1px solid rgba(26,108,255,.18);
-  border-radius:12px;padding:16px;
-}
-:not(.light) .pagomovil-box{
-  background:rgba(0,200,150,.04);
-  border:1px solid rgba(0,200,150,.14);
-  border-radius:12px;padding:16px;
-}
-
-/* Neobanco stats bar */
-.neo-stats{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:12px;margin:24px 0;
-}
-.neo-stat{
-  text-align:center;padding:16px 8px;
-  background:var(--bg1);border:1px solid var(--brd2);border-radius:var(--r2);
-}
-.light .neo-stat{box-shadow:0 2px 8px rgba(26,108,255,.05)}
-.neo-stat-val{font-size:22px;font-weight:900;color:var(--g);font-family:var(--mono);line-height:1}
-.neo-stat-lbl{font-size:9px;color:var(--t2);letter-spacing:.8px;margin-top:4px;font-weight:600}
-.light .neo-stat-val{background:linear-gradient(135deg,#1a6cff,#00c896);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-
-/* Enhanced card in light mode */
-.light .ui-card{
-  background:var(--bg1);
-  border:1px solid var(--brd2);
-  box-shadow:0 2px 12px rgba(26,108,255,.06);
-}
-.light .ui-card *:not(span[style]):not(div[style]):not(p.ui-body){color:inherit}
-.light .ui-card p.ui-body{color:#2a4a7a}
-
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-scroll-behavior:smooth;scroll-behavior:smooth;height:100%}
 body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh;min-height:100dvh;overflow-x:hidden;overscroll-behavior:none;-webkit-overflow-scrolling:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
@@ -898,10 +783,10 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
   <nav class="nav">
     <div class="nav-brand" onclick="goL()">
       <div class="nav-brand-img"><img class="logo-img" src="" alt="LS"></div>
-      <div class="nav-brand-name">LS CAMBIOS <span class="neo-chip">BETA</span></div>
+      <div class="nav-brand-name">LS CAMBIOS</div>
     </div>
     <div class="nav-actions" id="navActs">
-      <button id="theme-btn" onclick="toggleTheme()" title="Cambiar tema" style="background:var(--bg3);border:1px solid var(--brd2);border-radius:6px;padding:7px 10px;font-size:15px;cursor:pointer;transition:.2s;line-height:1">☀️</button>
+      <button id="theme-btn" onclick="toggleTheme()" title="Cambiar tema" style="background:var(--bg3);border:1px solid var(--brd2);border-radius:6px;padding:7px 10px;font-size:15px;cursor:pointer;transition:.2s;line-height:1">🌙</button>
       <button class="nav-btn nav-btn-ghost" onclick="openAuth('login')">Entrar</button>
       <button class="nav-btn nav-btn-solid" onclick="openAuth('register')">Crear cuenta</button>
     </div>
@@ -909,43 +794,13 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 
   <div class="hero">
     <div class="hero-logo"><img class="logo-img" src="" alt="LS Cambios"></div>
-    <div class="neo-pagomovil-badge">📲 DEPOSITA: Pago Móvil o Binance Pay · RETIRA: PayPal, Zinli, Wally, Airtm</div>
-    <div class="live-chip" style="margin-bottom:6px"><div class="live-dot"></div><span>TASAS EN VIVO</span></div>
+    <div class="live-chip"><div class="live-dot"></div><span>TASAS EN VIVO</span></div>
     <div id="horario-chip-lp"></div>
-    <h1 class="hero-h1">Tu neobanco<br><span>venezolano</span></h1>
-    <p class="hero-sub">Deposita en Bolívares vía <strong>Pago Móvil</strong> o en USDT vía <strong>Binance Pay</strong> y recibe en la plataforma que elijas.</p>
-    <div class="plat-pills">
-      <span class="plat-pill" style="background:rgba(207,20,43,.08);border-color:rgba(207,20,43,.25);color:#cf142b;font-weight:800">📲 Pago Móvil</span>
-      <span class="plat-pill binance" style="font-weight:800">💛 Binance Pay</span>
-    </div>
-    <div style="font-size:10px;color:var(--t2);letter-spacing:.5px;margin-bottom:8px;font-weight:600">DEPÓSITO • RETIRA EN:</div>
-    <div class="plat-pills" style="margin:0">
-      <span class="plat-pill paypal">💙 PayPal</span>
-      <span class="plat-pill zinli">💚 Zinli</span>
-      <span class="plat-pill wally">💜 Wally</span>
-      <span class="plat-pill airtm">🧡 Airtm</span>
-    </div>
+    <h1 class="hero-h1">Tu dinero a<br><span>tu destino</span></h1>
+    <p class="hero-sub">Casa de cambio P2P. PayPal, Binance, Zinli, Airtm, Wally → Bolívares.</p>
     <div class="hero-btns">
-      <button class="btn-main solid" onclick="openAuth('register')">Abrir cuenta gratis →</button>
+      <button class="btn-main solid" onclick="openAuth('register')">Comenzar →</button>
       <a href="#rates" class="btn-main outline">Ver tasas</a>
-    </div>
-  </div>
-
-  <!-- STATS -->
-  <div style="max-width:800px;margin:0 auto;width:100%;padding:0 24px 8px">
-    <div class="neo-stats">
-      <div class="neo-stat">
-        <div class="neo-stat-val">+2.4K</div>
-        <div class="neo-stat-lbl">USUARIOS</div>
-      </div>
-      <div class="neo-stat">
-        <div class="neo-stat-val">~18min</div>
-        <div class="neo-stat-lbl">TIEMPO PROMEDIO</div>
-      </div>
-      <div class="neo-stat">
-        <div class="neo-stat-val">5</div>
-        <div class="neo-stat-lbl">PLATAFORMAS</div>
-      </div>
     </div>
   </div>
 
@@ -1016,18 +871,18 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
     <div class="ui-mb32">
       <div class="live-chip ui-mb18"><div class="live-dot"></div><span>NUESTRA HISTORIA</span></div>
       <h1 style="font-size:clamp(28px,5vw,48px);font-weight:800;line-height:1.1;color:#fff;letter-spacing:-1px;margin-bottom:14px">Quiénes <span style="background:var(--gd);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent">Somos</span></h1>
-      <p style="font-size:15px;color:var(--t2);line-height:1.75;font-weight:300">LS Cambios es el neobanco digital venezolano que te permite depositar en Pago Móvil y cambiar tu dinero a las plataformas digitales que necesitas: PayPal, Binance, Zinli, Airtm, Wally y más.</p>
+      <p style="font-size:15px;color:var(--t2);line-height:1.75;font-weight:300">LS Cambios es una casa de cambio digital venezolana dedicada a facilitar el intercambio seguro y rápido de divisas digitales a bolívares y viceversa.</p>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:32px">
       <div class="ui-card">
         <div style="font-size:28px;margin-bottom:10px">🎯</div>
         <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px">Nuestra Misión</div>
-        <p class="ui-body">Ser el neobanco de referencia en Venezuela, facilitando a cada venezolano el acceso a divisas y plataformas digitales internacionales mediante Pago Móvil, con tasas competitivas y atención personalizada.</p>
+        <p class="ui-body">Ofrecer un servicio de cambio de divisas confiable, transparente y accesible para todos los venezolanos, facilitando el acceso a plataformas digitales internacionales con tasas competitivas y atención personalizada.</p>
       </div>
       <div class="ui-card">
         <div style="font-size:28px;margin-bottom:10px">👁️</div>
         <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px">Nuestra Visión</div>
-        <p class="ui-body">Liderar la digitalización financiera venezolana, siendo el neobanco más confiable y accesible para convertir bolívares en divisas digitales y viceversa.</p>
+        <p class="ui-body">Ser la casa de cambio digital de mayor confianza en Venezuela, reconocida por nuestra rapidez, transparencia y compromiso con el cliente en cada operación.</p>
       </div>
     </div>
     <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:24px;margin-bottom:24px">
@@ -1036,7 +891,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Tasas competitivas en tiempo real</div><div class="ui-fn-sm">Actualizamos nuestras tasas constantemente para ofrecerte el mejor precio del mercado.</div></div></div>
         <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Procesamiento en minutos</div><div class="ui-fn-sm">La mayoría de las operaciones se completan en menos de 30 minutos durante el horario de atención.</div></div></div>
         <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Soporte personalizado vía WhatsApp</div><div class="ui-fn-sm">Nuestro equipo está disponible para resolver cualquier duda antes, durante y después de tu operación.</div></div></div>
-        <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Múltiples plataformas</div><div class="ui-fn-sm">Operamos con PayPal, Binance, Zinli, Airtm, Wally y USDT BEP20 para tu comodidad.</div></div></div>
+        <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Múltiples plataformas</div><div class="ui-fn-sm">Operamos con PayPal, Binance, Zinli, Airtm, Wally y USDC para tu comodidad.</div></div></div>
       </div>
     </div>
     <div style="text-align:center;padding:24px;background:rgba(0,200,150,.05);border:1px solid rgba(0,200,150,.15);border-radius:var(--r2)">
@@ -1136,7 +991,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       </div>
       <div class="ui-card">
         <div class="ui-title-g">2. Descripción del servicio</div>
-        <p class="ui-body">LS Cambios es un neobanco digital venezolano que facilita el depósito en Pago Móvil y la conversión a plataformas digitales: PayPal, Binance/USDT, Zinli, Airtm, Wally y USDT, con liquidación en bolívares venezolanos (Bs). Actuamos como intermediarios en cada transacción.</p>
+        <p class="ui-body">LS Cambios es una plataforma P2P de intercambio de divisas digitales que facilita operaciones de compra y venta entre PayPal, Binance/USDT, Zinli, Airtm, Wally y USDC, con liquidación en bolívares venezolanos (Bs). Actuamos como intermediarios facilitando la transacción.</p>
       </div>
       <div class="ui-card">
         <div class="ui-title-g">3. Registro y cuenta de usuario</div>
@@ -1368,25 +1223,17 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
               <option value="venta">Compro divisas → envío Bolívares</option>
             </select>
           </div>
-          <div class="pagomovil-box" style="margin-bottom:16px">
-            <div style="font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--g);margin-bottom:6px">📲 ¿CÓMO DEPOSITAR?</div>
-            <div style="font-size:12px;color:var(--t2);line-height:1.6">Envía en <strong>Bolívares</strong> por <strong>Pago Móvil</strong> o en <strong>USDT</strong> por <strong>Binance Pay</strong> — luego retira en tu plataforma favorita.</div>
-          </div>
-          <div class="fg" id="plat-bs-wrap"><label>PLATAFORMA DE RETIRO</label>
+          <div class="fg" id="plat-bs-wrap"><label>PLATAFORMA</label>
             <select class="fsel" id="op-plat" onchange="calcOp();updWallet()">
-              <option value="paypal">PayPal</option>
-              <option value="zinli">Zinli</option>
-              <option value="wally">Wally</option>
-              <option value="airtm">Airtm</option>
-              <option value="binance">Binance Pay</option>
+              <option value="binance">Binance</option><option value="paypal">PayPal</option>
+              <option value="zinli">Zinli</option><option value="wally">Wally</option>
+              <option value="airtm">Airtm</option><option value="usdc">USDC</option>
             </select>
           </div>
           <div class="fg" id="plat-usdt-wrap" style="display:none"><label>PLATAFORMA</label>
             <select class="fsel" id="op-plat-usdt" onchange="calcOp();updWallet()">
-              <option value="paypal">PayPal</option>
-              <option value="zinli">Zinli</option>
-              <option value="wally">Wally</option>
-              <option value="airtm">Airtm</option>
+              <option value="paypal">PayPal</option><option value="zinli">Zinli</option>
+              <option value="wally">Wally</option><option value="airtm">Airtm</option>
               <option value="binance">Binance</option>
             </select>
           </div>
@@ -1409,7 +1256,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
             <i class="ph-fill ph-receipt"></i> Datos de Pago
           </button>
           <button class="trade-tab" id="ttab-chat" onclick="tradeTab('chat')">
-            <i class="ph-fill ph-chats-circle"></i> Chat de Soporte
+            <i class="ph-fill ph-chats-circle"></i> Chat P2P
             <span class="trade-tab-badge" id="chat-unread-badge">0</span>
           </button>
         </div>
@@ -1463,16 +1310,16 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 
             <!-- Botón ir al chat — solo en móvil -->
             <button class="btn g full" style="display:none" id="btn-go-chat" onclick="tradeTab('chat')">
-              <i class="ph-fill ph-chats-circle"></i> Ir al Chat de Soporte →
+              <i class="ph-fill ph-chats-circle"></i> Ir al Chat P2P →
             </button>
 
           </div>
 
-          <!-- Panel derecho / Pestaña "Chat de Soporte" -->
+          <!-- Panel derecho / Pestaña "Chat P2P" -->
           <div class="card chat-box trade-tab-pane" id="tpane-chat">
             <div class="card-hdr">
               <div>
-                <div class="card-title" id="chat-id">Chat de Soporte</div>
+                <div class="card-title" id="chat-id">Chat P2P</div>
                 <div style="font-size:10px;color:var(--t2);margin-top:1px">Con LS Cambios</div>
               </div>
               <div id="chat-st"></div>
@@ -1592,7 +1439,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clientes
       </button>
       <button class="ap-sb-i" id="asi-chats" onclick="showAV('chats')">
-        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chats de Soporte
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chats P2P
       </button>
       <button class="ap-sb-i" id="asi-rates" onclick="showAV('rates')">
         <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Tasas
@@ -1643,7 +1490,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <div class="card"><div id="a-cli-body"></div></div>
       </div>
       <div class="av" id="av-chats">
-        <div class="dv-h">Chats de Soporte 💬</div><div class="dv-s">Responde en tiempo real</div>
+        <div class="dv-h">Chats P2P 💬</div><div class="dv-s">Responde en tiempo real</div>
         <div class="a-chat-g">
           <div class="op-panel"><div class="op-panel-h">Operaciones activas</div><div class="op-panel-list" id="a-op-list"></div></div>
           <div class="a-chat-panel">
@@ -1748,15 +1595,8 @@ function toggleTheme(){
 (function initTheme(){
   try{
     const t=localStorage.getItem('lsc_theme');
-    // Default = light; only remove if explicitly set to dark
-    if(t==='dark'){
-      document.documentElement.classList.remove('light');
-      document.addEventListener('DOMContentLoaded',()=>{
-        const btn=document.getElementById('theme-btn');
-        if(btn)btn.textContent='🌙';
-      });
-    } else {
-      // Ensure light class is present and button shows sun
+    if(t==='light'){
+      document.documentElement.classList.add('light');
       document.addEventListener('DOMContentLoaded',()=>{
         const btn=document.getElementById('theme-btn');
         if(btn)btn.textContent='☀️';
@@ -2069,7 +1909,7 @@ function deepMerge(t,s){
   }
 }
 
-const PN={binance:'Binance',paypal:'PayPal',zinli:'Zinli',wally:'Wally',airtm:'Airtm',usdc:'USDC',usdt:'USDT (BEP20)',pagomovil:'Pago Móvil'};
+const PN={binance:'Binance',paypal:'PayPal',zinli:'Zinli',wally:'Wally',airtm:'Airtm',usdc:'USDC',usdt:'USDT (BEP20)'};
 const WLS={
   binance:{label:'ID Binance',       val:'906509124',                                   note:'Envía USDT'},
   paypal: {label:'Correo PayPal',    val:'sandrealeonard@gmail.com',                    note:'Monto exacto'},
@@ -2097,56 +1937,17 @@ function netCalc(a,c){
 }
 
 function svgL(id,sz=36){
-  const r=Math.round(sz*.25),h=sz/2,s=sz;
-  // Iconos reales SVG de cada plataforma
+  const r=Math.round(sz*.25),h=sz/2;
   const logos={
-    // Binance — rombo dorado oficial
-    binance:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#181a20"/>
-      <g fill="#F3BA2F" transform="translate(22,22)">
-        <polygon points="0,-8.5 2.5,-6 0,-3.5 -2.5,-6" transform="rotate(0)"/>
-        <polygon points="-8.5,0 -6,2.5 -3.5,0 -6,-2.5" transform="rotate(0)"/>
-        <polygon points="8.5,0 6,2.5 3.5,0 6,-2.5" transform="rotate(0)"/>
-        <polygon points="0,8.5 2.5,6 0,3.5 -2.5,6" transform="rotate(0)"/>
-        <polygon points="-3.5,-3.5 0,-7 3.5,-3.5 0,0" transform="rotate(0)"/>
-        <polygon points="-3.5,3.5 0,0 3.5,3.5 0,7" transform="rotate(0)"/>
-        <polygon points="-7,-0.1 -3.5,-3.5 0,0 -3.5,3.5" transform="rotate(0)"/>
-        <polygon points="7,-0.1 3.5,-3.5 0,0 3.5,3.5" transform="rotate(0)"/>
-      </g></svg>`,
-    // PayPal — doble P icónica
-    paypal:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#fff"/>
-      <g transform="translate(8,8)">
-        <path d="M23.4 6.5c.5 2.8-.8 5.9-3 7.6-2 1.5-4.8 2-7.4 2H11l-1.2 7.5H5.4L8.6 5.5h8.6c3 0 5.6.8 6.2 1z" fill="#009cde"/>
-        <path d="M26.5 8c.2 1 .2 2.1 0 3.1-.9 4.2-4.2 6.9-8.5 6.9h-2.2l-1.5 9.3H9.8l.3-2h2.8l1.5-9.3h2.2c3.8 0 6.8-2.1 7.9-5.5.4-1.2.5-2.4.3-3.5.5.3.9.6 1.3 1z" fill="#003087"/>
-        <path d="M10.3 5.5H19c2.8 0 5.3.8 6.2 2.3.4.7.6 1.4.6 2.2C25.5 6 22.9 4 19.2 4H10.6L7.2 25.5h4.4l1.2-7.5h2c2.6 0 5.4-.5 7.4-2C24.6 14 26 11 25.5 8c-.4-1.5-2-2.5-4.3-2.5z" fill="#012169"/>
-      </g></svg>`,
-    // Zinli — ícono Z morado
-    zinli:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#7C3AED"/>
-      <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" font-family="'Arial Black',Arial" font-size="${Math.round(s*.5)}" font-weight="900" fill="#fff">Z</text></svg>`,
-    // Wally — W verde
-    wally:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#00A651"/>
-      <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" font-family="'Arial Black',Arial" font-size="${Math.round(s*.46)}" font-weight="900" fill="#fff">W</text></svg>`,
-    // Airtm — avión / A naranja
-    airtm:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#FF5F00"/>
-      <path d="M22 10 L34 34 L22 28 L10 34 Z" fill="#fff" opacity=".95"/>
-      <path d="M22 10 L34 34 L22 22 Z" fill="#fff" opacity=".6"/></svg>`,
-    // USDC — círculo azul
-    usdc:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#2775CA"/>
-      <circle cx="22" cy="22" r="16" fill="none" stroke="#fff" stroke-width="2.5"/>
-      <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" font-family="'Arial Black',Arial" font-size="${Math.round(s*.26)}" font-weight="900" fill="#fff">USDC</text></svg>`,
-    // USDT — círculo verde tether
-    usdt:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#26A17B"/>
-      <path d="M14 12h16v4H14zM20 16h4v4h-4z" fill="#fff" opacity=".9"/>
-      <path d="M22 20c-5 0-9 1-9 2.5s4 2.5 9 2.5 9-1 9-2.5-4-2.5-9-2.5z" fill="#fff"/>
-      <rect x="20" y="23" width="4" height="9" rx="2" fill="#fff"/></svg>`,
-    // Pago Móvil — bandera VE + móvil
-    pagomovil:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#CF142B"/>
-      <rect x="0" y="14.7" width="44" height="14.6" fill="#fff"/>
-      <rect x="0" y="29.3" width="44" height="14.7" fill="#00247D"/>
-      <rect x="15" y="11" width="14" height="22" rx="3" fill="#fff" opacity=".9"/>
-      <rect x="17" y="14" width="10" height="13" rx="1" fill="#CF142B"/>
-      <circle cx="22" cy="30" r="1.5" fill="#CF142B"/></svg>`,
+    binance:`<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#181a20"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Georgia" font-size="${Math.round(sz*.52)}" font-weight="900" fill="#f3ba2f">B</text></svg>`,
+    paypal: `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#003087"/><text x="50%" y="56%" dominant-baseline="middle" text-anchor="middle" font-family="Georgia" font-size="${Math.round(sz*.52)}" font-weight="900" fill="#009cde">P</text></svg>`,
+    zinli:  `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#5b2d8e"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.27)}" font-weight="800" fill="#fff">Zinli</text></svg>`,
+    wally:  `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#006b31"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.27)}" font-weight="800" fill="#fff">Wally</text></svg>`,
+    airtm:  `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#0055b3"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.25)}" font-weight="800" fill="#fff">Airtm</text></svg>`,
+    usdc:   `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#2775ca"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.22)}" font-weight="800" fill="#fff">USDC</text></svg>`,
+    usdt:   `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#26a17b"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.22)}" font-weight="800" fill="#fff">USDT</text></svg>`,
   };
-  return logos[id]||`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="var(--bg3)"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(s*.3)}" font-weight="800" fill="var(--t2)">${id.slice(0,3).toUpperCase()}</text></svg>`;
+  return logos[id]||'';
 }
 
 function stBdg(st){
