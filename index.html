@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="light">
 <head>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -13,16 +13,16 @@ document.addEventListener('DOMContentLoaded',function(){
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#080c12">
+<meta name="theme-color" content="#eef2f8">
 <title>LS Cambios — Tu dinero a tu destino</title>
-<meta name="description" content="Casa de cambio digital. PayPal, Binance, Zinli, Airtm, Wally a Bolívares.">
+<meta name="description" content="Tu neobanco digital venezolano. Deposita en Pago Móvil y cambia a PayPal, Binance, Zinli, Airtm, Wally al instante.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="LS Cambios — Tu dinero a tu destino">
-<meta property="og:description" content="Casa de cambio digital. PayPal, Binance, Zinli, Airtm, Wally a Bolívares.">
+<meta property="og:title" content="LS Cambios — Tu dinero, tu destino">
+<meta property="og:description" content="Tu neobanco digital venezolano. Deposita en Pago Móvil y cambia a PayPal, Binance, Zinli, Airtm, Wally al instante.">
 <meta property="og:site_name" content="LS Cambios">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LS Cambios — Tu dinero a tu destino">
-<meta name="twitter:description" content="Casa de cambio digital. PayPal, Binance, Zinli, Airtm, Wally a Bolívares.">
+<meta name="twitter:title" content="LS Cambios — Tu dinero, tu destino">
+<meta name="twitter:description" content="Tu neobanco digital venezolano. Deposita en Pago Móvil y cambia a PayPal, Binance, Zinli, Airtm, Wally al instante.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -128,6 +128,121 @@ document.addEventListener('DOMContentLoaded',function(){
 .light .trade-tab{color:#1a4a8a;border-color:var(--brd2)}
 .light .trade-tab.on{background:var(--bg3);color:#0a1628}
 .light .compliance-card{background:rgba(26,108,255,.04)}
+
+/* ══════════════════════════════════════════════════
+   PLATAFORMA ENHANCEMENTS — LS Cambios
+   ══════════════════════════════════════════════════ */
+
+/* Light mode overrides for neobanco feel */
+.light .hero-h1{
+  color:#0a1628 !important;
+  text-shadow:0 1px 3px rgba(26,108,255,.06);
+}
+.light .hero-h1 span{
+  background:linear-gradient(135deg,#1a6cff,#00c896);
+  background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.light .hero-sub{color:#2a4a7a !important}
+.light .hero::before{
+  background:radial-gradient(ellipse at top,rgba(26,108,255,.1) 0%,rgba(0,200,150,.06) 40%,transparent 65%) !important;
+}
+.light .hero{background:linear-gradient(175deg,#f0f5fd 0%,#eef2f8 100%)}
+
+/* Neobanco deposit badge */
+.neo-pagomovil-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,rgba(26,108,255,.1),rgba(0,200,150,.08));
+  border:1px solid rgba(26,108,255,.2);border-radius:20px;
+  padding:6px 14px;font-size:11px;font-weight:700;letter-spacing:.8px;
+  color:#1a4a8a;margin-bottom:16px;
+}
+.light .neo-pagomovil-badge{color:#1a4a8a;border-color:rgba(26,108,255,.25)}
+:not(.light) .neo-pagomovil-badge{color:var(--g);border-color:rgba(0,200,150,.2);background:rgba(0,200,150,.05)}
+
+/* How section neobanco cards */
+.light .how-step{
+  background:var(--bg1) !important;
+  border:1px solid var(--brd2) !important;
+  box-shadow:0 2px 12px rgba(26,108,255,.06) !important;
+}
+.light .how-n{
+  background:linear-gradient(135deg,#1a6cff,#00c896) !important;
+  color:#fff !important;
+}
+.light .how-t{color:#0a1628 !important}
+.light .how-d{color:#2a4a7a !important}
+
+/* Neobanco platform pills */
+.plat-pills{
+  display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;justify-content:center;
+}
+.plat-pill{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 14px;border-radius:20px;
+  font-size:11px;font-weight:700;letter-spacing:.3px;
+  border:1px solid;cursor:default;
+  transition:transform .15s;
+}
+.plat-pill:hover{transform:translateY(-1px)}
+.plat-pill.paypal{background:rgba(0,48,135,.08);border-color:rgba(0,48,135,.2);color:#003087}
+.plat-pill.zinli{background:rgba(0,200,100,.08);border-color:rgba(0,200,100,.2);color:#007a40}
+.plat-pill.wally{background:rgba(100,50,200,.08);border-color:rgba(100,50,200,.2);color:#6432c8}
+.plat-pill.airtm{background:rgba(255,100,0,.08);border-color:rgba(255,100,0,.2);color:#cc4400}
+.plat-pill.binance{background:rgba(240,185,11,.08);border-color:rgba(240,185,11,.3);color:#8a6500}
+
+:not(.light) .plat-pill.paypal{color:#7aa8ff;border-color:rgba(122,168,255,.25);background:rgba(122,168,255,.06)}
+:not(.light) .plat-pill.zinli{color:#00e08a;border-color:rgba(0,224,138,.2);background:rgba(0,224,138,.05)}
+:not(.light) .plat-pill.wally{color:#a882ff;border-color:rgba(168,130,255,.2);background:rgba(168,130,255,.05)}
+:not(.light) .plat-pill.airtm{color:#ff9a5c;border-color:rgba(255,154,92,.2);background:rgba(255,154,92,.05)}
+:not(.light) .plat-pill.binance{color:#f0b90b;border-color:rgba(240,185,11,.2);background:rgba(240,185,11,.04)}
+
+/* Nav neobanco chip */
+.neo-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  background:linear-gradient(135deg,rgba(26,108,255,.12),rgba(0,200,150,.08));
+  border:1px solid rgba(26,108,255,.2);border-radius:4px;
+  padding:2px 8px;font-size:9px;font-weight:800;letter-spacing:1px;
+  color:#1a6cff;vertical-align:middle;margin-left:4px;
+}
+:not(.light) .neo-chip{
+  color:var(--g);background:rgba(0,200,150,.08);border-color:rgba(0,200,150,.2);
+}
+
+/* Pago Movil deposit highlight */
+.light .pagomovil-box{
+  background:linear-gradient(135deg,rgba(26,108,255,.06),rgba(0,200,150,.04));
+  border:1px solid rgba(26,108,255,.18);
+  border-radius:12px;padding:16px;
+}
+:not(.light) .pagomovil-box{
+  background:rgba(0,200,150,.04);
+  border:1px solid rgba(0,200,150,.14);
+  border-radius:12px;padding:16px;
+}
+
+/* Neobanco stats bar */
+.neo-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:12px;margin:24px 0;
+}
+.neo-stat{
+  text-align:center;padding:16px 8px;
+  background:var(--bg1);border:1px solid var(--brd2);border-radius:var(--r2);
+}
+.light .neo-stat{box-shadow:0 2px 8px rgba(26,108,255,.05)}
+.neo-stat-val{font-size:22px;font-weight:900;color:var(--g);font-family:var(--mono);line-height:1}
+.neo-stat-lbl{font-size:9px;color:var(--t2);letter-spacing:.8px;margin-top:4px;font-weight:600}
+.light .neo-stat-val{background:linear-gradient(135deg,#1a6cff,#00c896);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* Enhanced card in light mode */
+.light .ui-card{
+  background:var(--bg1);
+  border:1px solid var(--brd2);
+  box-shadow:0 2px 12px rgba(26,108,255,.06);
+}
+.light .ui-card *:not(span[style]):not(div[style]):not(p.ui-body){color:inherit}
+.light .ui-card p.ui-body{color:#2a4a7a}
+
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-scroll-behavior:smooth;scroll-behavior:smooth;height:100%}
 body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh;min-height:100dvh;overflow-x:hidden;overscroll-behavior:none;-webkit-overflow-scrolling:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
@@ -735,224 +850,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .ui-col-g{color:var(--g)}
 .ui-col-t1{color:var(--t1)}
 .ui-col-y{color:var(--yellow)}
-
-/* ══════════════════════════════════════════
-   🎨 APOLO PAY MOBILE SKIN — LS Cambios
-   ══════════════════════════════════════════ */
-:root{
-  --ap-accent:#00e8a0;
-  --ap-accent2:#0af;
-  --ap-glow:0 0 18px rgba(0,232,160,.25);
-  --ap-card-bg:rgba(16,22,34,.88);
-  --ap-card-border:rgba(0,232,160,.10);
-  --ap-pill:#121c2e;
-  --ap-fn:'Outfit',sans-serif;
-}
-
-/* ── Global body app feel ── */
-body{
-  background:linear-gradient(160deg,#060b14 0%,#0a1220 60%,#07111e 100%);
-  min-height:100vh;
-}
-
-/* ── Status bar top padding for iOS notch ── */
-body::before{
-  content:'';display:block;
-  height:env(safe-area-inset-top,0px);
-  background:transparent;
-}
-
-/* ── Glassmorphism cards ── */
-.card{
-  background:var(--ap-card-bg)!important;
-  border:1px solid var(--ap-card-border)!important;
-  border-radius:18px!important;
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
-  box-shadow:0 4px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.04)!important;
-}
-.card-hdr{
-  background:rgba(0,232,160,.04)!important;
-  border-bottom:1px solid rgba(0,232,160,.08)!important;
-}
-
-/* ── KPI chips ── */
-.kpi{
-  background:linear-gradient(135deg,rgba(0,232,160,.08) 0%,rgba(0,170,255,.06) 100%)!important;
-  border:1px solid rgba(0,232,160,.15)!important;
-  border-radius:14px!important;
-  box-shadow:var(--ap-glow)!important;
-  transition:transform .15s;
-}
-.kpi:active{transform:scale(.97)}
-.kpi-v{
-  font-size:28px!important;
-  font-weight:800!important;
-  letter-spacing:-1px;
-  background:linear-gradient(135deg,#00e8a0,#0af);
-  -webkit-background-clip:text;background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-/* ── Bottom tab bar Apolo style ── */
-.dp-mob,.ap-mob{
-  background:rgba(8,12,20,.92)!important;
-  backdrop-filter:blur(24px)!important;
-  -webkit-backdrop-filter:blur(24px)!important;
-  border-top:1px solid rgba(0,232,160,.10)!important;
-  box-shadow:0 -1px 0 rgba(0,0,0,.4),0 -8px 24px rgba(0,0,0,.2)!important;
-}
-.mn-i,.ap-mn-i{
-  position:relative;
-  transition:color .2s,transform .15s;
-}
-.mn-i.on,.mn-i:active,.ap-mn-i.on,.ap-mn-i:active{
-  color:var(--ap-accent)!important;
-  transform:translateY(-1px);
-}
-.mn-i.on svg,.ap-mn-i.on svg{
-  filter:drop-shadow(0 0 6px rgba(0,232,160,.5));
-}
-
-/* ── Top nav Apolo ── */
-.nav,.ap-nav{
-  background:rgba(6,10,18,.95)!important;
-  backdrop-filter:blur(20px)!important;
-  -webkit-backdrop-filter:blur(20px)!important;
-  border-bottom:1px solid rgba(0,232,160,.08)!important;
-  box-shadow:0 1px 0 rgba(0,232,160,.05)!important;
-}
-.nav-brand-name{
-  background:linear-gradient(90deg,var(--ap-accent),var(--ap-accent2))!important;
-  -webkit-background-clip:text!important;background-clip:text!important;
-  -webkit-text-fill-color:transparent!important;
-  font-weight:800!important;
-  letter-spacing:1px!important;
-}
-
-/* ── Sidebar admin Apolo ── */
-.ap-sb{
-  background:rgba(7,11,19,.96)!important;
-  border-right:1px solid rgba(0,232,160,.08)!important;
-}
-.ap-sb-i.on,.ap-sb-i:hover{
-  background:linear-gradient(90deg,rgba(0,232,160,.12),transparent)!important;
-  color:var(--ap-accent)!important;
-  border-left:3px solid var(--ap-accent)!important;
-}
-
-/* ── Buttons Apolo ── */
-.btn.g{
-  background:linear-gradient(135deg,#00e8a0,#00b87a)!important;
-  box-shadow:0 4px 16px rgba(0,232,160,.3)!important;
-  color:#030f0a!important;
-  font-weight:700!important;
-  border-radius:12px!important;
-  letter-spacing:.3px;
-  transition:all .15s;
-}
-.btn.g:active{transform:scale(.97);box-shadow:0 2px 8px rgba(0,232,160,.2)!important}
-.btn.ghost{
-  background:rgba(0,232,160,.06)!important;
-  border:1px solid rgba(0,232,160,.2)!important;
-  color:var(--ap-accent)!important;
-  border-radius:12px!important;
-}
-
-/* ── Chat input bar ── */
-.a-inp,.chat-inp-wrap{
-  background:rgba(15,22,36,.9)!important;
-  border:1px solid rgba(0,232,160,.15)!important;
-  border-radius:24px!important;
-}
-.a-send{
-  background:linear-gradient(135deg,var(--ap-accent),#00b87a)!important;
-  border-radius:50%!important;
-  box-shadow:0 2px 10px rgba(0,232,160,.3)!important;
-  color:#030f0a!important;
-}
-
-/* ── Op status badges ── */
-.stbdg{border-radius:20px!important;font-size:11px!important;font-weight:700!important;padding:4px 12px!important}
-
-/* ── Toast Apolo ── */
-#toast{
-  border-radius:24px!important;
-  backdrop-filter:blur(20px)!important;
-  -webkit-backdrop-filter:blur(20px)!important;
-  box-shadow:0 8px 32px rgba(0,0,0,.5),0 0 0 1px rgba(0,232,160,.12)!important;
-  font-weight:600!important;
-}
-
-/* ── Overlay pannels ── */
-.ov{
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-}
-
-/* ── Completion overlay Apolo confetti effect ── */
-#comp-ov .ov-box{
-  background:linear-gradient(160deg,#0d1f2d,#061510)!important;
-  border:1px solid rgba(0,232,160,.25)!important;
-  box-shadow:0 0 60px rgba(0,232,160,.2),0 0 0 1px rgba(0,232,160,.1)!important;
-}
-
-/* ── Input fields ── */
-input:not([type=checkbox]):not([type=radio]),select,textarea{
-  background:rgba(14,20,32,.8)!important;
-  border:1px solid rgba(0,232,160,.12)!important;
-  border-radius:12px!important;
-  color:var(--t1)!important;
-  font-family:var(--ap-fn)!important;
-}
-input:not([type=checkbox]):not([type=radio]):focus,select:focus,textarea:focus{
-  border-color:rgba(0,232,160,.35)!important;
-  outline:none!important;
-  box-shadow:0 0 0 3px rgba(0,232,160,.08)!important;
-}
-
-/* ── KYC/form overlays ── */
-.modal-box,.f-box,.kyc-box{
-  border-radius:22px!important;
-  border:1px solid rgba(0,232,160,.12)!important;
-  background:rgba(9,14,24,.97)!important;
-  box-shadow:0 8px 48px rgba(0,0,0,.6)!important;
-}
-
-/* ── Apolo op-panel list ── */
-.op-panel{
-  background:rgba(7,11,18,.95)!important;
-  border-right:1px solid rgba(0,232,160,.08)!important;
-}
-.op-item:hover,.op-item.on{
-  background:rgba(0,232,160,.07)!important;
-  border-left:3px solid var(--ap-accent)!important;
-}
-
-/* ── Scrollbar thin & green ── */
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:rgba(0,232,160,.2);border-radius:4px}
-::-webkit-scrollbar-thumb:hover{background:rgba(0,232,160,.4)}
-
-/* ── Ripple tap feedback ── */
-@keyframes apRipple{0%{opacity:.3;transform:scale(0)}100%{opacity:0;transform:scale(2.5)}}
-.btn::after{content:'';position:absolute;top:50%;left:50%;width:100%;height:100%;
-  background:rgba(255,255,255,.15);border-radius:inherit;
-  transform:translate(-50%,-50%) scale(0);pointer-events:none}
-.btn:active::after{animation:apRipple .4s ease-out forwards}
-
-/* ── Animated gradient ring on confirmed op ── */
-@keyframes ringPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,232,160,.4)}50%{box-shadow:0 0 0 8px rgba(0,232,160,0)}}
-.st-confirmed,.stbdg-c{animation:ringPulse 2s infinite}
-
-/* ── Mobile fullscreen ── */
-@media(max-width:600px){
-  body{background:#060b14!important}
-  .card{border-radius:14px!important}
-  .btn.g,.btn.ghost{border-radius:10px!important;padding:11px 18px!important}
-  .kpi{border-radius:12px!important}
-}
 </style>
 <!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -988,199 +885,23 @@ input:not([type=checkbox]):not([type=radio]):focus,select:focus,textarea:focus{
 
 <div id="toast"></div>
 <div id="lb" onclick="this.classList.remove('on')"><img id="lbImg" src="" alt=""></div>
-<!-- ══════════════ WALLET OVERLAYS ══════════════ -->
-
-<!-- DEPOSITAR -->
-<div id="wlt-dep-ov" style="display:none;position:fixed;inset:0;z-index:8500;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:flex-end;justify-content:center">
-  <div style="background:linear-gradient(160deg,#0d1825,#0a1410);border:1px solid rgba(0,232,160,.2);border-radius:24px 24px 0 0;padding:24px 20px 36px;width:100%;max-width:480px;animation:slideUp .3s ease">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
-      <div style="font-size:17px;font-weight:800;color:#fff">⬇️ Depositar fondos</div>
-      <button onclick="closeWalletOv('wlt-dep-ov')" style="background:rgba(255,255,255,.06);border:none;border-radius:50%;width:30px;height:30px;color:#fff;font-size:16px;cursor:pointer">✕</button>
-    </div>
-    <div style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:14px">Selecciona el método y envía tu comprobante. El admin acreditará en minutos.</div>
-    <!-- Método -->
-    <div style="margin-bottom:12px">
-      <label style="font-size:10px;font-weight:700;letter-spacing:1px;color:rgba(0,232,160,.7)">MÉTODO DE DEPÓSITO</label>
-      <select id="dep-metodo" onchange="updateDepInstructions()" style="width:100%;margin-top:6px;padding:11px 12px;background:rgba(14,22,36,.9);border:1px solid rgba(0,232,160,.15);border-radius:12px;color:#fff;font-size:13px;font-family:inherit">
-        <option value="pago_movil">📲 Pago Móvil (Bs)</option>
-        <option value="binance">🟡 Binance / USDT BEP20</option>
-        <option value="paypal">🔵 PayPal (USD)</option>
-        <option value="zinli">💜 Zinli (USD)</option>
-        <option value="wally">🟢 Wally (USD)</option>
-        <option value="airtm">🔶 Airtm (USD)</option>
-        <option value="zelle">🟣 Zelle (USD)</option>
-      </select>
-    </div>
-    <!-- Monto -->
-    <div style="margin-bottom:12px">
-      <label style="font-size:10px;font-weight:700;letter-spacing:1px;color:rgba(0,232,160,.7)">MONTO A DEPOSITAR</label>
-      <input id="dep-monto" type="number" min="1" placeholder="Ej: 50" oninput="calcDepositEquiv()" style="width:100%;margin-top:6px;padding:11px 12px;background:rgba(14,22,36,.9);border:1px solid rgba(0,232,160,.15);border-radius:12px;color:#fff;font-size:15px;font-weight:700;font-family:inherit">
-      <div id="dep-equiv" style="font-size:11px;color:rgba(0,232,160,.6);margin-top:5px;padding-left:4px">Ingresa el monto para ver equivalente</div>
-    </div>
-    <!-- Instrucciones de pago -->
-    <div id="dep-instrucciones" style="background:rgba(0,232,160,.04);border:1px solid rgba(0,232,160,.12);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:12px;color:rgba(255,255,255,.7);line-height:1.7"></div>
-    <!-- Comprobante -->
-    <div style="margin-bottom:16px">
-      <label style="font-size:10px;font-weight:700;letter-spacing:1px;color:rgba(0,232,160,.7)">COMPROBANTE / CAPTURA</label>
-      <label id="dep-voucher-lbl" style="display:flex;align-items:center;gap:10px;margin-top:6px;padding:12px;background:rgba(14,22,36,.9);border:1.5px dashed rgba(0,232,160,.2);border-radius:12px;cursor:pointer;color:rgba(255,255,255,.5);font-size:12px">
-        <span id="dep-voucher-txt">📎 Toca para adjuntar imagen</span>
-        <input type="file" accept="image/*" id="dep-voucher-file" style="display:none" onchange="previewDepVoucher(event)">
-      </label>
-      <img id="dep-voucher-preview" style="display:none;width:100%;border-radius:10px;margin-top:8px;max-height:160px;object-fit:cover" alt="comprobante">
-    </div>
-    <button class="btn g full" onclick="submitDeposit()" style="border-radius:14px!important;padding:14px!important;font-size:15px!important;font-weight:800!important">Enviar solicitud de depósito →</button>
-  </div>
-</div>
-
-<!-- CONVERTIR -->
-<div id="wlt-conv-ov" style="display:none;position:fixed;inset:0;z-index:8500;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:flex-end;justify-content:center">
-  <div style="background:linear-gradient(160deg,#0d1825,#0a1410);border:1px solid rgba(0,232,160,.2);border-radius:24px 24px 0 0;padding:24px 20px 36px;width:100%;max-width:480px;animation:slideUp .3s ease">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
-      <div style="font-size:17px;font-weight:800;color:#fff">🔄 Convertir fondos</div>
-      <button onclick="closeWalletOv('wlt-conv-ov')" style="background:rgba(255,255,255,.06);border:none;border-radius:50%;width:30px;height:30px;color:#fff;font-size:16px;cursor:pointer">✕</button>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 32px 1fr;gap:8px;align-items:end;margin-bottom:14px">
-      <div>
-        <label style="font-size:10px;font-weight:700;letter-spacing:1px;color:rgba(0,232,160,.7)">DE</label>
-        <select id="conv-from" onchange="calcConversion()" style="width:100%;margin-top:5px;padding:11px 10px;background:rgba(14,22,36,.9);border:1px solid rgba(0,232,160,.15);border-radius:12px;color:#fff;font-size:12px;font-family:inherit">
-          <option value="usdt">USDT</option>
-          <option value="bs">Bolívares (Bs)</option>
-          <option value="usd">USD</option>
-        </select>
-      </div>
-      <div style="text-align:center;color:rgba(0,232,160,.6);font-size:18px;padding-bottom:10px">⇄</div>
-      <div>
-        <label style="font-size:10px;font-weight:700;letter-spacing:1px;color:rgba(0,232,160,.7)">A</label>
-        <select id="conv-to" onchange="calcConversion()" style="width:100%;margin-top:5px;padding:11px 10px;background:rgba(14,22,36,.9);border:1px solid rgba(0,232,160,.15);border-radius:12px;color:#fff;font-size:12px;font-family:inherit">
-          <option value="bs">Bolívares (Bs)</option>
-          <option value="usdt">USDT</option>
-          <option value="usd">USD</option>
-        </select>
-      </div>
-    </div>
-    <div style="margin-bottom:12px">
-      <label style="font-size:10px;font-weight:700;letter-spacing:1px;color:rgba(0,232,160,.7)">MONTO A CONVERTIR</label>
-      <input id="conv-monto" type="number" min="0.01" placeholder="0.00" oninput="calcConversion()" style="width:100%;margin-top:6px;padding:12px;background:rgba(14,22,36,.9);border:1px solid rgba(0,232,160,.15);border-radius:12px;color:#fff;font-size:18px;font-weight:800;font-family:inherit">
-    </div>
-    <div id="conv-resultado" style="background:rgba(0,232,160,.05);border:1px solid rgba(0,232,160,.15);border-radius:12px;padding:14px;margin-bottom:16px;text-align:center">
-      <div style="font-size:11px;color:rgba(255,255,255,.4);margin-bottom:4px">RECIBIRÁS</div>
-      <div id="conv-res-val" style="font-size:28px;font-weight:800;color:#00e8a0">—</div>
-      <div id="conv-res-det" style="font-size:11px;color:rgba(255,255,255,.35);margin-top:3px"></div>
-    </div>
-    <div id="conv-saldo-disp" style="font-size:11px;color:rgba(255,255,255,.35);text-align:center;margin-bottom:14px"></div>
-    <button class="btn g full" onclick="submitConversion()" style="border-radius:14px!important;padding:14px!important;font-size:15px!important;font-weight:800!important">Confirmar conversión →</button>
-  </div>
-</div>
-
-<!-- RETIRAR -->
-<div id="wlt-wit-ov" style="display:none;position:fixed;inset:0;z-index:8500;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:flex-end;justify-content:center">
-  <div style="background:linear-gradient(160deg,#0d1825,#0a1410);border:1px solid rgba(0,232,160,.2);border-radius:24px 24px 0 0;padding:24px 20px 36px;width:100%;max-width:480px;animation:slideUp .3s ease">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
-      <div style="font-size:17px;font-weight:800;color:#fff">⬆️ Retirar fondos</div>
-      <button onclick="closeWalletOv('wlt-wit-ov')" style="background:rgba(255,255,255,.06);border:none;border-radius:50%;width:30px;height:30px;color:#fff;font-size:16px;cursor:pointer">✕</button>
-    </div>
-    <div style="margin-bottom:12px">
-      <label style="font-size:10px;font-weight:700;letter-spacing:1px;color:rgba(0,232,160,.7)">DESTINO DE RETIRO</label>
-      <select id="wit-destino" onchange="updateWithdrawForm()" style="width:100%;margin-top:6px;padding:11px 12px;background:rgba(14,22,36,.9);border:1px solid rgba(0,232,160,.15);border-radius:12px;color:#fff;font-size:13px;font-family:inherit">
-        <option value="pago_movil">📲 Pago Móvil (recibe Bs)</option>
-        <option value="binance">🟡 Binance / USDT BEP20</option>
-        <option value="paypal">🔵 PayPal (USD)</option>
-        <option value="zinli">💜 Zinli (USD)</option>
-        <option value="wally">🟢 Wally (USD)</option>
-        <option value="zelle">🟣 Zelle (USD)</option>
-      </select>
-    </div>
-    <div style="margin-bottom:12px">
-      <label style="font-size:10px;font-weight:700;letter-spacing:1px;color:rgba(0,232,160,.7)">MONTO EN USDT</label>
-      <input id="wit-monto" type="number" min="1" placeholder="Mínimo 5 USDT" oninput="calcWithdrawEquiv()" style="width:100%;margin-top:6px;padding:12px;background:rgba(14,22,36,.9);border:1px solid rgba(0,232,160,.15);border-radius:12px;color:#fff;font-size:16px;font-weight:800;font-family:inherit">
-      <div id="wit-equiv" style="font-size:11px;color:rgba(0,232,160,.6);margin-top:5px;padding-left:4px"></div>
-    </div>
-    <div id="wit-datos-wrap" style="margin-bottom:14px">
-      <label style="font-size:10px;font-weight:700;letter-spacing:1px;color:rgba(0,232,160,.7)">DATOS DE LA CUENTA DESTINO</label>
-      <input id="wit-cuenta" type="text" placeholder="Número de cuenta, dirección wallet, correo PayPal..." style="width:100%;margin-top:6px;padding:11px 12px;background:rgba(14,22,36,.9);border:1px solid rgba(0,232,160,.15);border-radius:12px;color:#fff;font-size:12px;font-family:inherit">
-    </div>
-    <div id="wit-saldo-disp" style="font-size:11px;color:rgba(255,255,255,.35);text-align:center;margin-bottom:14px"></div>
-    <div id="wit-horario-status" style="font-size:11px;text-align:center;margin-bottom:10px"></div>
-    <div id="wit-config-info" style="font-size:11px;color:rgba(255,100,100,.5);margin-bottom:12px;text-align:center"></div>
-    <button class="btn g full" onclick="submitWithdraw()" style="border-radius:14px!important;padding:14px!important;font-size:15px!important;font-weight:800!important">Solicitar retiro →</button>
-  </div>
-</div>
-
-<style>
-@keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
-.wlt-bal-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)}
-.wlt-bal-row:last-child{border-bottom:none}
-.wlt-bal-icon{font-size:18px;width:28px;text-align:center}
-.wlt-bal-name{flex:1;font-size:13px;color:rgba(255,255,255,.7)}
-.wlt-bal-val{font-size:14px;font-weight:800;color:#fff}
-.wlt-mov-item{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s}
-.wlt-mov-item:hover{background:rgba(0,232,160,.04)}
-.wlt-mov-item:last-child{border-bottom:none}
-.wlt-mov-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.wlt-mov-info{flex:1;min-width:0}
-.wlt-mov-title{font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wlt-mov-sub{font-size:11px;color:rgba(255,255,255,.4);margin-top:1px}
-.wlt-mov-amount{font-size:14px;font-weight:800;text-align:right}
-.wlt-mov-amount.pos{color:#00e8a0}
-.wlt-mov-amount.neg{color:#ff6b6b}
-.wlt-mov-amount.pend{color:#f0b90b}
-</style>
-
 <div id="comp-ov">
-  <canvas id="confetti-canvas" style="position:fixed;inset:0;pointer-events:none;z-index:8999;width:100%;height:100%"></canvas>
-  <div class="comp-box ov-box" style="position:relative;z-index:9001;text-align:center;padding:36px 28px;max-width:320px;width:90%">
-    <div id="comp-ring" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#00e8a0,#0af);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;box-shadow:0 0 30px rgba(0,232,160,.5),0 0 60px rgba(0,232,160,.2);font-size:36px;animation:compPop .5s cubic-bezier(.175,.885,.32,1.275)">✅</div>
-    <div class="comp-title" style="font-size:22px;font-weight:800;color:#fff;margin-bottom:6px">Operación <span style="color:#00e8a0">Completada</span></div>
-    <div class="comp-sub" id="compSub" style="font-size:14px;color:rgba(255,255,255,.6);margin-bottom:24px">Tu cambio fue procesado exitosamente.</div>
-    <button class="btn g full" onclick="closeCompOv()" style="border-radius:14px!important;padding:13px!important;font-size:15px!important">¡Entendido! 🚀</button>
+  <div class="comp-box">
+    <span class="comp-icon">🎉</span>
+    <div class="comp-title">Operación <span>Completada</span></div>
+    <div class="comp-sub" id="compSub">Tu cambio fue procesado exitosamente.</div>
+    <button class="btn g" onclick="document.getElementById('comp-ov').classList.remove('on')">¡Entendido! ✅</button>
   </div>
 </div>
-<style>
-@keyframes compPop{0%{transform:scale(0) rotate(-20deg);opacity:0}70%{transform:scale(1.15) rotate(5deg)}100%{transform:scale(1) rotate(0);opacity:1}}
-@keyframes flashFade{0%{opacity:1}100%{opacity:0}}
-</style>
-<script>
-function closeCompOv(){document.getElementById('comp-ov').classList.remove('on');stopConfetti();}
-let _confettiRAF=null,_confettiParts=[];
-function startConfetti(){
-  const cv=document.getElementById('confetti-canvas');if(!cv)return;
-  cv.width=window.innerWidth;cv.height=window.innerHeight;
-  const ctx=cv.getContext('2d');
-  const colors=['#00e8a0','#0af','#f7931a','#fff','#ffd700','#ff6b6b','#a78bfa'];
-  _confettiParts=Array.from({length:80},()=>({
-    x:Math.random()*cv.width,y:-20,
-    vx:(Math.random()-.5)*4,vy:Math.random()*3+2,
-    r:Math.random()*6+3,col:colors[Math.floor(Math.random()*colors.length)],
-    rot:Math.random()*360,vrot:(Math.random()-.5)*8,alpha:1
-  }));
-  function draw(){
-    ctx.clearRect(0,0,cv.width,cv.height);
-    _confettiParts.forEach(p=>{
-      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);
-      ctx.globalAlpha=p.alpha;ctx.fillStyle=p.col;
-      ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r*1.6);
-      ctx.restore();
-      p.x+=p.vx;p.y+=p.vy;p.rot+=p.vrot;p.vy+=.05;
-      if(p.y>cv.height)p.alpha-=.02;
-    });
-    _confettiParts=_confettiParts.filter(p=>p.alpha>0);
-    if(_confettiParts.length>0)_confettiRAF=requestAnimationFrame(draw);
-    else ctx.clearRect(0,0,cv.width,cv.height);
-  }
-  if(_confettiRAF)cancelAnimationFrame(_confettiRAF);
-  draw();
-}
-function stopConfetti(){if(_confettiRAF){cancelAnimationFrame(_confettiRAF);_confettiRAF=null;}const cv=document.getElementById('confetti-canvas');if(cv)cv.getContext('2d').clearRect(0,0,cv.width,cv.height);}
-</script>
 
 <div class="page on" id="lp">
   <nav class="nav">
     <div class="nav-brand" onclick="goL()">
       <div class="nav-brand-img"><img class="logo-img" src="" alt="LS"></div>
-      <div class="nav-brand-name">LS CAMBIOS</div>
+      <div class="nav-brand-name">LS CAMBIOS <span class="neo-chip">BETA</span></div>
     </div>
     <div class="nav-actions" id="navActs">
-      <button id="theme-btn" onclick="toggleTheme()" title="Cambiar tema" style="background:var(--bg3);border:1px solid var(--brd2);border-radius:6px;padding:7px 10px;font-size:15px;cursor:pointer;transition:.2s;line-height:1">🌙</button>
+      <button id="theme-btn" onclick="toggleTheme()" title="Cambiar tema" style="background:var(--bg3);border:1px solid var(--brd2);border-radius:6px;padding:7px 10px;font-size:15px;cursor:pointer;transition:.2s;line-height:1">☀️</button>
       <button class="nav-btn nav-btn-ghost" onclick="openAuth('login')">Entrar</button>
       <button class="nav-btn nav-btn-solid" onclick="openAuth('register')">Crear cuenta</button>
     </div>
@@ -1188,13 +909,43 @@ function stopConfetti(){if(_confettiRAF){cancelAnimationFrame(_confettiRAF);_con
 
   <div class="hero">
     <div class="hero-logo"><img class="logo-img" src="" alt="LS Cambios"></div>
-    <div class="live-chip"><div class="live-dot"></div><span>TASAS EN VIVO</span></div>
+    <div class="neo-pagomovil-badge">📲 DEPOSITA: Pago Móvil o Binance Pay · RETIRA: PayPal, Zinli, Wally, Airtm</div>
+    <div class="live-chip" style="margin-bottom:6px"><div class="live-dot"></div><span>TASAS EN VIVO</span></div>
     <div id="horario-chip-lp"></div>
-    <h1 class="hero-h1">Tu dinero a<br><span>tu destino</span></h1>
-    <p class="hero-sub">Casa de cambio P2P. PayPal, Binance, Zinli, Airtm, Wally → Bolívares.</p>
+    <h1 class="hero-h1">Tu neobanco<br><span>venezolano</span></h1>
+    <p class="hero-sub">Deposita en Bolívares vía <strong>Pago Móvil</strong> o en USDT vía <strong>Binance Pay</strong> y recibe en la plataforma que elijas.</p>
+    <div class="plat-pills">
+      <span class="plat-pill" style="background:rgba(207,20,43,.08);border-color:rgba(207,20,43,.25);color:#cf142b;font-weight:800">📲 Pago Móvil</span>
+      <span class="plat-pill binance" style="font-weight:800">💛 Binance Pay</span>
+    </div>
+    <div style="font-size:10px;color:var(--t2);letter-spacing:.5px;margin-bottom:8px;font-weight:600">DEPÓSITO • RETIRA EN:</div>
+    <div class="plat-pills" style="margin:0">
+      <span class="plat-pill paypal">💙 PayPal</span>
+      <span class="plat-pill zinli">💚 Zinli</span>
+      <span class="plat-pill wally">💜 Wally</span>
+      <span class="plat-pill airtm">🧡 Airtm</span>
+    </div>
     <div class="hero-btns">
-      <button class="btn-main solid" onclick="openAuth('register')">Comenzar →</button>
+      <button class="btn-main solid" onclick="openAuth('register')">Abrir cuenta gratis →</button>
       <a href="#rates" class="btn-main outline">Ver tasas</a>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div style="max-width:800px;margin:0 auto;width:100%;padding:0 24px 8px">
+    <div class="neo-stats">
+      <div class="neo-stat">
+        <div class="neo-stat-val">+2.4K</div>
+        <div class="neo-stat-lbl">USUARIOS</div>
+      </div>
+      <div class="neo-stat">
+        <div class="neo-stat-val">~18min</div>
+        <div class="neo-stat-lbl">TIEMPO PROMEDIO</div>
+      </div>
+      <div class="neo-stat">
+        <div class="neo-stat-val">5</div>
+        <div class="neo-stat-lbl">PLATAFORMAS</div>
+      </div>
     </div>
   </div>
 
@@ -1265,18 +1016,18 @@ function stopConfetti(){if(_confettiRAF){cancelAnimationFrame(_confettiRAF);_con
     <div class="ui-mb32">
       <div class="live-chip ui-mb18"><div class="live-dot"></div><span>NUESTRA HISTORIA</span></div>
       <h1 style="font-size:clamp(28px,5vw,48px);font-weight:800;line-height:1.1;color:#fff;letter-spacing:-1px;margin-bottom:14px">Quiénes <span style="background:var(--gd);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent">Somos</span></h1>
-      <p style="font-size:15px;color:var(--t2);line-height:1.75;font-weight:300">LS Cambios es una casa de cambio digital venezolana dedicada a facilitar el intercambio seguro y rápido de divisas digitales a bolívares y viceversa.</p>
+      <p style="font-size:15px;color:var(--t2);line-height:1.75;font-weight:300">LS Cambios es el neobanco digital venezolano que te permite depositar en Pago Móvil y cambiar tu dinero a las plataformas digitales que necesitas: PayPal, Binance, Zinli, Airtm, Wally y más.</p>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:32px">
       <div class="ui-card">
         <div style="font-size:28px;margin-bottom:10px">🎯</div>
         <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px">Nuestra Misión</div>
-        <p class="ui-body">Ofrecer un servicio de cambio de divisas confiable, transparente y accesible para todos los venezolanos, facilitando el acceso a plataformas digitales internacionales con tasas competitivas y atención personalizada.</p>
+        <p class="ui-body">Ser el neobanco de referencia en Venezuela, facilitando a cada venezolano el acceso a divisas y plataformas digitales internacionales mediante Pago Móvil, con tasas competitivas y atención personalizada.</p>
       </div>
       <div class="ui-card">
         <div style="font-size:28px;margin-bottom:10px">👁️</div>
         <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px">Nuestra Visión</div>
-        <p class="ui-body">Ser la casa de cambio digital de mayor confianza en Venezuela, reconocida por nuestra rapidez, transparencia y compromiso con el cliente en cada operación.</p>
+        <p class="ui-body">Liderar la digitalización financiera venezolana, siendo el neobanco más confiable y accesible para convertir bolívares en divisas digitales y viceversa.</p>
       </div>
     </div>
     <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:24px;margin-bottom:24px">
@@ -1285,7 +1036,7 @@ function stopConfetti(){if(_confettiRAF){cancelAnimationFrame(_confettiRAF);_con
         <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Tasas competitivas en tiempo real</div><div class="ui-fn-sm">Actualizamos nuestras tasas constantemente para ofrecerte el mejor precio del mercado.</div></div></div>
         <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Procesamiento en minutos</div><div class="ui-fn-sm">La mayoría de las operaciones se completan en menos de 30 minutos durante el horario de atención.</div></div></div>
         <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Soporte personalizado vía WhatsApp</div><div class="ui-fn-sm">Nuestro equipo está disponible para resolver cualquier duda antes, durante y después de tu operación.</div></div></div>
-        <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Múltiples plataformas</div><div class="ui-fn-sm">Operamos con PayPal, Binance, Zinli, Airtm, Wally y USDC para tu comodidad.</div></div></div>
+        <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Múltiples plataformas</div><div class="ui-fn-sm">Operamos con PayPal, Binance, Zinli, Airtm, Wally y USDT BEP20 para tu comodidad.</div></div></div>
       </div>
     </div>
     <div style="text-align:center;padding:24px;background:rgba(0,200,150,.05);border:1px solid rgba(0,200,150,.15);border-radius:var(--r2)">
@@ -1385,7 +1136,7 @@ function stopConfetti(){if(_confettiRAF){cancelAnimationFrame(_confettiRAF);_con
       </div>
       <div class="ui-card">
         <div class="ui-title-g">2. Descripción del servicio</div>
-        <p class="ui-body">LS Cambios es una plataforma P2P de intercambio de divisas digitales que facilita operaciones de compra y venta entre PayPal, Binance/USDT, Zinli, Airtm, Wally y USDC, con liquidación en bolívares venezolanos (Bs). Actuamos como intermediarios facilitando la transacción.</p>
+        <p class="ui-body">LS Cambios es un neobanco digital venezolano que facilita el depósito en Pago Móvil y la conversión a plataformas digitales: PayPal, Binance/USDT, Zinli, Airtm, Wally y USDT, con liquidación en bolívares venezolanos (Bs). Actuamos como intermediarios en cada transacción.</p>
       </div>
       <div class="ui-card">
         <div class="ui-title-g">3. Registro y cuenta de usuario</div>
@@ -1565,10 +1316,6 @@ function stopConfetti(){if(_confettiRAF){cancelAnimationFrame(_confettiRAF);_con
         <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Historial
         <span class="sb-badge ui-hidden" id="si-pend">!</span>
       </button>
-      <button class="sb-i" id="si-wallet" onclick="showDV('wallet')">
-        <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12h2"/><circle cx="17" cy="12" r="1"/></svg>Mi Wallet
-        <span class="sb-badge ui-hidden" id="si-wallet-badge">!</span>
-      </button>
       <button class="sb-i" id="si-profile" onclick="showDV('profile')">
         <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil
       </button>
@@ -1621,17 +1368,25 @@ function stopConfetti(){if(_confettiRAF){cancelAnimationFrame(_confettiRAF);_con
               <option value="venta">Compro divisas → envío Bolívares</option>
             </select>
           </div>
-          <div class="fg" id="plat-bs-wrap"><label>PLATAFORMA</label>
+          <div class="pagomovil-box" style="margin-bottom:16px">
+            <div style="font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--g);margin-bottom:6px">📲 ¿CÓMO DEPOSITAR?</div>
+            <div style="font-size:12px;color:var(--t2);line-height:1.6">Envía en <strong>Bolívares</strong> por <strong>Pago Móvil</strong> o en <strong>USDT</strong> por <strong>Binance Pay</strong> — luego retira en tu plataforma favorita.</div>
+          </div>
+          <div class="fg" id="plat-bs-wrap"><label>PLATAFORMA DE RETIRO</label>
             <select class="fsel" id="op-plat" onchange="calcOp();updWallet()">
-              <option value="binance">Binance</option><option value="paypal">PayPal</option>
-              <option value="zinli">Zinli</option><option value="wally">Wally</option>
-              <option value="airtm">Airtm</option><option value="usdc">USDC</option>
+              <option value="paypal">PayPal</option>
+              <option value="zinli">Zinli</option>
+              <option value="wally">Wally</option>
+              <option value="airtm">Airtm</option>
+              <option value="binance">Binance Pay</option>
             </select>
           </div>
           <div class="fg" id="plat-usdt-wrap" style="display:none"><label>PLATAFORMA</label>
             <select class="fsel" id="op-plat-usdt" onchange="calcOp();updWallet()">
-              <option value="paypal">PayPal</option><option value="zinli">Zinli</option>
-              <option value="wally">Wally</option><option value="airtm">Airtm</option>
+              <option value="paypal">PayPal</option>
+              <option value="zinli">Zinli</option>
+              <option value="wally">Wally</option>
+              <option value="airtm">Airtm</option>
               <option value="binance">Binance</option>
             </select>
           </div>
@@ -1654,7 +1409,7 @@ function stopConfetti(){if(_confettiRAF){cancelAnimationFrame(_confettiRAF);_con
             <i class="ph-fill ph-receipt"></i> Datos de Pago
           </button>
           <button class="trade-tab" id="ttab-chat" onclick="tradeTab('chat')">
-            <i class="ph-fill ph-chats-circle"></i> Chat P2P
+            <i class="ph-fill ph-chats-circle"></i> Chat de Soporte
             <span class="trade-tab-badge" id="chat-unread-badge">0</span>
           </button>
         </div>
@@ -1708,16 +1463,16 @@ function stopConfetti(){if(_confettiRAF){cancelAnimationFrame(_confettiRAF);_con
 
             <!-- Botón ir al chat — solo en móvil -->
             <button class="btn g full" style="display:none" id="btn-go-chat" onclick="tradeTab('chat')">
-              <i class="ph-fill ph-chats-circle"></i> Ir al Chat P2P →
+              <i class="ph-fill ph-chats-circle"></i> Ir al Chat de Soporte →
             </button>
 
           </div>
 
-          <!-- Panel derecho / Pestaña "Chat P2P" -->
+          <!-- Panel derecho / Pestaña "Chat de Soporte" -->
           <div class="card chat-box trade-tab-pane" id="tpane-chat">
             <div class="card-hdr">
               <div>
-                <div class="card-title" id="chat-id">Chat P2P</div>
+                <div class="card-title" id="chat-id">Chat de Soporte</div>
                 <div style="font-size:10px;color:var(--t2);margin-top:1px">Con LS Cambios</div>
               </div>
               <div id="chat-st"></div>
@@ -1803,51 +1558,6 @@ function stopConfetti(){if(_confettiRAF){cancelAnimationFrame(_confettiRAF);_con
       </div>
       
       <div class="dv" id="dv-profile"><div class="dv-h">Perfil 👤</div><div class="dv-s">Tu información</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px" id="prof-body"></div></div>
-
-      <!-- ══════════════════════════════════
-           💳 WALLET SCREEN — usuario
-           ══════════════════════════════════ -->
-      <div class="dv" id="dv-wallet">
-        <div class="dv-h">Mi Wallet 💳</div>
-        <div class="dv-s">Tu saldo y movimientos</div>
-
-        <!-- Tarjeta saldo principal -->
-        <div style="background:linear-gradient(135deg,#0a1f30,#0d2a1e);border:1px solid rgba(0,232,160,.2);border-radius:20px;padding:24px 22px;margin-bottom:16px;position:relative;overflow:hidden">
-          <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(0,232,160,.12),transparent 70%);pointer-events:none"></div>
-          <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:rgba(0,232,160,.7);margin-bottom:6px">SALDO DISPONIBLE</div>
-          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
-            <div id="wlt-usdt-bal" style="font-size:36px;font-weight:800;color:#fff;letter-spacing:-1px">0.00</div>
-            <div style="font-size:14px;font-weight:700;color:rgba(0,232,160,.8)">USDT</div>
-          </div>
-          <div id="wlt-bs-equiv" style="font-size:13px;color:rgba(255,255,255,.45);margin-bottom:18px">≈ Bs 0.00</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-            <button class="btn g sm" onclick="openWalletDeposit()" style="border-radius:10px!important;font-size:12px!important">⬇️ Depositar</button>
-            <button class="btn ghost sm" onclick="openWalletConvert()" style="border-radius:10px!important;font-size:12px!important">🔄 Convertir</button>
-            <button class="btn ghost sm" onclick="openWalletWithdraw()" style="border-radius:10px!important;font-size:12px!important">⬆️ Retirar</button>
-          </div>
-        </div>
-
-        <!-- Sub-saldos por moneda -->
-        <div class="card" style="margin-bottom:16px">
-          <div class="card-hdr"><span class="card-title">💱 Saldos por moneda</span></div>
-          <div id="wlt-balances" style="padding:12px 16px;display:flex;flex-direction:column;gap:10px">
-            <div class="wlt-bal-row"><span class="wlt-bal-icon">🟢</span><span class="wlt-bal-name">USDT (BEP20)</span><span class="wlt-bal-val" id="wb-usdt">0.00</span></div>
-            <div class="wlt-bal-row"><span class="wlt-bal-icon">🇻🇪</span><span class="wlt-bal-name">Bolívares (Bs)</span><span class="wlt-bal-val" id="wb-bs">0.00</span></div>
-            <div class="wlt-bal-row"><span class="wlt-bal-icon">💵</span><span class="wlt-bal-name">USD (PayPal eq.)</span><span class="wlt-bal-val" id="wb-usd">0.00</span></div>
-          </div>
-        </div>
-
-        <!-- Movimientos recientes -->
-        <div class="card">
-          <div class="card-hdr" style="justify-content:space-between">
-            <span class="card-title">📋 Movimientos</span>
-            <span id="wlt-mov-count" style="font-size:10px;color:var(--t2)">Cargando...</span>
-          </div>
-          <div id="wlt-movimientos" style="padding:8px 0;min-height:60px">
-            <div class="empty" style="padding:20px;text-align:center;color:var(--t2);font-size:12px">Sin movimientos aún</div>
-          </div>
-        </div>
-      </div>
     </main>
   </div>
   
@@ -1857,7 +1567,6 @@ function stopConfetti(){if(_confettiRAF){cancelAnimationFrame(_confettiRAF);_con
       <button class="mn-i" id="mn-newop" onclick="showDV('newop')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Operar</button>
       <button class="mn-i" id="mn-history" onclick="showDV('history')"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Historial</button>
       <button class="mn-i" id="mn-referidos" onclick="showDV('referidos')"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Referidos</button>
-      <button class="mn-i" id="mn-wallet" onclick="showDV('wallet')"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12h2"/><circle cx="17" cy="12" r="1"/></svg>Wallet</button>
       <button class="mn-i" id="mn-profile" onclick="showDV('profile')"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil</button>
     </div>
   </div>
@@ -1883,14 +1592,10 @@ function stopConfetti(){if(_confettiRAF){cancelAnimationFrame(_confettiRAF);_con
         <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clientes
       </button>
       <button class="ap-sb-i" id="asi-chats" onclick="showAV('chats')">
-        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chats P2P
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chats de Soporte
       </button>
       <button class="ap-sb-i" id="asi-rates" onclick="showAV('rates')">
         <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Tasas
-      </button>
-      <button class="ap-sb-i" id="asi-wallet" onclick="showAV('wallet')">
-        <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12h2"/><circle cx="17" cy="12" r="1"/></svg>Wallet Admin
-        <span class="sb-badge ui-hidden" id="asi-wallet-badge">!</span>
       </button>
       <button class="ap-sb-i" id="asi-activity" onclick="showAV('activity')">
         <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Actividad
@@ -1913,9 +1618,6 @@ function stopConfetti(){if(_confettiRAF){cancelAnimationFrame(_confettiRAF);_con
         </button>
         <button class="ap-mn-i" id="ami-rates" onclick="showAV('rates')">
           <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Tasas
-        </button>
-        <button class="ap-mn-i" id="ami-wallet" onclick="showAV('wallet')">
-          <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12h2"/><circle cx="17" cy="12" r="1"/></svg>Wallet
         </button>
         <button class="ap-mn-i" id="ami-activity" onclick="showAV('activity')">
           <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Actividad
@@ -1941,7 +1643,7 @@ function stopConfetti(){if(_confettiRAF){cancelAnimationFrame(_confettiRAF);_con
         <div class="card"><div id="a-cli-body"></div></div>
       </div>
       <div class="av" id="av-chats">
-        <div class="dv-h">Chats P2P 💬</div><div class="dv-s">Responde en tiempo real</div>
+        <div class="dv-h">Chats de Soporte 💬</div><div class="dv-s">Responde en tiempo real</div>
         <div class="a-chat-g">
           <div class="op-panel"><div class="op-panel-h">Operaciones activas</div><div class="op-panel-list" id="a-op-list"></div></div>
           <div class="a-chat-panel">
@@ -1995,87 +1697,6 @@ function stopConfetti(){if(_confettiRAF){cancelAnimationFrame(_confettiRAF);_con
           <div id="h-preview" style="padding:8px 12px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.5px;margin-bottom:10px;display:inline-flex;align-items:center;gap:6px"></div>
           <button class="btn g sm full" onclick="saveHorario()">💾 Guardar horario</button>
         </div>
-
-        <!-- ── CONFIGURACIÓN WALLET / RETIROS ── -->
-        <div style="margin-top:18px;background:var(--bg2);border:1px solid rgba(0,170,255,.2);border-radius:var(--r2);padding:16px">
-          <div style="font-size:12px;font-weight:700;color:#0af;margin-bottom:14px">💳 CONFIGURACIÓN DE RETIROS WALLET</div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-            <div>
-              <div class="ui-label">ESPERA RETIRO (minutos)</div>
-              <input class="re-inp" type="number" id="wcfg-espera" min="5" max="1440" placeholder="60" title="Tiempo que el usuario espera antes de que proceses su retiro">
-            </div>
-            <div>
-              <div class="ui-label">MÍNIMO RETIRO (USDT)</div>
-              <input class="re-inp" type="number" id="wcfg-min" min="1" max="9999" placeholder="5">
-            </div>
-          </div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-            <div>
-              <div class="ui-label">MÁXIMO RETIRO (USDT)</div>
-              <input class="re-inp" type="number" id="wcfg-max" min="1" max="99999" placeholder="500">
-            </div>
-            <div></div>
-          </div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-            <div>
-              <div class="ui-label">RETIROS DESDE</div>
-              <input class="re-inp" type="time" id="wcfg-desde" value="08:00">
-            </div>
-            <div>
-              <div class="ui-label">RETIROS HASTA</div>
-              <input class="re-inp" type="time" id="wcfg-hasta" value="19:00">
-            </div>
-          </div>
-
-          <div style="margin-bottom:10px">
-            <div class="ui-label">DÍAS QUE SE ACEPTAN RETIROS</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px" id="wcfg-dias">
-              <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer"><input type="checkbox" value="0" style="accent-color:var(--g)"> Dom</label>
-              <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer"><input type="checkbox" value="1" style="accent-color:var(--g)"> Lun</label>
-              <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer"><input type="checkbox" value="2" style="accent-color:var(--g)"> Mar</label>
-              <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer"><input type="checkbox" value="3" style="accent-color:var(--g)"> Mié</label>
-              <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer"><input type="checkbox" value="4" style="accent-color:var(--g)"> Jue</label>
-              <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer"><input type="checkbox" value="5" style="accent-color:var(--g)"> Vie</label>
-              <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer"><input type="checkbox" value="6" style="accent-color:var(--g)"> Sáb</label>
-            </div>
-          </div>
-
-          <div style="margin-bottom:10px">
-            <div class="ui-label">MENSAJE AL USUARIO MIENTRAS ESPERA</div>
-            <input class="re-inp" type="text" id="wcfg-msg" placeholder="Tu retiro está siendo procesado. Tiempo estimado: {min} min.">
-            <div style="font-size:10px;color:var(--t2);margin-top:3px">Usa {min} para insertar el tiempo configurado automáticamente</div>
-          </div>
-
-          <!-- Reservas mínimas por plataforma -->
-          <div style="font-size:11px;font-weight:700;color:var(--t2);margin:12px 0 8px;letter-spacing:.5px">⚠️ ALERTAS DE RESERVA MÍNIMA (te avisa cuando tu saldo baja)</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-            <div>
-              <div class="ui-label">BINANCE USDT mínimo</div>
-              <input class="re-inp" type="number" id="wcfg-res-binance" min="0" placeholder="100">
-            </div>
-            <div>
-              <div class="ui-label">PAYPAL USD mínimo</div>
-              <input class="re-inp" type="number" id="wcfg-res-paypal" min="0" placeholder="50">
-            </div>
-            <div>
-              <div class="ui-label">ZINLI USD mínimo</div>
-              <input class="re-inp" type="number" id="wcfg-res-zinli" min="0" placeholder="30">
-            </div>
-            <div>
-              <div class="ui-label">ZELLE USD mínimo</div>
-              <input class="re-inp" type="number" id="wcfg-res-zelle" min="0" placeholder="50">
-            </div>
-            <div>
-              <div class="ui-label">PAGO MÓVIL Bs mínimo</div>
-              <input class="re-inp" type="number" id="wcfg-res-pm" min="0" placeholder="500">
-            </div>
-          </div>
-
-          <button class="btn g sm full" onclick="saveWalletConfig()" style="background:linear-gradient(135deg,#0af,#007acc)!important;box-shadow:0 4px 14px rgba(0,170,255,.3)!important">💾 Guardar configuración wallet</button>
-        </div>
       </div>
       <div class="av" id="av-activity">
         <div class="dv-h">Actividad 📋</div><div class="dv-s">Log completo de la plataforma · Listo para base de datos</div>
@@ -2092,61 +1713,6 @@ function stopConfetti(){if(_confettiRAF){cancelAnimationFrame(_confettiRAF);_con
         </div>
       </div>
       
-      <div class="av" id="av-wallet">
-        <div class="dv-h">Wallet Admin 💳</div>
-        <div class="dv-s">Depósitos pendientes · Retiros · Saldos</div>
-
-        <!-- KPIs wallet -->
-        <div class="kpi-row" style="grid-template-columns:repeat(auto-fill,minmax(130px,1fr));margin-bottom:16px">
-          <div class="kpi"><div class="kpi-v ui-col-y" id="wad-dep-pend">0</div><div class="kpi-l">DEP. PENDIENTES</div></div>
-          <div class="kpi"><div class="kpi-v" style="color:#ff6b6b" id="wad-wit-pend">0</div><div class="kpi-l">RETIROS PEND.</div></div>
-          <div class="kpi"><div class="kpi-v ui-col-g" id="wad-total-usdt">0.00</div><div class="kpi-l">USDT EN CUSTODIA</div></div>
-          <div class="kpi"><div class="kpi-v" id="wad-total-users">0</div><div class="kpi-l">USUARIOS CON SALDO</div></div>
-        </div>
-
-        <!-- Alertas de reserva -->
-        <div id="wad-reserva-alerts" style="display:none;background:rgba(240,185,11,.05);border:1px solid rgba(240,185,11,.15);border-radius:10px;margin-bottom:16px;overflow:hidden">
-          <div style="padding:8px 14px;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--yellow);border-bottom:1px solid rgba(240,185,11,.1)">⚠️ ALERTAS DE LIQUIDEZ</div>
-        </div>
-
-        <!-- Pestañas admin wallet -->
-        <div class="rs-tabs" style="margin-bottom:16px">
-          <button class="rs-tab on" id="watab-dep" onclick="showWaTab('dep',this)">⬇️ Depósitos</button>
-          <button class="rs-tab" id="watab-wit" onclick="showWaTab('wit',this)">⬆️ Retiros</button>
-          <button class="rs-tab" id="watab-saldos" onclick="showWaTab('saldos',this)">💰 Saldos</button>
-        </div>
-
-        <!-- DEPÓSITOS -->
-        <div id="wapane-dep">
-          <div class="card">
-            <div class="card-hdr" style="justify-content:space-between">
-              <span class="card-title">Solicitudes de depósito</span>
-              <button class="btn ghost sm" onclick="loadAdminWallet()">🔄 Actualizar</button>
-            </div>
-            <div id="wad-dep-list" style="min-height:60px"><div class="empty" style="padding:20px;text-align:center;font-size:12px;color:var(--t2)">Cargando...</div></div>
-          </div>
-        </div>
-
-        <!-- RETIROS -->
-        <div id="wapane-wit" style="display:none">
-          <div class="card">
-            <div class="card-hdr" style="justify-content:space-between">
-              <span class="card-title">Solicitudes de retiro</span>
-              <button class="btn ghost sm" onclick="loadAdminWallet()">🔄 Actualizar</button>
-            </div>
-            <div id="wad-wit-list" style="min-height:60px"><div class="empty" style="padding:20px;text-align:center;font-size:12px;color:var(--t2)">Cargando...</div></div>
-          </div>
-        </div>
-
-        <!-- SALDOS USUARIOS -->
-        <div id="wapane-saldos" style="display:none">
-          <div class="card">
-            <div class="card-hdr"><span class="card-title">Saldos de usuarios</span></div>
-            <div id="wad-saldos-list" style="min-height:60px"><div class="empty" style="padding:20px;text-align:center;font-size:12px;color:var(--t2)">Cargando...</div></div>
-          </div>
-        </div>
-      </div>
-
       <div class="av" id="av-referidos">
         <div class="dv-h">Referidos 💸</div>
         <div class="dv-s">Control del programa · $2 por cada referido que cambie $30 o más</div>
@@ -2182,8 +1748,15 @@ function toggleTheme(){
 (function initTheme(){
   try{
     const t=localStorage.getItem('lsc_theme');
-    if(t==='light'){
-      document.documentElement.classList.add('light');
+    // Default = light; only remove if explicitly set to dark
+    if(t==='dark'){
+      document.documentElement.classList.remove('light');
+      document.addEventListener('DOMContentLoaded',()=>{
+        const btn=document.getElementById('theme-btn');
+        if(btn)btn.textContent='🌙';
+      });
+    } else {
+      // Ensure light class is present and button shows sun
       document.addEventListener('DOMContentLoaded',()=>{
         const btn=document.getElementById('theme-btn');
         if(btn)btn.textContent='☀️';
@@ -2447,7 +2020,6 @@ async function sbLoadRates(){
       deepMerge(RATES,data.data);
       if(data.data.adminPM) Object.assign(ADMIN_PM, data.data.adminPM);
       if(data.data.horario)  Object.assign(ADMIN_HORARIO, data.data.horario);
-      if(data.data.walletCfg) Object.assign(WALLET_CONFIG, data.data.walletCfg);
       if(data.data.wlsUsdt) WLS.usdt.val=data.data.wlsUsdt;
       if(data.data.usdt_compra) RATES.usdt_compra=data.data.usdt_compra;
       if(data.data.usdt_venta)  RATES.usdt_venta=data.data.usdt_venta;
@@ -2459,7 +2031,7 @@ async function sbLoadRates(){
 
 async function sbSaveRates(){
   if(!_dbOk('sbSaveRates')) return false;
-  const toSave={...RATES, adminPM:ADMIN_PM, horario:ADMIN_HORARIO, walletCfg:WALLET_CONFIG, wlsUsdt:WLS.usdt?.val||''};
+  const toSave={...RATES, adminPM:ADMIN_PM, horario:ADMIN_HORARIO, wlsUsdt:WLS.usdt?.val||''};
   const{error}=await db.from('tasas').upsert({id:1,data:toSave},{onConflict:'id'});
   if(sbErr('sbSaveRates',error)) return false;
   return true;
@@ -2497,7 +2069,7 @@ function deepMerge(t,s){
   }
 }
 
-const PN={binance:'Binance',paypal:'PayPal',zinli:'Zinli',wally:'Wally',airtm:'Airtm',usdc:'USDC',usdt:'USDT (BEP20)'};
+const PN={binance:'Binance',paypal:'PayPal',zinli:'Zinli',wally:'Wally',airtm:'Airtm',usdc:'USDC',usdt:'USDT (BEP20)',pagomovil:'Pago Móvil'};
 const WLS={
   binance:{label:'ID Binance',       val:'906509124',                                   note:'Envía USDT'},
   paypal: {label:'Correo PayPal',    val:'sandrealeonard@gmail.com',                    note:'Monto exacto'},
@@ -2517,24 +2089,6 @@ let ADMIN_HORARIO = {
   mensajeCerrado:'Horario: L-V 8am-7pm · Sáb 9am-3pm (VEN)'
 };
 
-// ── WALLET CONFIG — tiempo de espera, horario retiros, reservas ──
-let WALLET_CONFIG = {
-  retiro_espera_min: 60,        // minutos de espera antes de procesar retiro
-  retiro_horario_desde: '08:00',// hora desde la que se aceptan retiros
-  retiro_horario_hasta: '19:00',// hora hasta la que se aceptan retiros
-  retiro_dias: [1,2,3,4,5,6],  // 0=Dom,1=Lun...6=Sáb
-  retiro_min_usdt: 5,           // monto mínimo retiro en USDT
-  retiro_max_usdt: 500,         // monto máximo retiro en USDT
-  retiro_mensaje_espera: 'Tu retiro está siendo procesado. El tiempo estimado es de {min} minutos.',
-  reservas: {                   // alertas cuando tu saldo estimado baja de este umbral
-    binance_usdt: 100,
-    paypal_usd:   50,
-    zinli_usd:    30,
-    zelle_usd:    50,
-    pago_movil_bs: 500
-  }
-};
-
 function netCalc(a,c){
   if(!c||c.type==='none') return a;
   if(c.type==='pct')      return a*(1-c.pct);
@@ -2543,17 +2097,56 @@ function netCalc(a,c){
 }
 
 function svgL(id,sz=36){
-  const r=Math.round(sz*.25),h=sz/2;
+  const r=Math.round(sz*.25),h=sz/2,s=sz;
+  // Iconos reales SVG de cada plataforma
   const logos={
-    binance:`<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#181a20"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Georgia" font-size="${Math.round(sz*.52)}" font-weight="900" fill="#f3ba2f">B</text></svg>`,
-    paypal: `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#003087"/><text x="50%" y="56%" dominant-baseline="middle" text-anchor="middle" font-family="Georgia" font-size="${Math.round(sz*.52)}" font-weight="900" fill="#009cde">P</text></svg>`,
-    zinli:  `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#5b2d8e"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.27)}" font-weight="800" fill="#fff">Zinli</text></svg>`,
-    wally:  `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#006b31"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.27)}" font-weight="800" fill="#fff">Wally</text></svg>`,
-    airtm:  `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#0055b3"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.25)}" font-weight="800" fill="#fff">Airtm</text></svg>`,
-    usdc:   `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#2775ca"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.22)}" font-weight="800" fill="#fff">USDC</text></svg>`,
-    usdt:   `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#26a17b"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.22)}" font-weight="800" fill="#fff">USDT</text></svg>`,
+    // Binance — rombo dorado oficial
+    binance:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#181a20"/>
+      <g fill="#F3BA2F" transform="translate(22,22)">
+        <polygon points="0,-8.5 2.5,-6 0,-3.5 -2.5,-6" transform="rotate(0)"/>
+        <polygon points="-8.5,0 -6,2.5 -3.5,0 -6,-2.5" transform="rotate(0)"/>
+        <polygon points="8.5,0 6,2.5 3.5,0 6,-2.5" transform="rotate(0)"/>
+        <polygon points="0,8.5 2.5,6 0,3.5 -2.5,6" transform="rotate(0)"/>
+        <polygon points="-3.5,-3.5 0,-7 3.5,-3.5 0,0" transform="rotate(0)"/>
+        <polygon points="-3.5,3.5 0,0 3.5,3.5 0,7" transform="rotate(0)"/>
+        <polygon points="-7,-0.1 -3.5,-3.5 0,0 -3.5,3.5" transform="rotate(0)"/>
+        <polygon points="7,-0.1 3.5,-3.5 0,0 3.5,3.5" transform="rotate(0)"/>
+      </g></svg>`,
+    // PayPal — doble P icónica
+    paypal:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#fff"/>
+      <g transform="translate(8,8)">
+        <path d="M23.4 6.5c.5 2.8-.8 5.9-3 7.6-2 1.5-4.8 2-7.4 2H11l-1.2 7.5H5.4L8.6 5.5h8.6c3 0 5.6.8 6.2 1z" fill="#009cde"/>
+        <path d="M26.5 8c.2 1 .2 2.1 0 3.1-.9 4.2-4.2 6.9-8.5 6.9h-2.2l-1.5 9.3H9.8l.3-2h2.8l1.5-9.3h2.2c3.8 0 6.8-2.1 7.9-5.5.4-1.2.5-2.4.3-3.5.5.3.9.6 1.3 1z" fill="#003087"/>
+        <path d="M10.3 5.5H19c2.8 0 5.3.8 6.2 2.3.4.7.6 1.4.6 2.2C25.5 6 22.9 4 19.2 4H10.6L7.2 25.5h4.4l1.2-7.5h2c2.6 0 5.4-.5 7.4-2C24.6 14 26 11 25.5 8c-.4-1.5-2-2.5-4.3-2.5z" fill="#012169"/>
+      </g></svg>`,
+    // Zinli — ícono Z morado
+    zinli:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#7C3AED"/>
+      <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" font-family="'Arial Black',Arial" font-size="${Math.round(s*.5)}" font-weight="900" fill="#fff">Z</text></svg>`,
+    // Wally — W verde
+    wally:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#00A651"/>
+      <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" font-family="'Arial Black',Arial" font-size="${Math.round(s*.46)}" font-weight="900" fill="#fff">W</text></svg>`,
+    // Airtm — avión / A naranja
+    airtm:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#FF5F00"/>
+      <path d="M22 10 L34 34 L22 28 L10 34 Z" fill="#fff" opacity=".95"/>
+      <path d="M22 10 L34 34 L22 22 Z" fill="#fff" opacity=".6"/></svg>`,
+    // USDC — círculo azul
+    usdc:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#2775CA"/>
+      <circle cx="22" cy="22" r="16" fill="none" stroke="#fff" stroke-width="2.5"/>
+      <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" font-family="'Arial Black',Arial" font-size="${Math.round(s*.26)}" font-weight="900" fill="#fff">USDC</text></svg>`,
+    // USDT — círculo verde tether
+    usdt:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#26A17B"/>
+      <path d="M14 12h16v4H14zM20 16h4v4h-4z" fill="#fff" opacity=".9"/>
+      <path d="M22 20c-5 0-9 1-9 2.5s4 2.5 9 2.5 9-1 9-2.5-4-2.5-9-2.5z" fill="#fff"/>
+      <rect x="20" y="23" width="4" height="9" rx="2" fill="#fff"/></svg>`,
+    // Pago Móvil — bandera VE + móvil
+    pagomovil:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#CF142B"/>
+      <rect x="0" y="14.7" width="44" height="14.6" fill="#fff"/>
+      <rect x="0" y="29.3" width="44" height="14.7" fill="#00247D"/>
+      <rect x="15" y="11" width="14" height="22" rx="3" fill="#fff" opacity=".9"/>
+      <rect x="17" y="14" width="10" height="13" rx="1" fill="#CF142B"/>
+      <circle cx="22" cy="30" r="1.5" fill="#CF142B"/></svg>`,
   };
-  return logos[id]||'';
+  return logos[id]||`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="var(--bg3)"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(s*.3)}" font-weight="800" fill="var(--t2)">${id.slice(0,3).toUpperCase()}</text></svg>`;
 }
 
 function stBdg(st){
@@ -2616,774 +2209,11 @@ async function tgNotify(msg){
   }catch(e){console.warn('[tgNotify]',e)}
 }
 
-// ═══════════════════════════════════════════════════════════
-//  💳 WALLET SYSTEM — LS Cambios
-//  Base USDT interna · depósito · conversión · retiro
-// ═══════════════════════════════════════════════════════════
-
-// ── Supabase wallet helpers ─────────────────────────────────
-// localStorage como almacén principal (nunca falla)
-// Supabase tasas como sync secundario (best-effort)
-
-function _lGet(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
-function _lSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){return false;}}
-function _emKey(em){return em.toLowerCase().replace(/[^a-z0-9]/g,'_');}
-
-async function _sbPush(k,v){
-  // Sincroniza con Supabase sin bloquear — silencioso si falla
-  try{ if(db) await db.from('tasas').upsert({id:k,data:v},{onConflict:'id'}); }catch(e){}
-}
-async function _sbPull(k){
-  try{ if(!db)return null; const{data}=await db.from('tasas').select('data').eq('id',k).maybeSingle(); return data?.data||null; }catch(e){return null;}
-}
-
-// ── Wallet saldo ──────────────────────────────────────────────
-async function sbGetWallet(em){
-  const lk='wbal_'+_emKey(em);
-  // Intentar Supabase, si falla usar localStorage
-  const remote=await _sbPull('wlt__'+_emKey(em));
-  if(remote){_lSet(lk,remote); return {usdt:+(remote.usdt||0),bs:+(remote.bs||0),usd:+(remote.usd||0)};}
-  const local=_lGet(lk);
-  return {usdt:+(local?.usdt||0),bs:+(local?.bs||0),usd:+(local?.usd||0)};
-}
-async function sbUpsertWallet(em,u,b,d){
-  const v={email:em.toLowerCase(),usdt:+u||0,bs:+b||0,usd:+d||0,updated_at:tnowISO()};
-  _lSet('wbal_'+_emKey(em),v);
-  _sbPush('wlt__'+_emKey(em),v);
-  return true;
-}
-
-// ── Transacciones ─────────────────────────────────────────────
-async function sbAddTransaction(em,tipo,amt,desc,ex={}){
-  const lk='wtx_'+_emKey(em);
-  const L=_lGet(lk)||[];
-  L.unshift({id:'TX'+Date.now(),email:em.toLowerCase(),tipo,monto_usdt:+amt||0,descripcion:desc,metodo:ex.metodo||null,estado:ex.estado||'completado',created_at:tnowISO()});
-  const trim=L.slice(0,100);
-  _lSet(lk,trim); _sbPush('wtx__'+_emKey(em),trim);
-  return true;
-}
-async function sbGetTransactions(em){
-  const lk='wtx_'+_emKey(em);
-  const remote=await _sbPull('wtx__'+_emKey(em));
-  if(remote){_lSet(lk,remote);return Array.isArray(remote)?remote:[];}
-  return _lGet(lk)||[];
-}
-
-// ── Depósitos ─────────────────────────────────────────────────
-async function sbCreateDeposit(em,met,monto,mon,vch){
-  const dep={
-    id:'DEP'+Date.now().toString().slice(-8),
-    email:em.toLowerCase(), metodo:met,
-    monto:+monto||0, moneda:mon||'usd',
-    voucher:vch||null, estado:'pendiente',
-    usdt_acreditado:0, created_at:tnowISO()
-  };
-  // 1. Guardar en localStorage — SIEMPRE funciona
-  const L=_lGet('deps_all')||[];
-  L.unshift(dep); _lSet('deps_all',L.slice(0,500));
-  // 2. Sincronizar con Supabase en background
-  _sbPush('wdep__all',_lGet('deps_all'));
-  // SIEMPRE retorna el depósito — nunca null, nunca falla
-  return dep;
-}
-async function sbGetDeposits(em){
-  // Mezclar local + remote
-  const remote=await _sbPull('wdep__all');
-  if(remote&&remote.length>0){_lSet('deps_all',remote);}
-  const L=_lGet('deps_all')||[];
-  return L.filter(d=>d.email===em.toLowerCase());
-}
-async function sbGetAllDeposits(estado){
-  const remote=await _sbPull('wdep__all');
-  if(remote&&remote.length>0){_lSet('deps_all',remote);}
-  const L=_lGet('deps_all')||[];
-  return estado?L.filter(d=>d.estado===estado):L;
-}
-async function sbUpdateDeposit(id,estado,usdt_acreditado){
-  const L=_lGet('deps_all')||[];
-  const i=L.findIndex(d=>d.id===id); if(i<0)return false;
-  L[i]={...L[i],estado,updated_at:tnowISO()};
-  if(usdt_acreditado!==undefined)L[i].usdt_acreditado=usdt_acreditado;
-  _lSet('deps_all',L); _sbPush('wdep__all',L);
-  return true;
-}
-
-// ── Retiros ───────────────────────────────────────────────────
-async function sbCreateWithdraw(em,dest,amt,cta){
-  const ret={
-    id:'RET'+Date.now().toString().slice(-8),
-    email:em.toLowerCase(), destino:dest,
-    monto_usdt:+amt||0, cuenta_destino:cta||'',
-    estado:'pendiente', created_at:tnowISO()
-  };
-  const L=_lGet('rets_all')||[];
-  L.unshift(ret); _lSet('rets_all',L.slice(0,500));
-  _sbPush('wret__all',_lGet('rets_all'));
-  return ret;
-}
-async function sbGetAllWithdraws(estado){
-  const remote=await _sbPull('wret__all');
-  if(remote&&remote.length>0){_lSet('rets_all',remote);}
-  const L=_lGet('rets_all')||[];
-  return estado?L.filter(w=>w.estado===estado):L;
-}
-async function sbUpdateWithdraw(id,estado){
-  const L=_lGet('rets_all')||[];
-  const i=L.findIndex(w=>w.id===id); if(i<0)return false;
-  L[i]={...L[i],estado,updated_at:tnowISO()};
-  _lSet('rets_all',L); _sbPush('wret__all',L);
-  return true;
-}
-async function sbGetAllWallets(){
-  // Leer todos los saldos desde localStorage
-  const keys=Object.keys(localStorage).filter(k=>k.startsWith('wbal_'));
-  const local=keys.map(k=>_lGet(k)).filter(w=>w&&w.email&&((w.usdt||0)+(w.bs||0)>0));
-  // Intentar también desde Supabase
-  try{
-    if(db){
-      const{data}=await db.from('tasas').select('id,data').like('id','wlt__%');
-      if(data&&data.length>0){
-        const remote=data.filter(r=>r.data?.email).map(r=>r.data).filter(w=>(w.usdt||0)+(w.bs||0)>0);
-        if(remote.length>0) return remote.sort((a,b)=>(b.usdt||0)-(a.usdt||0));
-      }
-    }
-  }catch(e){}
-  return local.sort((a,b)=>(b.usdt||0)-(a.usdt||0));
-}
-
-// ── Helpers de conversión ────────────────────────────────────
-
-function getBsRate(dir){
-  // dir: 'compra' (divisas→Bs), 'venta' (Bs→divisas)
-  const plat='binance';
-  const r=RATES[dir]?.[plat];
-  return r?.t ? parseFloat(r.t) : (dir==='compra'?38:36);
-}
-
-function usdtToBs(usdt){ return usdt * getBsRate('compra'); }
-function bsToUsdt(bs){ return bs / getBsRate('venta'); }
-function usdtToUsd(usdt){ return usdt * 0.99; }  // 1% fee implícita
-function usdToUsdt(usd){ return usd / 1.01; }
-
-function getUsdtEquiv(monto, moneda){
-  if(moneda==='bs')    return bsToUsdt(monto);
-  if(moneda==='usd')   return usdToUsdt(monto);
-  if(moneda==='usdt')  return monto;
-  return 0;
-}
-
-function fmtUsdt(n){ return parseFloat(n||0).toFixed(2); }
-function fmtBs(n)  { return fmt(parseFloat(n||0),2); }
-
-// ── Estado local del wallet ──────────────────────────────────
-let _wltBal = {usdt:0, bs:0, usd:0};
-
-async function loadWallet(){
-  const sess=gS(); if(!sess) return;
-  _wltBal = await sbGetWallet(sess.email);
-  renderWalletScreen(_wltBal);
-  const txs = await sbGetTransactions(sess.email);
-  renderWalletMovimientos(txs);
-}
-
-function renderWalletScreen(bal){
-  const usdt=parseFloat(bal.usdt)||0;
-  const bs=parseFloat(bal.bs)||0;
-  const bsEquiv=usdtToBs(usdt)+bs;
-  const usd=parseFloat(bal.usd)||0;
-
-  const el=document.getElementById('wlt-usdt-bal');
-  if(el) el.textContent=fmtUsdt(usdt);
-  const eb=document.getElementById('wlt-bs-equiv');
-  if(eb) eb.textContent='≈ Bs '+fmtBs(bsEquiv);
-  const wu=document.getElementById('wb-usdt');
-  if(wu) wu.textContent=fmtUsdt(usdt)+' USDT';
-  const wb=document.getElementById('wb-bs');
-  if(wb) wb.textContent='Bs '+fmtBs(bs);
-  const wd=document.getElementById('wb-usd');
-  if(wd) wd.textContent='$'+fmtUsdt(usd);
-}
-
-function renderWalletMovimientos(txs){
-  const el=document.getElementById('wlt-movimientos');
-  const cnt=document.getElementById('wlt-mov-count');
-  if(!el) return;
-  if(cnt) cnt.textContent=txs.length+' movimiento'+(txs.length!==1?'s':'');
-  if(!txs.length){
-    el.innerHTML='<div class="empty" style="padding:24px;text-align:center;color:var(--t2);font-size:12px">Sin movimientos aún</div>';
-    return;
-  }
-  const iconMap={deposito:'⬇️',retiro:'⬆️',conversion:'🔄',ajuste:'🔧',referido:'🎁',bono:'⭐'};
-  const colorMap={deposito:'pos',retiro:'neg',conversion:'pos',ajuste:'pos',referido:'pos',bono:'pos'};
-  const bgMap={deposito:'rgba(0,232,160,.1)',retiro:'rgba(255,107,107,.1)',conversion:'rgba(0,170,255,.1)',ajuste:'rgba(240,185,11,.1)',referido:'rgba(167,139,250,.1)',bono:'rgba(240,185,11,.1)'};
-
-  el.innerHTML=txs.map(t=>{
-    const isPos=t.tipo!=='retiro';
-    const sign=isPos?'+':'-';
-    const cls=colorMap[t.tipo]||'pos';
-    const icon=iconMap[t.tipo]||'💱';
-    const bg=bgMap[t.tipo]||'rgba(0,232,160,.08)';
-    const fecha=t.created_at?new Date(t.created_at).toLocaleDateString('es-VE',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'—';
-    const estadoBadge=t.estado==='pendiente'?'<span style="font-size:9px;background:rgba(240,185,11,.2);color:#f0b90b;border-radius:20px;padding:1px 7px;margin-left:6px;font-weight:700">PENDIENTE</span>':'';
-    const progressBar=(t.tipo==='retiro'&&t.estado==='pendiente')?renderWithdrawProgress({created_at:t.created_at}):'';
-    return `<div class="wlt-mov-item" style="flex-direction:column;align-items:stretch">
-      <div style="display:flex;align-items:center;gap:12px">
-        <div class="wlt-mov-icon" style="background:${bg}">${icon}</div>
-        <div class="wlt-mov-info">
-          <div class="wlt-mov-title">${t.descripcion||t.tipo}${estadoBadge}</div>
-          <div class="wlt-mov-sub">${fecha}${t.metodo?' · '+t.metodo.replace('_',' '):''}</div>
-        </div>
-        <div class="wlt-mov-amount ${t.estado==='pendiente'?'pend':cls}">${sign}${fmtUsdt(t.monto_usdt)} USDT</div>
-      </div>
-      ${progressBar}
-    </div>`;
-  }).join('');
-}
-
-// ── Overlay: Depositar ────────────────────────────────────────
-
-let _depVoucherB64 = null;
-
-function openWalletDeposit(){
-  document.getElementById('wlt-dep-ov').style.display='flex';
-  updateDepInstructions();
-}
-
-function updateDepInstructions(){
-  const met=document.getElementById('dep-metodo')?.value;
-  const el=document.getElementById('dep-instrucciones');
-  if(!el) return;
-  const inst={
-    pago_movil: `📲 <b>Pago Móvil</b><br>Banco: <b>${ADMIN_PM.banco||'—'}</b><br>Teléfono: <b>${ADMIN_PM.tel||'—'}</b><br>Cédula: <b>${ADMIN_PM.ci||'—'}</b><br>Concepto: tu correo registrado`,
-    binance:    `🟡 <b>Binance / USDT BEP20</b><br>Wallet: <b>${WLS.usdt?.val||'Consultar en chat'}</b><br>Red: <b>BEP20 (BSC)</b><br>Mínimo: 5 USDT`,
-    paypal:     `🔵 <b>PayPal</b><br>Correo: <b>${WLS.paypal?.val||'Consultar en chat'}</b><br>Envía como <b>Amigos y familia</b>`,
-    zinli:      `💜 <b>Zinli</b><br>Correo/usuario: <b>${WLS.zinli?.val||'Consultar en chat'}</b>`,
-    wally:      `🟢 <b>Wally</b><br>Correo/usuario: <b>${WLS.wally?.val||'Consultar en chat'}</b>`,
-    airtm:      `🔶 <b>Airtm</b><br>Correo: <b>${WLS.airtm?.val||'Consultar en chat'}</b>`,
-    zelle:      `🟣 <b>Zelle</b><br>Correo/teléfono: <b>${WLS.zelle?.val||'Consultar en chat'}</b>`
-  };
-  el.innerHTML = inst[met]||'Selecciona un método';
-  calcDepositEquiv();
-}
-
-function calcDepositEquiv(){
-  const met=document.getElementById('dep-metodo')?.value;
-  const monto=parseFloat(document.getElementById('dep-monto')?.value)||0;
-  const el=document.getElementById('dep-equiv');
-  if(!el||!monto) return;
-  const moneda=met==='pago_movil'?'bs':'usd';
-  const usdt=getUsdtEquiv(monto,moneda);
-  const monedaLbl=moneda==='bs'?'Bs':'USD';
-  el.textContent=`${monto} ${monedaLbl} ≈ ${fmtUsdt(usdt)} USDT (tasa actual)`;
-}
-
-function previewDepVoucher(e){
-  const f=e.target.files[0]; if(!f) return;
-  const r=new FileReader();
-  r.onload=ev=>{
-    _depVoucherB64=ev.target.result;
-    const txt=document.getElementById('dep-voucher-txt');
-    if(txt) txt.textContent='✅ '+f.name;
-    const prev=document.getElementById('dep-voucher-preview');
-    if(prev){prev.src=ev.target.result;prev.style.display='block';}
-  };
-  r.readAsDataURL(f);
-}
-
-async function submitDeposit(){
-  const sess=gS(); if(!sess) return toast('Inicia sesión primero','err');
-  const met=document.getElementById('dep-metodo')?.value;
-  const monto=parseFloat(document.getElementById('dep-monto')?.value)||0;
-  if(!monto||monto<1) return toast('Ingresa un monto válido','err');
-  if(!_depVoucherB64) return toast('Adjunta el comprobante de pago','err');
-  const moneda=met==='pago_movil'?'bs':'usd';
-  const dep=await sbCreateDeposit(sess.email,met,monto,moneda,_depVoucherB64);
-  if(!dep) return toast('Error al enviar solicitud','err');
-  // Notificación Telegram al admin
-  const ud=getUser(sess.email);
-  tgNotify(`💳 <b>Solicitud de DEPÓSITO WALLET</b>\n🆔 ${dep.id}\n👤 ${ud?.nombre||''} ${ud?.apellido||''}\n📧 ${sess.email}\n💵 ${monto} ${moneda.toUpperCase()}\n📲 Método: ${met.replace('_',' ')}\n🔗 <a href="${ADMIN_URL}">Panel admin → Wallet</a>`);
-  closeWalletOv('wlt-dep-ov');
-  toast('✅ Solicitud enviada. El admin acreditará en minutos.','ok');
-  document.getElementById('dep-monto').value='';
-  _depVoucherB64=null;
-  const prev=document.getElementById('dep-voucher-preview');
-  if(prev) prev.style.display='none';
-  loadWallet();
-}
-
-// ── Overlay: Convertir ────────────────────────────────────────
-
-function openWalletConvert(){
-  document.getElementById('wlt-conv-ov').style.display='flex';
-  calcConversion();
-  const el=document.getElementById('conv-saldo-disp');
-  if(el) el.textContent=`Saldo disponible: ${fmtUsdt(_wltBal.usdt)} USDT · Bs ${fmtBs(_wltBal.bs)}`;
-}
-
-function calcConversion(){
-  const from=document.getElementById('conv-from')?.value;
-  const to=document.getElementById('conv-to')?.value;
-  const monto=parseFloat(document.getElementById('conv-monto')?.value)||0;
-  const resVal=document.getElementById('conv-res-val');
-  const resDet=document.getElementById('conv-res-det');
-  if(!monto||!resVal) return;
-  let resultado=0; let tasa='';
-  if(from==='usdt'&&to==='bs'){   resultado=usdtToBs(monto);    tasa=`1 USDT = Bs ${fmtBs(getBsRate('compra'))}`; }
-  else if(from==='bs'&&to==='usdt'){ resultado=bsToUsdt(monto); tasa=`1 USDT = Bs ${fmtBs(getBsRate('venta'))}`; }
-  else if(from==='usdt'&&to==='usd'){ resultado=usdtToUsd(monto); tasa='1 USDT ≈ $0.99 (fee 1%)'; }
-  else if(from==='usd'&&to==='usdt'){ resultado=usdToUsdt(monto); tasa='$1 USD ≈ 0.99 USDT (fee 1%)'; }
-  else if(from===to){ resultado=monto; tasa='Misma moneda'; }
-  else { resultado=monto; tasa='Conversión directa'; }
-  const sym={usdt:'USDT',bs:'Bs',usd:'USD'};
-  resVal.textContent=`${resultado.toFixed(2)} ${sym[to]||to}`;
-  if(resDet) resDet.textContent=tasa;
-}
-
-async function submitConversion(){
-  const sess=gS(); if(!sess) return toast('Inicia sesión primero','err');
-  const from=document.getElementById('conv-from')?.value;
-  const to=document.getElementById('conv-to')?.value;
-  const monto=parseFloat(document.getElementById('conv-monto')?.value)||0;
-  if(!monto||monto<=0) return toast('Ingresa un monto válido','err');
-  if(from===to) return toast('Selecciona monedas distintas','err');
-
-  // Validar saldo
-  const bal=await sbGetWallet(sess.email);
-  if(from==='usdt'&&parseFloat(bal.usdt)<monto) return toast('Saldo USDT insuficiente','err');
-  if(from==='bs'&&parseFloat(bal.bs)<monto)     return toast('Saldo Bs insuficiente','err');
-  if(from==='usd'&&parseFloat(bal.usd)<monto)   return toast('Saldo USD insuficiente','err');
-
-  let resultado=0;
-  if(from==='usdt'&&to==='bs')  resultado=usdtToBs(monto);
-  else if(from==='bs'&&to==='usdt') resultado=bsToUsdt(monto);
-  else if(from==='usdt'&&to==='usd') resultado=usdtToUsd(monto);
-  else if(from==='usd'&&to==='usdt') resultado=usdToUsdt(monto);
-  else resultado=monto;
-
-  // Actualizar saldos
-  const newBal={...bal};
-  newBal[from]=parseFloat(newBal[from])-monto;
-  newBal[to]=parseFloat(newBal[to]||0)+resultado;
-  const ok=await sbUpsertWallet(sess.email,newBal.usdt||0,newBal.bs||0,newBal.usd||0);
-  if(!ok) return toast('Error al procesar conversión','err');
-
-  const sym={usdt:'USDT',bs:'Bs',usd:'USD'};
-  await sbAddTransaction(sess.email,'conversion',
-    from==='usdt'?monto:resultado,
-    `Conversión ${monto.toFixed(2)} ${sym[from]} → ${resultado.toFixed(2)} ${sym[to]}`,
-    {metodo:'wallet_interno',estado:'completado'});
-
-  playSuccess();
-  closeWalletOv('wlt-conv-ov');
-  toast(`✅ Convertido: ${resultado.toFixed(2)} ${sym[to]}`, 'ok');
-  _wltBal=newBal;
-  renderWalletScreen(_wltBal);
-  const txs=await sbGetTransactions(sess.email);
-  renderWalletMovimientos(txs);
-}
-
-// ── Overlay: Retirar ──────────────────────────────────────────
-
-function openWalletWithdraw(){
-  document.getElementById('wlt-wit-ov').style.display='flex';
-  updateWithdrawForm();
-  // Estado del horario
-  const hs=document.getElementById('wit-horario-status');
-  if(hs){
-    const r=retiroAbierto();
-    hs.innerHTML=r.ok
-      ?`<span style="color:rgba(0,232,160,.8)">✅ Retiros disponibles ahora</span>`
-      :`<span style="color:rgba(255,107,107,.8)">🕐 ${r.msg}</span>`;
-  }
-  // Info mínimo/máximo/espera
-  const ci=document.getElementById('wit-config-info');
-  if(ci) ci.textContent=`Mínimo ${WALLET_CONFIG.retiro_min_usdt||5} USDT · Máximo ${WALLET_CONFIG.retiro_max_usdt||500} USDT · Tiempo estimado ${WALLET_CONFIG.retiro_espera_min||60} min`;
-}
-
-function updateWithdrawForm(){
-  calcWithdrawEquiv();
-  const el=document.getElementById('wit-saldo-disp');
-  if(el) el.textContent=`Saldo USDT disponible: ${fmtUsdt(_wltBal.usdt)} USDT`;
-}
-
-function calcWithdrawEquiv(){
-  const dest=document.getElementById('wit-destino')?.value;
-  const monto=parseFloat(document.getElementById('wit-monto')?.value)||0;
-  const el=document.getElementById('wit-equiv');
-  if(!el||!monto) return;
-  if(dest==='pago_movil'){ el.textContent=`≈ Bs ${fmtBs(usdtToBs(monto))} (tasa actual)`; }
-  else { el.textContent=`≈ $${fmtUsdt(usdtToUsd(monto))} USD`; }
-}
-
-async function submitWithdraw(){
-  const sess=gS(); if(!sess) return toast('Inicia sesión primero','err');
-  // Validar horario de retiros
-  const horOk=retiroAbierto();
-  if(!horOk.ok) return toast('🕐 '+horOk.msg,'err');
-  const dest=document.getElementById('wit-destino')?.value;
-  const monto=parseFloat(document.getElementById('wit-monto')?.value)||0;
-  const cuenta=document.getElementById('wit-cuenta')?.value?.trim();
-  const minRet=WALLET_CONFIG.retiro_min_usdt||5;
-  const maxRet=WALLET_CONFIG.retiro_max_usdt||500;
-  if(!monto||monto<minRet) return toast(`Retiro mínimo: ${minRet} USDT`,'err');
-  if(monto>maxRet) return toast(`Retiro máximo: ${maxRet} USDT`,'err');
-  if(!cuenta) return toast('Ingresa la cuenta destino','err');
-  const bal=await sbGetWallet(sess.email);
-  if(parseFloat(bal.usdt)<monto) return toast('Saldo USDT insuficiente','err');
-
-  // Descontar saldo USDT (queda "en proceso")
-  const newBal={...bal};
-  newBal.usdt=parseFloat(newBal.usdt)-monto;
-  const ok=await sbUpsertWallet(sess.email,newBal.usdt,newBal.bs||0,newBal.usd||0);
-  if(!ok) return toast('Error al procesar','err');
-
-  const ret=await sbCreateWithdraw(sess.email,dest,monto,cuenta);
-  if(!ret){ // revertir
-    await sbUpsertWallet(sess.email,bal.usdt,bal.bs||0,bal.usd||0);
-    return toast('Error al crear retiro','err');
-  }
-
-  await sbAddTransaction(sess.email,'retiro',monto,
-    `Retiro ${monto} USDT → ${dest.replace('_',' ')} (${cuenta.slice(0,20)})`,
-    {metodo:dest,estado:'pendiente'});
-
-  const ud=getUser(sess.email);
-  tgNotify(`💸 <b>Solicitud de RETIRO WALLET</b>\n🆔 ${ret.id}\n👤 ${ud?.nombre||''} ${ud?.apellido||''}\n📧 ${sess.email}\n💵 ${monto} USDT\n📲 Destino: ${dest.replace('_',' ')}\n🏦 Cuenta: ${cuenta}\n🔗 <a href="${ADMIN_URL}">Panel admin → Wallet</a>`);
-
-  closeWalletOv('wlt-wit-ov');
-  toast('⏳ Retiro solicitado. Procesando en 30-60 min.','ok');
-  _wltBal=newBal;
-  renderWalletScreen(_wltBal);
-  const txs=await sbGetTransactions(sess.email);
-  renderWalletMovimientos(txs);
-}
-
-// ── Helper close overlays ─────────────────────────────────────
-function closeWalletOv(id){
-  const el=document.getElementById(id);
-  if(el) el.style.display='none';
-}
-// Cerrar al tocar fuera del panel
-['wlt-dep-ov','wlt-conv-ov','wlt-wit-ov'].forEach(id=>{
-  setTimeout(()=>{
-    const el=document.getElementById(id);
-    if(el) el.addEventListener('click',e=>{ if(e.target===el) closeWalletOv(id); });
-  },500);
-});
-
-// ── Panel Admin Wallet ────────────────────────────────────────
-
-function showWaTab(tab,btn){
-  ['dep','wit','saldos'].forEach(t=>{
-    const p=document.getElementById('wapane-'+t);
-    const b=document.getElementById('watab-'+t);
-    if(p) p.style.display=t===tab?'block':'none';
-    if(b){ b.classList.toggle('on',t===tab); }
-  });
-}
-
-async function loadAdminWallet(){
-  loadWalletConfigUI();
-  checkReservaAlerts();
-  // KPIs
-  const deps=await sbGetAllDeposits('pendiente');
-  const wits=await sbGetAllWithdraws('pendiente');
-  const allWallets=await sbGetAllWallets();
-  const totalUsdt=allWallets.reduce((s,w)=>s+parseFloat(w.usdt_balance||0),0);
-  const usersWithBal=allWallets.filter(w=>parseFloat(w.usdt_balance||0)>0).length;
-
-  const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  s('wad-dep-pend',deps.length);
-  s('wad-wit-pend',wits.length);
-  s('wad-total-usdt',fmtUsdt(totalUsdt));
-  s('wad-total-users',usersWithBal);
-
-  // Badge
-  const badge=document.getElementById('asi-wallet-badge');
-  if(badge){ const n=deps.length+wits.length; badge.textContent=n; badge.classList.toggle('ui-hidden',n===0); }
-
-  // Depósitos
-  renderAdminDeposits(await sbGetAllDeposits());
-  // Retiros
-  renderAdminWithdraws(await sbGetAllWithdraws());
-  // Saldos
-  renderAdminSaldos(allWallets);
-}
-
-function renderAdminDeposits(deps){
-  const el=document.getElementById('wad-dep-list'); if(!el) return;
-  if(!deps.length){ el.innerHTML='<div class="empty" style="padding:20px;text-align:center;font-size:12px;color:var(--t2)">Sin depósitos</div>'; return; }
-  const stColor={pendiente:'var(--yellow)',acreditado:'var(--g)',rechazado:'var(--red)'};
-  el.innerHTML=deps.map(d=>{
-    const fecha=d.created_at?new Date(d.created_at).toLocaleDateString('es-VE',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'—';
-    const acciones=d.estado==='pendiente'?`
-      <div style="display:flex;gap:6px;margin-top:10px">
-        <input type="number" id="dep-usdt-${d.id}" placeholder="USDT a acreditar" step="0.01" min="0" style="flex:1;padding:7px 10px;background:var(--bg2);border:1px solid var(--brd2);border-radius:8px;color:var(--t1);font-size:12px;font-family:inherit">
-        <button class="btn g sm" onclick="adminAcreditarDeposit('${d.id}','${d.email}')">✅ Acreditar</button>
-        <button class="btn ghost sm" style="color:var(--red)" onclick="adminRechazarDeposit('${d.id}','${d.email}')">✗</button>
-      </div>`:'';
-    const voucher=d.voucher?`<img src="${d.voucher}" style="width:100%;max-height:120px;object-fit:cover;border-radius:8px;margin-top:8px;cursor:pointer" onclick="window.open(this.src,'_blank')" alt="comprobante">` : '';
-    return`<div style="padding:14px 16px;border-bottom:1px solid var(--brd)">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
-        <div>
-          <div style="font-size:11px;font-weight:700;color:var(--t2)">${d.id} · ${fecha}</div>
-          <div style="font-size:13px;font-weight:700;color:var(--t1);margin-top:2px">${d.email}</div>
-          <div style="font-size:12px;color:var(--t2);margin-top:1px">${d.monto} ${d.moneda?.toUpperCase()||'USD'} · ${d.metodo?.replace('_',' ')||'—'}</div>
-        </div>
-        <span style="font-size:10px;font-weight:800;color:${stColor[d.estado]||'var(--t2)'};background:rgba(255,255,255,.05);border-radius:20px;padding:3px 10px;white-space:nowrap">${d.estado?.toUpperCase()}</span>
-      </div>
-      ${voucher}${acciones}
-    </div>`;
-  }).join('');
-}
-
-async function adminAcreditarDeposit(depId,email){
-  const inp=document.getElementById('dep-usdt-'+depId);
-  const usdt=parseFloat(inp?.value)||0;
-  if(!usdt||usdt<=0) return toast('Ingresa los USDT a acreditar','err');
-  if(!confirm(`¿Acreditar ${usdt} USDT a ${email}?`)) return;
-  // Actualizar wallet usuario
-  const bal=await sbGetWallet(email);
-  const newUsdt=parseFloat(bal.usdt)+usdt;
-  const wok=await sbUpsertWallet(email,newUsdt,bal.bs||0,bal.usd||0);
-  if(!wok) return toast('Error actualizando wallet','err');
-  // Marcar depósito
-  await sbUpdateDeposit(depId,'acreditado',usdt);
-  // Registrar transacción
-  await sbAddTransaction(email,'deposito',usdt,`Depósito acreditado por admin (${depId})`,{metodo:'admin',estado:'completado'});
-  // Notificar usuario por Telegram
-  tgNotify(`✅ <b>Depósito acreditado</b>\n📧 ${email}\n💵 +${usdt} USDT\n🆔 ${depId}`);
-  // Sonido
-  playAdminConfirm();
-  const fl=document.createElement('div');fl.style.cssText='position:fixed;inset:0;background:rgba(0,232,160,.12);z-index:9999;pointer-events:none;animation:flashFade .6s ease forwards';document.body.appendChild(fl);setTimeout(()=>fl.remove(),700);
-  toast(`✅ ${usdt} USDT acreditados a ${email}`,'ok');
-  loadAdminWallet();
-}
-
-async function adminRechazarDeposit(depId,email){
-  if(!confirm(`¿Rechazar depósito ${depId} de ${email}?`)) return;
-  await sbUpdateDeposit(depId,'rechazado');
-  tgNotify(`❌ <b>Depósito rechazado</b>\n📧 ${email}\n🆔 ${depId}`);
-  toast('Depósito rechazado','ok');
-  loadAdminWallet();
-}
-
-function renderAdminWithdraws(wits){
-  const el=document.getElementById('wad-wit-list'); if(!el) return;
-  if(!wits.length){ el.innerHTML='<div class="empty" style="padding:20px;text-align:center;font-size:12px;color:var(--t2)">Sin retiros</div>'; return; }
-  const stColor={pendiente:'var(--yellow)',procesado:'var(--g)',rechazado:'var(--red)'};
-  el.innerHTML=wits.map(w=>{
-    const fecha=w.created_at?new Date(w.created_at).toLocaleDateString('es-VE',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'—';
-    const acciones=w.estado==='pendiente'?`
-      ${renderWithdrawProgress(w)}
-      <div style="display:flex;gap:6px;margin-top:10px">
-        <button class="btn g sm" onclick="adminProcesarRetiro('${w.id}','${w.email}',${w.monto_usdt})">✅ Marcar procesado</button>
-        <button class="btn ghost sm" style="color:var(--red)" onclick="adminRechazarRetiro('${w.id}','${w.email}',${w.monto_usdt})">✗ Rechazar</button>
-      </div>`:'';
-    return`<div style="padding:14px 16px;border-bottom:1px solid var(--brd)">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
-        <div>
-          <div style="font-size:11px;font-weight:700;color:var(--t2)">${w.id} · ${fecha}</div>
-          <div style="font-size:13px;font-weight:700;color:var(--t1);margin-top:2px">${w.email}</div>
-          <div style="font-size:12px;color:var(--t2);margin-top:1px">${w.monto_usdt} USDT → ${w.destino?.replace('_',' ')||'—'}</div>
-          <div style="font-size:11px;color:var(--g);margin-top:2px;word-break:break-all">📤 ${w.cuenta_destino||'—'}</div>
-        </div>
-        <span style="font-size:10px;font-weight:800;color:${stColor[w.estado]||'var(--t2)'};background:rgba(255,255,255,.05);border-radius:20px;padding:3px 10px;white-space:nowrap">${w.estado?.toUpperCase()}</span>
-      </div>${acciones}
-    </div>`;
-  }).join('');
-}
-
-async function adminProcesarRetiro(retId,email,monto){
-  if(!confirm(`¿Confirmar procesado de retiro ${retId} (${monto} USDT)?`)) return;
-  await sbUpdateWithdraw(retId,'procesado');
-  await sbAddTransaction(email,'retiro',monto,`Retiro procesado por admin (${retId})`,{estado:'completado'});
-  tgNotify(`💸 <b>Retiro procesado</b>\n📧 ${email}\n💵 ${monto} USDT\n🆔 ${retId}`);
-  playAdminConfirm();
-  toast('✅ Retiro marcado como procesado','ok');
-  loadAdminWallet();
-}
-
-async function adminRechazarRetiro(retId,email,monto){
-  if(!confirm(`¿Rechazar retiro ${retId} y devolver ${monto} USDT?`)) return;
-  // Devolver saldo
-  const bal=await sbGetWallet(email);
-  await sbUpsertWallet(email,(parseFloat(bal.usdt)||0)+monto,bal.bs||0,bal.usd||0);
-  await sbUpdateWithdraw(retId,'rechazado');
-  await sbAddTransaction(email,'ajuste',monto,`Retiro rechazado — saldo devuelto (${retId})`,{estado:'completado'});
-  tgNotify(`↩️ <b>Retiro rechazado</b>\n📧 ${email}\n💵 ${monto} USDT devueltos\n🆔 ${retId}`);
-  toast('Retiro rechazado y saldo devuelto','ok');
-  loadAdminWallet();
-}
-
-function renderAdminSaldos(wallets){
-  const el=document.getElementById('wad-saldos-list'); if(!el) return;
-  const activos=wallets.filter(w=>parseFloat(w.usdt_balance||0)>0||parseFloat(w.bs_balance||0)>0);
-  if(!activos.length){ el.innerHTML='<div class="empty" style="padding:20px;text-align:center;font-size:12px;color:var(--t2)">Sin wallets activos</div>'; return; }
-  el.innerHTML=activos.map(w=>`
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--brd);gap:8px">
-      <div style="font-size:12px;color:var(--t1);font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${w.email}</div>
-      <div style="display:flex;gap:10px;flex-shrink:0">
-        <span style="font-size:12px;font-weight:700;color:var(--g)">${fmtUsdt(w.usdt_balance)} USDT</span>
-        ${parseFloat(w.bs_balance||0)>0?`<span style="font-size:11px;color:var(--t2)">Bs ${fmtBs(w.bs_balance)}</span>`:''}
-      </div>
-    </div>`).join('');
-}
-
-// ── Gancho en loadAdmin para cargar wallet automáticamente ────
-const _origLoadAdmin = typeof loadAdmin === 'function' ? loadAdmin : null;
-
-// ── Inicializar wallet badge admin en loadAdmin ────────────────
-
-// ══════════════════════════════════════════════════════════════
-//  ⚙️ WALLET CONFIG — guardar, cargar, validar retiros
-// ══════════════════════════════════════════════════════════════
-
-function loadWalletConfigUI(){
-  const c=WALLET_CONFIG;
-  const s=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v;};
-  s('wcfg-espera', c.retiro_espera_min);
-  s('wcfg-min',    c.retiro_min_usdt);
-  s('wcfg-max',    c.retiro_max_usdt);
-  s('wcfg-desde',  c.retiro_horario_desde);
-  s('wcfg-hasta',  c.retiro_horario_hasta);
-  s('wcfg-msg',    c.retiro_mensaje_espera);
-  s('wcfg-res-binance', c.reservas?.binance_usdt||100);
-  s('wcfg-res-paypal',  c.reservas?.paypal_usd||50);
-  s('wcfg-res-zinli',   c.reservas?.zinli_usd||30);
-  s('wcfg-res-zelle',   c.reservas?.zelle_usd||50);
-  s('wcfg-res-pm',      c.reservas?.pago_movil_bs||500);
-  // días
-  const diasWrap=document.getElementById('wcfg-dias');
-  if(diasWrap) diasWrap.querySelectorAll('input[type=checkbox]').forEach(cb=>{
-    cb.checked=(c.retiro_dias||[]).includes(Number(cb.value));
-  });
-}
-
-function saveWalletConfig(){
-  const g=(id)=>{ const e=document.getElementById(id); return e?e.value.trim():''; };
-  const gn=(id,def)=>{ const v=parseFloat(g(id)); return isNaN(v)?def:v; };
-  const diasWrap=document.getElementById('wcfg-dias');
-  const dias=diasWrap?[...diasWrap.querySelectorAll('input:checked')].map(c=>Number(c.value)):[];
-  Object.assign(WALLET_CONFIG,{
-    retiro_espera_min:     gn('wcfg-espera',60),
-    retiro_min_usdt:       gn('wcfg-min',5),
-    retiro_max_usdt:       gn('wcfg-max',500),
-    retiro_horario_desde:  g('wcfg-desde')||'08:00',
-    retiro_horario_hasta:  g('wcfg-hasta')||'19:00',
-    retiro_dias:           dias,
-    retiro_mensaje_espera: g('wcfg-msg')||'Tu retiro está siendo procesado. Tiempo estimado: {min} minutos.',
-    reservas:{
-      binance_usdt:   gn('wcfg-res-binance',100),
-      paypal_usd:     gn('wcfg-res-paypal',50),
-      zinli_usd:      gn('wcfg-res-zinli',30),
-      zelle_usd:      gn('wcfg-res-zelle',50),
-      pago_movil_bs:  gn('wcfg-res-pm',500)
-    }
-  });
-  // Reusar el guardado de tasas (que ya guarda en Supabase)
-  if(typeof saveRates==='function') saveRates();
-  else toast('✅ Config guardada localmente','ok');
-  toast('✅ Configuración wallet guardada','ok');
-  checkReservaAlerts();
-}
-
-// ── Validar si se pueden aceptar retiros ahora ────────────────
-function retiroAbierto(){
-  const c=WALLET_CONFIG;
-  const now=new Date();
-  const dia=now.getDay();
-  if(!(c.retiro_dias||[1,2,3,4,5,6]).includes(dia)) return {ok:false,msg:'Retiros no disponibles hoy. '+horarioDiasStr()};
-  const hhmm=now.getHours()*60+now.getMinutes();
-  const desde=timeToMin(c.retiro_horario_desde||'08:00');
-  const hasta=timeToMin(c.retiro_horario_hasta||'19:00');
-  if(hhmm<desde||hhmm>hasta) return {ok:false,msg:`Retiros disponibles de ${c.retiro_horario_desde} a ${c.retiro_horario_hasta} hora Venezuela.`};
-  return {ok:true};
-}
-
-function timeToMin(hhmm){
-  const[h,m]=(hhmm||'00:00').split(':').map(Number);
-  return h*60+(m||0);
-}
-
-function horarioDiasStr(){
-  const dias=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-  return (WALLET_CONFIG.retiro_dias||[]).map(d=>dias[d]).join(', ');
-}
-
-// ── Tiempo estimado y barra de progreso ────────────────────────
-function getWithdrawETA(createdAt){
-  const minEspera=WALLET_CONFIG.retiro_espera_min||60;
-  const creado=new Date(createdAt).getTime();
-  const eta=creado+(minEspera*60*1000);
-  const ahora=Date.now();
-  const restante=Math.max(0,eta-ahora);
-  const pct=Math.min(100,((minEspera*60*1000-restante)/(minEspera*60*1000))*100);
-  const minRestantes=Math.ceil(restante/60000);
-  return {eta,restante,pct:Math.round(pct),minRestantes,listo:restante===0};
-}
-
-function renderWithdrawProgress(w){
-  const{pct,minRestantes,listo}=getWithdrawETA(w.created_at);
-  const msg=(WALLET_CONFIG.retiro_mensaje_espera||'Procesando en {min} min').replace('{min}',WALLET_CONFIG.retiro_espera_min||60);
-  if(listo) return `<div style="background:rgba(0,232,160,.08);border:1px solid rgba(0,232,160,.2);border-radius:10px;padding:10px 14px;margin-top:6px">
-    <div style="font-size:12px;font-weight:700;color:#00e8a0">✅ Listo para procesar — el admin enviará pronto</div>
-  </div>`;
-  return `<div style="background:rgba(0,170,255,.05);border:1px solid rgba(0,170,255,.12);border-radius:10px;padding:10px 14px;margin-top:6px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-      <div style="font-size:11px;color:rgba(255,255,255,.6)">${msg}</div>
-      <div style="font-size:11px;font-weight:700;color:#0af">${minRestantes} min</div>
-    </div>
-    <div style="background:rgba(255,255,255,.08);border-radius:50px;height:6px;overflow:hidden">
-      <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,#0af,#00e8a0);border-radius:50px;transition:width 1s linear"></div>
-    </div>
-    <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:4px">${pct}% completado</div>
-  </div>`;
-}
-
-// ── Alertas de reserva mínima ─────────────────────────────────
-async function checkReservaAlerts(){
-  if(!isAdm()) return;
-  const deps=await sbGetAllDeposits('acreditado');
-  // Calcular saldo estimado por plataforma (depósitos acreditados - retiros procesados)
-  const wits=await sbGetAllWithdraws('procesado');
-  const platIn={binance:0,paypal:0,zinli:0,zelle:0,pago_movil:0};
-  const platOut={binance:0,paypal:0,zinli:0,zelle:0,pago_movil:0};
-  deps.forEach(d=>{ if(platIn[d.metodo]!==undefined) platIn[d.metodo]+=(parseFloat(d.usdt_acreditado)||0); });
-  wits.forEach(w=>{ if(platOut[w.destino]!==undefined) platOut[w.destino]+=(parseFloat(w.monto_usdt)||0); });
-  const res=WALLET_CONFIG.reservas||{};
-  const alertas=[];
-  if((platIn.binance-platOut.binance)<(res.binance_usdt||100))
-    alertas.push(`⚠️ Binance: saldo bajo (estimado ${fmtUsdt(platIn.binance-platOut.binance)} USDT, mínimo ${res.binance_usdt})`);
-  if((platIn.paypal-platOut.paypal)<(res.paypal_usd||50))
-    alertas.push(`⚠️ PayPal: saldo bajo (estimado ${fmtUsdt(platIn.paypal-platOut.paypal)} USDT)`);
-  if((platIn.zinli-platOut.zinli)<(res.zinli_usd||30))
-    alertas.push(`⚠️ Zinli: saldo bajo`);
-  const el=document.getElementById('wad-reserva-alerts');
-  if(el){
-    if(alertas.length){
-      el.innerHTML=alertas.map(a=>`<div style="padding:7px 12px;font-size:12px;color:var(--yellow);border-bottom:1px solid rgba(240,185,11,.1)">${a}</div>`).join('');
-      el.style.display='block';
-    } else {
-      el.innerHTML='<div style="padding:8px 14px;font-size:12px;color:var(--g)">✅ Todas las reservas en niveles aceptables</div>';
-      el.style.display='block';
-    }
-  }
-}
-
-
-
-
-
 let _ac;
 function ac(){if(!_ac)_ac=new(window.AudioContext||window.webkitAudioContext)();return _ac}
 function pn(f,t,d,tp,v){try{const o=ac().createOscillator(),g=ac().createGain();o.connect(g);g.connect(ac().destination);o.type=tp||'sine';o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v||.12,t+.04);g.gain.exponentialRampToValueAtTime(.001,t+d);o.start(t);o.stop(t+d+.06)}catch{}}
 function playIntro(){try{const t=ac().currentTime,m=ac().createGain();m.connect(ac().destination);m.gain.setValueAtTime(.5,t);m.gain.linearRampToValueAtTime(0,t+3.5);[[261.6,0,.35],[329.6,.22,.35],[392,.44,.35],[523,.68,.5],[659,.94,.45],[784,1.22,.5]].forEach(([f,d,r])=>pn(f,t+d,r,'sine',.14));[[1046.5,1.6,.8],[1318.5,1.75,.7],[1567.98,1.9,.7]].forEach(([f,d,r])=>pn(f,t+d,r,'triangle',.09));pn(130.8,2.2,.12,'square',.06);pn(261.6,2.32,.08,'square',.04);[[2093,2.55,.5],[2637,2.65,.5],[3136,2.75,.6]].forEach(([f,d,r])=>pn(f,t+d,r,'triangle',.06));const dl=ac().createDelay(.15);const dg=ac().createGain();dg.gain.value=.12;m.connect(dl);dl.connect(dg);dg.connect(ac().destination);if(navigator.vibrate)navigator.vibrate([80,40,120])}catch{}}
 function playSuccess(){try{const t=ac().currentTime;[[523,.0,.12],[659,.12,.12],[784,.24,.12],[1047,.38,.5]].forEach(([f,d,r])=>pn(f,t+d,r,'triangle',.18));[1047,1319,1568].forEach((f,i)=>pn(f,t+.62+i*.05,.6,'sine',.08));if(navigator.vibrate)navigator.vibrate([100,50,150])}catch{}}
-/* 🔔 Sonido admin: confirma pago — estilo caja registradora */
-function playAdminConfirm(){try{const t=ac().currentTime;pn(880,t,.06,'square',.09);pn(1100,t+.07,.06,'square',.09);pn(1320,t+.14,.08,'sine',.12);pn(1760,t+.22,.15,'sine',.15);pn(2200,t+.37,.25,'triangle',.12);pn(2637,t+.5,.4,'sine',.10);if(navigator.vibrate)navigator.vibrate([60,30,80,30,120])}catch{}}
-/* 💸 Sonido usuario: operación completada — estilo Apolo Pay cashout */
-function playUserComplete(){try{const t=ac().currentTime;[[392,.0,.08],[523,.10,.08],[659,.20,.08],[784,.30,.08],[1047,.42,.6]].forEach(([f,d,r])=>pn(f,t+d,r,'sine',.20));[1047,1319,1568,2093].forEach((f,i)=>pn(f,t+.7+i*.06,.55,'triangle',.10));if(navigator.vibrate)navigator.vibrate([50,30,70,30,100,30,200])}catch{}}
 
 function showPage(id){document.querySelectorAll('.page').forEach(p=>{p.classList.remove('on');p.style.display='';});const el=document.getElementById(id);el.classList.add('on');window.scrollTo(0,0)}
 function showStaticPage(name){
@@ -3542,12 +2372,7 @@ async function doLogin(){
   try{
     const user=await sbGetUser(email);
     if(!user){err.textContent='Correo no registrado.';err.classList.add('on');return}
-    const passHash = await _h256(pass);
-    if(user.pw!==passHash && user.pw!==btoa(unescape(encodeURIComponent(pass)))){err.textContent='Contraseña incorrecta.';err.classList.add('on');return}
-    // migrar contraseña antigua a SHA-256 si todavía estaba en btoa
-    if(user.pw===btoa(unescape(encodeURIComponent(pass))) && user.pw!==passHash){
-      await db.from('clientes').update({pw_hash:passHash}).eq('email',email.toLowerCase());
-    }
+    if(user.pw!==btoa(unescape(encodeURIComponent(pass)))){err.textContent='Contraseña incorrecta.';err.classList.add('on');return}
     user.hist=await sbGetOps(email);
     sS({email,...user});
     await logAct('login',{email,name:user.name,date:tnowISO()});
@@ -3614,7 +2439,7 @@ async function doVerifyCode(){
     const ud={
       nombre:d.nombre,apellido:d.apellido,name:d.nombre+' '+d.apellido,
       cedula:d.cedula,email:d.email,tel:d.tel,code,
-      pw:await _h256(d.pass),
+      pw:btoa(unescape(encodeURIComponent(d.pass))),
       pagoMovil:{banco:d.banco,tel:d.pmTel,cedula:d.pmCi},
       cuentas:{correo:d.cDiv,binanceId:d.bid,usdtWallet:d.usdtWallet||''},
       joined:new Date().toLocaleDateString('es-VE'),created:tnowISO(),hist:[]
@@ -3688,7 +2513,6 @@ function showDV(name){
   if(name!=='trade')loadDash();
   if(name==='newop'){setTimeout(()=>{calcOp();updWallet();},100)}
   if(name==='referidos'){setTimeout(()=>loadReferidos(),150)}
-  if(name==='wallet'){setTimeout(()=>loadWallet(),100)}
   nsSet('lsc_lv',name); window.scrollTo(0,0);
 }
 
@@ -4166,8 +2990,7 @@ async function clientConfirm(){
   }
   const cs=document.getElementById('compSub'); if(cs&&op&&op.get)cs.textContent='Recibirás: '+op.get;
   document.getElementById('comp-ov').classList.add('on');
-  playUserComplete();
-  if(typeof startConfetti==='function')startConfetti();
+  playSuccess();
 }
 
 function dispute(){
@@ -4186,7 +3009,6 @@ function showAV(name){
   nsSet('lsc_av',name); window.scrollTo(0,0);
   if(name==='activity'){loadAct();return}
   if(name==='referidos'){loadAdminReferidos();return}
-  if(name==='wallet'){loadAdminWallet();return}
   loadAdmin();
 }
 
@@ -4361,9 +3183,6 @@ async function admConfirm(){
   await sbSendMsg(aCur.opId,{from:'sys',text:'🟢 LS Cambios verificó y confirmó tu pago — ya puedes completar la operación.',time:tnow()});
   await sbSendMsg(aCur.opId,{from:'admin',text:'✅ Todo en orden. Pulsa "Pago recibido — Completar" para finalizar.',time:tnow()});
   document.getElementById('a-chat-bdg').innerHTML=stBdg('confirmed');
-  playAdminConfirm();
-  // Flash verde admin
-  const fl=document.createElement('div');fl.style.cssText='position:fixed;inset:0;background:rgba(0,232,160,.12);z-index:9999;pointer-events:none;animation:flashFade .6s ease forwards';document.body.appendChild(fl);setTimeout(()=>fl.remove(),700);
   loadAdmin(); toast('✅ Pago confirmado. El cliente puede completar.','ok');
 }
 
@@ -4374,7 +3193,6 @@ async function admClose(){
   await sbSendMsg(aCur.opId,{from:'sys',text:'🔒 Transacción finalizada por LS Cambios.',time:tnow()});
   const ab=document.getElementById('a-acts'); if(ab)ab.style.display='none';
   document.getElementById('a-chat-bdg').innerHTML=stBdg('completed');
-  playSuccess();
   loadAdmin(); toast('🔒 Transacción finalizada','ok');
 }
 
