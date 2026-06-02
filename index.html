@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="light">
 <head>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -13,16 +13,16 @@ document.addEventListener('DOMContentLoaded',function(){
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#080c12">
+<meta name="theme-color" content="#eef2f8">
 <title>LS Cambios — Tu dinero a tu destino</title>
-<meta name="description" content="Casa de cambio digital. PayPal, Binance, Zinli, Airtm, Wally a Bolívares.">
+<meta name="description" content="Tu neobanco digital venezolano. Deposita en Pago Móvil y cambia a PayPal, Binance, Zinli, Airtm, Wally al instante.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="LS Cambios — Tu dinero a tu destino">
-<meta property="og:description" content="Casa de cambio digital. PayPal, Binance, Zinli, Airtm, Wally a Bolívares.">
+<meta property="og:title" content="LS Cambios — Tu dinero, tu destino">
+<meta property="og:description" content="Tu neobanco digital venezolano. Deposita en Pago Móvil y cambia a PayPal, Binance, Zinli, Airtm, Wally al instante.">
 <meta property="og:site_name" content="LS Cambios">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LS Cambios — Tu dinero a tu destino">
-<meta name="twitter:description" content="Casa de cambio digital. PayPal, Binance, Zinli, Airtm, Wally a Bolívares.">
+<meta name="twitter:title" content="LS Cambios — Tu dinero, tu destino">
+<meta name="twitter:description" content="Tu neobanco digital venezolano. Deposita en Pago Móvil y cambia a PayPal, Binance, Zinli, Airtm, Wally al instante.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -128,6 +128,130 @@ document.addEventListener('DOMContentLoaded',function(){
 .light .trade-tab{color:#1a4a8a;border-color:var(--brd2)}
 .light .trade-tab.on{background:var(--bg3);color:#0a1628}
 .light .compliance-card{background:rgba(26,108,255,.04)}
+
+/* ══════════════════════════════════════════════════
+   PLATAFORMA ENHANCEMENTS — LS Cambios
+   ══════════════════════════════════════════════════ */
+
+/* Light mode overrides for neobanco feel */
+.light .hero-h1{
+  color:#0a1628 !important;
+  text-shadow:0 1px 3px rgba(26,108,255,.06);
+}
+.light .hero-h1 span{
+  background:linear-gradient(135deg,#1a6cff,#00c896);
+  background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.light .hero-sub{color:#2a4a7a !important}
+.light .hero::before{
+  background:radial-gradient(ellipse at top,rgba(26,108,255,.1) 0%,rgba(0,200,150,.06) 40%,transparent 65%) !important;
+}
+.light .hero{background:linear-gradient(175deg,#f0f5fd 0%,#eef2f8 100%)}
+
+/* Neobanco deposit badge */
+.neo-pagomovil-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,rgba(26,108,255,.1),rgba(0,200,150,.08));
+  border:1px solid rgba(26,108,255,.2);border-radius:20px;
+  padding:6px 14px;font-size:11px;font-weight:700;letter-spacing:.8px;
+  color:#1a4a8a;margin-bottom:16px;
+}
+.light .neo-pagomovil-badge{color:#1a4a8a;border-color:rgba(26,108,255,.25)}
+:not(.light) .neo-pagomovil-badge{color:var(--g);border-color:rgba(0,200,150,.2);background:rgba(0,200,150,.05)}
+
+/* How section neobanco cards */
+.light .how-step{
+  background:var(--bg1) !important;
+  border:1px solid var(--brd2) !important;
+  box-shadow:0 2px 12px rgba(26,108,255,.06) !important;
+}
+.light .how-n{
+  background:linear-gradient(135deg,#1a6cff,#00c896) !important;
+  color:#fff !important;
+}
+.light .how-t{color:#0a1628 !important}
+.light .how-d{color:#2a4a7a !important}
+
+/* Neobanco platform pills */
+.plat-pills{
+  display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;justify-content:center;
+}
+.plat-pill{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 14px;border-radius:20px;
+  font-size:11px;font-weight:700;letter-spacing:.3px;
+  border:1px solid;cursor:default;
+  transition:transform .15s;
+}
+.plat-pill:hover{transform:translateY(-1px)}
+.plat-pill.paypal{background:rgba(0,48,135,.08);border-color:rgba(0,48,135,.2);color:#003087}
+.plat-pill.zinli{background:rgba(0,200,100,.08);border-color:rgba(0,200,100,.2);color:#007a40}
+.plat-pill.wally{background:rgba(100,50,200,.08);border-color:rgba(100,50,200,.2);color:#6432c8}
+.plat-pill.airtm{background:rgba(255,100,0,.08);border-color:rgba(255,100,0,.2);color:#cc4400}
+.plat-pill.binance{background:rgba(240,185,11,.08);border-color:rgba(240,185,11,.3);color:#8a6500}
+
+:not(.light) .plat-pill.paypal{color:#7aa8ff;border-color:rgba(122,168,255,.25);background:rgba(122,168,255,.06)}
+:not(.light) .plat-pill.zinli{color:#00e08a;border-color:rgba(0,224,138,.2);background:rgba(0,224,138,.05)}
+:not(.light) .plat-pill.wally{color:#a882ff;border-color:rgba(168,130,255,.2);background:rgba(168,130,255,.05)}
+:not(.light) .plat-pill.airtm{color:#ff9a5c;border-color:rgba(255,154,92,.2);background:rgba(255,154,92,.05)}
+:not(.light) .plat-pill.binance{color:#f0b90b;border-color:rgba(240,185,11,.2);background:rgba(240,185,11,.04)}
+
+/* Nav neobanco chip */
+.neo-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  background:linear-gradient(135deg,rgba(26,108,255,.12),rgba(0,200,150,.08));
+  border:1px solid rgba(26,108,255,.2);border-radius:4px;
+  padding:2px 8px;font-size:9px;font-weight:800;letter-spacing:1px;
+  color:#1a6cff;vertical-align:middle;margin-left:4px;
+}
+:not(.light) .neo-chip{
+  color:var(--g);background:rgba(0,200,150,.08);border-color:rgba(0,200,150,.2);
+}
+
+/* Pago Movil deposit highlight */
+.light .pagomovil-box{
+  background:linear-gradient(135deg,rgba(26,108,255,.06),rgba(0,200,150,.04));
+  border:1px solid rgba(26,108,255,.18);
+  border-radius:12px;padding:16px;
+}
+:not(.light) .pagomovil-box{
+  background:rgba(0,200,150,.04);
+  border:1px solid rgba(0,200,150,.14);
+  border-radius:12px;padding:16px;
+}
+
+/* Neobanco stats bar */
+.neo-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:12px;margin:24px 0;
+}
+.neo-stat{
+  text-align:center;padding:16px 8px;
+  background:var(--bg1);border:1px solid var(--brd2);border-radius:var(--r2);
+}
+.light .neo-stat{box-shadow:0 2px 8px rgba(26,108,255,.05)}
+.neo-stat-val{font-size:22px;font-weight:900;color:var(--g);font-family:var(--mono);line-height:1}
+.neo-stat-lbl{font-size:9px;color:var(--t2);letter-spacing:.8px;margin-top:4px;font-weight:600}
+.light .neo-stat-val{background:linear-gradient(135deg,#1a6cff,#00c896);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* Enhanced card in light mode */
+.light .ui-card{
+  background:var(--bg1);
+  border:1px solid var(--brd2);
+  box-shadow:0 2px 12px rgba(26,108,255,.06);
+}
+.light .ui-card *:not(span[style]):not(div[style]):not(p.ui-body){color:inherit}
+.light .ui-card p.ui-body{color:#2a4a7a}
+
+
+/* ═══ NEOBANCO WALLET STYLES ═══ */
+.wallet-card{background:var(--bg1);border:1px solid var(--brd2);border-radius:var(--r2);padding:16px;text-align:center}
+.wallet-bal{font-size:22px;font-weight:900;font-family:var(--mono);line-height:1.1}
+.wallet-unit{font-size:9px;color:var(--t3);letter-spacing:.8px;font-weight:700;margin-top:2px}
+.dep-method-card{cursor:pointer;transition:.15s}
+.dep-method-card:hover{transform:translateY(-2px)}
+.light .dep-method-card:hover{box-shadow:0 4px 16px rgba(26,108,255,.1)}
+
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-scroll-behavior:smooth;scroll-behavior:smooth;height:100%}
 body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh;min-height:100dvh;overflow-x:hidden;overscroll-behavior:none;-webkit-overflow-scrolling:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
@@ -783,10 +907,10 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
   <nav class="nav">
     <div class="nav-brand" onclick="goL()">
       <div class="nav-brand-img"><img class="logo-img" src="" alt="LS"></div>
-      <div class="nav-brand-name">LS CAMBIOS</div>
+      <div class="nav-brand-name">LS CAMBIOS <span class="neo-chip">BETA</span></div>
     </div>
     <div class="nav-actions" id="navActs">
-      <button id="theme-btn" onclick="toggleTheme()" title="Cambiar tema" style="background:var(--bg3);border:1px solid var(--brd2);border-radius:6px;padding:7px 10px;font-size:15px;cursor:pointer;transition:.2s;line-height:1">🌙</button>
+      <button id="theme-btn" onclick="toggleTheme()" title="Cambiar tema" style="background:var(--bg3);border:1px solid var(--brd2);border-radius:6px;padding:7px 10px;font-size:15px;cursor:pointer;transition:.2s;line-height:1">☀️</button>
       <button class="nav-btn nav-btn-ghost" onclick="openAuth('login')">Entrar</button>
       <button class="nav-btn nav-btn-solid" onclick="openAuth('register')">Crear cuenta</button>
     </div>
@@ -794,13 +918,43 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 
   <div class="hero">
     <div class="hero-logo"><img class="logo-img" src="" alt="LS Cambios"></div>
-    <div class="live-chip"><div class="live-dot"></div><span>TASAS EN VIVO</span></div>
+    <div class="neo-pagomovil-badge">📲 DEPOSITA: Pago Móvil o Binance Pay · RETIRA: PayPal, Zinli, Wally, Airtm</div>
+    <div class="live-chip" style="margin-bottom:6px"><div class="live-dot"></div><span>TASAS EN VIVO</span></div>
     <div id="horario-chip-lp"></div>
-    <h1 class="hero-h1">Tu dinero a<br><span>tu destino</span></h1>
-    <p class="hero-sub">Casa de cambio P2P. PayPal, Binance, Zinli, Airtm, Wally → Bolívares.</p>
+    <h1 class="hero-h1">Tu neobanco<br><span>venezolano</span></h1>
+    <p class="hero-sub">Deposita en Bolívares vía <strong>Pago Móvil</strong> o en USDT vía <strong>Binance Pay</strong> y recibe en la plataforma que elijas.</p>
+    <div class="plat-pills">
+      <span class="plat-pill" style="background:rgba(207,20,43,.08);border-color:rgba(207,20,43,.25);color:#cf142b;font-weight:800">📲 Pago Móvil</span>
+      <span class="plat-pill binance" style="font-weight:800">💛 Binance Pay</span>
+    </div>
+    <div style="font-size:10px;color:var(--t2);letter-spacing:.5px;margin-bottom:8px;font-weight:600">DEPÓSITO • RETIRA EN:</div>
+    <div class="plat-pills" style="margin:0">
+      <span class="plat-pill paypal">💙 PayPal</span>
+      <span class="plat-pill zinli">💚 Zinli</span>
+      <span class="plat-pill wally">💜 Wally</span>
+      <span class="plat-pill airtm">🧡 Airtm</span>
+    </div>
     <div class="hero-btns">
-      <button class="btn-main solid" onclick="openAuth('register')">Comenzar →</button>
+      <button class="btn-main solid" onclick="openAuth('register')">Abrir cuenta gratis →</button>
       <a href="#rates" class="btn-main outline">Ver tasas</a>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div style="max-width:800px;margin:0 auto;width:100%;padding:0 24px 8px">
+    <div class="neo-stats">
+      <div class="neo-stat">
+        <div class="neo-stat-val">+2.4K</div>
+        <div class="neo-stat-lbl">USUARIOS</div>
+      </div>
+      <div class="neo-stat">
+        <div class="neo-stat-val">~18min</div>
+        <div class="neo-stat-lbl">TIEMPO PROMEDIO</div>
+      </div>
+      <div class="neo-stat">
+        <div class="neo-stat-val">5</div>
+        <div class="neo-stat-lbl">PLATAFORMAS</div>
+      </div>
     </div>
   </div>
 
@@ -871,18 +1025,18 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
     <div class="ui-mb32">
       <div class="live-chip ui-mb18"><div class="live-dot"></div><span>NUESTRA HISTORIA</span></div>
       <h1 style="font-size:clamp(28px,5vw,48px);font-weight:800;line-height:1.1;color:#fff;letter-spacing:-1px;margin-bottom:14px">Quiénes <span style="background:var(--gd);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent">Somos</span></h1>
-      <p style="font-size:15px;color:var(--t2);line-height:1.75;font-weight:300">LS Cambios es una casa de cambio digital venezolana dedicada a facilitar el intercambio seguro y rápido de divisas digitales a bolívares y viceversa.</p>
+      <p style="font-size:15px;color:var(--t2);line-height:1.75;font-weight:300">LS Cambios es el neobanco digital venezolano que te permite depositar en Pago Móvil y cambiar tu dinero a las plataformas digitales que necesitas: PayPal, Binance, Zinli, Airtm, Wally y más.</p>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:32px">
       <div class="ui-card">
         <div style="font-size:28px;margin-bottom:10px">🎯</div>
         <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px">Nuestra Misión</div>
-        <p class="ui-body">Ofrecer un servicio de cambio de divisas confiable, transparente y accesible para todos los venezolanos, facilitando el acceso a plataformas digitales internacionales con tasas competitivas y atención personalizada.</p>
+        <p class="ui-body">Ser el neobanco de referencia en Venezuela, facilitando a cada venezolano el acceso a divisas y plataformas digitales internacionales mediante Pago Móvil, con tasas competitivas y atención personalizada.</p>
       </div>
       <div class="ui-card">
         <div style="font-size:28px;margin-bottom:10px">👁️</div>
         <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px">Nuestra Visión</div>
-        <p class="ui-body">Ser la casa de cambio digital de mayor confianza en Venezuela, reconocida por nuestra rapidez, transparencia y compromiso con el cliente en cada operación.</p>
+        <p class="ui-body">Liderar la digitalización financiera venezolana, siendo el neobanco más confiable y accesible para convertir bolívares en divisas digitales y viceversa.</p>
       </div>
     </div>
     <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:24px;margin-bottom:24px">
@@ -891,7 +1045,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Tasas competitivas en tiempo real</div><div class="ui-fn-sm">Actualizamos nuestras tasas constantemente para ofrecerte el mejor precio del mercado.</div></div></div>
         <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Procesamiento en minutos</div><div class="ui-fn-sm">La mayoría de las operaciones se completan en menos de 30 minutos durante el horario de atención.</div></div></div>
         <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Soporte personalizado vía WhatsApp</div><div class="ui-fn-sm">Nuestro equipo está disponible para resolver cualquier duda antes, durante y después de tu operación.</div></div></div>
-        <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Múltiples plataformas</div><div class="ui-fn-sm">Operamos con PayPal, Binance, Zinli, Airtm, Wally y USDC para tu comodidad.</div></div></div>
+        <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Múltiples plataformas</div><div class="ui-fn-sm">Operamos con PayPal, Binance, Zinli, Airtm, Wally y USDT BEP20 para tu comodidad.</div></div></div>
       </div>
     </div>
     <div style="text-align:center;padding:24px;background:rgba(0,200,150,.05);border:1px solid rgba(0,200,150,.15);border-radius:var(--r2)">
@@ -991,7 +1145,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       </div>
       <div class="ui-card">
         <div class="ui-title-g">2. Descripción del servicio</div>
-        <p class="ui-body">LS Cambios es una plataforma P2P de intercambio de divisas digitales que facilita operaciones de compra y venta entre PayPal, Binance/USDT, Zinli, Airtm, Wally y USDC, con liquidación en bolívares venezolanos (Bs). Actuamos como intermediarios facilitando la transacción.</p>
+        <p class="ui-body">LS Cambios es un neobanco digital venezolano que facilita el depósito en Pago Móvil y la conversión a plataformas digitales: PayPal, Binance/USDT, Zinli, Airtm, Wally y USDT, con liquidación en bolívares venezolanos (Bs). Actuamos como intermediarios en cada transacción.</p>
       </div>
       <div class="ui-card">
         <div class="ui-title-g">3. Registro y cuenta de usuario</div>
@@ -1153,7 +1307,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
     </div>
     <div style="display:flex;gap:8px;align-items:center">
       <div id="horario-chip" style="cursor:default"></div>
-      <a href="https://wa.me/584147408768" target="_blank" class="btn ghost sm">💬 Soporte</a>
+      <a href="https://wa.me/584147408768" target="_blank" class="btn ghost sm" style="text-decoration:none">💬 Soporte</a>
       <div class="dp-user" onclick="showDV('profile')">
         <div class="dp-av" id="dpAv">U</div>
         <span class="dp-name" id="dpNm">—</span>
@@ -1164,8 +1318,14 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
   <div class="dp-body">
     <aside class="dp-sb">
       <div class="sb-sec">MENÚ</div>
-      <button class="sb-i on" id="si-newop" onclick="showDV('newop')">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Nueva operación
+      <button class="sb-i on" id="si-wallet" onclick="showDV('wallet')">
+        <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12h2"/><path d="M2 10h20"/></svg>Mi Billetera
+      </button>
+      <button class="sb-i" id="si-deposit" onclick="showDV('deposit')">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>Depositar
+      </button>
+      <button class="sb-i" id="si-withdraw" onclick="showDV('withdraw')">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>Retirar
       </button>
       <button class="sb-i" id="si-history" onclick="showDV('history')">
         <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Historial
@@ -1187,7 +1347,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       
       <div class="dv" id="dv-overview">
         <div class="dv-h" id="dpGreet">Hola 👋</div>
-        <div class="dv-s">Bienvenido a LS Cambios</div>
+        <div class="dv-s">Tu neobanco venezolano · Deposita y retira cuando quieras</div>
         
         <div class="ui-hidden">
           <span id="ov-tot"></span><span id="ov-pend"></span><span id="ov-done"></span>
@@ -1204,51 +1364,208 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
           <div class="rate-grid" id="ovSell" style="display:none;flex-direction:column"></div>
         </div>
         
-        <button class="btn g full" style="font-size:15px;padding:14px;margin-bottom:8px" onclick="showDV('newop')">⚡ Nueva operación</button>
-      </div>
-      
-      <div class="dv on" id="dv-newop">
-        <div class="dv-h">Nueva operación ⚡</div><div class="dv-s">Calculadora con tasas exactas.</div>
-        <div class="op-form">
-          <div class="fg">
-            <label>MODO DE CAMBIO</label>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-              <button id="mode-bs" onclick="setMode('bs')" style="padding:11px 6px;border-radius:8px;border:1.5px solid var(--g);background:var(--g);color:#000;font-size:12px;font-weight:800;cursor:pointer">💵 Bolívares</button>
-              <button id="mode-usdt" onclick="setMode('usdt')" style="padding:11px 6px;border-radius:8px;border:1.5px solid var(--brd2);background:transparent;color:var(--t2);font-size:12px;font-weight:800;cursor:pointer">🪙 USDT BEP20</button>
-            </div>
-          </div>
-          <div class="fg"><label>OPERACIÓN</label>
-            <select class="fsel" id="op-dir" onchange="calcOp();updWallet();swapPlats()">
-              <option value="compra">Vendo divisas → recibo Bolívares</option>
-              <option value="venta">Compro divisas → envío Bolívares</option>
-            </select>
-          </div>
-          <div class="fg" id="plat-bs-wrap"><label>PLATAFORMA</label>
-            <select class="fsel" id="op-plat" onchange="calcOp();updWallet()">
-              <option value="binance">Binance</option><option value="paypal">PayPal</option>
-              <option value="zinli">Zinli</option><option value="wally">Wally</option>
-              <option value="airtm">Airtm</option><option value="usdc">USDC</option>
-            </select>
-          </div>
-          <div class="fg" id="plat-usdt-wrap" style="display:none"><label>PLATAFORMA</label>
-            <select class="fsel" id="op-plat-usdt" onchange="calcOp();updWallet()">
-              <option value="paypal">PayPal</option><option value="zinli">Zinli</option>
-              <option value="wally">Wally</option><option value="airtm">Airtm</option>
-              <option value="binance">Binance</option>
-            </select>
-          </div>
-          <div class="fg"><label id="op-amt-lbl">MONTO A ENVIAR (USD)</label>
-            <input class="fi" type="number" id="op-amt" value="100" min="1" oninput="calcOp()">
-          </div>
-          <div class="res-box"><div class="res-lbl" id="op-res-lbl">RECIBIRÍAS</div><div class="res-val" id="op-res-val">—</div><div class="res-det" id="op-res-det"></div></div>
-          <div class="wall-box ui-hidden" id="wall-box"><div style="font-size:9px;color:var(--g);letter-spacing:.8px;font-weight:700;margin-bottom:8px">📲 ENVÍA TU PAGO A LS CAMBIOS</div><div id="wall-cnt"></div></div>
-          <button class="btn g full" onclick="startOp()" style="font-size:14px;padding:13px">Confirmar operación →</button>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px">
+          <button class="btn g full" style="font-size:13px;padding:13px" onclick="showDV('deposit')">⬇️ Depositar</button>
+          <button class="btn ghost full" style="font-size:13px;padding:13px" onclick="showDV('withdraw')">⬆️ Retirar</button>
         </div>
       </div>
       
+      <!-- ══ BILLETERA ══ -->
+      <div class="dv on" id="dv-wallet">
+        <div class="dv-h">Mi Billetera 💳</div>
+        <div class="dv-s">Saldo disponible en tu cuenta LS Cambios</div>
+
+        <!-- Saldo en 3 monedas -->
+        <div id="wallet-balances" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px"></div>
+
+        <!-- Acciones rápidas -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+          <button class="btn g full" onclick="showDV('deposit')" style="padding:14px;font-size:13px">
+            ⬇️ Depositar
+          </button>
+          <button class="btn ghost full" onclick="showDV('withdraw')" style="padding:14px;font-size:13px">
+            ⬆️ Retirar
+          </button>
+        </div>
+
+        <!-- Tiempos estimados -->
+        <div style="background:var(--bg2);border:1px solid var(--brd2);border-radius:var(--r2);padding:14px;margin-bottom:16px">
+          <div style="font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--g);margin-bottom:10px">⏱ TIEMPOS ESTIMADOS</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:12px;color:var(--t2)">⬇️ Depósito (acreditación)</span>
+              <span style="font-size:12px;font-weight:700;color:var(--g)">~5 minutos</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:12px;color:var(--t2)">⬆️ Retiro (procesamiento)</span>
+              <span style="font-size:12px;font-weight:700;color:var(--yellow)">30 min – 2 horas</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Últimas transacciones -->
+        <div class="dv-h" style="font-size:15px;margin-bottom:8px">Últimas transacciones</div>
+        <div id="wallet-txns"></div>
+
+        <!-- Soporte -->
+        <a href="https://wa.me/584147408768" target="_blank" class="btn ghost full" style="margin-top:16px;text-decoration:none;display:block;text-align:center">
+          💬 Soporte por WhatsApp
+        </a>
+      </div>
+
+      <!-- ══ DEPOSITAR ══ -->
+      <div class="dv" id="dv-deposit">
+        <div class="dv-h">Depositar ⬇️</div>
+        <div class="dv-s">Elige cómo enviar tu dinero a LS Cambios</div>
+
+        <!-- Métodos de depósito -->
+        <div style="display:grid;gap:12px;margin-bottom:20px">
+
+          <!-- Pago Móvil -->
+          <div class="card" style="cursor:pointer" onclick="startDeposit('pagomovil')">
+            <div class="card-hdr" style="background:rgba(207,20,43,.05);border-color:rgba(207,20,43,.2)">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div id="dep-ico-pm" style="width:36px;height:36px;flex-shrink:0"></div>
+                <div>
+                  <div style="font-weight:800;font-size:13px">Pago Móvil</div>
+                  <div style="font-size:11px;color:var(--t2)">Bolívares (Bs) · Bancos venezolanos</div>
+                </div>
+                <div style="margin-left:auto;font-size:20px">→</div>
+              </div>
+            </div>
+            <div style="padding:12px 16px;font-size:12px;color:var(--t2)">
+              Envía bolívares desde cualquier banco venezolano.<br>
+              <strong style="color:var(--g)">⏱ Acreditación ~5 minutos</strong>
+            </div>
+          </div>
+
+          <!-- Binance Pay -->
+          <div class="card" style="cursor:pointer" onclick="startDeposit('binance')">
+            <div class="card-hdr" style="background:rgba(240,185,11,.05);border-color:rgba(240,185,11,.2)">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div id="dep-ico-bnb" style="width:36px;height:36px;flex-shrink:0"></div>
+                <div>
+                  <div style="font-weight:800;font-size:13px">Binance Pay</div>
+                  <div style="font-size:11px;color:var(--t2)">USDT · Red Binance Pay</div>
+                </div>
+                <div style="margin-left:auto;font-size:20px">→</div>
+              </div>
+            </div>
+            <div style="padding:12px 16px;font-size:12px;color:var(--t2)">
+              Envía USDT desde tu cuenta Binance.<br>
+              <strong style="color:var(--g)">⏱ Acreditación ~5 minutos</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form de depósito -->
+        <div id="deposit-form-wrap" style="display:none">
+          <div class="card" id="deposit-form-card">
+            <div class="card-hdr"><span class="card-title" id="dep-form-title">Depositar</span></div>
+            <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+              <div class="fg">
+                <label>MONTO A DEPOSITAR</label>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <input class="fi" type="number" id="dep-amount" placeholder="0.00" min="1" oninput="calcDeposit()" style="flex:1">
+                  <span id="dep-currency" style="font-size:13px;font-weight:700;color:var(--g);width:50px;text-align:right">Bs</span>
+                </div>
+              </div>
+              <div id="dep-info-box" style="background:var(--bg2);border:1px solid var(--brd2);border-radius:var(--r);padding:12px;display:none">
+                <div style="font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--g);margin-bottom:8px" id="dep-info-title">📲 DATOS PARA EL DEPÓSITO</div>
+                <div id="dep-info-body"></div>
+              </div>
+              <div id="dep-preview" style="display:none">
+                <div class="res-box">
+                  <div class="res-lbl">SE ACREDITARÁ EN TU CUENTA</div>
+                  <div class="res-val" id="dep-result-val">—</div>
+                  <div class="res-det" id="dep-result-det"></div>
+                </div>
+              </div>
+              <button class="btn g full" id="dep-confirm-btn" onclick="confirmDeposit()" style="padding:13px;font-size:14px" disabled>
+                Iniciar depósito →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn ghost full" onclick="showDV('wallet')" style="margin-top:12px">← Volver a billetera</button>
+      </div>
+
+      <!-- ══ RETIRAR ══ -->
+      <div class="dv" id="dv-withdraw">
+        <div class="dv-h">Retirar ⬆️</div>
+        <div class="dv-s">Envía tu dinero a la plataforma que elijas</div>
+
+        <!-- Saldo disponible resumen -->
+        <div id="withdraw-balances" style="margin-bottom:16px"></div>
+
+        <!-- Form de retiro -->
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">Nueva solicitud de retiro</span></div>
+          <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+
+            <div class="fg">
+              <label>MONEDA DE ORIGEN (tu saldo)</label>
+              <select class="fsel" id="wd-from" onchange="calcWithdraw()">
+                <option value="usd">USD (Dólares)</option>
+                <option value="usdt">USDT</option>
+                <option value="bs">Bolívares (Bs)</option>
+              </select>
+            </div>
+
+            <div class="fg">
+              <label>PLATAFORMA DE RETIRO</label>
+              <select class="fsel" id="wd-plat" onchange="calcWithdraw()">
+                <option value="paypal">PayPal</option>
+                <option value="zinli">Zinli</option>
+                <option value="wally">WallyTech</option>
+                <option value="airtm">Airtm</option>
+                <option value="binance">Binance</option>
+                <option value="pagomovil">Pago Móvil (Bs)</option>
+              </select>
+            </div>
+
+            <div class="fg">
+              <label id="wd-amt-lbl">MONTO A RETIRAR (USD)</label>
+              <input class="fi" type="number" id="wd-amount" placeholder="0.00" min="1" oninput="calcWithdraw()">
+            </div>
+
+            <div id="wd-preview" style="display:none">
+              <div class="res-box">
+                <div class="res-lbl">RECIBIRÁS EN <span id="wd-plat-name">PayPal</span></div>
+                <div class="res-val" id="wd-result-val">—</div>
+                <div class="res-det" id="wd-result-det"></div>
+              </div>
+            </div>
+
+            <div style="background:rgba(245,184,0,.06);border:1px solid rgba(245,184,0,.18);border-radius:var(--r);padding:10px;font-size:11px;color:var(--yellow)">
+              ⏱ <strong>Tiempo estimado de retiro:</strong> 30 minutos a 2 horas
+            </div>
+
+            <div id="wd-dest-info" style="background:var(--bg2);border:1px solid var(--brd2);border-radius:var(--r);padding:12px;display:none">
+              <div style="font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--t2);margin-bottom:6px">📋 TU CUENTA REGISTRADA</div>
+              <div id="wd-dest-body"></div>
+            </div>
+
+            <button class="btn g full" id="wd-confirm-btn" onclick="confirmWithdraw()" style="padding:13px;font-size:14px" disabled>
+              Solicitar retiro →
+            </button>
+          </div>
+        </div>
+
+        <!-- Soporte -->
+        <a href="https://wa.me/584147408768" target="_blank" class="btn ghost full" style="margin-top:12px;text-decoration:none;display:block;text-align:center">
+          💬 Soporte por WhatsApp
+        </a>
+
+        <button class="btn ghost full" onclick="showDV('wallet')" style="margin-top:8px">← Volver a billetera</button>
+      </div>
+
+      <!-- ══ OPERACIÓN EN CURSO (para depósitos/retiros pendientes) ══ -->
+      
       <div class="dv" id="dv-trade">
-        <div class="dv-h">Operación en curso 🔄</div>
-        <div class="dv-s">Adjunta el comprobante en el chat.</div>
+        <div class="dv-h">Transacción en curso 🔄</div>
+        <div class="dv-s">Tu solicitud está siendo procesada.</div>
 
         <!-- Pestañas — solo visibles en móvil -->
         <div class="trade-tabs" id="trade-tabs">
@@ -1256,7 +1573,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
             <i class="ph-fill ph-receipt"></i> Datos de Pago
           </button>
           <button class="trade-tab" id="ttab-chat" onclick="tradeTab('chat')">
-            <i class="ph-fill ph-chats-circle"></i> Chat P2P
+            <i class="ph-fill ph-chats-circle"></i> Chat de Soporte
             <span class="trade-tab-badge" id="chat-unread-badge">0</span>
           </button>
         </div>
@@ -1310,16 +1627,16 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 
             <!-- Botón ir al chat — solo en móvil -->
             <button class="btn g full" style="display:none" id="btn-go-chat" onclick="tradeTab('chat')">
-              <i class="ph-fill ph-chats-circle"></i> Ir al Chat P2P →
+              <i class="ph-fill ph-chats-circle"></i> Ir al Chat de Soporte →
             </button>
 
           </div>
 
-          <!-- Panel derecho / Pestaña "Chat P2P" -->
+          <!-- Panel derecho / Pestaña "Chat de Soporte" -->
           <div class="card chat-box trade-tab-pane" id="tpane-chat">
             <div class="card-hdr">
               <div>
-                <div class="card-title" id="chat-id">Chat P2P</div>
+                <div class="card-title" id="chat-id">Chat de Soporte</div>
                 <div style="font-size:10px;color:var(--t2);margin-top:1px">Con LS Cambios</div>
               </div>
               <div id="chat-st"></div>
@@ -1439,7 +1756,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clientes
       </button>
       <button class="ap-sb-i" id="asi-chats" onclick="showAV('chats')">
-        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chats P2P
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chats de Soporte
       </button>
       <button class="ap-sb-i" id="asi-rates" onclick="showAV('rates')">
         <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Tasas
@@ -1490,7 +1807,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <div class="card"><div id="a-cli-body"></div></div>
       </div>
       <div class="av" id="av-chats">
-        <div class="dv-h">Chats P2P 💬</div><div class="dv-s">Responde en tiempo real</div>
+        <div class="dv-h">Transacciones 💬</div><div class="dv-s">Depósitos y retiros pendientes</div>
         <div class="a-chat-g">
           <div class="op-panel"><div class="op-panel-h">Operaciones activas</div><div class="op-panel-list" id="a-op-list"></div></div>
           <div class="a-chat-panel">
@@ -1595,8 +1912,15 @@ function toggleTheme(){
 (function initTheme(){
   try{
     const t=localStorage.getItem('lsc_theme');
-    if(t==='light'){
-      document.documentElement.classList.add('light');
+    // Default = light; only remove if explicitly set to dark
+    if(t==='dark'){
+      document.documentElement.classList.remove('light');
+      document.addEventListener('DOMContentLoaded',()=>{
+        const btn=document.getElementById('theme-btn');
+        if(btn)btn.textContent='🌙';
+      });
+    } else {
+      // Ensure light class is present and button shows sun
       document.addEventListener('DOMContentLoaded',()=>{
         const btn=document.getElementById('theme-btn');
         if(btn)btn.textContent='☀️';
@@ -1909,7 +2233,7 @@ function deepMerge(t,s){
   }
 }
 
-const PN={binance:'Binance',paypal:'PayPal',zinli:'Zinli',wally:'Wally',airtm:'Airtm',usdc:'USDC',usdt:'USDT (BEP20)'};
+const PN={binance:'Binance',paypal:'PayPal',zinli:'Zinli',wally:'Wally',airtm:'Airtm',usdc:'USDC',usdt:'USDT (BEP20)',pagomovil:'Pago Móvil'};
 const WLS={
   binance:{label:'ID Binance',       val:'906509124',                                   note:'Envía USDT'},
   paypal: {label:'Correo PayPal',    val:'sandrealeonard@gmail.com',                    note:'Monto exacto'},
@@ -1937,17 +2261,56 @@ function netCalc(a,c){
 }
 
 function svgL(id,sz=36){
-  const r=Math.round(sz*.25),h=sz/2;
+  const r=Math.round(sz*.25),h=sz/2,s=sz;
+  // Iconos reales SVG de cada plataforma
   const logos={
-    binance:`<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#181a20"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Georgia" font-size="${Math.round(sz*.52)}" font-weight="900" fill="#f3ba2f">B</text></svg>`,
-    paypal: `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#003087"/><text x="50%" y="56%" dominant-baseline="middle" text-anchor="middle" font-family="Georgia" font-size="${Math.round(sz*.52)}" font-weight="900" fill="#009cde">P</text></svg>`,
-    zinli:  `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#5b2d8e"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.27)}" font-weight="800" fill="#fff">Zinli</text></svg>`,
-    wally:  `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#006b31"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.27)}" font-weight="800" fill="#fff">Wally</text></svg>`,
-    airtm:  `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#0055b3"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.25)}" font-weight="800" fill="#fff">Airtm</text></svg>`,
-    usdc:   `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#2775ca"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.22)}" font-weight="800" fill="#fff">USDC</text></svg>`,
-    usdt:   `<svg width="${sz}" height="${sz}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#26a17b"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(sz*.22)}" font-weight="800" fill="#fff">USDT</text></svg>`,
+    // Binance — rombo dorado oficial
+    binance:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${h}" fill="#181a20"/>
+      <g fill="#F3BA2F" transform="translate(22,22)">
+        <polygon points="0,-8.5 2.5,-6 0,-3.5 -2.5,-6" transform="rotate(0)"/>
+        <polygon points="-8.5,0 -6,2.5 -3.5,0 -6,-2.5" transform="rotate(0)"/>
+        <polygon points="8.5,0 6,2.5 3.5,0 6,-2.5" transform="rotate(0)"/>
+        <polygon points="0,8.5 2.5,6 0,3.5 -2.5,6" transform="rotate(0)"/>
+        <polygon points="-3.5,-3.5 0,-7 3.5,-3.5 0,0" transform="rotate(0)"/>
+        <polygon points="-3.5,3.5 0,0 3.5,3.5 0,7" transform="rotate(0)"/>
+        <polygon points="-7,-0.1 -3.5,-3.5 0,0 -3.5,3.5" transform="rotate(0)"/>
+        <polygon points="7,-0.1 3.5,-3.5 0,0 3.5,3.5" transform="rotate(0)"/>
+      </g></svg>`,
+    // PayPal — doble P icónica
+    paypal:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#fff"/>
+      <g transform="translate(8,8)">
+        <path d="M23.4 6.5c.5 2.8-.8 5.9-3 7.6-2 1.5-4.8 2-7.4 2H11l-1.2 7.5H5.4L8.6 5.5h8.6c3 0 5.6.8 6.2 1z" fill="#009cde"/>
+        <path d="M26.5 8c.2 1 .2 2.1 0 3.1-.9 4.2-4.2 6.9-8.5 6.9h-2.2l-1.5 9.3H9.8l.3-2h2.8l1.5-9.3h2.2c3.8 0 6.8-2.1 7.9-5.5.4-1.2.5-2.4.3-3.5.5.3.9.6 1.3 1z" fill="#003087"/>
+        <path d="M10.3 5.5H19c2.8 0 5.3.8 6.2 2.3.4.7.6 1.4.6 2.2C25.5 6 22.9 4 19.2 4H10.6L7.2 25.5h4.4l1.2-7.5h2c2.6 0 5.4-.5 7.4-2C24.6 14 26 11 25.5 8c-.4-1.5-2-2.5-4.3-2.5z" fill="#012169"/>
+      </g></svg>`,
+    // Zinli — ícono Z morado
+    zinli:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#7C3AED"/>
+      <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" font-family="'Arial Black',Arial" font-size="${Math.round(s*.5)}" font-weight="900" fill="#fff">Z</text></svg>`,
+    // Wally — W verde
+    wally:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#00A651"/>
+      <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" font-family="'Arial Black',Arial" font-size="${Math.round(s*.46)}" font-weight="900" fill="#fff">W</text></svg>`,
+    // Airtm — avión / A naranja
+    airtm:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#FF5F00"/>
+      <path d="M22 10 L34 34 L22 28 L10 34 Z" fill="#fff" opacity=".95"/>
+      <path d="M22 10 L34 34 L22 22 Z" fill="#fff" opacity=".6"/></svg>`,
+    // USDC — círculo azul
+    usdc:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#2775CA"/>
+      <circle cx="22" cy="22" r="16" fill="none" stroke="#fff" stroke-width="2.5"/>
+      <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" font-family="'Arial Black',Arial" font-size="${Math.round(s*.26)}" font-weight="900" fill="#fff">USDC</text></svg>`,
+    // USDT — círculo verde tether
+    usdt:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#26A17B"/>
+      <path d="M14 12h16v4H14zM20 16h4v4h-4z" fill="#fff" opacity=".9"/>
+      <path d="M22 20c-5 0-9 1-9 2.5s4 2.5 9 2.5 9-1 9-2.5-4-2.5-9-2.5z" fill="#fff"/>
+      <rect x="20" y="23" width="4" height="9" rx="2" fill="#fff"/></svg>`,
+    // Pago Móvil — bandera VE + móvil
+    pagomovil:`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="#CF142B"/>
+      <rect x="0" y="14.7" width="44" height="14.6" fill="#fff"/>
+      <rect x="0" y="29.3" width="44" height="14.7" fill="#00247D"/>
+      <rect x="15" y="11" width="14" height="22" rx="3" fill="#fff" opacity=".9"/>
+      <rect x="17" y="14" width="10" height="13" rx="1" fill="#CF142B"/>
+      <circle cx="22" cy="30" r="1.5" fill="#CF142B"/></svg>`,
   };
-  return logos[id]||'';
+  return logos[id]||`<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="${r}" fill="var(--bg3)"/><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="${Math.round(s*.3)}" font-weight="800" fill="var(--t2)">${id.slice(0,3).toUpperCase()}</text></svg>`;
 }
 
 function stBdg(st){
@@ -2369,7 +2732,7 @@ function buildHistTbl(ops){
   return`<table class="tbl"><thead><tr><th>ID</th><th>Tipo</th><th>Plataforma</th><th>Envías</th><th>Recibes</th><th>Estado</th><th></th></tr></thead>
   <tbody>${ops.map(op=>`<tr>
     <td style="font-family:var(--mono);font-size:11px;color:var(--g)">${op.id}</td>
-    <td>${op.dir==='compra'?'<span class="bdg buy">Compra</span>':'<span class="bdg sell">Venta</span>'}</td>
+    <td>${op.dir==='compra'?'<span class="bdg buy">Depósito</span>':'<span class="bdg sell">Retiro</span>'}</td>
     <td>${PN[op.plat]||op.plat}</td>
     <td style="color:var(--yellow);font-weight:600;font-size:11px">${op.send}</td>
     <td style="color:var(--g);font-weight:600;font-size:11px">${op.get}</td>
@@ -2699,7 +3062,7 @@ function startCountdown(){
   const el=document.getElementById('trd-timer'); if(!el)return;
   const key='lsc_tmr_'+(curOpId||'x');
   let startTs=parseInt(sessionStorage.getItem(key)||'0');
-  const totalSecs=15*60;
+  const totalSecs=5*60; // 5 minutos para depósito
   if(!startTs||isNaN(startTs)){
     startTs=Date.now();
     try{sessionStorage.setItem(key,String(startTs));}catch(e){}
@@ -3831,5 +4194,414 @@ setTimeout(()=>{
 #kyc-send-btn:not([disabled]){opacity:1!important;cursor:pointer!important}
 </style>
 
+
+<!-- ══════════════════════════════════════════════════════════
+     NEOBANCO WALLET JS — LS Cambios
+     Billetera, depósitos, retiros
+     ══════════════════════════════════════════════════════════ -->
+<script>
+// ── Columnas nuevas en Supabase que necesitas:
+//  clientes: balance_usd NUMERIC DEFAULT 0
+//            balance_usdt NUMERIC DEFAULT 0
+//            balance_bs NUMERIC DEFAULT 0
+//  transacciones: id, cliente_email, tipo ('deposit'|'withdraw'), 
+//                 moneda ('usd'|'usdt'|'bs'), monto, plat, estado, 
+//                 created_at, updated_at, notas
+
+// ── Helpers de formato ────────────────────────────────────
+const fmtBal=(n,dec=2)=>Number(n||0).toFixed(dec).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+
+// ── Estado local de billetera ─────────────────────────────
+let _walletData = { balance_usd:0, balance_usdt:0, balance_bs:0 };
+let _depositMode = null; // 'pagomovil' | 'binance'
+
+// ── Leer saldo desde Supabase ─────────────────────────────
+async function loadWalletBalance(email) {
+  try {
+    const {data,error} = await db.from('clientes')
+      .select('balance_usd,balance_usdt,balance_bs')
+      .eq('email', email).single();
+    if (!error && data) {
+      _walletData = data;
+    }
+  } catch(e) { console.warn('[wallet]',e); }
+}
+
+// ── Renderizar saldos ─────────────────────────────────────
+function renderWalletBalances() {
+  const el = document.getElementById('wallet-balances');
+  if (!el) return;
+  const cards = [
+    { key:'balance_usd',  sym:'$',    lbl:'Dólares',   unit:'USD',  col:'#1a6cff', icon:'💵' },
+    { key:'balance_usdt', sym:'',     lbl:'Tether',    unit:'USDT', col:'#26a17b', icon:'🪙' },
+    { key:'balance_bs',   sym:'Bs ',  lbl:'Bolívares', unit:'VES',  col:'#cf142b', icon:'🇻🇪' },
+  ];
+  el.innerHTML = cards.map(c => {
+    const val = _walletData[c.key] || 0;
+    return `<div style="background:var(--bg1);border:1px solid var(--brd2);border-radius:var(--r2);padding:14px;text-align:center">
+      <div style="font-size:20px;margin-bottom:4px">${c.icon}</div>
+      <div style="font-size:10px;color:var(--t2);font-weight:700;letter-spacing:.8px;margin-bottom:4px">${c.lbl}</div>
+      <div style="font-size:18px;font-weight:900;color:${c.col};font-family:var(--mono)">${c.sym}${fmtBal(val, c.key==='balance_bs'?0:2)}</div>
+      <div style="font-size:9px;color:var(--t3);margin-top:2px">${c.unit}</div>
+    </div>`;
+  }).join('');
+
+  // Retirar página — resumen de saldo
+  const wr = document.getElementById('withdraw-balances');
+  if (wr) {
+    wr.innerHTML = `<div style="background:var(--bg2);border:1px solid var(--brd2);border-radius:var(--r);padding:12px">
+      <div style="font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--t2);margin-bottom:8px">SALDO DISPONIBLE</div>
+      <div style="display:flex;flex-wrap:wrap;gap:12px">
+        <span style="font-size:13px;font-weight:800;color:#1a6cff">💵 $${fmtBal(_walletData.balance_usd)} USD</span>
+        <span style="font-size:13px;font-weight:800;color:#26a17b">🪙 ${fmtBal(_walletData.balance_usdt)} USDT</span>
+        <span style="font-size:13px;font-weight:800;color:#cf142b">🇻🇪 Bs ${fmtBal(_walletData.balance_bs,0)}</span>
+      </div>
+    </div>`;
+  }
+}
+
+// ── Cargar últimas transacciones ──────────────────────────
+async function loadWalletTxns(email) {
+  try {
+    const {data,error} = await db.from('transacciones')
+      .select('*').eq('cliente_email',email)
+      .order('created_at',{ascending:false}).limit(10);
+    const el = document.getElementById('wallet-txns');
+    if (!el) return;
+    if (error || !data || !data.length) {
+      el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--t2);font-size:12px">Sin transacciones aún</div>';
+      return;
+    }
+    const stIcon = {pending:'⏳',approved:'✅',rejected:'❌',processing:'🔄'};
+    el.innerHTML = data.map(t => {
+      const isDeposit = t.tipo==='deposit';
+      const monSyms = {usd:'$',usdt:'',bs:'Bs '};
+      const monLbls = {usd:'USD',usdt:'USDT',bs:'Bs'};
+      const sym = monSyms[t.moneda]||'';
+      const dec = t.moneda==='bs'?0:2;
+      const platName = PN[t.plat]||t.plat||'—';
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--brd2)">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:34px;height:34px;border-radius:8px;background:${isDeposit?'rgba(26,108,255,.1)':'rgba(247,147,26,.1)'};display:flex;align-items:center;justify-content:center;font-size:16px">${isDeposit?'⬇️':'⬆️'}</div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--t1)">${isDeposit?'Depósito':'Retiro'} · ${platName}</div>
+            <div style="font-size:10px;color:var(--t2)">${stIcon[t.estado]||'⏳'} ${t.estado||'pending'} · ${t.created_at?new Date(t.created_at).toLocaleDateString('es-VE'):''}</div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:14px;font-weight:900;color:${isDeposit?'var(--g)':'var(--red)'}">${isDeposit?'+':'-'}${sym}${fmtBal(t.monto,dec)}</div>
+          <div style="font-size:9px;color:var(--t3)">${monLbls[t.moneda]||''}</div>
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e) { console.warn('[txns]',e); }
+}
+
+// ── Iniciar depósito por método ───────────────────────────
+function startDeposit(method) {
+  _depositMode = method;
+  const wrap = document.getElementById('deposit-form-wrap');
+  const title = document.getElementById('dep-form-title');
+  const curEl = document.getElementById('dep-currency');
+  const infoBox = document.getElementById('dep-info-box');
+  const infoTitle = document.getElementById('dep-info-title');
+  const infoBody = document.getElementById('dep-info-body');
+  const btn = document.getElementById('dep-confirm-btn');
+
+  if (!wrap) return;
+  wrap.style.display = 'block';
+
+  if (method === 'pagomovil') {
+    if (title) title.textContent = '⬇️ Depositar por Pago Móvil';
+    if (curEl) curEl.textContent = 'Bs';
+    // Mostrar datos de Pago Móvil del admin
+    if (infoBox) infoBox.style.display = 'block';
+    if (infoTitle) infoTitle.textContent = '📲 ENVÍA A ESTE PAGO MÓVIL';
+    const pm = ADMIN_PM||{};
+    if (infoBody) infoBody.innerHTML = pm.tel ? `
+      <div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco||'—'}</span></div>
+      <div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel} <button class="cpb" onclick="copyVal('${pm.tel}')">COPIAR</button></span></div>
+      <div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula||'—'}</span></div>
+      <div style="font-size:10px;color:var(--t3);margin-top:8px">⚠️ Envía el monto exacto y sube el comprobante en soporte.</div>
+    ` : '<div style="color:var(--t2);font-size:12px">⚠️ Pago Móvil no configurado. Contacta soporte.</div>';
+  } else if (method === 'binance') {
+    if (title) title.textContent = '⬇️ Depositar por Binance Pay';
+    if (curEl) curEl.textContent = 'USDT';
+    if (infoBox) infoBox.style.display = 'block';
+    if (infoTitle) infoTitle.textContent = '🪙 ENVÍA A ESTA CUENTA BINANCE';
+    const w = (WLS&&WLS.binance)||{};
+    if (infoBody) infoBody.innerHTML = w.val ? `
+      <div class="wall-row"><span class="wall-k">ID Binance</span><span class="wall-v">${w.val} <button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button></span></div>
+      <div style="font-size:10px;color:var(--t3);margin-top:8px">⚠️ Envía USDT por Binance Pay. Sube captura en soporte.</div>
+    ` : '<div style="color:var(--t2);font-size:12px">⚠️ ID Binance no configurado. Contacta soporte.</div>';
+  }
+
+  calcDeposit();
+  document.getElementById('deposit-form-wrap').scrollIntoView({behavior:'smooth'});
+}
+
+function calcDeposit() {
+  const amt = parseFloat(document.getElementById('dep-amount')?.value)||0;
+  const prev = document.getElementById('dep-preview');
+  const resVal = document.getElementById('dep-result-val');
+  const resDet = document.getElementById('dep-result-det');
+  const btn = document.getElementById('dep-confirm-btn');
+  if (!prev) return;
+
+  if (!amt || amt <= 0) {
+    prev.style.display = 'none';
+    if (btn) btn.disabled = true;
+    return;
+  }
+
+  prev.style.display = 'block';
+  if (btn) btn.disabled = false;
+
+  if (_depositMode === 'pagomovil') {
+    // Bolívares entran → se acreditan como Bs
+    if (resVal) resVal.textContent = 'Bs ' + fmtBal(amt, 0) + ' en tu cuenta';
+    if (resDet) resDet.textContent = 'Se acreditarán ' + fmtBal(amt,0) + ' Bs en tu saldo';
+  } else if (_depositMode === 'binance') {
+    // USDT entra → se acredita como USDT
+    if (resVal) resVal.textContent = fmtBal(amt,4) + ' USDT en tu cuenta';
+    if (resDet) resDet.textContent = 'Se acreditarán ' + fmtBal(amt,4) + ' USDT en tu saldo';
+  }
+}
+
+async function confirmDeposit() {
+  const sess = gS(); if (!sess) return;
+  const amt = parseFloat(document.getElementById('dep-amount')?.value)||0;
+  if (!amt || amt <= 0) { toast('Ingresa un monto válido','err'); return; }
+  const moneda = _depositMode === 'pagomovil' ? 'bs' : 'usdt';
+  const platLabel = _depositMode === 'pagomovil' ? 'Pago Móvil' : 'Binance Pay';
+  const btn = document.getElementById('dep-confirm-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Creando solicitud...'; }
+
+  try {
+    // Crear transacción de depósito en Supabase (estado: pending, admin la aprueba)
+    const {error} = await db.from('transacciones').insert({
+      cliente_email: sess.email,
+      tipo: 'deposit',
+      moneda: moneda,
+      monto: amt,
+      plat: _depositMode,
+      estado: 'pending',
+      notas: 'Depósito solicitado por el usuario'
+    });
+    if (error) { toast('❌ Error creando solicitud: '+error.message,'err'); return; }
+
+    const ud = getUser(sess.email)||{};
+    tgNotify(`⬇️ <b>Nuevo depósito pendiente</b>
+👤 ${ud.nombre||''} ${ud.apellido||''}
+📧 ${sess.email}
+💰 ${fmtBal(amt)} ${moneda.toUpperCase()} · ${platLabel}
+⏱ Pendiente de aprobación`);
+    toast('✅ Solicitud de depósito creada. ¡Envía tu comprobante por soporte!','ok');
+    document.getElementById('dep-amount').value = '';
+    document.getElementById('dep-preview').style.display = 'none';
+    setTimeout(()=>showDV('wallet'), 1500);
+  } catch(e) {
+    toast('❌ Error: '+e.message,'err');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Iniciar depósito →'; }
+  }
+}
+
+// ── Calcular retiro ────────────────────────────────────────
+function calcWithdraw() {
+  const from = document.getElementById('wd-from')?.value||'usd';
+  const plat = document.getElementById('wd-plat')?.value||'paypal';
+  const amt = parseFloat(document.getElementById('wd-amount')?.value)||0;
+  const lbl = document.getElementById('wd-amt-lbl');
+  const prev = document.getElementById('wd-preview');
+  const resVal = document.getElementById('wd-result-val');
+  const resDet = document.getElementById('wd-result-det');
+  const platName = document.getElementById('wd-plat-name');
+  const btn = document.getElementById('wd-confirm-btn');
+  const destInfo = document.getElementById('wd-dest-info');
+  const destBody = document.getElementById('wd-dest-body');
+
+  const lblMap = {usd:'MONTO A RETIRAR (USD)',usdt:'MONTO A RETIRAR (USDT)',bs:'MONTO A RETIRAR (Bs)'};
+  if (lbl) lbl.textContent = lblMap[from]||'MONTO';
+  if (platName) platName.textContent = PN[plat]||plat;
+
+  // Datos de la cuenta destino del usuario
+  const sess = gS(); const ud = sess?getUser(sess.email):null;
+  if (destInfo && destBody && ud) {
+    destInfo.style.display = 'block';
+    const cu = ud.cuentas||{};
+    const pm = ud.pagoMovil||{};
+    let destHtml = '';
+    if (plat === 'pagomovil') {
+      destHtml = pm.tel ? `
+        <div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco||'—'}</span></div>
+        <div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel}</span></div>
+        <div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula||'—'}</span></div>
+      ` : '<div style="color:var(--t2);font-size:11px">⚠️ No tienes Pago Móvil registrado en tu perfil.</div>';
+    } else if (plat === 'binance') {
+      destHtml = cu.binanceId ? `<div class="wall-row"><span class="wall-k">ID Binance</span><span class="wall-v">${cu.binanceId}</span></div>` : '<div style="color:var(--t2);font-size:11px">⚠️ No tienes ID Binance registrado.</div>';
+    } else {
+      destHtml = cu.correo ? `<div class="wall-row"><span class="wall-k">Correo</span><span class="wall-v">${cu.correo}</span></div>` : '<div style="color:var(--t2);font-size:11px">⚠️ No tienes correo de plataforma registrado.</div>';
+    }
+    destBody.innerHTML = destHtml;
+  }
+
+  if (!amt || amt <= 0) {
+    if (prev) prev.style.display = 'none';
+    if (btn) btn.disabled = true;
+    return;
+  }
+
+  if (prev) prev.style.display = 'block';
+  if (btn) btn.disabled = false;
+
+  // Calcular lo que recibe según la tasa
+  let resultTxt = '', detTxt = '';
+  if (from === 'usd') {
+    if (plat === 'pagomovil') {
+      const r = (RATES.venta&&RATES.venta[plat])||RATES.venta?.paypal||{t:670};
+      resultTxt = 'Bs ' + fmtBal(amt * r.t, 0);
+      detTxt = `$${fmtBal(amt)} USD × Bs ${fmt(r.t)} = Bs ${fmtBal(amt*r.t,0)}`;
+    } else {
+      const r = (RATES.compra&&RATES.compra[plat])||{t:520,type:'none'};
+      const net = netCalc(amt, r);
+      resultTxt = '$' + fmtBal(net) + ' en ' + (PN[plat]||plat);
+      detTxt = `$${fmtBal(amt)} USD → neto $${fmtBal(net)} tras comisión`;
+    }
+  } else if (from === 'usdt') {
+    const r = (RATES.usdt_compra&&RATES.usdt_compra[plat])||{t:0.97};
+    if (plat === 'pagomovil') {
+      // USDT → Bs: primero a USD por tasa, luego a Bs
+      const usd = amt * r.t;
+      const bsR = (RATES.venta&&RATES.venta.paypal)||{t:670};
+      resultTxt = 'Bs ' + fmtBal(usd * bsR.t, 0);
+      detTxt = `${fmtBal(amt)} USDT → $${fmtBal(usd)} → Bs ${fmtBal(usd*bsR.t,0)}`;
+    } else {
+      resultTxt = '$' + fmtBal(amt * r.t) + ' en ' + (PN[plat]||plat);
+      detTxt = `${fmtBal(amt)} USDT × $${r.t} = $${fmtBal(amt*r.t)}`;
+    }
+  } else { // bs
+    const bsR = (RATES.venta&&RATES.venta.paypal)||{t:670};
+    const usd = amt / bsR.t;
+    if (plat === 'pagomovil') {
+      resultTxt = 'Bs ' + fmtBal(amt,0) + ' a tu Pago Móvil';
+      detTxt = `Bs ${fmtBal(amt,0)} directo a tu cuenta`;
+    } else {
+      const r = (RATES.compra&&RATES.compra[plat])||{t:520};
+      const net = netCalc(usd, r);
+      resultTxt = '$' + fmtBal(net) + ' en ' + (PN[plat]||plat);
+      detTxt = `Bs ${fmtBal(amt,0)} → ~$${fmtBal(usd)} → $${fmtBal(net)} neto`;
+    }
+  }
+
+  if (resVal) resVal.textContent = resultTxt;
+  if (resDet) resDet.textContent = detTxt;
+}
+
+async function confirmWithdraw() {
+  const sess = gS(); if (!sess) return;
+  const from = document.getElementById('wd-from')?.value||'usd';
+  const plat = document.getElementById('wd-plat')?.value||'paypal';
+  const amt = parseFloat(document.getElementById('wd-amount')?.value)||0;
+  if (!amt || amt <= 0) { toast('Ingresa un monto válido','err'); return; }
+
+  // Verificar saldo disponible
+  const balKey = {usd:'balance_usd',usdt:'balance_usdt',bs:'balance_bs'}[from];
+  const available = _walletData[balKey]||0;
+  if (amt > available) {
+    toast(`❌ Saldo insuficiente. Tienes ${from==='bs'?'Bs ':from==='usdt'?'':'$'}${fmtBal(available, from==='bs'?0:2)} ${from.toUpperCase()}`, 'err');
+    return;
+  }
+
+  const btn = document.getElementById('wd-confirm-btn');
+  if (btn) { btn.disabled=true; btn.textContent='Procesando...'; }
+
+  try {
+    const {error} = await db.from('transacciones').insert({
+      cliente_email: sess.email,
+      tipo: 'withdraw',
+      moneda: from,
+      monto: amt,
+      plat: plat,
+      estado: 'pending',
+      notas: 'Retiro solicitado por el usuario'
+    });
+    if (error) { toast('❌ '+error.message,'err'); return; }
+
+    const resVal = document.getElementById('wd-result-val')?.textContent||'';
+    const ud = getUser(sess.email)||{};
+    tgNotify(`⬆️ <b>Solicitud de retiro</b>
+👤 ${ud.nombre||''} ${ud.apellido||''}
+📧 ${sess.email}
+💰 ${fmtBal(amt)} ${from.toUpperCase()} → ${PN[plat]||plat}
+💸 Recibe: ${resVal}
+⏱ 30min-2h`);
+    toast('✅ Retiro solicitado. Se procesará en 30 min – 2 horas.','ok');
+    document.getElementById('wd-amount').value='';
+    document.getElementById('wd-preview').style.display='none';
+    setTimeout(()=>showDV('wallet'),1500);
+  } catch(e) {
+    toast('❌ '+e.message,'err');
+  } finally {
+    if (btn) { btn.disabled=false; btn.textContent='Solicitar retiro →'; }
+  }
+}
+
+// ── Inyectar iconos de depósito en la página ──────────────
+function injectDepositIcons() {
+  const pm = document.getElementById('dep-ico-pm');
+  const bnb = document.getElementById('dep-ico-bnb');
+  if (pm) pm.innerHTML = svgL('pagomovil',36);
+  if (bnb) bnb.innerHTML = svgL('binance',36);
+}
+
+// ── Patch: goD() abre billetera en vez de newop ───────────
+const _origGoD = typeof goD==='function' ? goD : null;
+function goD() {
+  showPage('dp');
+  showDV('wallet');
+  setTimeout(()=>{
+    if('Notification' in window && Notification.permission==='default') showNotifPrompt();
+  }, 1500);
+}
+
+// ── Patch: showDV carga billetera al entrar ───────────────
+const _origShowDV = showDV;
+showDV = function(name) {
+  _origShowDV(name);
+  if (name==='wallet'||name==='deposit'||name==='withdraw') {
+    const sess=gS(); if(!sess) return;
+    loadWalletBalance(sess.email).then(()=>{
+      renderWalletBalances();
+      if (name==='wallet') loadWalletTxns(sess.email);
+    });
+    if (name==='deposit') setTimeout(injectDepositIcons, 100);
+    if (name==='withdraw') setTimeout(calcWithdraw, 100);
+  }
+};
+
+// ── Patch: loadDash también actualiza saldo ───────────────
+const _origLoadDash = typeof loadDash==='function' ? loadDash : null;
+async function loadDash() {
+  if (_origLoadDash) await _origLoadDash.call(this);
+  const sess=gS();
+  if (sess) {
+    await loadWalletBalance(sess.email);
+    renderWalletBalances();
+  }
+}
+
+// ── showDV ahora también activa si-wallet ─────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  // Si el usuario estaba en wallet, restaurarlo
+  const lv = nsGet('lsc_lv');
+  if (!lv || lv==='newop') {
+    // redirigir newop → wallet
+    const dvNO = document.getElementById('dv-newop');
+    const dvW = document.getElementById('dv-wallet');
+    if (dvNO && !dvW) {} // newop existe pero wallet no (no debería pasar)
+  }
+});
+</script>
 </body>
 </html>
