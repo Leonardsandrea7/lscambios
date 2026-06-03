@@ -3334,63 +3334,91 @@ async function admRevisar(){
 
 async function admConfirm(){
   if(!aCur) return;
-  // 1. Leer la operación para saber monto y moneda
-  let dep_monto=0, dep_moneda='usd', dep_plat='pagomovil';
+  const clientEmail = aCur.uem; // ← campo correcto
+  const opId = aCur.opId;
+
+  // 1. Leer operación desde Supabase — obtener send_txt, dir, plat
+  let dep_monto=0, dep_moneda='bs', dep_plat='pagomovil';
   try{
-    const{data:opRow}=await db.from('operaciones')
-      .select('send_txt,dir,plat').eq('id',aCur.opId).single();
+    const{data:opRow, error:opErr}=await db.from('operaciones')
+      .select('send_txt,dir,plat,cliente_email')
+      .eq('id', opId).single();
+    if(opErr){ console.error('[admConfirm] leer op:', opErr.message); }
     if(opRow){
-      dep_plat = opRow.plat||'pagomovil';
-      // Parsear monto desde send_txt: "Bs 7000 (Pago Móvil)" o "5.0000 USDT (Binance Pay)"
-      if(opRow.dir==='deposito'||opRow.dir==='deposit'){
-        const txt = opRow.send_txt||'';
+      dep_plat = opRow.plat || 'pagomovil';
+      const dir = opRow.dir || '';
+      const txt = opRow.send_txt || '';
+      if(dir==='deposito'||dir==='deposit'){
         if(dep_plat==='pagomovil'){
-          dep_moneda='bs';
-          const m=txt.match(/([\d.,]+)/); dep_monto=m?parseFloat(m[1].replace(',','')):0;
+          dep_moneda = 'bs';
+          // "Bs 7.000 (Pago Móvil)" → extraer número
+          const m = txt.replace(/\./g,'').replace(',','.').match(/[\d]+(\.\d+)?/);
+          dep_monto = m ? parseFloat(m[0]) : 0;
         } else {
-          dep_moneda='usdt';
-          const m=txt.match(/([\d.]+)/); dep_monto=m?parseFloat(m[1]):0;
+          dep_moneda = 'usdt';
+          // "5.0000 USDT (Binance Pay)" → extraer número
+          const m = txt.match(/[\d]+\.?[\d]*/);
+          dep_monto = m ? parseFloat(m[0]) : 0;
         }
       }
     }
-  }catch(e){ console.warn('[admConfirm read op]',e); }
+  }catch(e){ console.error('[admConfirm read]', e); }
 
-  // 2. Marcar como confirmed
-  const ok=await sbUpdateOpEstado(aCur.opId,'confirmed');
-  if(!ok){ toast('❌ Error al confirmar','err'); return; }
+  // 2. Marcar operación como confirmed
+  const ok = await sbUpdateOpEstado(opId, 'confirmed');
+  if(!ok){ toast('❌ Error al confirmar estado','err'); return; }
 
-  // 3. Acreditar saldo DIRECTO en clientes (sin depender de transacciones)
-  let credited=false;
-  if(dep_monto>0){
+  // 3. Acreditar saldo directo en la tabla clientes
+  let credited = false;
+  let creditMsg = '';
+  if(dep_monto > 0 && clientEmail){
     try{
-      const colMap={usd:'balance_usd',usdt:'balance_usdt',bs:'balance_bs'};
-      const col=colMap[dep_moneda];
-      // Leer saldo actual
-      const{data:cli}=await db.from('clientes').select(col).eq('email',aCur.email).single();
-      const newBal=(parseFloat(cli?.[col])||0)+dep_monto;
-      const{error:er}=await db.from('clientes').update({[col]:newBal}).eq('email',aCur.email);
-      if(!er){
-        credited=true;
-        // Registrar en transacciones como approved
-        await db.from('transacciones').insert({
-          cliente_email:aCur.email, tipo:'deposit', moneda:dep_moneda,
-          monto:dep_monto, plat:dep_plat, estado:'approved',
-          notas:'Op: '+aCur.opId, admin_notas:'Acreditado por admin al confirmar'
-        }).catch(()=>{});
+      const colMap = {usd:'balance_usd', usdt:'balance_usdt', bs:'balance_bs'};
+      const col = colMap[dep_moneda];
+      if(col){
+        // Leer saldo actual
+        const{data:cli, error:e1} = await db.from('clientes')
+          .select(col).eq('email', clientEmail).single();
+        if(e1){ console.error('[admConfirm] leer saldo:', e1.message); }
+        else{
+          const curBal = parseFloat(cli[col]) || 0;
+          const newBal = curBal + dep_monto;
+          const{error:e2} = await db.from('clientes')
+            .update({[col]: newBal})
+            .eq('email', clientEmail);
+          if(e2){ console.error('[admConfirm] update balance:', e2.message); }
+          else{
+            credited = true;
+            creditMsg = '+'+dep_monto+' '+dep_moneda.toUpperCase();
+            // Log en transacciones
+            await db.from('transacciones').insert({
+              cliente_email: clientEmail,
+              tipo: 'deposit', moneda: dep_moneda,
+              monto: dep_monto, plat: dep_plat,
+              estado: 'approved',
+              notas: 'Op:'+opId,
+              admin_notas: 'Acreditado automáticamente'
+            }).catch(e=>console.warn('[txn log]',e));
+          }
+        }
       }
-    }catch(e){ console.warn('[admConfirm credit]',e); }
+    }catch(e){ console.error('[admConfirm credit]', e); }
+  } else {
+    console.warn('[admConfirm] dep_monto='+dep_monto+' email='+clientEmail);
   }
 
-  // 4. Mensajes al cliente
-  await sbSendMsg(aCur.opId,{from:'sys',text:'🟢 Comprobante verificado por LS Cambios.',time:tnow()});
+  // 4. Mensajes al cliente en el chat
+  await sbSendMsg(opId,{from:'sys',text:'🟢 Comprobante verificado por LS Cambios.',time:tnow()});
   if(credited){
-    await sbSendMsg(aCur.opId,{from:'admin',text:'✅ Pago confirmado. Tu saldo ha sido acreditado en tu billetera LS Cambios. ¡Gracias!',time:tnow()});
-    toast('✅ Confirmado y saldo acreditado: +'+dep_monto+' '+dep_moneda.toUpperCase(),'ok');
+    await sbSendMsg(opId,{from:'admin',text:'✅ Saldo acreditado en tu billetera LS Cambios: '+creditMsg+'. ¡Gracias!',time:tnow()});
+    toast('✅ '+creditMsg+' acreditados a '+clientEmail,'ok');
   } else {
-    await sbSendMsg(aCur.opId,{from:'admin',text:'✅ Pago confirmado. Tu saldo será acreditado en breve.',time:tnow()});
-    toast('✅ Confirmado. Usa "Acreditar saldo" si el monto no se aplicó.','ok');
+    await sbSendMsg(opId,{from:'admin',text:'✅ Pago verificado. Tu saldo será acreditado en breve.',time:tnow()});
+    toast('⚠️ Estado confirmado pero no se acreditó. Usa "Acreditar saldo" manual.','err');
   }
-  document.getElementById('a-chat-bdg').innerHTML=stBdg('confirmed');
+
+  const bdg = document.getElementById('a-chat-bdg');
+  if(bdg) bdg.innerHTML = stBdg('confirmed');
   loadAdmin();
 }
 
