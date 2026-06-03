@@ -1365,27 +1365,20 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <div class="dv-h">Mi Billetera 💳</div>
         <div class="dv-s">Saldo disponible en tu cuenta LS Cambios</div>
         <!-- Saldo principal tipo Binance -->
-        <div id="wallet-main-card" style="background:linear-gradient(135deg,rgba(26,108,255,.08),rgba(0,200,150,.06));border:1px solid var(--brd2);border-radius:16px;padding:24px 20px;margin-bottom:16px;text-align:center">
-          <div style="font-size:10px;color:var(--t2);letter-spacing:1px;font-weight:700;margin-bottom:6px">SALDO ESTIMADO</div>
-          <div id="wbal-total" style="font-size:36px;font-weight:900;color:var(--g);font-family:var(--mono);line-height:1;margin-bottom:4px">0.00 <span style="font-size:16px;color:var(--t2)">USDT</span></div>
-          <div id="wbal-usd-est" style="font-size:11px;color:var(--t3);margin-bottom:18px">≈ $0.00 USD</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;border-top:1px solid var(--brd);padding-top:16px">
+        <div style="background:linear-gradient(135deg,rgba(26,108,255,.08),rgba(0,200,150,.06));border:1px solid var(--brd2);border-radius:16px;padding:24px 20px;margin-bottom:16px;text-align:center">
+          <div style="font-size:10px;color:var(--t2);letter-spacing:1px;font-weight:700;margin-bottom:8px">SALDO DISPONIBLE</div>
+          <!-- Saldo único, cambia con la flecha -->
+          <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px">
             <div>
-              <div style="font-size:9px;color:var(--t3);letter-spacing:.5px;margin-bottom:2px">USD</div>
-              <div id="wbal-usd" style="font-size:15px;font-weight:800;color:#1a6cff;font-family:var(--mono)">$0.00</div>
-              <button onclick="showConvertModal('usd')" style="margin-top:6px;font-size:9px;padding:3px 8px;border-radius:20px;border:1px solid rgba(26,108,255,.3);background:rgba(26,108,255,.08);color:#1a6cff;cursor:pointer;font-weight:700">↔ Cambiar</button>
+              <span id="wbal-amount" style="font-size:38px;font-weight:900;color:var(--g);font-family:var(--mono);line-height:1">0.00</span>
+              <span id="wbal-unit" style="font-size:16px;font-weight:700;color:var(--t2);margin-left:6px">USDT</span>
             </div>
-            <div>
-              <div style="font-size:9px;color:var(--t3);letter-spacing:.5px;margin-bottom:2px">USDT</div>
-              <div id="wbal-usdt" style="font-size:15px;font-weight:800;color:#26a17b;font-family:var(--mono)">0.00</div>
-              <button onclick="showConvertModal('usdt')" style="margin-top:6px;font-size:9px;padding:3px 8px;border-radius:20px;border:1px solid rgba(38,161,123,.3);background:rgba(38,161,123,.08);color:#26a17b;cursor:pointer;font-weight:700">↔ Cambiar</button>
-            </div>
-            <div>
-              <div style="font-size:9px;color:var(--t3);letter-spacing:.5px;margin-bottom:2px">Bs</div>
-              <div id="wbal-bs" style="font-size:15px;font-weight:800;color:#cf142b;font-family:var(--mono)">0</div>
-              <button onclick="showConvertModal('bs')" style="margin-top:6px;font-size:9px;padding:3px 8px;border-radius:20px;border:1px solid rgba(207,20,43,.3);background:rgba(207,20,43,.08);color:#cf142b;cursor:pointer;font-weight:700">↔ Cambiar</button>
-            </div>
+            <!-- Botón tipo Binance para cambiar moneda -->
+            <button id="wbal-switch-btn" onclick="switchWalletCurrency()" title="Cambiar moneda" style="width:34px;height:34px;border-radius:50%;border:1.5px solid var(--brd2);background:var(--bg2);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;font-size:15px">⇅</button>
           </div>
+          <div id="wbal-equiv" style="font-size:11px;color:var(--t3);margin-bottom:18px">≈ 0.00 USD</div>
+          <!-- Botón de conversión -->
+          <button onclick="showConvertModal(_wCur)" style="padding:8px 20px;border-radius:20px;border:1.5px solid var(--g);background:rgba(0,200,150,.08);color:var(--g);font-size:12px;font-weight:700;cursor:pointer;transition:.15s">↔ Convertir saldo</button>
         </div>
         <!-- Acciones rápidas -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
@@ -1657,6 +1650,10 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <button class="ap-sb-i" id="asi-rates" onclick="showAV('rates')">
         <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Tasas
       </button>
+      <button class="ap-sb-i" id="asi-transacciones" onclick="showAV('transacciones')">
+        <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="16" cy="14" r="1.5" fill="currentColor"/></svg>Depósitos/Retiros
+        <span class="sb-badge ui-hidden" id="ap-txn-badge" style="background:var(--red)">!</span>
+      </button>
       <button class="ap-sb-i" id="asi-activity" onclick="showAV('activity')">
         <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Actividad
       </button>
@@ -1758,6 +1755,17 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
           <button class="btn g sm full" onclick="saveHorario()">💾 Guardar horario</button>
         </div>
       </div>
+      <div class="av" id="av-transacciones">
+        <div class="re-hdr"><div style="font-size:16px;font-weight:800">💳 Depósitos &amp; Retiros</div></div>
+        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+          <button onclick="loadAdminTxns('pending')"  id="txf-pending"  class="btn g sm"     style="font-size:11px">⏳ Pendientes</button>
+          <button onclick="loadAdminTxns('all')"      id="txf-all"      class="btn ghost sm" style="font-size:11px">Todos</button>
+          <button onclick="loadAdminTxns('approved')" id="txf-approved" class="btn ghost sm" style="font-size:11px">Aprobados</button>
+          <button onclick="loadAdminTxns('rejected')" id="txf-rejected" class="btn ghost sm" style="font-size:11px">Rechazados</button>
+        </div>
+        <div id="admin-txns-list"><div style="text-align:center;padding:20px;color:var(--t2);font-size:12px">Selecciona un filtro arriba</div></div>
+      </div>
+
       <div class="av" id="av-activity">
         <div class="dv-h">Actividad 📋</div><div class="dv-s">Log completo de la plataforma · Listo para base de datos</div>
         <div class="act-filters">
@@ -3153,6 +3161,8 @@ function buildCliTbl(users){
       <div class="u-acts" style="flex-wrap:wrap;gap:6px;margin-top:8px">
         <button class="u-btn wa" onclick="(function(){const t=('${ud.tel||''}'.replace(/[^0-9]/g,''));if(t)window.open('https://wa.me/'+t+'?text='+encodeURIComponent('Hola ${ud.nombre||em}, te contactamos de LS Cambios.'),'_blank');else alert('El cliente no tiene teléfono registrado');})()" >💬 WhatsApp</button>
         <button class="u-btn vw" onclick="showAV('chats')">Ver chats</button>
+        <!-- ★ ACREDITAR DINERO ★ -->
+        <button class="btn g sm" onclick="admCreditModal('${em}','${ud.nombre||''} ${ud.apellido||''}')" style="background:rgba(0,200,150,.12);border-color:var(--g);color:var(--g);font-weight:800">💳 Acreditar saldo</button>
         ${ud.kycPhoto
           ?`<button class="btn g sm" onclick="admKycView('${ud.kycPhoto}')" style="background:rgba(0,200,150,.1);border-color:var(--g)">🆔 Ver foto KYC</button>`
           :'<span style="font-size:11px;color:var(--t3)">📷 Sin foto aún</span>'}
@@ -4126,28 +4136,51 @@ async function loadWalletData() {
   loadWalletTxns();
 }
 
+// Moneda activa en la billetera (cicla entre usdt → usd → bs)
+let _wCur = 'usdt';
+const _wCurCfg = {
+  usdt: { col:'#26a17b', unit:'USDT', dec:2, equiv: (u,t,b,r)=>fmtW(u+t+(b/r),2)+' USD equiv.' },
+  usd:  { col:'#1a6cff', unit:'USD',  dec:2, equiv: (u,t,b,r)=>fmtW(t+(b/r),2)+' USDT equiv.' },
+  bs:   { col:'#cf142b', unit:'Bs',   dec:0, equiv: (u,t,b,r)=>fmtW((u+t)*r,0)+' Bs total' }
+};
+
+function switchWalletCurrency() {
+  const order = ['usdt','usd','bs'];
+  _wCur = order[(order.indexOf(_wCur)+1) % order.length];
+  // Animación de giro en el botón
+  const btn = document.getElementById('wbal-switch-btn');
+  if(btn){ btn.style.transform='rotate(180deg)'; setTimeout(()=>btn.style.transform='',300); }
+  renderWallet();
+}
+
 function renderWallet() {
   const bsRate = (RATES&&RATES.venta&&RATES.venta.paypal&&RATES.venta.paypal.t) || 670;
   const usd  = parseFloat(_wBal.balance_usd)  || 0;
   const usdt = parseFloat(_wBal.balance_usdt) || 0;
   const bs   = parseFloat(_wBal.balance_bs)   || 0;
-  const total = usdt + usd + (bs / bsRate);
+  const cfg  = _wCurCfg[_wCur];
+
+  // Monto a mostrar según moneda activa
+  const amounts = {usdt, usd, bs};
+  const amt = amounts[_wCur] || 0;
 
   const el = id => document.getElementById(id);
-  if(el('wbal-total'))    el('wbal-total').innerHTML    = fmtW(total,2)+' <span style="font-size:16px;color:var(--t2)">USDT</span>';
-  if(el('wbal-usd-est'))  el('wbal-usd-est').textContent = '≈ $'+fmtW(total,2)+' USD';
-  if(el('wbal-usd'))      el('wbal-usd').textContent     = '$'+fmtW(usd,2);
-  if(el('wbal-usdt'))     el('wbal-usdt').textContent    = fmtW(usdt,2);
-  if(el('wbal-bs'))       el('wbal-bs').textContent      = fmtW(bs,0);
+  if(el('wbal-amount')) { el('wbal-amount').textContent = fmtW(amt, cfg.dec); el('wbal-amount').style.color = cfg.col; }
+  if(el('wbal-unit'))   { el('wbal-unit').textContent   = cfg.unit; el('wbal-unit').style.color = cfg.col; }
+  if(el('wbal-equiv'))  el('wbal-equiv').textContent    = '≈ ' + cfg.equiv(usd, usdt, bs, bsRate);
 
   // Mini-saldo en el overview
   const ov = document.getElementById('wallet-overview-mini');
-  if(ov) ov.innerHTML = `
-    <div style="display:flex;justify-content:space-around;padding:10px 0;border-bottom:1px solid var(--brd)">
-      <div style="text-align:center"><div style="font-size:9px;color:var(--t3)">USD</div><div style="font-size:14px;font-weight:800;color:#1a6cff;font-family:var(--mono)">$${fmtW(usd,2)}</div></div>
-      <div style="text-align:center"><div style="font-size:9px;color:var(--t3)">USDT</div><div style="font-size:14px;font-weight:800;color:#26a17b;font-family:var(--mono)">${fmtW(usdt,2)}</div></div>
-      <div style="text-align:center"><div style="font-size:9px;color:var(--t3)">Bs</div><div style="font-size:14px;font-weight:800;color:#cf142b;font-family:var(--mono)">${fmtW(bs,0)}</div></div>
+  if(ov) {
+    const total = usdt + usd + (bs / bsRate);
+    ov.innerHTML = `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer" onclick="showDV('wallet')">
+      <div style="font-size:11px;color:var(--t2);font-weight:600">💳 Billetera</div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:14px;font-weight:900;color:var(--g);font-family:var(--mono)">${fmtW(total,2)} USDT</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
     </div>`;
+  }
 }
 
 async function loadWalletTxns() {
@@ -4354,6 +4387,85 @@ function buildTxnCard(t) {
   </div>`;
 }
 
+// ── Modal acreditar saldo manual (admin) ─────────────────────────
+function admCreditModal(email, nombre) {
+  document.getElementById('adm-credit-modal')?.remove();
+  const html = `<div id="adm-credit-modal" onclick="if(event.target===this)this.remove()" style="position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;padding:16px">
+  <div style="background:var(--bg1);border:1px solid var(--brd2);border-radius:16px;padding:24px;width:100%;max-width:380px">
+    <div style="font-size:15px;font-weight:800;margin-bottom:4px">💳 Acreditar saldo</div>
+    <div style="font-size:12px;color:var(--t2);margin-bottom:18px">${nombre.trim()||email}<br><span style="font-family:var(--mono);font-size:10px;color:var(--t3)">${email}</span></div>
+
+    <div style="margin-bottom:12px">
+      <label style="font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.8px;display:block;margin-bottom:5px">MONEDA A ACREDITAR</label>
+      <select id="cr-moneda" class="fsel" onchange="document.getElementById('cr-sym').textContent={usd:'USD ($)',usdt:'USDT',bs:'Bolívares (Bs)'}[this.value]">
+        <option value="usdt">USDT</option>
+        <option value="usd">USD ($)</option>
+        <option value="bs">Bolívares (Bs)</option>
+      </select>
+    </div>
+
+    <div style="margin-bottom:12px">
+      <label style="font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.8px;display:block;margin-bottom:5px">MONTO</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input id="cr-amount" type="number" class="fi" placeholder="0.00" min="0" step="any" style="flex:1;font-size:18px;font-weight:800">
+        <span id="cr-sym" style="font-size:12px;font-weight:700;color:var(--g);width:60px">USDT</span>
+      </div>
+    </div>
+
+    <div style="margin-bottom:16px">
+      <label style="font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.8px;display:block;margin-bottom:5px">NOTA (opcional)</label>
+      <input id="cr-nota" type="text" class="fi" placeholder="Ej: Depósito PM verificado" style="font-size:13px">
+    </div>
+
+    <div style="background:rgba(247,147,26,.06);border:1px solid rgba(247,147,26,.2);border-radius:8px;padding:10px;font-size:11px;color:var(--yellow);margin-bottom:16px">
+      ⚠️ Esta acción acredita el saldo directamente sin crear transacción. Para depósitos normales usa la pestaña <b>Depósitos/Retiros</b>.
+    </div>
+
+    <div style="display:flex;gap:8px">
+      <button class="btn g full" onclick="admCreditSubmit('${email}')" style="flex:2;padding:12px;font-size:13px;font-weight:800">✅ Acreditar ahora</button>
+      <button class="btn ghost full" onclick="document.getElementById('adm-credit-modal').remove()" style="flex:1;padding:12px;font-size:13px">Cancelar</button>
+    </div>
+  </div></div>`;
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+
+async function admCreditSubmit(email) {
+  const moneda = document.getElementById('cr-moneda')?.value;
+  const amt    = parseFloat(document.getElementById('cr-amount')?.value)||0;
+  const nota   = document.getElementById('cr-nota')?.value||'Acreditación manual por admin';
+  if(!amt||amt<=0){ toast('Ingresa un monto válido','err'); return; }
+  if(!confirm(`¿Acreditar ${amt} ${moneda.toUpperCase()} a ${email}?`)) return;
+
+  const btn = document.querySelector('#adm-credit-modal .btn.g');
+  if(btn){ btn.disabled=true; btn.textContent='Procesando...'; }
+
+  try {
+    // Usar la función de Supabase que actualiza el balance directamente
+    const colMap = {usd:'balance_usd', usdt:'balance_usdt', bs:'balance_bs'};
+    const col = colMap[moneda];
+    // Primero leer saldo actual
+    const {data:cli, error:er1} = await db.from('clientes').select(col).eq('email',email).single();
+    if(er1||!cli){ toast('❌ Cliente no encontrado','err'); return; }
+    const newBal = (parseFloat(cli[col])||0) + amt;
+    const {error:er2} = await db.from('clientes').update({[col]: newBal}).eq('email',email);
+    if(er2){ toast('❌ '+er2.message,'err'); return; }
+    // Registrar como transacción aprobada
+    await db.from('transacciones').insert({
+      cliente_email:email, tipo:'deposit', moneda, monto:amt,
+      plat:'manual_admin', estado:'approved',
+      notas: nota, admin_notas:'Acreditación manual por admin'
+    });
+    // Notificar por Telegram
+    if(typeof tgNotify==='function') tgNotify(`💳 <b>Acreditación manual</b>
+📧 ${email}
+💰 +${amt} ${moneda.toUpperCase()}
+📝 ${nota}`);
+    toast(`✅ Acreditados ${amt} ${moneda.toUpperCase()} a ${email}`, 'ok');
+    document.getElementById('adm-credit-modal')?.remove();
+    loadAdmin();
+  } catch(e){ toast('❌ '+e.message,'err'); }
+}
+
 async function admApproveTxn(txnId, tipo) {
   if(!confirm(`¿Aprobar y acreditar saldo? ID: ${txnId}`)) return;
   try {
@@ -4521,7 +4633,57 @@ document.addEventListener('DOMContentLoaded', ()=>{
 </div>
 
 <!-- Botón flotante -->
-<button id="bot-fab" onclick="openSupportBot()" style="display:none;position:fixed;bottom:20px;right:16px;z-index:7999;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#1a6cff,#00c896);border:none;cursor:pointer;box-shadow:0 4px 16px rgba(26,108,255,.4);font-size:22px;transition:.2s" title="Soporte">💬</button>
+<button id="bot-fab" style="display:none;position:fixed;bottom:20px;right:16px;z-index:7999;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#1a6cff,#00c896);border:none;cursor:grab;box-shadow:0 4px 16px rgba(26,108,255,.4);font-size:22px;transition:box-shadow .2s;touch-action:none;user-select:none" title="Soporte · Arrastra para mover">💬</button>
+<script>
+(function(){
+  const fab = document.getElementById('bot-fab');
+  if(!fab) return;
+  let dragging=false, startX, startY, origX, origY, moved=false;
+
+  function getPos(e){ return e.touches ? {x:e.touches[0].clientX, y:e.touches[0].clientY} : {x:e.clientX, y:e.clientY}; }
+
+  fab.addEventListener('mousedown', start);
+  fab.addEventListener('touchstart', start, {passive:true});
+
+  function start(e){
+    dragging=true; moved=false;
+    const p=getPos(e);
+    const r=fab.getBoundingClientRect();
+    startX=p.x; startY=p.y;
+    origX=r.left; origY=r.top;
+    fab.style.transition='none';
+    fab.style.cursor='grabbing';
+    fab.style.right='auto'; fab.style.bottom='auto';
+    fab.style.left=origX+'px'; fab.style.top=origY+'px';
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', end);
+    document.addEventListener('touchmove', move, {passive:false});
+    document.addEventListener('touchend', end);
+  }
+
+  function move(e){
+    if(!dragging) return;
+    if(e.cancelable) e.preventDefault();
+    const p=getPos(e);
+    const dx=p.x-startX, dy=p.y-startY;
+    if(Math.abs(dx)>4||Math.abs(dy)>4) moved=true;
+    const nx=Math.max(0, Math.min(window.innerWidth-52, origX+dx));
+    const ny=Math.max(0, Math.min(window.innerHeight-52, origY+dy));
+    fab.style.left=nx+'px'; fab.style.top=ny+'px';
+  }
+
+  function end(){
+    dragging=false;
+    fab.style.cursor='grab';
+    fab.style.transition='box-shadow .2s';
+    document.removeEventListener('mousemove', move);
+    document.removeEventListener('mouseup', end);
+    document.removeEventListener('touchmove', move);
+    document.removeEventListener('touchend', end);
+    if(!moved) openSupportBot();
+  }
+})();
+</script>
 
 </body>
 </html>
