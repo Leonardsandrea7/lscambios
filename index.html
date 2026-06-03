@@ -3334,94 +3334,96 @@ async function admRevisar(){
 
 async function admConfirm(){
   if(!aCur) return;
-  const clientEmail = aCur.uem; // ← campo correcto
-  const opId = aCur.opId;
+  const email = aCur.uem;
+  const opId  = aCur.opId;
 
-  // 1. Leer operación desde Supabase — obtener send_txt, dir, plat
-  let dep_monto=0, dep_moneda='bs', dep_plat='pagomovil';
+  // Leer la operación para mostrar info al admin
+  let opDir='', opPlat='', opSend='';
   try{
-    const{data:opRow, error:opErr}=await db.from('operaciones')
-      .select('send_txt,dir,plat,cliente_email')
-      .eq('id', opId).single();
-    if(opErr){ console.error('[admConfirm] leer op:', opErr.message); }
-    if(opRow){
-      dep_plat = opRow.plat || 'pagomovil';
-      const dir = opRow.dir || '';
-      const txt = opRow.send_txt || '';
-      if(dir==='deposito'||dir==='deposit'){
-        if(dep_plat==='pagomovil'){
-          dep_moneda = 'bs';
-          // "Bs 7.000 (Pago Móvil)" → extraer número
-          const m = txt.replace(/\./g,'').replace(',','.').match(/[\d]+(\.\d+)?/);
-          dep_monto = m ? parseFloat(m[0]) : 0;
-        } else {
-          dep_moneda = 'usdt';
-          // "5.0000 USDT (Binance Pay)" → extraer número
-          const m = txt.match(/[\d]+\.?[\d]*/);
-          dep_monto = m ? parseFloat(m[0]) : 0;
-        }
-      }
-    }
-  }catch(e){ console.error('[admConfirm read]', e); }
+    const{data}=await db.from('operaciones')
+      .select('dir,plat,send_txt').eq('id',opId).single();
+    if(data){ opDir=data.dir||''; opPlat=data.plat||''; opSend=data.send_txt||''; }
+  }catch(e){}
 
-  // 2. Marcar operación como confirmed
-  const ok = await sbUpdateOpEstado(opId, 'confirmed');
-  if(!ok){ toast('❌ Error al confirmar estado','err'); return; }
-
-  // 3. Acreditar saldo directo en la tabla clientes
-  let credited = false;
-  let creditMsg = '';
-  if(dep_monto > 0 && clientEmail){
-    try{
-      const colMap = {usd:'balance_usd', usdt:'balance_usdt', bs:'balance_bs'};
-      const col = colMap[dep_moneda];
-      if(col){
-        // Leer saldo actual
-        const{data:cli, error:e1} = await db.from('clientes')
-          .select(col).eq('email', clientEmail).single();
-        if(e1){ console.error('[admConfirm] leer saldo:', e1.message); }
-        else{
-          const curBal = parseFloat(cli[col]) || 0;
-          const newBal = curBal + dep_monto;
-          const{error:e2} = await db.from('clientes')
-            .update({[col]: newBal})
-            .eq('email', clientEmail);
-          if(e2){ console.error('[admConfirm] update balance:', e2.message); }
-          else{
-            credited = true;
-            creditMsg = '+'+dep_monto+' '+dep_moneda.toUpperCase();
-            // Log en transacciones
-            await db.from('transacciones').insert({
-              cliente_email: clientEmail,
-              tipo: 'deposit', moneda: dep_moneda,
-              monto: dep_monto, plat: dep_plat,
-              estado: 'approved',
-              notas: 'Op:'+opId,
-              admin_notas: 'Acreditado automáticamente'
-            }).catch(e=>console.warn('[txn log]',e));
-          }
-        }
-      }
-    }catch(e){ console.error('[admConfirm credit]', e); }
-  } else {
-    console.warn('[admConfirm] dep_monto='+dep_monto+' email='+clientEmail);
+  // Solo acreditar si es un depósito
+  const esDeposito = opDir==='deposito'||opDir==='deposit';
+  if(!esDeposito){
+    // Es una operación normal (no depósito) — solo confirmar estado
+    await sbUpdateOpEstado(opId,'confirmed');
+    await sbSendMsg(opId,{from:'sys',text:'🟢 LS Cambios verificó tu pago.',time:tnow()});
+    await sbSendMsg(opId,{from:'admin',text:'✅ Pago confirmado.',time:tnow()});
+    document.getElementById('a-chat-bdg').innerHTML=stBdg('confirmed');
+    toast('✅ Confirmado','ok'); loadAdmin(); return;
   }
 
-  // 4. Mensajes al cliente en el chat
-  await sbSendMsg(opId,{from:'sys',text:'🟢 Comprobante verificado por LS Cambios.',time:tnow()});
-  if(credited){
-    await sbSendMsg(opId,{from:'admin',text:'✅ Saldo acreditado en tu billetera LS Cambios: '+creditMsg+'. ¡Gracias!',time:tnow()});
-    toast('✅ '+creditMsg+' acreditados a '+clientEmail,'ok');
-  } else {
-    await sbSendMsg(opId,{from:'admin',text:'✅ Pago verificado. Tu saldo será acreditado en breve.',time:tnow()});
-    toast('⚠️ Estado confirmado pero no se acreditó. Usa "Acreditar saldo" manual.','err');
-  }
-
-  const bdg = document.getElementById('a-chat-bdg');
-  if(bdg) bdg.innerHTML = stBdg('confirmed');
-  loadAdmin();
+  // Es un depósito → pedir monto y moneda al admin en un modal
+  document.getElementById('adm-dep-modal')?.remove();
+  const monedaLabel = opPlat==='binance'?'USDT':'Bs';
+  const html=`<div id="adm-dep-modal" style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;padding:16px">
+  <div style="background:var(--bg1);border:1px solid var(--brd2);border-radius:16px;padding:24px;width:100%;max-width:360px">
+    <div style="font-size:15px;font-weight:800;margin-bottom:4px">💳 Confirmar depósito</div>
+    <div style="font-size:11px;color:var(--t2);margin-bottom:4px">Cliente: <b>${email}</b></div>
+    <div style="font-size:11px;color:var(--t2);margin-bottom:16px">Operación: <b>${opSend}</b></div>
+    <div style="margin-bottom:12px">
+      <label style="font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.8px;display:block;margin-bottom:5px">MONEDA A ACREDITAR</label>
+      <select id="adc-moneda" class="fsel">
+        ${opPlat==='binance'
+          ? '<option value="usdt">USDT</option><option value="usd">USD</option>'
+          : '<option value="bs">Bolívares (Bs)</option><option value="usd">USD</option><option value="usdt">USDT</option>'}
+      </select>
+    </div>
+    <div style="margin-bottom:16px">
+      <label style="font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.8px;display:block;margin-bottom:5px">MONTO A ACREDITAR</label>
+      <input id="adc-monto" type="number" class="fi" placeholder="0.00" step="any" min="0" style="font-size:20px;font-weight:800">
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn g full" onclick="admConfirmDeposit('${email}','${opId}','${opPlat}')" style="flex:2;padding:12px;font-size:14px;font-weight:800">✅ Acreditar y confirmar</button>
+      <button class="btn ghost full" onclick="document.getElementById('adm-dep-modal').remove()" style="flex:1;padding:12px">Cancelar</button>
+    </div>
+  </div></div>`;
+  document.body.insertAdjacentHTML('beforeend', html);
+  setTimeout(()=>document.getElementById('adc-monto')?.focus(), 100);
 }
 
+async function admConfirmDeposit(email, opId, plat){
+  const moneda = document.getElementById('adc-moneda')?.value;
+  const monto  = parseFloat(document.getElementById('adc-monto')?.value);
+  if(!monto || monto<=0){ toast('Ingresa un monto válido','err'); return; }
+
+  const btn = document.querySelector('#adm-dep-modal .btn.g');
+  if(btn){ btn.disabled=true; btn.textContent='Procesando...'; }
+
+  // 1. Leer saldo actual
+  const colMap = {usd:'balance_usd', usdt:'balance_usdt', bs:'balance_bs'};
+  const col = colMap[moneda];
+  const{data:cli, error:e1}=await db.from('clientes').select(col).eq('email',email).single();
+  if(e1){ toast('❌ Error leyendo saldo: '+e1.message,'err'); return; }
+
+  // 2. Sumar y guardar nuevo saldo
+  const newBal = (parseFloat(cli[col])||0) + monto;
+  const{error:e2}=await db.from('clientes').update({[col]:newBal}).eq('email',email);
+  if(e2){ toast('❌ Error acreditando: '+e2.message,'err'); return; }
+
+  // 3. Marcar operación como confirmed
+  await sbUpdateOpEstado(opId,'confirmed');
+
+  // 4. Registrar en transacciones
+  await db.from('transacciones').insert({
+    cliente_email:email, tipo:'deposit', moneda, monto,
+    plat:plat||'pagomovil', estado:'approved',
+    notas:'Op:'+opId, admin_notas:'Acreditado manualmente por admin'
+  }).catch(()=>{});
+
+  // 5. Mensajes en el chat
+  await sbSendMsg(opId,{from:'sys',text:'🟢 Comprobante verificado por LS Cambios.',time:tnow()});
+  await sbSendMsg(opId,{from:'admin',text:`✅ Depósito confirmado. Se acreditaron ${monto} ${moneda.toUpperCase()} en tu billetera LS Cambios. ¡Gracias!`,time:tnow()});
+
+  document.getElementById('adm-dep-modal')?.remove();
+  const bdg=document.getElementById('a-chat-bdg');
+  if(bdg) bdg.innerHTML=stBdg('confirmed');
+  toast(`✅ Acreditados ${monto} ${moneda.toUpperCase()} a ${email}`,'ok');
+  loadAdmin();
+}
 async function admClose(){
   if(!aCur||!confirm('¿Marcar como completado y acreditar saldo automáticamente?'))return;
   const ok=await sbUpdateOpEstado(aCur.opId,'completed');
