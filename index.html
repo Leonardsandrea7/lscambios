@@ -3333,37 +3333,64 @@ async function admRevisar(){
 }
 
 async function admConfirm(){
-  if(!aCur)return;
-  const ok=await sbUpdateOpEstado(aCur.opId,'confirmed');
-  if(!ok)return;
-  await sbSendMsg(aCur.opId,{from:'sys',text:'🟢 Comprobante verificado por LS Cambios. Tu saldo será acreditado en segundos.',time:tnow()});
-  await sbSendMsg(aCur.opId,{from:'admin',text:'✅ Pago recibido y confirmado. Acreditando saldo...',time:tnow()});
-  document.getElementById('a-chat-bdg').innerHTML=stBdg('confirmed');
-
-  // Acreditar inmediatamente al confirmar (sin esperar el admClose)
+  if(!aCur) return;
+  // 1. Leer la operación para saber monto y moneda
+  let dep_monto=0, dep_moneda='usd', dep_plat='pagomovil';
   try{
-    const{data:txns}=await db.from('transacciones')
-      .select('*')
-      .eq('cliente_email', aCur.email)
-      .eq('tipo','deposit')
-      .eq('estado','pending')
-      .order('created_at',{ascending:false})
-      .limit(10);
-    const txn=(txns||[]).find(t=>t.notas&&t.notas.includes(aCur.opId))||(txns&&txns[0]);
-    if(txn){
-      const{data:res,error:err}=await db.rpc('aprobar_deposito',{p_txn_id:txn.id});
-      if(!err&&res?.ok!==false){
-        await sbSendMsg(aCur.opId,{from:'sys',text:'💳 ¡Saldo acreditado! Ya puedes verlo en tu billetera LS Cambios.',time:tnow()});
-        toast('✅ Pago confirmado y saldo acreditado automáticamente.','ok');
-      } else {
-        toast('✅ Confirmado. Error menor al acreditar, revisa Depósitos/Retiros.','ok');
+    const{data:opRow}=await db.from('operaciones')
+      .select('send_txt,dir,plat').eq('id',aCur.opId).single();
+    if(opRow){
+      dep_plat = opRow.plat||'pagomovil';
+      // Parsear monto desde send_txt: "Bs 7000 (Pago Móvil)" o "5.0000 USDT (Binance Pay)"
+      if(opRow.dir==='deposito'||opRow.dir==='deposit'){
+        const txt = opRow.send_txt||'';
+        if(dep_plat==='pagomovil'){
+          dep_moneda='bs';
+          const m=txt.match(/([\d.,]+)/); dep_monto=m?parseFloat(m[1].replace(',','')):0;
+        } else {
+          dep_moneda='usdt';
+          const m=txt.match(/([\d.]+)/); dep_monto=m?parseFloat(m[1]):0;
+        }
       }
-    } else {
-      toast('✅ Confirmado. Acredita manualmente desde Depósitos/Retiros si es necesario.','ok');
     }
-  }catch(e){
-    toast('✅ Confirmado (acreditación manual si necesario).','ok');
+  }catch(e){ console.warn('[admConfirm read op]',e); }
+
+  // 2. Marcar como confirmed
+  const ok=await sbUpdateOpEstado(aCur.opId,'confirmed');
+  if(!ok){ toast('❌ Error al confirmar','err'); return; }
+
+  // 3. Acreditar saldo DIRECTO en clientes (sin depender de transacciones)
+  let credited=false;
+  if(dep_monto>0){
+    try{
+      const colMap={usd:'balance_usd',usdt:'balance_usdt',bs:'balance_bs'};
+      const col=colMap[dep_moneda];
+      // Leer saldo actual
+      const{data:cli}=await db.from('clientes').select(col).eq('email',aCur.email).single();
+      const newBal=(parseFloat(cli?.[col])||0)+dep_monto;
+      const{error:er}=await db.from('clientes').update({[col]:newBal}).eq('email',aCur.email);
+      if(!er){
+        credited=true;
+        // Registrar en transacciones como approved
+        await db.from('transacciones').insert({
+          cliente_email:aCur.email, tipo:'deposit', moneda:dep_moneda,
+          monto:dep_monto, plat:dep_plat, estado:'approved',
+          notas:'Op: '+aCur.opId, admin_notas:'Acreditado por admin al confirmar'
+        }).catch(()=>{});
+      }
+    }catch(e){ console.warn('[admConfirm credit]',e); }
   }
+
+  // 4. Mensajes al cliente
+  await sbSendMsg(aCur.opId,{from:'sys',text:'🟢 Comprobante verificado por LS Cambios.',time:tnow()});
+  if(credited){
+    await sbSendMsg(aCur.opId,{from:'admin',text:'✅ Pago confirmado. Tu saldo ha sido acreditado en tu billetera LS Cambios. ¡Gracias!',time:tnow()});
+    toast('✅ Confirmado y saldo acreditado: +'+dep_monto+' '+dep_moneda.toUpperCase(),'ok');
+  } else {
+    await sbSendMsg(aCur.opId,{from:'admin',text:'✅ Pago confirmado. Tu saldo será acreditado en breve.',time:tnow()});
+    toast('✅ Confirmado. Usa "Acreditar saldo" si el monto no se aplicó.','ok');
+  }
+  document.getElementById('a-chat-bdg').innerHTML=stBdg('confirmed');
   loadAdmin();
 }
 
