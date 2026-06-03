@@ -1404,50 +1404,128 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <button onclick="openSupportBot()" class="btn ghost full" style="margin-top:16px">💬 Soporte</button>
       </div>
 
-      <div class="dv on" id="dv-newop">
-        <div class="dv-h">Nueva operación ⚡</div><div class="dv-s">Calculadora con tasas exactas.</div>
-        <div class="op-form">
-          <div class="fg">
-            <label>MODO DE CAMBIO</label>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-              <button id="mode-bs" onclick="setMode('bs')" style="padding:11px 6px;border-radius:8px;border:1.5px solid var(--g);background:var(--g);color:#000;font-size:12px;font-weight:800;cursor:pointer">💵 Bolívares</button>
-              <button id="mode-usdt" onclick="setMode('usdt')" style="padding:11px 6px;border-radius:8px;border:1.5px solid var(--brd2);background:transparent;color:var(--t2);font-size:12px;font-weight:800;cursor:pointer">🪙 USDT BEP20</button>
+      <div class="dv" id="dv-newop">
+        <!-- Tabs Depositar / Retirar -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:2px solid var(--brd);margin-bottom:20px">
+          <button id="tab-dep" onclick="switchOpTab('dep')" style="padding:12px;font-size:13px;font-weight:800;border:none;background:none;cursor:pointer;color:var(--g);border-bottom:2px solid var(--g);margin-bottom:-2px;transition:.2s">⬇️ Depositar</button>
+          <button id="tab-ret" onclick="switchOpTab('ret')" style="padding:12px;font-size:13px;font-weight:800;border:none;background:none;cursor:pointer;color:var(--t2);border-bottom:2px solid transparent;margin-bottom:-2px;transition:.2s">⬆️ Retirar</button>
+        </div>
+
+        <!-- ── DEPOSITAR ── -->
+        <div id="op-dep-panel">
+          <div class="dv-s" style="margin-bottom:16px">Elige cómo enviar tu pago a LS Cambios</div>
+
+          <!-- Método de depósito -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+            <div id="dep-btn-pm" onclick="selectDepMethod('pagomovil')" style="border:2px solid var(--g);border-radius:12px;padding:14px;text-align:center;cursor:pointer;background:rgba(0,200,150,.06);transition:.15s">
+              <div style="font-size:22px;margin-bottom:4px">📲</div>
+              <div style="font-size:11px;font-weight:800">Pago Móvil</div>
+              <div style="font-size:9px;color:var(--t2);margin-top:2px">Bolívares</div>
+            </div>
+            <div id="dep-btn-bnb" onclick="selectDepMethod('binance')" style="border:2px solid var(--brd2);border-radius:12px;padding:14px;text-align:center;cursor:pointer;background:transparent;transition:.15s">
+              <div style="font-size:22px;margin-bottom:4px">💛</div>
+              <div style="font-size:11px;font-weight:800">Binance Pay</div>
+              <div style="font-size:9px;color:var(--t2);margin-top:2px">USDT</div>
             </div>
           </div>
-          <div class="fg"><label>OPERACIÓN</label>
-            <select class="fsel" id="op-dir" onchange="calcOp();updWallet();swapPlats()">
-              <option value="compra">Vendo divisas → recibo Bolívares</option>
-              <option value="venta">Compro divisas → envío Bolívares</option>
+
+          <!-- Datos de pago del admin -->
+          <div id="dep-payment-info" style="display:none;background:var(--bg2);border:1px solid var(--brd2);border-radius:var(--r2);padding:14px;margin-bottom:14px">
+            <div id="dep-info-title" style="font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--g);margin-bottom:10px">📲 ENVÍA A ESTE NÚMERO</div>
+            <div id="dep-info-body"></div>
+          </div>
+
+          <!-- Monto -->
+          <div class="fg">
+            <label id="dep-amt-lbl">MONTO A DEPOSITAR (Bs)</label>
+            <input class="fi" type="number" id="dep-amt" placeholder="0" min="0" oninput="calcDep()">
+          </div>
+
+          <!-- Resultado calculadora -->
+          <div id="dep-res-box" style="display:none">
+            <div class="res-box">
+              <div class="res-lbl">SE ACREDITARÁ EN TU BILLETERA</div>
+              <div class="res-val" id="dep-res-val">—</div>
+              <div class="res-det" id="dep-res-det"></div>
+            </div>
+          </div>
+
+          <!-- Tiempo estimado -->
+          <div style="background:rgba(0,200,150,.06);border:1px solid rgba(0,200,150,.18);border-radius:var(--r);padding:10px 12px;font-size:11px;color:var(--g);margin:12px 0;display:flex;align-items:center;gap:8px">
+            ⏱ <span>Tiempo de revisión y acreditación: <strong>~5 minutos</strong></span>
+          </div>
+
+          <button class="btn g full" id="dep-start-btn" onclick="startDeposit()" style="font-size:14px;padding:13px" disabled>
+            Subir comprobante →
+          </button>
+        </div>
+
+        <!-- ── RETIRAR ── -->
+        <div id="op-ret-panel" style="display:none">
+          <div class="dv-s" style="margin-bottom:16px">Elige la moneda de tu saldo y a dónde retiras</div>
+
+          <!-- Saldo disponible -->
+          <div id="ret-saldo-box" style="background:var(--bg2);border:1px solid var(--brd2);border-radius:var(--r);padding:12px;margin-bottom:14px">
+            <div style="font-size:10px;color:var(--t3);font-weight:700;letter-spacing:.8px;margin-bottom:6px">TU SALDO</div>
+            <div style="display:flex;gap:16px;flex-wrap:wrap">
+              <span id="ret-bal-usd" style="font-size:13px;font-weight:800;color:#1a6cff;font-family:var(--mono)">$0.00 USD</span>
+              <span id="ret-bal-usdt" style="font-size:13px;font-weight:800;color:#26a17b;font-family:var(--mono)">0.00 USDT</span>
+              <span id="ret-bal-bs" style="font-size:13px;font-weight:800;color:#cf142b;font-family:var(--mono)">Bs 0</span>
+            </div>
+          </div>
+
+          <!-- Moneda de origen -->
+          <div class="fg">
+            <label>RETIRAR DESDE MI SALDO EN</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px">
+              <button id="ret-from-usd"  onclick="selectRetFrom('usd')"  style="padding:10px 4px;border-radius:8px;border:1.5px solid var(--brd2);background:transparent;color:var(--t2);font-size:11px;font-weight:800;cursor:pointer;transition:.15s">💵 USD</button>
+              <button id="ret-from-usdt" onclick="selectRetFrom('usdt')" style="padding:10px 4px;border-radius:8px;border:1.5px solid var(--g);background:rgba(0,200,150,.1);color:var(--g);font-size:11px;font-weight:800;cursor:pointer;transition:.15s">🪙 USDT</button>
+              <button id="ret-from-bs"   onclick="selectRetFrom('bs')"   style="padding:10px 4px;border-radius:8px;border:1.5px solid var(--brd2);background:transparent;color:var(--t2);font-size:11px;font-weight:800;cursor:pointer;transition:.15s">🇻🇪 Bs</button>
+            </div>
+          </div>
+
+          <!-- Plataforma de retiro -->
+          <div class="fg" style="margin-top:12px">
+            <label>RECIBIR EN</label>
+            <select class="fsel" id="ret-plat" onchange="calcRet()">
+              <option value="paypal">💙 PayPal</option>
+              <option value="zinli">💚 Zinli</option>
+              <option value="wally">💜 WallyTech</option>
+              <option value="airtm">🧡 Airtm</option>
+              <option value="binance">💛 Binance</option>
+              <option value="pagomovil">📲 Pago Móvil (Bs)</option>
             </select>
           </div>
-          <div class="pagomovil-box" style="margin-bottom:16px">
-            <div style="font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--g);margin-bottom:6px">📲 ¿CÓMO DEPOSITAR?</div>
-            <div style="font-size:12px;color:var(--t2);line-height:1.6">Envía en <strong>Bolívares</strong> por <strong>Pago Móvil</strong> o en <strong>USDT</strong> por <strong>Binance Pay</strong> — luego retira en tu plataforma favorita.</div>
+
+          <!-- Monto a retirar -->
+          <div class="fg" style="margin-top:12px">
+            <label id="ret-amt-lbl">MONTO A RETIRAR (USDT)</label>
+            <input class="fi" type="number" id="ret-amt" placeholder="0.00" min="0" oninput="calcRet()">
           </div>
-          <div class="fg" id="plat-bs-wrap"><label>PLATAFORMA DE RETIRO</label>
-            <select class="fsel" id="op-plat" onchange="calcOp();updWallet()">
-              <option value="paypal">PayPal</option>
-              <option value="zinli">Zinli</option>
-              <option value="wally">Wally</option>
-              <option value="airtm">Airtm</option>
-              <option value="binance">Binance Pay</option>
-            </select>
+
+          <!-- Resultado -->
+          <div id="ret-res-box" style="display:none">
+            <div class="res-box">
+              <div class="res-lbl">RECIBIRÁS EN <span id="ret-plat-name">—</span></div>
+              <div class="res-val" id="ret-res-val">—</div>
+              <div class="res-det" id="ret-res-det"></div>
+            </div>
           </div>
-          <div class="fg" id="plat-usdt-wrap" style="display:none"><label>PLATAFORMA</label>
-            <select class="fsel" id="op-plat-usdt" onchange="calcOp();updWallet()">
-              <option value="paypal">PayPal</option>
-              <option value="zinli">Zinli</option>
-              <option value="wally">Wally</option>
-              <option value="airtm">Airtm</option>
-              <option value="binance">Binance</option>
-            </select>
+
+          <!-- Cuenta destino del usuario -->
+          <div id="ret-dest-box" style="display:none;background:var(--bg2);border:1px solid var(--brd2);border-radius:var(--r);padding:12px;margin-top:12px">
+            <div style="font-size:10px;color:var(--t3);font-weight:700;letter-spacing:.8px;margin-bottom:6px">📋 SE ENVIARÁ A TU CUENTA</div>
+            <div id="ret-dest-body"></div>
           </div>
-          <div class="fg"><label id="op-amt-lbl">MONTO A ENVIAR (USD)</label>
-            <input class="fi" type="number" id="op-amt" value="100" min="1" oninput="calcOp()">
+
+          <!-- Tiempo estimado -->
+          <div style="background:rgba(245,184,0,.06);border:1px solid rgba(245,184,0,.18);border-radius:var(--r);padding:10px 12px;font-size:11px;color:var(--yellow);margin:12px 0;display:flex;align-items:center;gap:8px">
+            ⏱ <span>Tiempo de procesamiento: <strong>30 min – 2 horas</strong></span>
           </div>
-          <div class="res-box"><div class="res-lbl" id="op-res-lbl">RECIBIRÍAS</div><div class="res-val" id="op-res-val">—</div><div class="res-det" id="op-res-det"></div></div>
-          <div class="wall-box ui-hidden" id="wall-box"><div style="font-size:9px;color:var(--g);letter-spacing:.8px;font-weight:700;margin-bottom:8px">📲 ENVÍA TU PAGO A LS CAMBIOS</div><div id="wall-cnt"></div></div>
-          <button class="btn g full" onclick="startOp()" style="font-size:14px;padding:13px">Confirmar operación →</button>
+
+          <button class="btn g full" id="ret-start-btn" onclick="startRetiro()" style="font-size:14px;padding:13px" disabled>
+            Solicitar retiro →
+          </button>
         </div>
       </div>
       
@@ -4685,5 +4763,251 @@ document.addEventListener('DOMContentLoaded', ()=>{
 })();
 </script>
 
+
+<script>
+// ════════════════════════════════════════════════════════════════
+//  DEPÓSITO Y RETIRO — LS Cambios
+// ════════════════════════════════════════════════════════════════
+let _depMethod = 'pagomovil'; // método de depósito activo
+let _retFrom   = 'usdt';      // moneda de origen del retiro
+
+// ── Tab switcher Depositar / Retirar ─────────────────────────────
+function switchOpTab(tab) {
+  const isD = tab === 'dep';
+  const bD = document.getElementById('tab-dep');
+  const bR = document.getElementById('tab-ret');
+  const pD = document.getElementById('op-dep-panel');
+  const pR = document.getElementById('op-ret-panel');
+  if(bD){ bD.style.color = isD?'var(--g)':'var(--t2)'; bD.style.borderBottomColor = isD?'var(--g)':'transparent'; }
+  if(bR){ bR.style.color = !isD?'var(--g)':'var(--t2)'; bR.style.borderBottomColor = !isD?'var(--g)':'transparent'; }
+  if(pD) pD.style.display = isD?'':'none';
+  if(pR) pR.style.display = isD?'none':'';
+  if(!isD) { loadRetSaldo(); calcRet(); }
+}
+
+// ══ DEPÓSITO ══════════════════════════════════════════════════════
+
+function selectDepMethod(method) {
+  _depMethod = method;
+  const isPM = method === 'pagomovil';
+  // Estilo botones
+  const btnPM  = document.getElementById('dep-btn-pm');
+  const btnBNB = document.getElementById('dep-btn-bnb');
+  if(btnPM)  { btnPM.style.borderColor  = isPM?'var(--g)':'var(--brd2)'; btnPM.style.background  = isPM?'rgba(0,200,150,.06)':'transparent'; }
+  if(btnBNB) { btnBNB.style.borderColor = !isPM?'var(--g)':'var(--brd2)'; btnBNB.style.background = !isPM?'rgba(0,200,150,.06)':'transparent'; }
+  // Label monto
+  const lbl = document.getElementById('dep-amt-lbl');
+  if(lbl) lbl.textContent = isPM ? 'MONTO A DEPOSITAR (Bs)' : 'MONTO A DEPOSITAR (USDT)';
+  // Mostrar datos de pago del admin
+  const infoBox   = document.getElementById('dep-payment-info');
+  const infoTitle = document.getElementById('dep-info-title');
+  const infoBody  = document.getElementById('dep-info-body');
+  if(infoBox) infoBox.style.display = 'block';
+  if(isPM) {
+    if(infoTitle) infoTitle.textContent = '📲 ENVÍA A ESTE PAGO MÓVIL';
+    const pm = (typeof ADMIN_PM !== 'undefined' && ADMIN_PM) || {};
+    if(infoBody) infoBody.innerHTML = pm.tel
+      ? `<div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco||'—'}</span></div>
+         <div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel} <button class="cpb" onclick="copyVal('${pm.tel}')">COPIAR</button></span></div>
+         <div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula||'—'}</span></div>`
+      : '<div style="color:var(--t2);font-size:11px">⚠️ Pago Móvil no configurado aún. Contáctanos.</div>';
+  } else {
+    if(infoTitle) infoTitle.textContent = '💛 ENVÍA A ESTE ID DE BINANCE PAY';
+    const bId = (typeof WLS !== 'undefined' && WLS && WLS.binance && WLS.binance.val) || '';
+    if(infoBody) infoBody.innerHTML = bId
+      ? `<div class="wall-row"><span class="wall-k">ID Binance</span><span class="wall-v">${bId} <button class="cpb" onclick="copyVal('${bId}')">COPIAR</button></span></div>
+         <div style="font-size:10px;color:var(--t3);margin-top:6px">Red: Binance Pay · Moneda: USDT</div>`
+      : '<div style="color:var(--t2);font-size:11px">⚠️ ID Binance no configurado. Contáctanos.</div>';
+  }
+  calcDep();
+}
+
+function calcDep() {
+  const amt = parseFloat(document.getElementById('dep-amt')?.value) || 0;
+  const res  = document.getElementById('dep-res-box');
+  const val  = document.getElementById('dep-res-val');
+  const det  = document.getElementById('dep-res-det');
+  const btn  = document.getElementById('dep-start-btn');
+  if(!res||!val) return;
+  if(!amt || amt <= 0) { res.style.display='none'; if(btn) btn.disabled=true; return; }
+  const bsRate = (RATES&&RATES.venta&&RATES.venta.paypal&&RATES.venta.paypal.t)||670;
+  res.style.display = 'block';
+  if(btn) btn.disabled = false;
+  if(_depMethod === 'pagomovil') {
+    const usd = amt / bsRate;
+    val.textContent = 'Bs ' + fmtW(amt,0) + ' → ' + fmtW(usd,2) + ' USD en tu saldo';
+    det.textContent = 'Bs '+fmtW(amt,0)+' ÷ '+fmtW(bsRate,0)+' = $'+fmtW(usd,2);
+  } else {
+    val.textContent = fmtW(amt,4) + ' USDT en tu saldo';
+    det.textContent = 'Se acredita exactamente '+fmtW(amt,4)+' USDT';
+  }
+}
+
+async function startDeposit() {
+  const sess = gS(); if(!sess){ toast('Inicia sesión primero.','err'); return; }
+  const freshUser = await sbGetUser(sess.email);
+  if(!freshUser){ toast('Error cargando tu perfil.','err'); return; }
+  const ks = freshUser.kycStatus;
+  if(ks==='pending'){ toast('⏳ Tu verificación KYC está siendo revisada.','err'); return; }
+  if(ks==='rejected'){ showKycModal(freshUser.kycReason); return; }
+  if(ks!=='verified'&&ks!=='approved'){ showKycModal(null); return; }
+  const amt = parseFloat(document.getElementById('dep-amt')?.value)||0;
+  if(!amt||amt<=0){ toast('Ingresa un monto válido.','err'); return; }
+  // Usar el flujo de operación existente (chat + comprobante)
+  const ud = getUser(sess.email); if(!ud) return;
+  const moneda  = _depMethod==='pagomovil' ? 'bs' : 'usdt';
+  const bsRate  = (RATES&&RATES.venta&&RATES.venta.paypal&&RATES.venta.paypal.t)||670;
+  const usdEq   = _depMethod==='pagomovil' ? fmtW(amt/bsRate,2) : fmtW(amt,4);
+  const sendTxt = _depMethod==='pagomovil' ? 'Bs '+fmtW(amt,0)+' (Pago Móvil)' : fmtW(amt,4)+' USDT (Binance Pay)';
+  const getTxt  = _depMethod==='pagomovil' ? '$'+usdEq+' USD en billetera LS' : fmtW(amt,4)+' USDT en billetera LS';
+  const id = genId();
+  const op = { id, date:new Date().toLocaleDateString('es-VE'), plat:_depMethod, dir:'deposito',
+               send:sendTxt, get:getTxt, st:'pending', chat:[] };
+  const opOk = await sbCreateOp(sess.email, op);
+  if(!opOk){ toast('❌ Error creando solicitud. Verifica tu conexión.','err'); return; }
+  await sbSendMsg(id,{from:'sys',text:'📥 Depósito '+id+' iniciado.',time:tnow()});
+  await sbSendMsg(id,{from:'sys',text:'📌 Adjunta el comprobante de tu pago. LS Cambios lo verificará y acreditará tu saldo en ~5 minutos.',time:tnow()});
+  tgNotify(`📥 <b>Nuevo depósito</b>
+🆔 ${id}
+👤 ${ud.nombre} ${ud.apellido}
+📧 ${sess.email}
+💰 ${sendTxt}
+💳 Acreditar: ${getTxt}`);
+  toast('✅ Operación creada. Adjunta el comprobante en el chat.','ok');
+  openTradeUI(id, op);
+}
+
+// ══ RETIRO ════════════════════════════════════════════════════════
+
+function loadRetSaldo() {
+  const usd  = parseFloat(_wBal.balance_usd)||0;
+  const usdt = parseFloat(_wBal.balance_usdt)||0;
+  const bs   = parseFloat(_wBal.balance_bs)||0;
+  const el = id => document.getElementById(id);
+  if(el('ret-bal-usd'))  el('ret-bal-usd').textContent  = '$'+fmtW(usd,2)+' USD';
+  if(el('ret-bal-usdt')) el('ret-bal-usdt').textContent = fmtW(usdt,2)+' USDT';
+  if(el('ret-bal-bs'))   el('ret-bal-bs').textContent   = 'Bs '+fmtW(bs,0);
+}
+
+function selectRetFrom(moneda) {
+  _retFrom = moneda;
+  ['usd','usdt','bs'].forEach(m => {
+    const btn = document.getElementById('ret-from-'+m);
+    if(btn){
+      const active = m===moneda;
+      btn.style.borderColor  = active?'var(--g)':'var(--brd2)';
+      btn.style.background   = active?'rgba(0,200,150,.1)':'transparent';
+      btn.style.color        = active?'var(--g)':'var(--t2)';
+    }
+  });
+  const lbl = document.getElementById('ret-amt-lbl');
+  if(lbl) lbl.textContent = `MONTO A RETIRAR (${moneda.toUpperCase()})`;
+  calcRet();
+}
+
+function calcRet() {
+  const amt  = parseFloat(document.getElementById('ret-amt')?.value)||0;
+  const plat = document.getElementById('ret-plat')?.value||'paypal';
+  const platName = document.getElementById('ret-plat-name');
+  const resBox   = document.getElementById('ret-res-box');
+  const resVal   = document.getElementById('ret-res-val');
+  const resDet   = document.getElementById('ret-res-det');
+  const destBox  = document.getElementById('ret-dest-box');
+  const destBody = document.getElementById('ret-dest-body');
+  const btn      = document.getElementById('ret-start-btn');
+  if(platName) platName.textContent = (typeof PN!=='undefined'&&PN[plat])||plat;
+  // Mostrar cuenta destino
+  const sess = gS(); const ud = sess?(getUser(sess.email)||{}):null;
+  if(destBox && destBody && ud) {
+    const pm = ud.pagoMovil||{}; const cu = ud.cuentas||{};
+    let dHtml = '';
+    if(plat==='pagomovil') dHtml = pm.tel ? `<span style="font-size:12px">${pm.banco||'—'} · ${pm.tel} · CI: ${pm.cedula||'—'}</span>` : '<span style="font-size:11px;color:var(--t2)">⚠️ Configura tu Pago Móvil en Perfil</span>';
+    else if(plat==='binance') dHtml = cu.binanceId ? `<span style="font-size:12px">ID Binance: ${cu.binanceId}</span>` : '<span style="font-size:11px;color:var(--t2)">⚠️ Agrega tu ID Binance en Perfil</span>';
+    else dHtml = cu.correo ? `<span style="font-size:12px">Correo: ${cu.correo}</span>` : '<span style="font-size:11px;color:var(--t2)">⚠️ Agrega tu correo de plataforma en Perfil</span>';
+    destBox.style.display = 'block';
+    destBody.innerHTML = dHtml;
+  }
+  if(!amt||amt<=0){ if(resBox) resBox.style.display='none'; if(btn) btn.disabled=true; return; }
+  // Verificar saldo
+  const balKey = {usd:'balance_usd',usdt:'balance_usdt',bs:'balance_bs'}[_retFrom];
+  const available = parseFloat(_wBal[balKey])||0;
+  if(amt > available){
+    if(resVal) resVal.textContent = '❌ Saldo insuficiente';
+    if(resDet) resDet.textContent = `Tienes ${fmtW(available,_retFrom==='bs'?0:2)} ${_retFrom.toUpperCase()}`;
+    if(resBox) resBox.style.display='block';
+    if(btn) btn.disabled=true; return;
+  }
+  if(resBox) resBox.style.display='block';
+  if(btn) btn.disabled=false;
+  const bsRate = (RATES&&RATES.venta&&RATES.venta.paypal&&RATES.venta.paypal.t)||670;
+  let rv='', rd='';
+  const R = RATES||{};
+  // Calcular resultado según moneda origen → plataforma destino
+  if(_retFrom==='usd') {
+    if(plat==='pagomovil'){ const bs=amt*(R.venta?.paypal?.t||bsRate); rv='Bs '+fmtW(bs,0); rd='$'+fmtW(amt,2)+' × Bs'+fmtW(R.venta?.paypal?.t||bsRate,0); }
+    else{ const rr=R.compra?.[plat]||{t:520,type:'none'}; const net=netCalc?netCalc(amt,rr):amt; rv='$'+fmtW(net,2); rd='$'+fmtW(amt,2)+' → $'+fmtW(net,2)+' neto'; }
+  } else if(_retFrom==='usdt') {
+    if(plat==='pagomovil'){ const bs=amt*bsRate; rv='Bs '+fmtW(bs,0); rd=fmtW(amt,4)+' USDT × Bs'+fmtW(bsRate,0); }
+    else{ const rr=R.usdt_compra?.[plat]||{t:0.97}; rv='$'+fmtW(amt*rr.t,2); rd=fmtW(amt,4)+' × '+rr.t+'= $'+fmtW(amt*rr.t,2); }
+  } else { // bs
+    if(plat==='pagomovil'){ rv='Bs '+fmtW(amt,0)+' a tu cuenta'; rd='Pago directo en bolívares'; }
+    else{ const usd=amt/bsRate; const rr=R.compra?.[plat]||{t:520,type:'none'}; const net=netCalc?netCalc(usd,rr):usd; rv='$'+fmtW(net,2); rd='Bs'+fmtW(amt,0)+'→$'+fmtW(usd,2)+'→$'+fmtW(net,2); }
+  }
+  if(resVal) resVal.textContent=rv;
+  if(resDet) resDet.textContent=rd;
+}
+
+async function startRetiro() {
+  const sess=gS(); if(!sess){ toast('Inicia sesión primero.','err'); return; }
+  const freshUser = await sbGetUser(sess.email);
+  if(!freshUser){ toast('Error cargando tu perfil.','err'); return; }
+  const ks=freshUser.kycStatus;
+  if(ks==='pending'){ toast('⏳ Tu verificación KYC está siendo revisada.','err'); return; }
+  if(ks!=='verified'&&ks!=='approved'){ showKycModal(null); return; }
+  const amt  = parseFloat(document.getElementById('ret-amt')?.value)||0;
+  const plat = document.getElementById('ret-plat')?.value||'paypal';
+  if(!amt||amt<=0){ toast('Ingresa un monto válido.','err'); return; }
+  const balKey={usd:'balance_usd',usdt:'balance_usdt',bs:'balance_bs'}[_retFrom];
+  if(amt > (parseFloat(_wBal[balKey])||0)){ toast('❌ Saldo insuficiente.','err'); return; }
+  const resVal = document.getElementById('ret-res-val')?.textContent||'';
+  const ud=getUser(sess.email)||{};
+  const sendTxt=`${fmtW(amt,_retFrom==='bs'?0:2)} ${_retFrom.toUpperCase()} (de tu billetera LS)`;
+  const getTxt=resVal+' en '+(typeof PN!=='undefined'&&PN[plat]||plat);
+  const id=genId();
+  const op={id,date:new Date().toLocaleDateString('es-VE'),plat,dir:'retiro',
+            send:sendTxt,get:getTxt,st:'pending',chat:[]};
+  const opOk=await sbCreateOp(sess.email,op);
+  if(!opOk){ toast('❌ Error creando retiro.','err'); return; }
+  await sbSendMsg(id,{from:'sys',text:'📤 Retiro '+id+' solicitado.',time:tnow()});
+  await sbSendMsg(id,{from:'sys',text:'⏳ LS Cambios procesará tu retiro en 30 min – 2 horas hábiles. Te notificaremos cuando se envíe.',time:tnow()});
+  // Registrar en transacciones para descontar saldo cuando admin apruebe
+  try {
+    await db.from('transacciones').insert({
+      cliente_email:sess.email, tipo:'withdraw', moneda:_retFrom, monto:amt,
+      plat:plat, estado:'pending', notas:getTxt
+    });
+  } catch(e){ console.warn('txn insert:', e); }
+  tgNotify(`📤 <b>Retiro solicitado</b>
+🆔 ${id}
+👤 ${ud.nombre||''} ${ud.apellido||''}
+📧 ${sess.email}
+💸 ${sendTxt}
+💰 ${getTxt}
+⏱ 30min-2h`);
+  toast('✅ Retiro solicitado. Procesaremos en 30 min – 2 horas.','ok');
+  openTradeUI(id, op);
+}
+
+// Inicializar paneles al abrir la vista
+const _origShowDV2 = showDV;
+showDV = function(name) {
+  _origShowDV2(name);
+  if(name==='newop') {
+    switchOpTab('dep');
+    selectDepMethod('pagomovil');
+    loadRetSaldo();
+  }
+};
+</script>
 </body>
 </html>
