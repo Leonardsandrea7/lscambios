@@ -3336,20 +3336,72 @@ async function admConfirm(){
   if(!aCur)return;
   const ok=await sbUpdateOpEstado(aCur.opId,'confirmed');
   if(!ok)return;
-  await sbSendMsg(aCur.opId,{from:'sys',text:'🟢 LS Cambios verificó y confirmó tu pago — ya puedes completar la operación.',time:tnow()});
-  await sbSendMsg(aCur.opId,{from:'admin',text:'✅ Todo en orden. Pulsa "Pago recibido — Completar" para finalizar.',time:tnow()});
+  await sbSendMsg(aCur.opId,{from:'sys',text:'🟢 Comprobante verificado por LS Cambios. Tu saldo será acreditado en segundos.',time:tnow()});
+  await sbSendMsg(aCur.opId,{from:'admin',text:'✅ Pago recibido y confirmado. Acreditando saldo...',time:tnow()});
   document.getElementById('a-chat-bdg').innerHTML=stBdg('confirmed');
-  loadAdmin(); toast('✅ Pago confirmado. El cliente puede completar.','ok');
+
+  // Acreditar inmediatamente al confirmar (sin esperar el admClose)
+  try{
+    const{data:txns}=await db.from('transacciones')
+      .select('*')
+      .eq('cliente_email', aCur.email)
+      .eq('tipo','deposit')
+      .eq('estado','pending')
+      .order('created_at',{ascending:false})
+      .limit(10);
+    const txn=(txns||[]).find(t=>t.notas&&t.notas.includes(aCur.opId))||(txns&&txns[0]);
+    if(txn){
+      const{data:res,error:err}=await db.rpc('aprobar_deposito',{p_txn_id:txn.id});
+      if(!err&&res?.ok!==false){
+        await sbSendMsg(aCur.opId,{from:'sys',text:'💳 ¡Saldo acreditado! Ya puedes verlo en tu billetera LS Cambios.',time:tnow()});
+        toast('✅ Pago confirmado y saldo acreditado automáticamente.','ok');
+      } else {
+        toast('✅ Confirmado. Error menor al acreditar, revisa Depósitos/Retiros.','ok');
+      }
+    } else {
+      toast('✅ Confirmado. Acredita manualmente desde Depósitos/Retiros si es necesario.','ok');
+    }
+  }catch(e){
+    toast('✅ Confirmado (acreditación manual si necesario).','ok');
+  }
+  loadAdmin();
 }
 
 async function admClose(){
-  if(!aCur||!confirm('¿Marcar como transacción finalizada?'))return;
+  if(!aCur||!confirm('¿Marcar como completado y acreditar saldo automáticamente?'))return;
   const ok=await sbUpdateOpEstado(aCur.opId,'completed');
   if(!ok)return;
-  await sbSendMsg(aCur.opId,{from:'sys',text:'🔒 Transacción finalizada por LS Cambios.',time:tnow()});
+
+  // ★ Acreditar saldo automáticamente ★
+  // Buscar la transacción pending de este depósito
+  let credited=false;
+  try{
+    const{data:txns}=await db.from('transacciones')
+      .select('*')
+      .eq('cliente_email', aCur.email)
+      .eq('tipo','deposit')
+      .eq('estado','pending')
+      .order('created_at',{ascending:false})
+      .limit(10);
+
+    // Buscar por op_id en las notas, o tomar la más reciente
+    const txn = (txns||[]).find(t=>t.notas&&t.notas.includes(aCur.opId))
+             || (txns&&txns[0]);
+
+    if(txn){
+      const{data:res,error:err}=await db.rpc('aprobar_deposito',{p_txn_id:txn.id});
+      if(!err&&res?.ok!==false){
+        credited=true;
+        await sbSendMsg(aCur.opId,{from:'sys',text:'✅ Saldo acreditado automáticamente en tu billetera LS Cambios.',time:tnow()});
+      }
+    }
+  }catch(e){ console.warn('[auto-credit]',e); }
+
+  await sbSendMsg(aCur.opId,{from:'sys',text:'🔒 Operación finalizada por LS Cambios.',time:tnow()});
   const ab=document.getElementById('a-acts'); if(ab)ab.style.display='none';
   document.getElementById('a-chat-bdg').innerHTML=stBdg('completed');
-  loadAdmin(); toast('🔒 Transacción finalizada','ok');
+  loadAdmin();
+  toast(credited?'✅ Completado y saldo acreditado automáticamente.':'🔒 Completado. Verifica la acreditación en Depósitos/Retiros.','ok');
 }
 
 function buildRateEditor(){
