@@ -1416,16 +1416,36 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
           <div class="dv-s" style="margin-bottom:16px">Elige cómo enviar tu pago a LS Cambios</div>
 
           <!-- Método de depósito -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
-            <div id="dep-btn-pm" onclick="selectDepMethod('pagomovil')" style="border:2px solid var(--g);border-radius:12px;padding:14px;text-align:center;cursor:pointer;background:rgba(0,200,150,.06);transition:.15s">
-              <div style="font-size:22px;margin-bottom:4px">📲</div>
-              <div style="font-size:11px;font-weight:800">Pago Móvil</div>
-              <div style="font-size:9px;color:var(--t2);margin-top:2px">Bolívares</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
+            <div id="dep-btn-pagomovil" onclick="selectDepMethod('pagomovil')" style="border:2px solid var(--g);border-radius:12px;padding:12px 6px;text-align:center;cursor:pointer;background:rgba(0,200,150,.06);transition:.15s">
+              <div style="font-size:20px;margin-bottom:3px">📲</div>
+              <div style="font-size:10px;font-weight:800">Pago Móvil</div>
+              <div style="font-size:9px;color:var(--t2)">Bs</div>
             </div>
-            <div id="dep-btn-bnb" onclick="selectDepMethod('binance')" style="border:2px solid var(--brd2);border-radius:12px;padding:14px;text-align:center;cursor:pointer;background:transparent;transition:.15s">
-              <div style="font-size:22px;margin-bottom:4px">💛</div>
-              <div style="font-size:11px;font-weight:800">Binance Pay</div>
-              <div style="font-size:9px;color:var(--t2);margin-top:2px">USDT</div>
+            <div id="dep-btn-binance" onclick="selectDepMethod('binance')" style="border:2px solid var(--brd2);border-radius:12px;padding:12px 6px;text-align:center;cursor:pointer;background:transparent;transition:.15s">
+              <div style="font-size:20px;margin-bottom:3px">💛</div>
+              <div style="font-size:10px;font-weight:800">Binance Pay</div>
+              <div style="font-size:9px;color:var(--t2)">USDT</div>
+            </div>
+            <div id="dep-btn-paypal" onclick="selectDepMethod('paypal')" style="border:2px solid var(--brd2);border-radius:12px;padding:12px 6px;text-align:center;cursor:pointer;background:transparent;transition:.15s">
+              <div style="font-size:20px;margin-bottom:3px">💙</div>
+              <div style="font-size:10px;font-weight:800">PayPal</div>
+              <div style="font-size:9px;color:var(--t2)">USD</div>
+            </div>
+            <div id="dep-btn-zinli" onclick="selectDepMethod('zinli')" style="border:2px solid var(--brd2);border-radius:12px;padding:12px 6px;text-align:center;cursor:pointer;background:transparent;transition:.15s">
+              <div style="font-size:20px;margin-bottom:3px">💚</div>
+              <div style="font-size:10px;font-weight:800">Zinli</div>
+              <div style="font-size:9px;color:var(--t2)">USD</div>
+            </div>
+            <div id="dep-btn-wally" onclick="selectDepMethod('wally')" style="border:2px solid var(--brd2);border-radius:12px;padding:12px 6px;text-align:center;cursor:pointer;background:transparent;transition:.15s">
+              <div style="font-size:20px;margin-bottom:3px">💜</div>
+              <div style="font-size:10px;font-weight:800">WallyTech</div>
+              <div style="font-size:9px;color:var(--t2)">USD</div>
+            </div>
+            <div id="dep-btn-airtm" onclick="selectDepMethod('airtm')" style="border:2px solid var(--brd2);border-radius:12px;padding:12px 6px;text-align:center;cursor:pointer;background:transparent;transition:.15s">
+              <div style="font-size:20px;margin-bottom:3px">🧡</div>
+              <div style="font-size:10px;font-weight:800">Airtm</div>
+              <div style="font-size:9px;color:var(--t2)">USD</div>
             </div>
           </div>
 
@@ -1510,12 +1530,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
               <div class="res-val" id="ret-res-val">—</div>
               <div class="res-det" id="ret-res-det"></div>
             </div>
-          </div>
-
-          <!-- Cuenta destino del usuario -->
-          <div id="ret-dest-box" style="display:none;background:var(--bg2);border:1px solid var(--brd2);border-radius:var(--r);padding:12px;margin-top:12px">
-            <div style="font-size:10px;color:var(--t3);font-weight:700;letter-spacing:.8px;margin-bottom:6px">📋 SE ENVIARÁ A TU CUENTA</div>
-            <div id="ret-dest-body"></div>
           </div>
 
           <!-- Tiempo estimado -->
@@ -2954,7 +2968,7 @@ function openTradeUI(opId,op){
   curOpId=opId;
   nsSet('lsc_lv','trade'); nsSet('lsc_lo',opId);
   const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
-  s('trd-id',op.id); s('trd-type',op.dir==='compra'?'Compra':'Venta');
+  s('trd-id',op.id); s('trd-type', op.dir==='deposito'||op.dir==='deposit'?'Depósito': op.dir==='retiro'||op.dir==='withdraw'?'Retiro': op.dir==='compra'?'Compra':'Venta');
   s('trd-plat',PN[op.plat]||op.plat); s('trd-send',op.send); s('trd-get',op.get); s('chat-id',op.id);
   const tb=document.getElementById('trd-badge'); if(tb){tb.innerHTML=stBdg(op.st);tb.dataset.st=op.st;}
   const cs=document.getElementById('chat-st');   if(cs)cs.innerHTML=stBdg(op.st);
@@ -3015,11 +3029,14 @@ function renderTradePayment(op){
 let _timerInterval=null;
 function renderSteps(st){
   
+  // Detectar si es depósito o retiro
+  const curOpDir = (()=>{ try{ const t=document.getElementById('trd-type'); return t?t.textContent.toLowerCase():''; }catch(e){return '';} })();
+  const esRetiro = curOpDir.includes('retiro') || curOpDir.includes('retir') || curOpDir.includes('venta');
   const steps=[
-    {k:'pending',     t:'Operación iniciada',      d:'Tu solicitud fue registrada correctamente.',                col:'var(--g)'},
-    {k:'voucher_sent',t:'Comprobante enviado',      d:'Recibimos tu comprobante, LS Cambios está verificando.',   col:'var(--yellow)'},
-    {k:'confirmed',   t:'Pago confirmado ✅',       d:'Pulsa "Pago recibido — Completar" para finalizar.',        col:'var(--g)'},
-    {k:'completed',   t:'¡Completado! 🎉',          d:'Tu cambio fue procesado exitosamente.',                    col:'var(--g)'},
+    {k:'pending',     t:'Solicitud registrada',    d:'Tu solicitud fue creada. Adjunta tu comprobante.',         col:'var(--g)'},
+    {k:'voucher_sent',t:'Comprobante enviado',      d:'LS Cambios está verificando tu comprobante.',             col:'var(--yellow)'},
+    {k:'confirmed',   t:esRetiro?'Retiro aprobado ✅':'Depósito confirmado ✅', d:esRetiro?'Tu retiro está siendo procesado (30min-2h).':'Tu saldo fue acreditado en tu billetera.', col:'var(--g)'},
+    {k:'completed',   t:'¡Completado! 🎉',          d:esRetiro?'Tu retiro fue enviado exitosamente.':'Depósito acreditado en tu billetera.',  col:'var(--g)'},
   ];
   const order=['pending','voucher_sent','confirmed','completed'];
   const curIdx=order.indexOf(st);
@@ -3334,133 +3351,128 @@ async function admRevisar(){
 
 async function admConfirm(){
   if(!aCur) return;
-
-  // Mostrar modal simple: admin escribe monto y elige moneda
-  document.getElementById('adm-confirm-modal')?.remove();
-
-  // Leer op del cache (aCur tiene uem+opId, la op fue cargada en admOpenChatDB)
-  const email = aCur.uem;
+  const email = aCur.uem.trim().toLowerCase();
   const opId  = aCur.opId;
 
-  // Obtener plat y send de la operación actual desde Supabase
-  const {data:op} = await db.from('operaciones')
-    .select('plat,dir,send_txt,get_txt')
-    .eq('id', opId).single();
+  // Leer operación
+  const {data:opRow, error:opErr} = await db.from('operaciones')
+    .select('dir,plat,send_txt,get_txt').eq('id', opId).single();
+  if(opErr || !opRow){ toast('❌ Error leyendo operación','err'); return; }
 
-  const plat   = op?.plat   || 'pagomovil';
-  const dir    = op?.dir    || '';
-  const esDeposito = (dir === 'deposito');
+  const esDeposito = opRow.dir==='deposito' || opRow.dir==='deposit';
+  const esRetiro   = opRow.dir==='retiro'   || opRow.dir==='withdraw';
 
-  // Si NO es depósito: confirmar normal sin acreditar
-  if(!esDeposito){
+  if(esRetiro){
+    // ── RETIRO: solo confirmar, el admin ya envió el dinero externamente ──
     await sbUpdateOpEstado(opId, 'confirmed');
-    await sbSendMsg(opId, {from:'admin', text:'✅ Pago confirmado. Procesando envío.', time:tnow()});
+    await sbSendMsg(opId, {from:'admin', text:'✅ Tu retiro fue aprobado y está siendo procesado. Recibirás el dinero en 30 min – 2 horas.', time:tnow()});
     document.getElementById('a-chat-bdg').innerHTML = stBdg('confirmed');
-    toast('✅ Confirmado', 'ok');
+    toast('✅ Retiro confirmado', 'ok');
     loadAdmin();
     return;
   }
 
-  // ES DEPÓSITO → mostrar modal para acreditar saldo
-  const defaultMoneda = plat === 'binance' ? 'usdt' : 'bs';
+  if(!esDeposito){
+    // ── OPERACIÓN NORMAL (compra/venta): confirmar pago ──
+    await sbUpdateOpEstado(opId, 'confirmed');
+    await sbSendMsg(opId, {from:'admin', text:'✅ Pago confirmado. Pulsa el botón para completar la operación.', time:tnow()});
+    document.getElementById('a-chat-bdg').innerHTML = stBdg('confirmed');
+    toast('✅ Pago confirmado', 'ok');
+    loadAdmin();
+    return;
+  }
+
+  // ── DEPÓSITO: acreditar saldo ──
+  const plat = opRow.plat || 'pagomovil';
+  const defMoneda = plat==='binance' ? 'usdt' : 'bs';
+
+  document.getElementById('adm-dep-modal')?.remove();
   const modal = document.createElement('div');
-  modal.id = 'adm-confirm-modal';
+  modal.id = 'adm-dep-modal';
   modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:16px';
   modal.innerHTML = `
     <div style="background:var(--bg1);border:1px solid var(--brd2);border-radius:16px;padding:24px;width:100%;max-width:340px">
-      <div style="font-size:14px;font-weight:800;margin-bottom:12px">💳 Acreditar depósito</div>
-      <div style="background:var(--bg2);border-radius:8px;padding:10px 12px;margin-bottom:16px;font-size:11px;color:var(--t2)">
+      <div style="font-size:15px;font-weight:800;margin-bottom:10px">💳 Confirmar depósito</div>
+      <div style="background:var(--bg2);border-radius:8px;padding:10px 12px;margin-bottom:16px;font-size:11px;color:var(--t2);line-height:1.6">
         <div>👤 <b>${email}</b></div>
-        <div>📋 ${op?.send_txt||''}</div>
+        <div>📋 ${opRow.send_txt||''}</div>
       </div>
       <div style="margin-bottom:12px">
-        <label style="font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.8px;display:block;margin-bottom:6px">MONEDA</label>
+        <label style="font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.8px;display:block;margin-bottom:6px">MONEDA A ACREDITAR</label>
         <select id="adc-mon" class="fsel" style="font-weight:800">
-          <option value="bs"   ${defaultMoneda==='bs'  ?'selected':''}>🇻🇪 Bolívares (Bs)</option>
-          <option value="usdt" ${defaultMoneda==='usdt'?'selected':''}>🪙 USDT</option>
-          <option value="usd"                                          >💵 USD</option>
+          <option value="bs"   ${defMoneda==='bs'  ?'selected':''}>🇻🇪 Bolívares (Bs)</option>
+          <option value="usdt" ${defMoneda==='usdt'?'selected':''}>🪙 USDT</option>
+          <option value="usd">💵 USD</option>
         </select>
       </div>
       <div style="margin-bottom:20px">
         <label style="font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.8px;display:block;margin-bottom:6px">MONTO A ACREDITAR</label>
-        <input id="adc-amt" type="number" class="fi" placeholder="0.00" min="0.01" step="any"
-          style="font-size:24px;font-weight:900;text-align:center">
+        <input id="adc-amt" type="number" class="fi" placeholder="0.00" min="0.01" step="any" style="font-size:26px;font-weight:900;text-align:center">
       </div>
-      <button id="adc-ok-btn" style="width:100%;padding:14px;border-radius:10px;border:none;background:var(--g);color:#000;font-size:15px;font-weight:900;cursor:pointer">
-        ✅ Acreditar ahora
+      <button id="adc-ok" style="width:100%;padding:14px;border-radius:10px;border:none;background:var(--g);color:#000;font-size:15px;font-weight:900;cursor:pointer">
+        ✅ Acreditar y confirmar
       </button>
-      <button onclick="document.getElementById('adm-confirm-modal').remove()"
+      <button onclick="document.getElementById('adm-dep-modal').remove()"
         style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--brd2);background:none;color:var(--t2);font-size:13px;cursor:pointer;margin-top:8px">
         Cancelar
       </button>
     </div>`;
   document.body.appendChild(modal);
-  document.getElementById('adc-amt').focus();
+  setTimeout(()=>document.getElementById('adc-amt')?.focus(), 100);
 
-  document.getElementById('adc-ok-btn').onclick = async function(){
+  document.getElementById('adc-ok').onclick = async function(){
     const moneda = document.getElementById('adc-mon').value;
     const monto  = parseFloat(document.getElementById('adc-amt').value);
-    if(!monto || monto <= 0){ toast('Escribe el monto','err'); return; }
+    if(!monto || monto <= 0){ toast('Ingresa el monto a acreditar','err'); return; }
 
     this.disabled = true;
     this.textContent = 'Acreditando...';
 
-    // Columna según moneda
-    const col = {bs:'balance_bs', usdt:'balance_usdt', usd:'balance_usd'}[moneda];
+    const colMap = {usd:'balance_usd', usdt:'balance_usdt', bs:'balance_bs'};
+    const col = colMap[moneda];
 
-    // Leer saldo actual
-    const {data:cli, error:er1} = await db
-      .from('clientes').select(col).eq('email', email).single();
-
-    if(er1){
-      toast('❌ Error: ' + er1.message, 'err');
-      this.disabled=false; this.textContent='✅ Acreditar ahora';
+    // Leer saldo actual del cliente
+    const {data:cli, error:e1} = await db.from('clientes')
+      .select(col).eq('email', email).maybeSingle();
+    if(e1 || !cli){
+      toast('❌ Cliente no encontrado: ' + email, 'err');
+      this.disabled=false; this.textContent='✅ Acreditar y confirmar';
       return;
     }
 
-    const saldoActual = parseFloat(cli[col]) || 0;
-    const saldoNuevo  = saldoActual + monto;
-
-    // Actualizar saldo
-    const {error:er2} = await db
-      .from('clientes').update({[col]: saldoNuevo}).eq('email', email);
-
-    if(er2){
-      toast('❌ Error acreditando: ' + er2.message, 'err');
-      this.disabled=false; this.textContent='✅ Acreditar ahora';
+    // Calcular y guardar nuevo saldo
+    const saldoNuevo = (parseFloat(cli[col]) || 0) + monto;
+    const {error:e2} = await db.from('clientes')
+      .update({[col]: saldoNuevo}).eq('email', email);
+    if(e2){
+      toast('❌ Error acreditando: ' + e2.message, 'err');
+      this.disabled=false; this.textContent='✅ Acreditar y confirmar';
       return;
     }
 
-    // Confirmar estado de la operación
+    // Marcar operación como confirmed
     await sbUpdateOpEstado(opId, 'confirmed');
 
     // Registrar en transacciones
     await db.from('transacciones').insert({
-      cliente_email: email,
-      tipo:    'deposit',
-      moneda:  moneda,
-      monto:   monto,
-      plat:    plat,
-      estado:  'approved',
-      notas:   'Op:' + opId
-    });
+      cliente_email: email, tipo:'deposit',
+      moneda, monto, plat, estado:'approved',
+      notas:'Op:'+opId, admin_notas:'Acreditado por admin'
+    }).catch(()=>{});
 
     // Mensaje al cliente
-    const sym = {bs:'Bs ', usdt:'', usd:'$'}[moneda];
-    const dec = moneda==='bs' ? 0 : 2;
-    const montoStr = sym + Number(monto).toFixed(dec);
-    await sbSendMsg(opId, {
-      from:'admin',
-      text:'✅ Depósito confirmado. Se acreditaron ' + montoStr + ' ' + moneda.toUpperCase() + ' en tu billetera LS Cambios. ¡Gracias!',
-      time: tnow()
-    });
+    const syms = {bs:'Bs ', usdt:'', usd:'$'};
+    const decs = {bs:0, usdt:2, usd:2};
+    const montoFmt = syms[moneda] + Number(monto).toFixed(decs[moneda]);
+    await sbSendMsg(opId, {from:'admin',
+      text:'✅ Depósito confirmado. Se acreditaron ' + montoFmt + ' ' + moneda.toUpperCase() + ' en tu billetera LS Cambios. ¡Gracias!',
+      time:tnow()});
 
-    document.getElementById('adm-confirm-modal').remove();
+    document.getElementById('adm-dep-modal').remove();
     document.getElementById('a-chat-bdg').innerHTML = stBdg('confirmed');
     const ab = document.getElementById('a-acts');
     if(ab) ab.style.display = 'none';
-
-    toast('✅ Acreditados ' + montoStr + ' a ' + email, 'ok');
+    toast('✅ ' + montoFmt + ' acreditados a ' + email, 'ok');
     loadAdmin();
   };
 }
@@ -4940,35 +4952,43 @@ function switchOpTab(tab) {
 
 function selectDepMethod(method) {
   _depMethod = method;
-  const isPM = method === 'pagomovil';
-  // Estilo botones
-  const btnPM  = document.getElementById('dep-btn-pm');
-  const btnBNB = document.getElementById('dep-btn-bnb');
-  if(btnPM)  { btnPM.style.borderColor  = isPM?'var(--g)':'var(--brd2)'; btnPM.style.background  = isPM?'rgba(0,200,150,.06)':'transparent'; }
-  if(btnBNB) { btnBNB.style.borderColor = !isPM?'var(--g)':'var(--brd2)'; btnBNB.style.background = !isPM?'rgba(0,200,150,.06)':'transparent'; }
+  // Resetear todos los botones
+  ['pagomovil','binance','paypal','zinli','wally','airtm'].forEach(m=>{
+    const b = document.getElementById('dep-btn-'+m);
+    if(b){ b.style.borderColor=m===method?'var(--g)':'var(--brd2)'; b.style.background=m===method?'rgba(0,200,150,.06)':'transparent'; }
+  });
   // Label monto
+  const labels = {pagomovil:'MONTO A DEPOSITAR (Bs)', binance:'MONTO A DEPOSITAR (USDT)', paypal:'MONTO A DEPOSITAR (USD)', zinli:'MONTO A DEPOSITAR (USD)', wally:'MONTO A DEPOSITAR (USD)', airtm:'MONTO A DEPOSITAR (USD)'};
   const lbl = document.getElementById('dep-amt-lbl');
-  if(lbl) lbl.textContent = isPM ? 'MONTO A DEPOSITAR (Bs)' : 'MONTO A DEPOSITAR (USDT)';
-  // Mostrar datos de pago del admin
+  if(lbl) lbl.textContent = labels[method]||'MONTO A DEPOSITAR';
+  // Mostrar datos del admin según método
   const infoBox   = document.getElementById('dep-payment-info');
   const infoTitle = document.getElementById('dep-info-title');
   const infoBody  = document.getElementById('dep-info-body');
-  if(infoBox) infoBox.style.display = 'block';
-  if(isPM) {
-    if(infoTitle) infoTitle.textContent = '📲 ENVÍA A ESTE PAGO MÓVIL';
-    const pm = (typeof ADMIN_PM !== 'undefined' && ADMIN_PM) || {};
+  if(!infoBox) return;
+  const pm  = (typeof ADMIN_PM!=='undefined'&&ADMIN_PM)||{};
+  const wls = (typeof WLS!=='undefined'&&WLS)||{};
+  infoBox.style.display = 'block';
+  if(method==='pagomovil'){
+    if(infoTitle) infoTitle.textContent='📲 ENVÍA A ESTE PAGO MÓVIL';
     if(infoBody) infoBody.innerHTML = pm.tel
       ? `<div class="wall-row"><span class="wall-k">Banco</span><span class="wall-v">${pm.banco||'—'}</span></div>
          <div class="wall-row"><span class="wall-k">Teléfono</span><span class="wall-v">${pm.tel} <button class="cpb" onclick="copyVal('${pm.tel}')">COPIAR</button></span></div>
          <div class="wall-row"><span class="wall-k">Cédula</span><span class="wall-v">${pm.cedula||'—'}</span></div>`
-      : '<div style="color:var(--t2);font-size:11px">⚠️ Pago Móvil no configurado aún. Contáctanos.</div>';
-  } else {
-    if(infoTitle) infoTitle.textContent = '💛 ENVÍA A ESTE ID DE BINANCE PAY';
-    const bId = (typeof WLS !== 'undefined' && WLS && WLS.binance && WLS.binance.val) || '';
+      : '<div style="color:var(--t2);font-size:11px">⚠️ Sin datos de Pago Móvil. Contacta soporte.</div>';
+  } else if(method==='binance'){
+    if(infoTitle) infoTitle.textContent='💛 ENVÍA A ESTE ID BINANCE PAY';
+    const bId=(wls.binance&&wls.binance.val)||'';
     if(infoBody) infoBody.innerHTML = bId
-      ? `<div class="wall-row"><span class="wall-k">ID Binance</span><span class="wall-v">${bId} <button class="cpb" onclick="copyVal('${bId}')">COPIAR</button></span></div>
-         <div style="font-size:10px;color:var(--t3);margin-top:6px">Red: Binance Pay · Moneda: USDT</div>`
-      : '<div style="color:var(--t2);font-size:11px">⚠️ ID Binance no configurado. Contáctanos.</div>';
+      ? `<div class="wall-row"><span class="wall-k">ID Binance</span><span class="wall-v">${bId} <button class="cpb" onclick="copyVal('${bId}')">COPIAR</button></span></div>`
+      : '<div style="color:var(--t2);font-size:11px">⚠️ Sin ID Binance. Contacta soporte.</div>';
+  } else {
+    const platNames={paypal:'PayPal',zinli:'Zinli',wally:'WallyTech',airtm:'Airtm'};
+    const w = wls[method]||{};
+    if(infoTitle) infoTitle.textContent='📋 ENVÍA A ESTA CUENTA '+platNames[method].toUpperCase();
+    if(infoBody) infoBody.innerHTML = w.val
+      ? `<div class="wall-row"><span class="wall-k">Correo/ID</span><span class="wall-v">${w.val} <button class="cpb" onclick="copyVal('${w.val}')">COPIAR</button></span></div>`
+      : `<div style="color:var(--t2);font-size:11px">⚠️ Sin datos de ${platNames[method]}. Contacta soporte.</div>`;
   }
   calcDep();
 }
@@ -5063,21 +5083,10 @@ function calcRet() {
   const resBox   = document.getElementById('ret-res-box');
   const resVal   = document.getElementById('ret-res-val');
   const resDet   = document.getElementById('ret-res-det');
-  const destBox  = document.getElementById('ret-dest-box');
-  const destBody = document.getElementById('ret-dest-body');
+
   const btn      = document.getElementById('ret-start-btn');
   if(platName) platName.textContent = (typeof PN!=='undefined'&&PN[plat])||plat;
-  // Mostrar cuenta destino
-  const sess = gS(); const ud = sess?(getUser(sess.email)||{}):null;
-  if(destBox && destBody && ud) {
-    const pm = ud.pagoMovil||{}; const cu = ud.cuentas||{};
-    let dHtml = '';
-    if(plat==='pagomovil') dHtml = pm.tel ? `<span style="font-size:12px">${pm.banco||'—'} · ${pm.tel} · CI: ${pm.cedula||'—'}</span>` : '<span style="font-size:11px;color:var(--t2)">⚠️ Configura tu Pago Móvil en Perfil</span>';
-    else if(plat==='binance') dHtml = cu.binanceId ? `<span style="font-size:12px">ID Binance: ${cu.binanceId}</span>` : '<span style="font-size:11px;color:var(--t2)">⚠️ Agrega tu ID Binance en Perfil</span>';
-    else dHtml = cu.correo ? `<span style="font-size:12px">Correo: ${cu.correo}</span>` : '<span style="font-size:11px;color:var(--t2)">⚠️ Agrega tu correo de plataforma en Perfil</span>';
-    destBox.style.display = 'block';
-    destBody.innerHTML = dHtml;
-  }
+  // No mostrar datos de cuenta: el admin transfiere por su cuenta
   if(!amt||amt<=0){ if(resBox) resBox.style.display='none'; if(btn) btn.disabled=true; return; }
   // Verificar saldo
   const balKey = {usd:'balance_usd',usdt:'balance_usdt',bs:'balance_bs'}[_retFrom];
