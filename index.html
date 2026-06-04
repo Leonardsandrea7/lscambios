@@ -221,43 +221,14 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 .btn-main.outline:hover{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.05)}
 .btn-main:active{transform:scale(.97)}
 
-.hero-trust{
-  display:flex;align-items:center;gap:14px;margin-top:28px;
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-  border-radius:50px;padding:10px 22px;
+.live-chip{
+  display:inline-flex;align-items:center;gap:6px;margin-bottom:22px;
+  background:rgba(0,200,150,.08);border:1px solid rgba(0,200,150,.22);
+  padding:5px 13px;border-radius:50px;
 }
-.hero-trust-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t2);font-weight:500}
-.hero-trust-icon{font-size:14px}
-.hero-trust-sep{width:1px;height:16px;background:rgba(255,255,255,.1)}
-
-/* ── Countdown Popup (flotante) ── */
-#countdown-popup{
-  position:fixed;bottom:24px;right:24px;z-index:9000;
-  background:linear-gradient(135deg,rgba(20,26,46,.97),rgba(12,16,32,.98));
-  border:1px solid rgba(245,184,0,.35);border-radius:16px;
-  padding:18px 22px;min-width:230px;
-  box-shadow:0 8px 40px rgba(0,0,0,.5),0 0 0 1px rgba(245,184,0,.1);
-  transform:translateY(100px);opacity:0;pointer-events:none;
-  transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .3s ease;
-}
-#countdown-popup.visible{transform:translateY(0);opacity:1;pointer-events:auto}
-.cdp-header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.cdp-dot{width:8px;height:8px;border-radius:50%;background:var(--yellow);animation:cdp-pulse 1.2s infinite}
-@keyframes cdp-pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,184,0,.5)}50%{box-shadow:0 0 0 6px rgba(245,184,0,0)}}
-.cdp-label{font-size:11px;font-weight:700;color:var(--yellow);letter-spacing:1px;text-transform:uppercase}
-.cdp-desc{font-size:12px;color:var(--t2);margin-bottom:12px;line-height:1.5}
-.cdp-timer-display{
-  font-family:var(--mono);font-size:38px;font-weight:700;color:var(--yellow);
-  letter-spacing:3px;text-align:center;
-  text-shadow:0 0 20px rgba(245,184,0,.4);
-  line-height:1;
-}
-.cdp-timer-display.urgent{color:#ff4d4d;text-shadow:0 0 20px rgba(255,77,77,.4)}
-.cdp-progress{margin-top:10px;height:3px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
-.cdp-progress-bar{height:100%;background:var(--yellow);border-radius:3px;transition:width 1s linear}
-.cdp-progress-bar.urgent{background:#ff4d4d}
-
-
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--g);animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
+.live-chip span{font-size:10px;font-weight:700;color:var(--g);letter-spacing:1.5px}
 
 .rates-section{padding:48px 24px;max-width:800px;margin:0 auto;width:100%}
 .rs-tabs{display:flex;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:3px;gap:3px;width:fit-content;margin-bottom:24px}
@@ -825,18 +796,11 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
     <div class="hero-logo"><img class="logo-img" src="" alt="LS Cambios"></div>
     <div class="live-chip"><div class="live-dot"></div><span>TASAS EN VIVO</span></div>
     <div id="horario-chip-lp"></div>
-    <h1 class="hero-h1">Cambia divisas<br><span>rápido y seguro</span></h1>
-    <p class="hero-sub">Casa de cambio P2P. PayPal, Binance, Zinli, Airtm y Wally → Bolívares al mejor precio.</p>
+    <h1 class="hero-h1">Tu dinero a<br><span>tu destino</span></h1>
+    <p class="hero-sub">Casa de cambio P2P. PayPal, Binance, Zinli, Airtm, Wally → Bolívares.</p>
     <div class="hero-btns">
-      <button class="btn-main solid" onclick="openAuth('register')">Comenzar gratis →</button>
+      <button class="btn-main solid" onclick="openAuth('register')">Comenzar →</button>
       <a href="#rates" class="btn-main outline">Ver tasas</a>
-    </div>
-    <div class="hero-trust">
-      <div class="hero-trust-item"><span class="hero-trust-icon">⚡</span><span>Cambios en minutos</span></div>
-      <div class="hero-trust-sep"></div>
-      <div class="hero-trust-item"><span class="hero-trust-icon">🔒</span><span>100% seguro</span></div>
-      <div class="hero-trust-sep"></div>
-      <div class="hero-trust-item"><span class="hero-trust-icon">💬</span><span>Soporte 24/7</span></div>
     </div>
   </div>
 
@@ -2732,10 +2696,7 @@ function renderSteps(st){
 }
 function startCountdown(){
   stopCountdown();
-  const el=document.getElementById('trd-timer');
-  const popupEl=document.getElementById('countdown-popup');
-  const popupVal=document.getElementById('cdp-timer-val');
-  const popupBar=document.getElementById('cdp-progress-bar');
+  const el=document.getElementById('trd-timer'); if(!el)return;
   const key='lsc_tmr_'+(curOpId||'x');
   let startTs=parseInt(sessionStorage.getItem(key)||'0');
   const totalSecs=15*60;
@@ -2743,33 +2704,16 @@ function startCountdown(){
     startTs=Date.now();
     try{sessionStorage.setItem(key,String(startTs));}catch(e){}
   }
-  // Show popup
-  if(popupEl)setTimeout(()=>popupEl.classList.add('visible'),100);
   function tick(){
     const elapsed=Math.floor((Date.now()-startTs)/1000);
     const secs=Math.max(0,totalSecs-elapsed);
-    const fmt=fmtTimer(secs);
-    const pct=Math.max(0,(secs/totalSecs)*100);
-    const urgent=secs<120;
-    if(el)el.textContent=fmt;
-    if(popupVal){popupVal.textContent=fmt;popupVal.className='cdp-timer-display'+(urgent?' urgent':'');}
-    if(popupBar){popupBar.style.width=pct+'%';popupBar.className='cdp-progress-bar'+(urgent?' urgent':'');}
-    if(secs<=0){
-      stopCountdown();
-      if(el)el.textContent='00:00';
-      if(popupVal)popupVal.textContent='00:00';
-      try{sessionStorage.removeItem(key);}catch(e){}
-      return;
-    }
+    el.textContent=fmtTimer(secs);
+    if(secs<=0){stopCountdown();el.textContent='00:00';try{sessionStorage.removeItem(key);}catch(e){}return;}
   }
   tick();
   _timerInterval=setInterval(tick,1000);
 }
-function stopCountdown(){
-  if(_timerInterval){clearInterval(_timerInterval);_timerInterval=null;}
-  const popupEl=document.getElementById('countdown-popup');
-  if(popupEl)popupEl.classList.remove('visible');
-}
+function stopCountdown(){if(_timerInterval){clearInterval(_timerInterval);_timerInterval=null;}}
 function clearTimerKey(){try{sessionStorage.removeItem('lsc_tmr_'+(curOpId||'x'));}catch(e){}}
 function fmtTimer(s){const m=Math.floor(s/60),sec=s%60;return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');}
 function lockChat(lock){
@@ -3886,17 +3830,6 @@ setTimeout(()=>{
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 #kyc-send-btn:not([disabled]){opacity:1!important;cursor:pointer!important}
 </style>
-
-<!-- ════ COUNTDOWN POPUP FLOTANTE ════════════════════════════════════ -->
-<div id="countdown-popup">
-  <div class="cdp-header">
-    <div class="cdp-dot"></div>
-    <div class="cdp-label">⏳ Tiempo de confirmación</div>
-  </div>
-  <div class="cdp-desc">LS Cambios está verificando tu comprobante</div>
-  <div class="cdp-timer-display" id="cdp-timer-val">15:00</div>
-  <div class="cdp-progress"><div class="cdp-progress-bar" id="cdp-progress-bar" style="width:100%"></div></div>
-</div>
 
 </body>
 </html>
