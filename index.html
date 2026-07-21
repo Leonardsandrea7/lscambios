@@ -15,14 +15,14 @@ document.addEventListener('DOMContentLoaded',function(){
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#080c12">
 <title>LS Cambios — Tu dinero a tu destino</title>
-<meta name="description" content="Casa de cambio digital. PayPal, Binance, Zinli, Airtm, Wally a Bolívares.">
+<meta name="description" content="Casa de cambio digital. Compramos PayPal, Binance y Zinli, pagamos en Bolívares.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="LS Cambios — Tu dinero a tu destino">
-<meta property="og:description" content="Casa de cambio digital. PayPal, Binance, Zinli, Airtm, Wally a Bolívares.">
+<meta property="og:description" content="Casa de cambio digital. Compramos PayPal, Binance y Zinli, pagamos en Bolívares.">
 <meta property="og:site_name" content="LS Cambios">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LS Cambios — Tu dinero a tu destino">
-<meta name="twitter:description" content="Casa de cambio digital. PayPal, Binance, Zinli, Airtm, Wally a Bolívares.">
+<meta name="twitter:description" content="Casa de cambio digital. Compramos PayPal, Binance y Zinli, pagamos en Bolívares.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -797,7 +797,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
     <div class="live-chip"><div class="live-dot"></div><span>TASAS EN VIVO</span></div>
     <div id="horario-chip-lp"></div>
     <h1 class="hero-h1">Tu dinero a<br><span>tu destino</span></h1>
-    <p class="hero-sub">Casa de cambio P2P. PayPal, Binance, Zinli, Airtm, Wally → Bolívares.</p>
+    <p class="hero-sub">Casa de cambio P2P. Compramos PayPal, Binance y Zinli → pagamos en Bolívares.</p>
     <div class="hero-btns">
       <button class="btn-main solid" onclick="openAuth('register')">Comenzar →</button>
       <a href="#rates" class="btn-main outline">Ver tasas</a>
@@ -806,8 +806,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
 
   <div class="rates-section" id="rates">
     <div class="rs-tabs">
-      <button class="rs-tab buy on" onclick="setLPMode('buy',this)">Vender divisas</button>
-      <button class="rs-tab sell" onclick="setLPMode('sell',this)">Comprar divisas</button>
+      <button class="rs-tab buy on" style="cursor:default">Vende tus divisas</button>
     </div>
     <div class="rate-grid" id="lpBuy"></div>
     <div class="rate-grid ui-hidden" id="lpSell"></div>
@@ -871,7 +870,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
     <div class="ui-mb32">
       <div class="live-chip ui-mb18"><div class="live-dot"></div><span>NUESTRA HISTORIA</span></div>
       <h1 style="font-size:clamp(28px,5vw,48px);font-weight:800;line-height:1.1;color:#fff;letter-spacing:-1px;margin-bottom:14px">Quiénes <span style="background:var(--gd);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent">Somos</span></h1>
-      <p style="font-size:15px;color:var(--t2);line-height:1.75;font-weight:300">LS Cambios es una casa de cambio digital venezolana dedicada a facilitar el intercambio seguro y rápido de divisas digitales a bolívares y viceversa.</p>
+      <p style="font-size:15px;color:var(--t2);line-height:1.75;font-weight:300">LS Cambios es una casa de cambio digital venezolana dedicada a facilitar el intercambio seguro y rápido de divisas digitales a bolívares.</p>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:32px">
       <div class="ui-card">
@@ -891,7 +890,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Tasas competitivas en tiempo real</div><div class="ui-fn-sm">Actualizamos nuestras tasas constantemente para ofrecerte el mejor precio del mercado.</div></div></div>
         <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Procesamiento en minutos</div><div class="ui-fn-sm">La mayoría de las operaciones se completan en menos de 30 minutos durante el horario de atención.</div></div></div>
         <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Soporte personalizado vía WhatsApp</div><div class="ui-fn-sm">Nuestro equipo está disponible para resolver cualquier duda antes, durante y después de tu operación.</div></div></div>
-        <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Múltiples plataformas</div><div class="ui-fn-sm">Operamos con PayPal, Binance, Zinli, Airtm, Wally y USDC para tu comodidad.</div></div></div>
+        <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Múltiples plataformas</div><div class="ui-fn-sm">Compramos PayPal, Binance y Zinli para tu comodidad.</div></div></div>
       </div>
     </div>
     <div style="text-align:center;padding:24px;background:rgba(0,200,150,.05);border:1px solid rgba(0,200,150,.15);border-radius:var(--r2)">
@@ -991,7 +990,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       </div>
       <div class="ui-card">
         <div class="ui-title-g">2. Descripción del servicio</div>
-        <p class="ui-body">LS Cambios es una plataforma P2P de intercambio de divisas digitales que facilita operaciones de compra y venta entre PayPal, Binance/USDT, Zinli, Airtm, Wally y USDC, con liquidación en bolívares venezolanos (Bs). Actuamos como intermediarios facilitando la transacción.</p>
+        <p class="ui-body">LS Cambios es una plataforma P2P que compra divisas digitales PayPal, Binance/USDT y Zinli, con liquidación en bolívares venezolanos (Bs). Actuamos como intermediarios facilitando la transacción.</p>
       </div>
       <div class="ui-card">
         <div class="ui-title-g">3. Registro y cuenta de usuario</div>
@@ -1080,24 +1079,9 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <div class="fg ui-mt12"><label>CÉDULA</label><input class="fi" type="text" id="rg-ci" placeholder="V-12345678"></div>
       <div class="fg"><label>CORREO</label><input class="fi" type="email" id="rg-e" placeholder="tu@correo.com" autocomplete="email"></div>
       <div class="fg"><label>CELULAR / WHATSAPP</label><input class="fi" type="tel" id="rg-tel" placeholder="+58 412 000 0000"></div>
-      <div class="fdiv">PARA VENDER Bs (Pago Móvil)</div>
-      <div class="fg">
-        <label>BANCO</label>
-        <select class="fsel" id="rg-banco">
-          <option value="">Selecciona banco</option>
-          <option>Banesco</option><option>Banco de Venezuela</option><option>Mercantil</option>
-          <option>Provincial (BBVA)</option><option>Bicentenario</option><option>Del Tesoro</option>
-          <option>Banplus</option><option>Venezolano de Crédito</option><option>Otro</option>
-        </select>
-      </div>
-      <div class="fg2">
-        <div class="fg ui-mb0"><label>TEL. PAGO MÓVIL</label><input class="fi" type="tel" id="rg-pm-tel" placeholder="0412-0000000"></div>
-        <div class="fg ui-mb0"><label>CÉDULA PAGO MÓVIL</label><input class="fi" type="text" id="rg-pm-ci" placeholder="V-12345678"></div>
-      </div>
-      <div class="fdiv">PARA COMPRAR Bs (tus cuentas)</div>
-      <div class="fg"><label>CORREO PAYPAL / ZINLI / AIRTM / WALLY</label><input class="fi" type="email" id="rg-cdiv" placeholder="tucorreo@email.com"></div>
+      <div class="fdiv">TUS CUENTAS (PARA RECIBIR PAGOS)</div>
+      <div class="fg"><label>CORREO PAYPAL / ZINLI</label><input class="fi" type="email" id="rg-cdiv" placeholder="tucorreo@email.com"></div>
       <div class="fg"><label>ID BINANCE</label><input class="fi" type="text" id="rg-bid" placeholder="ID numérico Binance"></div>
-      <div class="fg"><label>WALLET USDT TETHER <span style="font-size:10px;color:var(--t3);font-weight:400">(opcional)</span></label><input class="fi" type="text" id="rg-usdt" placeholder="0x... dirección BEP20"></div>
       <div class="fdiv">REFERIDO (OPCIONAL)</div>
       <div class="fg"><label>¿TIENES UN CÓDIGO DE REFERIDO? <span style="font-size:10px;color:var(--t3);font-weight:400">(opcional)</span></label><input class="fi" type="text" id="rg-ref" placeholder="Ej: LS-ABCDEF" autocomplete="off" style="text-transform:uppercase"></div>
       <div class="fdiv">CONTRASEÑA</div>
@@ -1197,8 +1181,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         
         <div style="margin-bottom:16px">
           <div class="rs-tabs" style="margin-bottom:14px">
-            <button class="rs-tab buy on" id="ov-tab-buy" onclick="setOVMode('buy',this)">Vender divisas</button>
-            <button class="rs-tab sell" id="ov-tab-sell" onclick="setOVMode('sell',this)">Comprar divisas</button>
+            <button class="rs-tab buy on" id="ov-tab-buy" style="cursor:default">Vende tus divisas</button>
           </div>
           <div class="rate-grid" id="ovBuy" style="display:flex;flex-direction:column"></div>
           <div class="rate-grid" id="ovSell" style="display:none;flex-direction:column"></div>
@@ -1210,31 +1193,15 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <div class="dv on" id="dv-newop">
         <div class="dv-h">Nueva operación ⚡</div><div class="dv-s">Calculadora con tasas exactas.</div>
         <div class="op-form">
-          <div class="fg">
-            <label>MODO DE CAMBIO</label>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-              <button id="mode-bs" onclick="setMode('bs')" style="padding:11px 6px;border-radius:8px;border:1.5px solid var(--g);background:var(--g);color:#000;font-size:12px;font-weight:800;cursor:pointer">💵 Bolívares</button>
-              <button id="mode-usdt" onclick="setMode('usdt')" style="padding:11px 6px;border-radius:8px;border:1.5px solid var(--brd2);background:transparent;color:var(--t2);font-size:12px;font-weight:800;cursor:pointer">🪙 USDT BEP20</button>
-            </div>
-          </div>
           <div class="fg"><label>OPERACIÓN</label>
             <select class="fsel" id="op-dir" onchange="calcOp();updWallet();swapPlats()">
               <option value="compra">Vendo divisas → recibo Bolívares</option>
-              <option value="venta">Compro divisas → envío Bolívares</option>
             </select>
           </div>
           <div class="fg" id="plat-bs-wrap"><label>PLATAFORMA</label>
             <select class="fsel" id="op-plat" onchange="calcOp();updWallet()">
               <option value="binance">Binance</option><option value="paypal">PayPal</option>
-              <option value="zinli">Zinli</option><option value="wally">Wally</option>
-              <option value="airtm">Airtm</option><option value="usdc">USDC</option>
-            </select>
-          </div>
-          <div class="fg" id="plat-usdt-wrap" style="display:none"><label>PLATAFORMA</label>
-            <select class="fsel" id="op-plat-usdt" onchange="calcOp();updWallet()">
-              <option value="paypal">PayPal</option><option value="zinli">Zinli</option>
-              <option value="wally">Wally</option><option value="airtm">Airtm</option>
-              <option value="binance">Binance</option>
+              <option value="zinli">Zinli</option>
             </select>
           </div>
           <div class="fg"><label id="op-amt-lbl">MONTO A ENVIAR (USD)</label>
@@ -2121,7 +2088,7 @@ function renderOVRates(){
   const ovBuy=document.getElementById('ovBuy');
   const ovSell=document.getElementById('ovSell');
   if(!ovBuy||!ovSell)return;
-  const plats=['binance','paypal','zinli','wally','airtm','usdc'];
+  const plats=['binance','paypal','zinli'];
   const act=`onclick="showDV('newop')"`;
   ovBuy.innerHTML=plats.map(k=>{
     const c=RATES.compra[k]||{};
@@ -2141,7 +2108,7 @@ function setLPMode(mode,btn){
 }
 function renderLPRates(){
   const sess=gS();
-  const plats=['binance','paypal','zinli','wally','airtm','usdc'];
+  const plats=['binance','paypal','zinli'];
   const act=sess?`onclick="goD();setTimeout(()=>showDV('newop'),200)"` :`onclick="openAuth('register')"`;
   document.getElementById('lpBuy').innerHTML=plats.map(k=>{
     const c=RATES.compra[k]||{};
@@ -3000,7 +2967,7 @@ async function admClose(){
 function buildRateEditor(){
   const el=document.getElementById('a-rate-grid');if(!el)return;
   loadZelleEmail();loadAdminPM();
-  const plats=['binance','paypal','zinli','wally','airtm','usdc'];
+  const plats=['binance','paypal','zinli'];
   const uPlats=['paypal','zinli','wally','airtm','binance'];
   if(!RATES.usdt_compra)RATES.usdt_compra={};
   if(!RATES.usdt_venta)RATES.usdt_venta={};
