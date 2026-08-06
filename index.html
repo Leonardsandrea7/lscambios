@@ -15,14 +15,14 @@ document.addEventListener('DOMContentLoaded',function(){
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#080c12">
 <title>LS Cambios — Tu dinero a tu destino</title>
-<meta name="description" content="Casa de cambio digital. PayPal, Binance y Zinli a Bolívares.">
+<meta name="description" content="Casa de cambio digital. PayPal, Binance, Zinli, Airtm, Wally a Bolívares.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="LS Cambios — Tu dinero a tu destino">
-<meta property="og:description" content="Casa de cambio digital. PayPal, Binance y Zinli a Bolívares.">
+<meta property="og:description" content="Casa de cambio digital. PayPal, Binance, Zinli, Airtm, Wally a Bolívares.">
 <meta property="og:site_name" content="LS Cambios">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LS Cambios — Tu dinero a tu destino">
-<meta name="twitter:description" content="Casa de cambio digital. PayPal, Binance y Zinli a Bolívares.">
+<meta name="twitter:description" content="Casa de cambio digital. PayPal, Binance, Zinli, Airtm, Wally a Bolívares.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -797,7 +797,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
     <div class="live-chip"><div class="live-dot"></div><span>TASAS EN VIVO</span></div>
     <div id="horario-chip-lp"></div>
     <h1 class="hero-h1">Tu dinero a<br><span>tu destino</span></h1>
-    <p class="hero-sub">Casa de cambio P2P. PayPal, Binance, Zinli → Bolívares.</p>
+    <p class="hero-sub">Casa de cambio P2P. PayPal, Binance, Zinli, Airtm, Wally → Bolívares.</p>
     <div class="hero-btns">
       <button class="btn-main solid" onclick="openAuth('register')">Comenzar →</button>
       <a href="#rates" class="btn-main outline">Ver tasas</a>
@@ -817,7 +817,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
   <div style="max-width:800px;margin:0 auto;width:100%;padding:0 24px 48px;display:flex;flex-direction:column;gap:24px">
 
     
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
       <div onclick="showStaticPage('nosotros')" style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:18px 14px;cursor:pointer;transition:border-color .15s;text-align:center" onmouseover="this.style.borderColor='rgba(0,200,150,.3)'" onmouseout="this.style.borderColor='rgba(0,180,130,.08)'">
         <div class="ui-fs22 ui-mb8">🏢</div>
         <div style="font-size:12px;font-weight:700;color:var(--t1);margin-bottom:4px">Quiénes Somos</div>
@@ -832,11 +832,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <div class="ui-fs22 ui-mb8">📄</div>
         <div style="font-size:12px;font-weight:700;color:var(--t1);margin-bottom:4px">Términos</div>
         <div class="ui-fn-xxs">Condiciones del servicio</div>
-      </div>
-      <div onclick="showStaticPage('smm');renderSmmCatalogPublic()" style="background:var(--bg1);border:1px solid rgba(240,80,200,.18);border-radius:var(--r2);padding:18px 14px;cursor:pointer;transition:border-color .15s;text-align:center" onmouseover="this.style.borderColor='rgba(240,80,200,.4)'" onmouseout="this.style.borderColor='rgba(240,80,200,.18)'">
-        <div class="ui-fs22 ui-mb8">🚀</div>
-        <div style="font-size:12px;font-weight:700;color:var(--t1);margin-bottom:4px">Redes Sociales</div>
-        <div class="ui-fn-xxs">Vistas, likes, seguidores y Canva Pro</div>
       </div>
     </div>
 
@@ -860,46 +855,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <a href="https://wa.me/584147408768" target="_blank">Soporte</a>
     </div>
   </footer>
-</div>
-
-<div class="page" id="pg-smm">
-  <nav class="nav">
-    <div class="nav-brand" onclick="showStaticPage(null)">
-      <div class="nav-brand-img"><img src="https://i.imgur.com/7JkKq5F.png" onerror="this.style.display='none'"></div>
-      <div class="nav-brand-name">LS CAMBIOS</div>
-    </div>
-    <div class="nav-actions">
-      <button class="nav-btn nav-btn-ghost" onclick="showStaticPage(null)">← Volver</button>
-    </div>
-  </nav>
-  <div class="ui-section">
-    <div class="ui-mb32">
-      <div class="live-chip ui-mb18"><div class="live-dot"></div><span>REDES SOCIALES</span></div>
-      <h1 style="font-size:clamp(28px,5vw,48px);font-weight:800;line-height:1.1;color:#fff;letter-spacing:-1px;margin-bottom:14px">Impulsa tus <span style="background:var(--gd);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent">Redes Sociales</span></h1>
-      <p style="font-size:15px;color:var(--t2);line-height:1.75;font-weight:300">Vistas, me gusta y seguidores para TikTok, YouTube, Instagram y Facebook, además de suscripciones Canva Pro. Elige un servicio y te contactamos para coordinar el pago.</p>
-    </div>
-    <div id="smm-catalog" style="display:flex;flex-direction:column;gap:20px;margin-bottom:24px"></div>
-  </div>
-  <footer class="lp-footer">
-    <div>© 2025 LS Cambios</div>
-    <div class="footer-links">
-      <a href="javascript:void(0)" onclick="showStaticPage(null)">Inicio</a>
-      <a href="https://wa.me/584147408768" target="_blank">Soporte</a>
-    </div>
-  </footer>
-</div>
-
-<div class="ov" id="smmOv">
-  <div class="modal" style="max-width:420px">
-    <button class="modal-x" onclick="closeSmmOrder()">✕</button>
-    <div class="modal-logo"><div class="modal-logo-name">Solicitar servicio</div></div>
-    <div class="fg"><label>SERVICIO</label><input class="fi" type="text" id="smm-o-servicio" disabled></div>
-    <div class="fg"><label>CANTIDAD</label><input class="fi" type="number" id="smm-o-cant" min="1" value="1" oninput="calcSmmOrder()"></div>
-    <div class="fg"><label>ENLACE (perfil o publicación)</label><input class="fi" type="text" id="smm-o-link" placeholder="https://..."></div>
-    <div class="fg"><label>TU WHATSAPP O CORREO</label><input class="fi" type="text" id="smm-o-contacto" placeholder="+58 412 000 0000 o correo@email.com"></div>
-    <div class="res-box"><div class="res-lbl">TOTAL ESTIMADO</div><div class="res-val" id="smm-o-total">$0.00</div></div>
-    <button class="btn g full" style="font-size:14px;padding:13px;margin-top:8px" onclick="submitSmmOrder()">Enviar pedido →</button>
-  </div>
 </div>
 
 <div class="page" id="pg-nosotros">
@@ -936,7 +891,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Tasas competitivas en tiempo real</div><div class="ui-fn-sm">Actualizamos nuestras tasas constantemente para ofrecerte el mejor precio del mercado.</div></div></div>
         <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Procesamiento en minutos</div><div class="ui-fn-sm">La mayoría de las operaciones se completan en menos de 30 minutos durante el horario de atención.</div></div></div>
         <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Soporte personalizado vía WhatsApp</div><div class="ui-fn-sm">Nuestro equipo está disponible para resolver cualquier duda antes, durante y después de tu operación.</div></div></div>
-        <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Múltiples plataformas</div><div class="ui-fn-sm">Operamos con PayPal, Binance y Zinli para tu comodidad.</div></div></div>
+        <div class="ui-row-top"><span class="ui-icon-g">✓</span><div><div class="ui-fn600-t1">Múltiples plataformas</div><div class="ui-fn-sm">Operamos con PayPal, Binance, Zinli, Airtm, Wally y USDC para tu comodidad.</div></div></div>
       </div>
     </div>
     <div style="text-align:center;padding:24px;background:rgba(0,200,150,.05);border:1px solid rgba(0,200,150,.15);border-radius:var(--r2)">
@@ -1036,7 +991,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       </div>
       <div class="ui-card">
         <div class="ui-title-g">2. Descripción del servicio</div>
-        <p class="ui-body">LS Cambios es una plataforma P2P de intercambio de divisas digitales que facilita operaciones de compra y venta entre PayPal, Binance/USDT y Zinli, con liquidación en bolívares venezolanos (Bs). Actuamos como intermediarios facilitando la transacción.</p>
+        <p class="ui-body">LS Cambios es una plataforma P2P de intercambio de divisas digitales que facilita operaciones de compra y venta entre PayPal, Binance/USDT, Zinli, Airtm, Wally y USDC, con liquidación en bolívares venezolanos (Bs). Actuamos como intermediarios facilitando la transacción.</p>
       </div>
       <div class="ui-card">
         <div class="ui-title-g">3. Registro y cuenta de usuario</div>
@@ -1125,7 +1080,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <div class="fg ui-mt12"><label>CÉDULA</label><input class="fi" type="text" id="rg-ci" placeholder="V-12345678"></div>
       <div class="fg"><label>CORREO</label><input class="fi" type="email" id="rg-e" placeholder="tu@correo.com" autocomplete="email"></div>
       <div class="fg"><label>CELULAR / WHATSAPP</label><input class="fi" type="tel" id="rg-tel" placeholder="+58 412 000 0000"></div>
-      <div class="fdiv">PARA RECIBIR TUS BOLÍVARES (Pago Móvil)</div>
+      <div class="fdiv">PARA VENDER Bs (Pago Móvil)</div>
       <div class="fg">
         <label>BANCO</label>
         <select class="fsel" id="rg-banco">
@@ -1139,9 +1094,10 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <div class="fg ui-mb0"><label>TEL. PAGO MÓVIL</label><input class="fi" type="tel" id="rg-pm-tel" placeholder="0412-0000000"></div>
         <div class="fg ui-mb0"><label>CÉDULA PAGO MÓVIL</label><input class="fi" type="text" id="rg-pm-ci" placeholder="V-12345678"></div>
       </div>
-      <div class="fdiv">TUS CUENTAS (PARA COMPRAR DIVISAS)</div>
-      <div class="fg"><label>CORREO PAYPAL / ZINLI</label><input class="fi" type="email" id="rg-cdiv" placeholder="tucorreo@email.com"></div>
+      <div class="fdiv">PARA COMPRAR Bs (tus cuentas)</div>
+      <div class="fg"><label>CORREO PAYPAL / ZINLI / AIRTM / WALLY</label><input class="fi" type="email" id="rg-cdiv" placeholder="tucorreo@email.com"></div>
       <div class="fg"><label>ID BINANCE</label><input class="fi" type="text" id="rg-bid" placeholder="ID numérico Binance"></div>
+      <div class="fg"><label>WALLET USDT TETHER <span style="font-size:10px;color:var(--t3);font-weight:400">(opcional)</span></label><input class="fi" type="text" id="rg-usdt" placeholder="0x... dirección BEP20"></div>
       <div class="fdiv">REFERIDO (OPCIONAL)</div>
       <div class="fg"><label>¿TIENES UN CÓDIGO DE REFERIDO? <span style="font-size:10px;color:var(--t3);font-weight:400">(opcional)</span></label><input class="fi" type="text" id="rg-ref" placeholder="Ej: LS-ABCDEF" autocomplete="off" style="text-transform:uppercase"></div>
       <div class="fdiv">CONTRASEÑA</div>
@@ -1249,12 +1205,18 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         </div>
         
         <button class="btn g full" style="font-size:15px;padding:14px;margin-bottom:8px" onclick="showDV('newop')">⚡ Nueva operación</button>
-        <button class="btn ghost full" style="font-size:14px;padding:12px;margin-bottom:8px;border-color:rgba(240,80,200,.3);color:#f050c8" onclick="showStaticPage('smm');renderSmmCatalogPublic()">🚀 Redes Sociales — Vistas, Likes, Seguidores, Canva Pro</button>
       </div>
       
       <div class="dv on" id="dv-newop">
         <div class="dv-h">Nueva operación ⚡</div><div class="dv-s">Calculadora con tasas exactas.</div>
         <div class="op-form">
+          <div class="fg">
+            <label>MODO DE CAMBIO</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <button id="mode-bs" onclick="setMode('bs')" style="padding:11px 6px;border-radius:8px;border:1.5px solid var(--g);background:var(--g);color:#000;font-size:12px;font-weight:800;cursor:pointer">💵 Bolívares</button>
+              <button id="mode-usdt" onclick="setMode('usdt')" style="padding:11px 6px;border-radius:8px;border:1.5px solid var(--brd2);background:transparent;color:var(--t2);font-size:12px;font-weight:800;cursor:pointer">🪙 USDT BEP20</button>
+            </div>
+          </div>
           <div class="fg"><label>OPERACIÓN</label>
             <select class="fsel" id="op-dir" onchange="calcOp();updWallet();swapPlats()">
               <option value="compra">Vendo divisas → recibo Bolívares</option>
@@ -1264,7 +1226,15 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
           <div class="fg" id="plat-bs-wrap"><label>PLATAFORMA</label>
             <select class="fsel" id="op-plat" onchange="calcOp();updWallet()">
               <option value="binance">Binance</option><option value="paypal">PayPal</option>
-              <option value="zinli">Zinli</option>
+              <option value="zinli">Zinli</option><option value="wally">Wally</option>
+              <option value="airtm">Airtm</option><option value="usdc">USDC</option>
+            </select>
+          </div>
+          <div class="fg" id="plat-usdt-wrap" style="display:none"><label>PLATAFORMA</label>
+            <select class="fsel" id="op-plat-usdt" onchange="calcOp();updWallet()">
+              <option value="paypal">PayPal</option><option value="zinli">Zinli</option>
+              <option value="wally">Wally</option><option value="airtm">Airtm</option>
+              <option value="binance">Binance</option>
             </select>
           </div>
           <div class="fg"><label id="op-amt-lbl">MONTO A ENVIAR (USD)</label>
@@ -1474,9 +1444,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
       <button class="ap-sb-i" id="asi-rates" onclick="showAV('rates')">
         <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Tasas
       </button>
-      <button class="ap-sb-i" id="asi-smm" onclick="showAV('smm')">
-        <svg viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>SMM 🚀
-      </button>
       <button class="ap-sb-i" id="asi-activity" onclick="showAV('activity')">
         <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Actividad
       </button>
@@ -1498,9 +1465,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         </button>
         <button class="ap-mn-i" id="ami-rates" onclick="showAV('rates')">
           <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Tasas
-        </button>
-        <button class="ap-mn-i" id="ami-smm" onclick="showAV('smm')">
-          <svg viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>SMM
         </button>
         <button class="ap-mn-i" id="ami-activity" onclick="showAV('activity')">
           <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Actividad
@@ -1581,10 +1545,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
           <button class="btn g sm full" onclick="saveHorario()">💾 Guardar horario</button>
         </div>
       </div>
-      <div class="av" id="av-smm">
-        <div class="dv-h">SMM — Redes Sociales 🚀</div><div class="dv-s">Precios de vistas, likes, seguidores y Canva Pro. Cambios aplican de inmediato.</div>
-        <div class="re-grid" id="a-smm-grid"></div>
-      </div>
       <div class="av" id="av-activity">
         <div class="dv-h">Actividad 📋</div><div class="dv-s">Log completo de la plataforma · Listo para base de datos</div>
         <div class="act-filters">
@@ -1646,7 +1606,7 @@ function toggleTheme(){
 })();
 
 const WA       = 'https://wa.me/584147408768';
-const TG_TOKEN = '8943366447:AAFdUWwuPwJ-DRyTNvX38PNTtPsd3ufA0Zg';
+const TG_TOKEN = '8545688733:AAGUVpqSGdLH5A27RtwwxCPQFmlWBhZEj6A';
 const TG_CHAT  = '8180852500';
 const _AH      = 'b0be4eccdbc807053775c62524f83067ead0f1b00579fefc5aab17778e81c1e7';
 
@@ -1903,7 +1863,6 @@ async function sbLoadRates(){
       if(data.data.wlsUsdt) WLS.usdt.val=data.data.wlsUsdt;
       if(data.data.usdt_compra) RATES.usdt_compra=data.data.usdt_compra;
       if(data.data.usdt_venta)  RATES.usdt_venta=data.data.usdt_venta;
-      if(data.data.smm) deepMerge(SMM,data.data.smm);
     }
   }catch(e){
     console.warn('[sbLoadRates] fallo/timeout:',e.message,'— tasas por defecto');
@@ -1912,7 +1871,7 @@ async function sbLoadRates(){
 
 async function sbSaveRates(){
   if(!_dbOk('sbSaveRates')) return false;
-  const toSave={...RATES, adminPM:ADMIN_PM, horario:ADMIN_HORARIO, wlsUsdt:WLS.usdt?.val||'', smm:SMM};
+  const toSave={...RATES, adminPM:ADMIN_PM, horario:ADMIN_HORARIO, wlsUsdt:WLS.usdt?.val||''};
   const{error}=await db.from('tasas').upsert({id:1,data:toSave},{onConflict:'id'});
   if(sbErr('sbSaveRates',error)) return false;
   return true;
@@ -1942,34 +1901,6 @@ const DEFAULT_RATES={
   usdt_venta: {paypal:{t:0.96},zinli:{t:0.96},wally:{t:0.96},airtm:{t:0.96},binance:{t:0.97}}
 };
 let RATES=JSON.parse(JSON.stringify(DEFAULT_RATES));
-
-const DEFAULT_SMM={
-  tiktok:{ label:'TikTok', color:'#000000', services:{
-    vistas:{label:'Vistas', unit:1000, price:0.50},
-    likes:{label:'Me gusta', unit:1000, price:1.20},
-    seguidores:{label:'Seguidores', unit:100, price:1.80}
-  }},
-  youtube:{ label:'YouTube', color:'#ff0000', services:{
-    vistas:{label:'Vistas', unit:1000, price:1.50},
-    likes:{label:'Me gusta', unit:1000, price:2.00},
-    seguidores:{label:'Suscriptores', unit:100, price:3.50}
-  }},
-  instagram:{ label:'Instagram', color:'#c13584', services:{
-    vistas:{label:'Vistas / Reproducciones', unit:1000, price:0.60},
-    likes:{label:'Me gusta', unit:1000, price:1.00},
-    seguidores:{label:'Seguidores', unit:100, price:2.00}
-  }},
-  facebook:{ label:'Facebook', color:'#1877f2', services:{
-    vistas:{label:'Vistas', unit:1000, price:0.60},
-    likes:{label:'Me gusta / Reacciones', unit:1000, price:1.00},
-    seguidores:{label:'Seguidores', unit:100, price:2.00}
-  }},
-  canva:{ label:'Canva Pro', color:'#00c4cc', services:{
-    mensual:{label:'Suscripción mensual', unit:1, price:5.00},
-    anual:{label:'Suscripción anual', unit:1, price:20.00}
-  }}
-};
-let SMM=JSON.parse(JSON.stringify(DEFAULT_SMM));
 
 function deepMerge(t,s){
   for(const k in s){
@@ -2077,65 +2008,6 @@ async function tgNotify(msg){
       body:JSON.stringify({chat_id:TG_CHAT,text:msg,parse_mode:'HTML'})
     });
   }catch(e){console.warn('[tgNotify]',e)}
-}
-
-// ════ SMM (Redes Sociales) ═══════════════════════════════════════════
-let _smmSel=null; // {platKey, platLabel, servKey, servLabel, unit, price}
-function renderSmmCatalogPublic(){
-  const el=document.getElementById('smm-catalog');if(!el)return;
-  el.innerHTML=Object.keys(SMM).map(pk=>{
-    const p=SMM[pk];
-    const rows=Object.keys(p.services).map(sk=>{
-      const s=p.services[sk];
-      const unitTxt=s.unit>1?('cada '+fmt(s.unit)):'unidad';
-      return`<div class="rate-row ui-pointer" onclick="openSmmOrder('${pk}','${sk}')">
-        <div class="rr-info"><div class="rr-name">${s.label}</div><div class="rr-comm">$${fmt(s.price,2)} ${unitTxt}</div></div>
-        <div class="rr-action">🛒 PEDIR</div>
-      </div>`;
-    }).join('');
-    return`<div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:16px 18px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-        <div style="width:34px;height:34px;border-radius:9px;background:${p.color};display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff">${p.label[0]}</div>
-        <div style="font-size:14px;font-weight:700;color:#fff">${p.label}</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:6px">${rows}</div>
-    </div>`;
-  }).join('');
-}
-function openSmmOrder(platKey,servKey){
-  const p=SMM[platKey];if(!p)return;
-  const s=p.services[servKey];if(!s)return;
-  _smmSel={platKey,platLabel:p.label,servKey,servLabel:s.label,unit:s.unit,price:s.price};
-  const servEl=document.getElementById('smm-o-servicio');if(servEl)servEl.value=p.label+' — '+s.label;
-  const cantEl=document.getElementById('smm-o-cant');if(cantEl)cantEl.value=s.unit>1?s.unit:1;
-  const linkEl=document.getElementById('smm-o-link');if(linkEl)linkEl.value='';
-  const conEl=document.getElementById('smm-o-contacto');if(conEl)conEl.value='';
-  calcSmmOrder();
-  document.getElementById('smmOv').classList.add('on');
-}
-function closeSmmOrder(){document.getElementById('smmOv').classList.remove('on');}
-function calcSmmOrder(){
-  if(!_smmSel)return;
-  const cantEl=document.getElementById('smm-o-cant');
-  const cant=parseFloat(cantEl?cantEl.value:0)||0;
-  const total=(cant/_smmSel.unit)*_smmSel.price;
-  const totalEl=document.getElementById('smm-o-total');
-  if(totalEl)totalEl.textContent='$'+fmt(total,2);
-}
-async function submitSmmOrder(){
-  if(!_smmSel){toast('Selecciona un servicio primero.','err');return;}
-  const cant=parseFloat(document.getElementById('smm-o-cant').value)||0;
-  const link=document.getElementById('smm-o-link').value.trim();
-  const contacto=document.getElementById('smm-o-contacto').value.trim();
-  if(!cant||cant<1){toast('Ingresa una cantidad válida.','err');return;}
-  if(!link){toast('Ingresa el enlace del perfil o publicación.','err');return;}
-  if(!contacto){toast('Ingresa tu WhatsApp o correo de contacto.','err');return;}
-  const total=(cant/_smmSel.unit)*_smmSel.price;
-  const sess=gS();
-  const emailTxt=sess?sess.email:'—';
-  await tgNotify(`🚀 <b>Nuevo pedido SMM</b>\n📦 ${_smmSel.platLabel} · ${_smmSel.servLabel}\n🔢 Cantidad: ${fmt(cant)}\n🔗 Enlace: ${link}\n📱 Contacto: ${contacto}\n👤 Cuenta: ${emailTxt}\n💰 Total estimado: $${fmt(total,2)}\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
-  closeSmmOrder();
-  toast('✅ Pedido enviado. Te contactaremos pronto para coordinar el pago.','ok');
 }
 
 let _ac;
@@ -2249,7 +2121,7 @@ function renderOVRates(){
   const ovBuy=document.getElementById('ovBuy');
   const ovSell=document.getElementById('ovSell');
   if(!ovBuy||!ovSell)return;
-  const plats=['binance','paypal','zinli'];
+  const plats=['binance','paypal','zinli','wally','airtm','usdc'];
   const act=`onclick="showDV('newop')"`;
   ovBuy.innerHTML=plats.map(k=>{
     const c=RATES.compra[k]||{};
@@ -2269,7 +2141,7 @@ function setLPMode(mode,btn){
 }
 function renderLPRates(){
   const sess=gS();
-  const plats=['binance','paypal','zinli'];
+  const plats=['binance','paypal','zinli','wally','airtm','usdc'];
   const act=sess?`onclick="goD();setTimeout(()=>showDV('newop'),200)"` :`onclick="openAuth('register')"`;
   document.getElementById('lpBuy').innerHTML=plats.map(k=>{
     const c=RATES.compra[k]||{};
@@ -2301,7 +2173,12 @@ async function doLogin(){
   try{
     const user=await sbGetUser(email);
     if(!user){err.textContent='Correo no registrado.';err.classList.add('on');return}
-    if(user.pw!==btoa(unescape(encodeURIComponent(pass)))){err.textContent='Contraseña incorrecta.';err.classList.add('on');return}
+    const passHash = await _h256(pass);
+    if(user.pw!==passHash && user.pw!==btoa(unescape(encodeURIComponent(pass)))){err.textContent='Contraseña incorrecta.';err.classList.add('on');return}
+    // migrar contraseña antigua a SHA-256 si todavía estaba en btoa
+    if(user.pw===btoa(unescape(encodeURIComponent(pass))) && user.pw!==passHash){
+      await db.from('clientes').update({pw_hash:passHash}).eq('email',email.toLowerCase());
+    }
     user.hist=await sbGetOps(email);
     sS({email,...user});
     await logAct('login',{email,name:user.name,date:tnowISO()});
@@ -2368,7 +2245,7 @@ async function doVerifyCode(){
     const ud={
       nombre:d.nombre,apellido:d.apellido,name:d.nombre+' '+d.apellido,
       cedula:d.cedula,email:d.email,tel:d.tel,code,
-      pw:btoa(unescape(encodeURIComponent(d.pass))),
+      pw:await _h256(d.pass),
       pagoMovil:{banco:d.banco,tel:d.pmTel,cedula:d.pmCi},
       cuentas:{correo:d.cDiv,binanceId:d.bid,usdtWallet:d.usdtWallet||''},
       joined:new Date().toLocaleDateString('es-VE'),created:tnowISO(),hist:[]
@@ -2696,9 +2573,7 @@ async function startOp(){
   const opOk=await sbCreateOp(sess.email,op);
   if(!opOk){toast('❌ No se pudo crear la operación. Verifica tu conexión.','err');return}
 
-  // ── Aviso de Telegram INMEDIATO (antes de cualquier otro paso que pueda fallar) ──
-  tgNotify(`🔔 <b>Nueva operación</b>\n🆔 ${id}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n💱 ${dir==='compra'?'Compra':'Venta'} · ${PN[plat]}\n📤 Envía: ${sendTxt}\n📥 Recibe: ${getTxt}\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
-
+  
   const m1={from:'sys',text:'Operación '+id+' iniciada.',time:tnow()};
   const m2={from:'sys',text:'📌 Realiza el pago y adjunta el comprobante aquí. LS Cambios lo verificará en breve.',time:tnow()};
   await sbSendMsg(id,m1);
@@ -2711,6 +2586,7 @@ async function startOp(){
 
   sS({email:sess.email,...ud});
   await logAct('operation',{id,email:sess.email,name:ud.name,dir,plat,send:sendTxt,get:getTxt,date:tnowISO()});
+  tgNotify(`🔔 <b>Nueva operación</b>\n🆔 ${id}\n👤 ${ud.nombre} ${ud.apellido}\n📧 ${sess.email}\n📱 ${ud.tel||'—'}\n💱 ${dir==='compra'?'Compra':'Venta'} · ${PN[plat]}\n📤 Envía: ${sendTxt}\n📥 Recibe: ${getTxt}\n🔗 <a href="${ADMIN_URL}">Abrir panel admin</a>`);
   openTradeUI(id,op);
 }
 
@@ -2939,7 +2815,6 @@ function showAV(name){
   nsSet('lsc_av',name); window.scrollTo(0,0);
   if(name==='activity'){loadAct();return}
   if(name==='referidos'){loadAdminReferidos();return}
-  if(name==='smm'){buildSmmEditor();return}
   loadAdmin();
 }
 
@@ -3130,7 +3005,7 @@ async function admClose(){
 function buildRateEditor(){
   const el=document.getElementById('a-rate-grid');if(!el)return;
   loadZelleEmail();loadAdminPM();
-  const plats=['binance','paypal','zinli'];
+  const plats=['binance','paypal','zinli','wally','airtm','usdc'];
   const uPlats=['paypal','zinli','wally','airtm','binance'];
   if(!RATES.usdt_compra)RATES.usdt_compra={};
   if(!RATES.usdt_venta)RATES.usdt_venta={};
@@ -3200,32 +3075,6 @@ async function saveZelleEmail(){
   if(!inp||!inp.value.trim()){toast('⚠️ Ingresa el correo Zelle','err');return;}
   if(!WLS.zelle) WLS.zelle={label:'Correo Zelle',note:'Monto exacto'};
   WLS.zelle.val=inp.value.trim(); await sbSaveRates(); toast('💾 Correo Zelle actualizado','ok');
-}
-
-function buildSmmEditor(){
-  const el=document.getElementById('a-smm-grid');if(!el)return;
-  el.innerHTML=Object.keys(SMM).map(pk=>{
-    const p=SMM[pk];
-    const rows=Object.keys(p.services).map(sk=>{
-      const s=p.services[sk];
-      const unitTxt=s.unit>1?('por cada '+fmt(s.unit)):'por unidad';
-      return`<div class="re-row"><span class="re-lbl">${s.label} (${unitTxt})</span><input class="re-inp" type="number" id="smmp-${pk}-${sk}" value="${s.price}" step="0.01" min="0"></div>`;
-    }).join('');
-    return`<div class="re-card">
-      <div class="re-hdr"><div class="re-name">${p.label}</div></div>
-      ${rows}
-      <button class="btn g sm full" style="margin-top:8px" onclick="saveSmmPrices('${pk}')">💾 Guardar ${p.label}</button>
-    </div>`;
-  }).join('');
-}
-async function saveSmmPrices(pk){
-  const p=SMM[pk];if(!p)return;
-  Object.keys(p.services).forEach(sk=>{
-    const inp=document.getElementById(`smmp-${pk}-${sk}`);
-    if(inp)p.services[sk].price=parseFloat(inp.value)||0;
-  });
-  const ok=await sbSaveRates();
-  toast(ok?('💾 Precios de '+p.label+' guardados'):'❌ Error guardando','ok');
 }
 
 let actFilter='all';
