@@ -1606,7 +1606,7 @@ function toggleTheme(){
 })();
 
 const WA       = 'https://wa.me/584147408768';
-const TG_TOKEN = '8545688733:AAGUVpqSGdLH5A27RtwwxCPQFmlWBhZEj6A';
+const TG_TOKEN = '8827544604:AAGJ07569ACNtcdXu0p8oVIPWnXG1E1Appk';
 const TG_CHAT  = '8180852500';
 const _AH      = 'b0be4eccdbc807053775c62524f83067ead0f1b00579fefc5aab17778e81c1e7';
 
@@ -2173,12 +2173,7 @@ async function doLogin(){
   try{
     const user=await sbGetUser(email);
     if(!user){err.textContent='Correo no registrado.';err.classList.add('on');return}
-    const passHash = await _h256(pass);
-    if(user.pw!==passHash && user.pw!==btoa(unescape(encodeURIComponent(pass)))){err.textContent='Contraseña incorrecta.';err.classList.add('on');return}
-    // migrar contraseña antigua a SHA-256 si todavía estaba en btoa
-    if(user.pw===btoa(unescape(encodeURIComponent(pass))) && user.pw!==passHash){
-      await db.from('clientes').update({pw_hash:passHash}).eq('email',email.toLowerCase());
-    }
+    if(user.pw!==btoa(unescape(encodeURIComponent(pass)))){err.textContent='Contraseña incorrecta.';err.classList.add('on');return}
     user.hist=await sbGetOps(email);
     sS({email,...user});
     await logAct('login',{email,name:user.name,date:tnowISO()});
@@ -2245,7 +2240,7 @@ async function doVerifyCode(){
     const ud={
       nombre:d.nombre,apellido:d.apellido,name:d.nombre+' '+d.apellido,
       cedula:d.cedula,email:d.email,tel:d.tel,code,
-      pw:await _h256(d.pass),
+      pw:btoa(unescape(encodeURIComponent(d.pass))),
       pagoMovil:{banco:d.banco,tel:d.pmTel,cedula:d.pmCi},
       cuentas:{correo:d.cDiv,binanceId:d.bid,usdtWallet:d.usdtWallet||''},
       joined:new Date().toLocaleDateString('es-VE'),created:tnowISO(),hist:[]
