@@ -817,7 +817,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
   <div style="max-width:800px;margin:0 auto;width:100%;padding:0 24px 48px;display:flex;flex-direction:column;gap:24px">
 
     
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px">
       <div onclick="showStaticPage('nosotros')" style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:18px 14px;cursor:pointer;transition:border-color .15s;text-align:center" onmouseover="this.style.borderColor='rgba(0,200,150,.3)'" onmouseout="this.style.borderColor='rgba(0,180,130,.08)'">
         <div class="ui-fs22 ui-mb8">🏢</div>
         <div style="font-size:12px;font-weight:700;color:var(--t1);margin-bottom:4px">Quiénes Somos</div>
@@ -832,6 +832,11 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
         <div class="ui-fs22 ui-mb8">📄</div>
         <div style="font-size:12px;font-weight:700;color:var(--t1);margin-bottom:4px">Términos</div>
         <div class="ui-fn-xxs">Condiciones del servicio</div>
+      </div>
+      <div onclick="showStaticPage('widget')" style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:18px 14px;cursor:pointer;transition:border-color .15s;text-align:center" onmouseover="this.style.borderColor='rgba(109,30,212,.35)'" onmouseout="this.style.borderColor='rgba(0,180,130,.08)'">
+        <div class="ui-fs22 ui-mb8">⚡</div>
+        <div style="font-size:12px;font-weight:700;color:var(--t1);margin-bottom:4px">Cambio Rápido</div>
+        <div class="ui-fn-xxs">Compra/vende al instante, sin registro</div>
       </div>
     </div>
 
@@ -849,6 +854,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
     <div>© 2025 LS Cambios</div>
     <div class="footer-links">
       <a href="#rates">Tasas</a>
+      <a href="javascript:void(0)" onclick="showStaticPage('widget')">Cambio Rápido</a>
       <a href="javascript:void(0)" onclick="showStaticPage('nosotros')">Quiénes Somos</a>
       <a href="javascript:void(0)" onclick="showStaticPage('seguridad')">Seguridad</a>
       <a href="javascript:void(0)" onclick="showStaticPage('tos')">Términos</a>
@@ -903,6 +909,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
     <div>© 2025 LS Cambios</div>
     <div class="footer-links">
       <a href="javascript:void(0)" onclick="showStaticPage(null)">Inicio</a>
+      <a href="javascript:void(0)" onclick="showStaticPage('widget')">Cambio Rápido</a>
       <a href="javascript:void(0)" onclick="showStaticPage('seguridad')">Seguridad</a>
       <a href="javascript:void(0)" onclick="showStaticPage('tos')">Términos</a>
     </div>
@@ -962,6 +969,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
     <div>© 2025 LS Cambios</div>
     <div class="footer-links">
       <a href="javascript:void(0)" onclick="showStaticPage(null)">Inicio</a>
+      <a href="javascript:void(0)" onclick="showStaticPage('widget')">Cambio Rápido</a>
       <a href="javascript:void(0)" onclick="showStaticPage('nosotros')">Quiénes Somos</a>
       <a href="javascript:void(0)" onclick="showStaticPage('tos')">Términos</a>
     </div>
@@ -1035,8 +1043,81 @@ body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh
     <div>© 2025 LS Cambios</div>
     <div class="footer-links">
       <a href="javascript:void(0)" onclick="showStaticPage(null)">Inicio</a>
+      <a href="javascript:void(0)" onclick="showStaticPage('widget')">Cambio Rápido</a>
       <a href="javascript:void(0)" onclick="showStaticPage('nosotros')">Quiénes Somos</a>
       <a href="javascript:void(0)" onclick="showStaticPage('seguridad')">Seguridad</a>
+    </div>
+  </footer>
+</div>
+
+<div class="page" id="pg-widget">
+  <nav class="nav">
+    <div class="nav-brand" onclick="showStaticPage(null)">
+      <div class="nav-brand-img"><img src="https://i.imgur.com/7JkKq5F.png" onerror="this.style.display='none'"></div>
+      <div class="nav-brand-name">LS CAMBIOS</div>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn nav-btn-ghost" onclick="showStaticPage(null)">← Volver</button>
+    </div>
+  </nav>
+  <div class="ui-section">
+    <div class="ui-mb32">
+      <div class="live-chip ui-mb18"><div class="live-dot" style="background:#8b5cf6"></div><span style="color:#8b5cf6">CAMBIO INSTANTÁNEO</span></div>
+      <h1 style="font-size:clamp(28px,5vw,48px);font-weight:800;line-height:1.1;color:#fff;letter-spacing:-1px;margin-bottom:14px">Cambia al <span style="background:linear-gradient(135deg,#6d1ed4,#1a6cff);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent">instante</span></h1>
+      <p style="font-size:15px;color:var(--t2);line-height:1.75;font-weight:300">Compra y vende cripto sin crear una cuenta en LS Cambios. Esta operativa la procesa nuestro socio P2P y acepta PayPal, Zinli, Wally, USDT y Pago Móvil.</p>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">
+      <span style="background:var(--bg1);border:1px solid var(--brd);border-radius:50px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--t1)">💳 PayPal</span>
+      <span style="background:var(--bg1);border:1px solid var(--brd);border-radius:50px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--t1)">🅩 Zinli</span>
+      <span style="background:var(--bg1);border:1px solid var(--brd);border-radius:50px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--t1)">📱 Wally</span>
+      <span style="background:var(--bg1);border:1px solid var(--brd);border-radius:50px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--t1)">🪙 USDT</span>
+      <span style="background:var(--bg1);border:1px solid var(--brd);border-radius:50px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--t1)">🏦 Pago Móvil</span>
+    </div>
+
+    <!--
+      ══════════════════════════════════════════════════════════════════
+      INTEGRACIÓN DEL WIDGET SKIPSHIFT — instrucciones para el admin:
+      1. Entra a skipshift.io → menú "Integrar" → "Get Your Widget".
+      2. Fee Receiver Address: pega TU wallet (ahí llegan las comisiones
+         que genere cada operación hecha desde lscambios.com).
+      3. Maker Address (opcional): si quieres que el widget SOLO muestre
+         tus propios métodos (PayPal, Zinli, Wally, USDT, Pago Móvil),
+         escanea el widget a tu propia dirección de "maker"/proveedor de
+         liquidez en SkipShift. Si lo dejas vacío, el widget mostrará
+         todos los makers disponibles en la red de SkipShift, no solo
+         los tuyos — eso NO se controla desde este HTML, es 100%
+         configuración del lado de SkipShift.
+      4. Pulsa "Generate Widget Code" y copia el <iframe> o <script>
+         que te entrega SkipShift.
+      5. Reemplaza TODO el contenido del div id="skipshift-widget-slot"
+         de aquí abajo por ese código (borra el placeholder incluido).
+      ══════════════════════════════════════════════════════════════════
+    -->
+    <div class="ui-card" style="padding:0;overflow:hidden;margin-bottom:24px">
+      <div id="skipshift-widget-slot" style="min-height:480px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;padding:40px 20px;text-align:center">
+        <div style="font-size:32px">🔗</div>
+        <div style="font-size:14px;font-weight:700;color:var(--t1)">Widget de SkipShift pendiente de integrar</div>
+        <div style="font-size:12px;color:var(--t3);max-width:340px;line-height:1.6">Genera tu código en skipshift.io → Integrar → Get Your Widget, y pégalo en el div id="skipshift-widget-slot" del código fuente para activar el cambio en vivo aquí.</div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r2);padding:18px 20px;margin-bottom:24px">
+      <div style="font-size:12px;font-weight:700;color:var(--t1);margin-bottom:8px">ℹ️ Cómo funciona</div>
+      <p class="ui-body">Este cambio rápido es un servicio P2P descentralizado sin verificación de identidad (No-KYC), operado por SkipShift. Al confirmar tu operación en el recuadro de arriba, esta aparecerá en la sección "Trades" del widget; una vez que un proveedor la acepte, envías el pago al usuario indicado por el método elegido. LS Cambios facilita este acceso pero la operación se procesa de forma independiente a tu cuenta y operaciones habituales de LS Cambios.</p>
+    </div>
+
+    <div style="text-align:center;padding:24px;background:rgba(109,30,212,.06);border:1px solid rgba(109,30,212,.18);border-radius:var(--r2)">
+      <p style="font-size:13px;color:var(--t2);margin-bottom:14px">¿Prefieres operar con nuestro equipo directamente?</p>
+      <button class="btn-main solid" onclick="showStaticPage(null);setTimeout(()=>openAuth('register'),200)">Crear cuenta en LS Cambios →</button>
+    </div>
+  </div>
+  <footer class="lp-footer">
+    <div>© 2025 LS Cambios</div>
+    <div class="footer-links">
+      <a href="javascript:void(0)" onclick="showStaticPage(null)">Inicio</a>
+      <a href="javascript:void(0)" onclick="showStaticPage('seguridad')">Seguridad</a>
+      <a href="javascript:void(0)" onclick="showStaticPage('tos')">Términos</a>
     </div>
   </footer>
 </div>
