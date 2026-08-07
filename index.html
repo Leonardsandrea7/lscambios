@@ -84,8 +84,9 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:20px 2
 .method-card:hover{transform:translateY(-3px);border-color:var(--brd2)}
 .method-badge{
   width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:17px;color:#fff;letter-spacing:-.5px;flex-shrink:0;
+  font-weight:800;font-size:17px;color:#fff;letter-spacing:-.5px;flex-shrink:0;overflow:hidden;background:#fff;
 }
+.method-badge img{width:100%;height:100%;object-fit:contain;padding:8px}
 .method-name{font-size:12.5px;font-weight:700;color:var(--t1)}
 
 /* WIDGET */
@@ -93,6 +94,40 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:20px 2
 .widget-card{background:var(--bg1);border:1px solid var(--brd2);border-radius:var(--r2);overflow:hidden}
 .widget-hdr{display:flex;align-items:center;gap:8px;padding:16px 20px;border-bottom:1px solid var(--brd2);font-size:11px;font-weight:700;letter-spacing:.8px;color:var(--t2)}
 #skipshift-widget-slot{min-height:440px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;padding:44px 20px;text-align:center}
+
+/* AUTH GATE */
+.auth-card{background:var(--bg1);border:1px solid var(--brd2);border-radius:var(--r2);overflow:hidden;max-width:420px;margin:0 auto}
+.auth-tabs{display:flex;border-bottom:1px solid var(--brd2)}
+.auth-tab{flex:1;padding:16px;text-align:center;font-size:13px;font-weight:700;letter-spacing:.3px;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
+.auth-tab.active{color:var(--t1);border-color:var(--g)}
+.auth-body{padding:26px 24px 28px}
+.auth-body p.auth-sub{font-size:12.5px;color:var(--t2);margin-bottom:18px;line-height:1.5}
+.field{margin-bottom:14px;text-align:left}
+.field label{display:block;font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--t2);margin-bottom:6px}
+.field input{
+  width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--brd2);background:var(--bg);
+  color:var(--t1);font-family:var(--fn);font-size:14px;transition:border-color .15s;
+}
+.field input:focus{border-color:var(--g)}
+.auth-submit{
+  width:100%;margin-top:6px;background:var(--gd);color:#04140f;border:none;padding:13px;border-radius:10px;
+  font-family:var(--fn);font-weight:800;font-size:14.5px;cursor:pointer;transition:transform .15s,box-shadow .15s;
+  box-shadow:0 10px 26px -10px rgba(0,200,150,.45);
+}
+.auth-submit:hover{transform:translateY(-1px)}
+.auth-msg{margin-top:12px;font-size:12px;font-weight:600;text-align:center;min-height:16px}
+.auth-msg.error{color:#ff6b6b}
+.auth-msg.ok{color:var(--g)}
+.auth-note{margin-top:16px;font-size:10.5px;color:var(--t3);line-height:1.5;text-align:center}
+.session-pill{
+  display:flex;align-items:center;gap:8px;background:var(--bg1);border:1px solid var(--brd2);
+  border-radius:50px;padding:6px 14px 6px 12px;font-size:12px;font-weight:700;color:var(--t2);
+}
+.session-pill button{
+  background:none;border:none;color:var(--t3);font-family:var(--fn);font-weight:700;font-size:11px;
+  cursor:pointer;text-decoration:underline;padding:0;
+}
+.hidden{display:none !important}
 
 footer{
   max-width:1080px;margin:0 auto;padding:24px;display:flex;align-items:center;justify-content:space-between;
@@ -107,7 +142,10 @@ footer{
     <img id="logoImg" src="" alt="LSCAMBIOS">
     <div class="brand-name">LS<span>CAMBIOS</span></div>
   </div>
-  <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
+  <div style="display:flex;align-items:center;gap:10px">
+    <span id="session-slot"></span>
+    <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
+  </div>
 </nav>
 
 <div class="hero">
@@ -121,31 +159,86 @@ footer{
 <div class="methods-section">
   <div class="methods-label">TRABAJAMOS CON</div>
   <div class="methods-grid">
-    <div class="method-card"><div class="method-badge" style="background:#0070ba">PP</div><div class="method-name">PayPal</div></div>
-    <div class="method-card"><div class="method-badge" style="background:#00c896">Z</div><div class="method-name">Zinli</div></div>
-    <div class="method-card"><div class="method-badge" style="background:#1a6cff">W</div><div class="method-name">Wally</div></div>
-    <div class="method-card"><div class="method-badge" style="background:#6d1ed4">Ze</div><div class="method-name">Zelle</div></div>
-    <div class="method-card"><div class="method-badge" style="background:#00a99d">A</div><div class="method-name">Airtm</div></div>
-    <div class="method-card"><div class="method-badge" style="background:#f0b90b;color:#1a1a1a">B</div><div class="method-name">Binance</div></div>
+    <div class="method-card"><div class="method-badge"><img src="https://www.google.com/s2/favicons?domain=paypal.com&sz=128" alt="PayPal" loading="lazy"></div><div class="method-name">PayPal</div></div>
+    <div class="method-card"><div class="method-badge"><img src="https://www.google.com/s2/favicons?domain=zinli.com&sz=128" alt="Zinli" loading="lazy"></div><div class="method-name">Zinli</div></div>
+    <div class="method-card"><div class="method-badge"><img src="https://www.google.com/s2/favicons?domain=wally.tech&sz=128" alt="Wally" loading="lazy"></div><div class="method-name">Wally</div></div>
+    <div class="method-card"><div class="method-badge"><img src="https://www.google.com/s2/favicons?domain=zellepay.com&sz=128" alt="Zelle" loading="lazy"></div><div class="method-name">Zelle</div></div>
+    <div class="method-card"><div class="method-badge"><img src="https://www.google.com/s2/favicons?domain=airtm.com&sz=128" alt="Airtm" loading="lazy"></div><div class="method-name">Airtm</div></div>
+    <div class="method-card"><div class="method-badge"><img src="https://www.google.com/s2/favicons?domain=binance.com&sz=128" alt="Binance" loading="lazy"></div><div class="method-name">Binance</div></div>
   </div>
 </div>
 
-<!--
-  ══════════════════════════════════════════════════════════════════
-  INTEGRACIÓN DEL WIDGET SKIPSHIFT — instrucciones para el admin:
-  1. Entra a skipshift.io → "Integrar" → "Get Your Widget".
-  2. Fee Receiver Address: tu wallet (ahí llegan las comisiones).
-  3. Maker Address (opcional): escópalo a tu propio maker si quieres
-     que SOLO aparezcan tus métodos (PayPal, Zinli, Wally, Zelle,
-     Airtm, Binance...). Sin esto, el widget puede mostrar otros
-     makers/métodos de la red de SkipShift — eso se controla del
-     lado de SkipShift, no desde este HTML.
-  4. Pulsa "Generate Widget Code" y copia el <iframe> o <script>.
-  5. Reemplaza TODO el contenido del div id="skipshift-widget-slot"
-     de aquí abajo por ese código (borra el placeholder incluido).
-  ══════════════════════════════════════════════════════════════════
--->
-<iframe style="border: 0px; width: 100%; height: 100%; min-height: 635px; max-width: 440px;" src="https://skipshift.io/?skipwidget&r=0xe2a086531b5f9e2e9e13ce3164e58ad1dd90e8dc" id="_RBX_SKIPSHIFT_WIDGET" class="skippyWidget" ></iframe> <script src="https://skipshift.io/widgetari/arbitor.js"></script>
+<div class="widget-section" id="widget-anchor">
+
+  <!-- AUTH GATE: se muestra hasta que el usuario se registra o inicia sesión -->
+  <div id="auth-gate">
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="tab-register" onclick="switchAuthTab('register')">Crear cuenta</div>
+        <div class="auth-tab" id="tab-login" onclick="switchAuthTab('login')">Iniciar sesión</div>
+      </div>
+      <div class="auth-body">
+        <p class="auth-sub" id="auth-sub">Regístrate con tu correo y contraseña para acceder al widget de cambio.</p>
+
+        <form id="form-register" onsubmit="return handleRegister(event)">
+          <div class="field">
+            <label for="reg-email">Correo electrónico</label>
+            <input type="email" id="reg-email" autocomplete="email" required placeholder="tucorreo@ejemplo.com">
+          </div>
+          <div class="field">
+            <label for="reg-pass">Contraseña</label>
+            <input type="password" id="reg-pass" autocomplete="new-password" required minlength="6" placeholder="Mínimo 6 caracteres">
+          </div>
+          <div class="field">
+            <label for="reg-pass2">Confirmar contraseña</label>
+            <input type="password" id="reg-pass2" autocomplete="new-password" required minlength="6" placeholder="Repite tu contraseña">
+          </div>
+          <button type="submit" class="auth-submit">Crear cuenta y ver widget</button>
+        </form>
+
+        <form id="form-login" class="hidden" onsubmit="return handleLogin(event)">
+          <div class="field">
+            <label for="log-email">Correo electrónico</label>
+            <input type="email" id="log-email" autocomplete="email" required placeholder="tucorreo@ejemplo.com">
+          </div>
+          <div class="field">
+            <label for="log-pass">Contraseña</label>
+            <input type="password" id="log-pass" autocomplete="current-password" required placeholder="Tu contraseña">
+          </div>
+          <button type="submit" class="auth-submit">Iniciar sesión</button>
+        </form>
+
+        <div class="auth-msg" id="auth-msg"></div>
+        <div class="auth-note">Cuenta almacenada solo en este navegador (demo). Para cuentas reales y seguras en producción se necesita un backend.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WIDGET: oculto hasta que el usuario se registre / inicie sesión -->
+  <div class="widget-card hidden" id="widget-card">
+    <div class="widget-hdr">CAMBIO EN VIVO</div>
+    <!--
+      ══════════════════════════════════════════════════════════════════
+      INTEGRACIÓN DEL WIDGET SKIPSHIFT — instrucciones para el admin:
+      1. Entra a skipshift.io → "Integrar" → "Get Your Widget".
+      2. Fee Receiver Address: tu wallet (ahí llegan las comisiones).
+      3. Maker Address (opcional): escópalo a tu propio maker si quieres
+         que SOLO aparezcan tus métodos (PayPal, Zinli, Wally, Zelle,
+         Airtm, Binance...). Sin esto, el widget puede mostrar otros
+         makers/métodos de la red de SkipShift — eso se controla del
+         lado de SkipShift, no desde este HTML.
+      4. Pulsa "Generate Widget Code" y copia el <iframe> o <script>.
+      5. Reemplaza TODO el contenido del div id="skipshift-widget-slot"
+         de aquí abajo por ese código (borra el placeholder incluido).
+      ══════════════════════════════════════════════════════════════════
+    -->
+    <div id="skipshift-widget-slot">
+      <iframe style="border: 0px; width: 100%; height: 100%; min-height: 635px; max-width: 440px;" src="https://skipshift.io/?skipwidget&r=0xe2a086531b5f9e2e9e13ce3164e58ad1dd90e8dc" id="_RBX_SKIPSHIFT_WIDGET" class="skippyWidget" ></iframe>
+      <script src="https://skipshift.io/widgetari/arbitor.js"></script>
+    </div>
+  </div>
+
+</div>
 
 <footer>
   <div>© 2025 LSCAMBIOS</div>
@@ -171,6 +264,118 @@ function toggleTheme(){
 function goWidget(){
   document.getElementById('widget-anchor').scrollIntoView({behavior:'smooth', block:'center'});
 }
+
+/* ============ AUTH (demo, solo localStorage — sin backend) ============ */
+const USERS_KEY = 'lsc_users';
+const SESSION_KEY = 'lsc_session';
+
+function getUsers(){
+  try{ return JSON.parse(localStorage.getItem(USERS_KEY) || '{}'); }
+  catch(e){ return {}; }
+}
+function saveUsers(users){ localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
+
+async function hashPass(pass){
+  const enc = new TextEncoder().encode('lsc-salt::' + pass);
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+function setMsg(text, type){
+  const el = document.getElementById('auth-msg');
+  el.textContent = text || '';
+  el.className = 'auth-msg' + (type ? ' ' + type : '');
+}
+
+function switchAuthTab(which){
+  const isReg = which === 'register';
+  document.getElementById('tab-register').classList.toggle('active', isReg);
+  document.getElementById('tab-login').classList.toggle('active', !isReg);
+  document.getElementById('form-register').classList.toggle('hidden', !isReg);
+  document.getElementById('form-login').classList.toggle('hidden', isReg);
+  document.getElementById('auth-sub').textContent = isReg
+    ? 'Regístrate con tu correo y contraseña para acceder al widget de cambio.'
+    : 'Ingresa con tu correo y contraseña para acceder al widget de cambio.';
+  setMsg('');
+}
+
+async function handleRegister(e){
+  e.preventDefault();
+  const email = document.getElementById('reg-email').value.trim().toLowerCase();
+  const pass = document.getElementById('reg-pass').value;
+  const pass2 = document.getElementById('reg-pass2').value;
+
+  if(pass !== pass2){ setMsg('Las contraseñas no coinciden.', 'error'); return false; }
+  if(pass.length < 6){ setMsg('La contraseña debe tener al menos 6 caracteres.', 'error'); return false; }
+
+  const users = getUsers();
+  if(users[email]){ setMsg('Ese correo ya está registrado. Inicia sesión.', 'error'); switchAuthTab('login'); return false; }
+
+  users[email] = { hash: await hashPass(pass), createdAt: Date.now() };
+  saveUsers(users);
+  localStorage.setItem(SESSION_KEY, email);
+  setMsg('¡Cuenta creada! Cargando widget...', 'ok');
+  setTimeout(showWidgetForSession, 500);
+  return false;
+}
+
+async function handleLogin(e){
+  e.preventDefault();
+  const email = document.getElementById('log-email').value.trim().toLowerCase();
+  const pass = document.getElementById('log-pass').value;
+
+  const users = getUsers();
+  const user = users[email];
+  if(!user){ setMsg('No existe una cuenta con ese correo.', 'error'); return false; }
+
+  const hash = await hashPass(pass);
+  if(hash !== user.hash){ setMsg('Contraseña incorrecta.', 'error'); return false; }
+
+  localStorage.setItem(SESSION_KEY, email);
+  setMsg('¡Bienvenido de nuevo! Cargando widget...', 'ok');
+  setTimeout(showWidgetForSession, 400);
+  return false;
+}
+
+function logout(){
+  localStorage.removeItem(SESSION_KEY);
+  renderSession();
+}
+
+function renderSession(){
+  const email = localStorage.getItem(SESSION_KEY);
+  const slot = document.getElementById('session-slot');
+  const gate = document.getElementById('auth-gate');
+  const widget = document.getElementById('widget-card');
+
+  if(email){
+    slot.innerHTML = '';
+    const pill = document.createElement('div');
+    pill.className = 'session-pill';
+    const span = document.createElement('span');
+    span.textContent = email;
+    const btn = document.createElement('button');
+    btn.textContent = 'Salir';
+    btn.onclick = logout;
+    pill.appendChild(span);
+    pill.appendChild(btn);
+    slot.appendChild(pill);
+
+    gate.classList.add('hidden');
+    widget.classList.remove('hidden');
+  } else {
+    slot.innerHTML = '';
+    gate.classList.remove('hidden');
+    widget.classList.add('hidden');
+  }
+}
+
+function showWidgetForSession(){
+  renderSession();
+  document.getElementById('widget-anchor').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+renderSession();
 </script>
 </body>
 </html>
