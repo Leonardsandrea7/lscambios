@@ -129,6 +129,24 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:20px 2
 }
 .hidden{display:none !important}
 
+/* RECORTE DE MARCA EN EL WIDGET */
+.widget-crop-wrap{position:relative;overflow:hidden}
+.widget-cover-bottom{
+  position:absolute;left:0;right:0;bottom:0;height:38px;
+  background:var(--bg1);display:flex;align-items:center;justify-content:center;
+  font-size:10.5px;font-weight:700;letter-spacing:.4px;color:var(--t3);
+  border-top:1px solid var(--brd2);
+}
+
+/* ADMIN */
+.users-table{width:100%;border-collapse:collapse;font-size:13px}
+.users-table th{text-align:left;font-size:10.5px;letter-spacing:.5px;color:var(--t3);padding:8px 10px;border-bottom:1px solid var(--brd2)}
+.users-table td{padding:10px;border-bottom:1px solid var(--brd2);color:var(--t1)}
+.users-table tr:last-child td{border-bottom:none}
+.users-table .del-btn{background:none;border:1px solid var(--brd2);color:var(--t3);border-radius:8px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--fn)}
+.users-table .del-btn:hover{color:#ff6b6b;border-color:#ff6b6b}
+.users-empty{padding:30px 10px;text-align:center;color:var(--t3);font-size:13px}
+
 footer{
   max-width:1080px;margin:0 auto;padding:24px;display:flex;align-items:center;justify-content:space-between;
   border-top:1px solid var(--brd2);font-size:12px;color:var(--t3);position:relative;z-index:1;flex-wrap:wrap;gap:10px;
@@ -147,6 +165,8 @@ footer{
     <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
   </div>
 </nav>
+
+<div id="public-view">
 
 <div class="hero">
   <div class="chip"><span class="dot"></span>SIN REGISTROS · SIN KYC</div>
@@ -230,11 +250,82 @@ footer{
       4. Pulsa "Generate Widget Code" y copia el <iframe> o <script>.
       5. Reemplaza TODO el contenido del div id="skipshift-widget-slot"
          de aquí abajo por ese código (borra el placeholder incluido).
+
+      RECORTE DE MARCA "SKIPSHIFT":
+      El iframe es de otro dominio (skipshift.io), así que no podemos
+      editar su contenido interno con JS/CSS — solo podemos recortarlo
+      visualmente desde afuera. La franja inferior (donde suele decir
+      "Powered by SkipShift" o similar) se tapa con la capa
+      ".widget-cover-bottom" de aquí abajo, que además bloquea el clic
+      para que no se pueda ir a skipshift.io desde ahí.
+      Si la franja de marca está más alta o más baja de lo esperado,
+      ajusta la altura en la variable --cover-h (abajo en el <style>,
+      busca ".widget-cover-bottom{height: ...}") hasta que tape bien
+      el logo/texto sin recortar los botones del widget.
       ══════════════════════════════════════════════════════════════════
     -->
-    <div id="skipshift-widget-slot">
-      <iframe style="border: 0px; width: 100%; height: 100%; min-height: 635px; max-width: 440px;" src="https://skipshift.io/?skipwidget&r=0xe2a086531b5f9e2e9e13ce3164e58ad1dd90e8dc" id="_RBX_SKIPSHIFT_WIDGET" class="skippyWidget" ></iframe>
+    <div id="skipshift-widget-slot" class="widget-crop-wrap">
+      <iframe style="border: 0px; width: 100%; height: 100%; min-height: 635px; max-width: 440px; display:block;" src="https://skipshift.io/?skipwidget&r=0xe2a086531b5f9e2e9e13ce3164e58ad1dd90e8dc" id="_RBX_SKIPSHIFT_WIDGET" class="skippyWidget" ></iframe>
       <script src="https://skipshift.io/widgetari/arbitor.js"></script>
+      <div class="widget-cover-bottom">LSCAMBIOS · Cambio seguro</div>
+    </div>
+  </div>
+
+</div>
+
+</div><!-- /public-view -->
+
+<!-- ============ VISTA DE ADMIN ============ -->
+<div id="admin-view" class="hidden">
+
+  <div class="widget-section" style="margin-top:52px">
+    <!-- LOGIN DE ADMIN -->
+    <div class="auth-card" id="admin-login-card">
+      <div class="auth-tabs"><div class="auth-tab active">Panel de administración</div></div>
+      <div class="auth-body">
+        <p class="auth-sub">Acceso restringido. Ingresa la contraseña de administrador.</p>
+        <form id="form-admin-login" onsubmit="return handleAdminLogin(event)">
+          <div class="field">
+            <label for="admin-pass-input">Contraseña de admin</label>
+            <input type="password" id="admin-pass-input" required placeholder="Contraseña de admin" autocomplete="current-password">
+          </div>
+          <button type="submit" class="auth-submit">Entrar</button>
+        </form>
+        <div class="auth-msg" id="admin-login-msg"></div>
+        <div class="auth-note">Contraseña por defecto la primera vez: <strong>admin123</strong>. Cámbiala apenas entres, desde el panel.</div>
+      </div>
+    </div>
+
+    <!-- PANEL DE ADMIN (usuarios registrados) -->
+    <div class="auth-card hidden" id="admin-panel-card" style="max-width:760px">
+      <div class="auth-tabs">
+        <div class="auth-tab active">Usuarios registrados (<span id="admin-user-count">0</span>)</div>
+      </div>
+      <div class="auth-body">
+        <div id="admin-users-table"></div>
+
+        <details style="margin-top:22px">
+          <summary style="cursor:pointer;font-size:12px;font-weight:700;color:var(--t2)">Cambiar contraseña de admin</summary>
+          <form id="form-admin-pass" onsubmit="return handleAdminChangePass(event)" style="margin-top:14px">
+            <div class="field">
+              <label for="admin-pass-current">Contraseña actual</label>
+              <input type="password" id="admin-pass-current" required>
+            </div>
+            <div class="field">
+              <label for="admin-pass-new">Nueva contraseña</label>
+              <input type="password" id="admin-pass-new" required minlength="6">
+            </div>
+            <button type="submit" class="auth-submit">Actualizar contraseña</button>
+          </form>
+          <div class="auth-msg" id="admin-pass-msg"></div>
+        </details>
+
+        <div class="auth-note" style="margin-top:20px">
+          ⚠️ Estos registros se guardan solo en el navegador de cada visitante (localStorage), no en un servidor central. Este panel únicamente muestra las cuentas creadas <strong>en este mismo navegador/dispositivo</strong>. Para ver todos los registros de todos los visitantes desde cualquier lugar, se necesita conectar un backend real (por ejemplo Firebase o Supabase).
+        </div>
+
+        <button class="auth-submit" style="margin-top:18px;background:transparent;color:var(--t2);border:1px solid var(--brd2);box-shadow:none" onclick="logoutAdmin()">Salir del panel de admin</button>
+      </div>
     </div>
   </div>
 
@@ -242,7 +333,10 @@ footer{
 
 <footer>
   <div>© 2025 LSCAMBIOS</div>
-  <div>Cambio procesado vía SkipShift</div>
+  <div style="display:flex;gap:16px;align-items:center">
+    <span>Cambio procesado vía SkipShift</span>
+    <a href="?admin" id="admin-link" style="color:var(--t3);text-decoration:none;font-size:11px;border-bottom:1px dashed var(--brd2)">Admin</a>
+  </div>
 </footer>
 
 <script>
@@ -376,6 +470,115 @@ function showWidgetForSession(){
 }
 
 renderSession();
+
+/* ============ ADMIN ============ */
+const ADMIN_HASH_KEY = 'lsc_admin_hash';
+const ADMIN_SESSION_KEY = 'lsc_admin_session';
+const DEFAULT_ADMIN_PASS = 'admin123';
+
+function fmtDate(ts){
+  const d = new Date(ts);
+  return d.toLocaleDateString('es-ES', {day:'2-digit', month:'short', year:'numeric'}) + ' ' +
+         d.toLocaleTimeString('es-ES', {hour:'2-digit', minute:'2-digit'});
+}
+
+async function ensureAdminPass(){
+  if(!localStorage.getItem(ADMIN_HASH_KEY)){
+    localStorage.setItem(ADMIN_HASH_KEY, await hashPass(DEFAULT_ADMIN_PASS));
+  }
+}
+
+function setAdminLoginMsg(text, type){
+  const el = document.getElementById('admin-login-msg');
+  el.textContent = text || '';
+  el.className = 'auth-msg' + (type ? ' ' + type : '');
+}
+function setAdminPassMsg(text, type){
+  const el = document.getElementById('admin-pass-msg');
+  el.textContent = text || '';
+  el.className = 'auth-msg' + (type ? ' ' + type : '');
+}
+
+async function handleAdminLogin(e){
+  e.preventDefault();
+  await ensureAdminPass();
+  const pass = document.getElementById('admin-pass-input').value;
+  const hash = await hashPass(pass);
+  const stored = localStorage.getItem(ADMIN_HASH_KEY);
+  if(hash !== stored){ setAdminLoginMsg('Contraseña incorrecta.', 'error'); return false; }
+  sessionStorage.setItem(ADMIN_SESSION_KEY, '1');
+  renderAdminView();
+  return false;
+}
+
+function logoutAdmin(){
+  sessionStorage.removeItem(ADMIN_SESSION_KEY);
+  renderAdminView();
+}
+
+function deleteUser(email){
+  if(!confirm('¿Eliminar la cuenta ' + email + '? Esta acción no se puede deshacer.')) return;
+  const users = getUsers();
+  delete users[email];
+  saveUsers(users);
+  renderUsersTable();
+}
+
+function renderUsersTable(){
+  const users = getUsers();
+  const emails = Object.keys(users).sort((a,b) => (users[b].createdAt||0) - (users[a].createdAt||0));
+  document.getElementById('admin-user-count').textContent = emails.length;
+
+  const container = document.getElementById('admin-users-table');
+  if(emails.length === 0){
+    container.innerHTML = '<div class="users-empty">Todavía no hay usuarios registrados en este navegador.</div>';
+    return;
+  }
+
+  let html = '<table class="users-table"><thead><tr><th>Correo</th><th>Registrado</th><th></th></tr></thead><tbody>';
+  for(const email of emails){
+    const created = users[email].createdAt ? fmtDate(users[email].createdAt) : '—';
+    html += '<tr><td>' + escapeHtml(email) + '</td><td>' + created + '</td>' +
+            '<td style="text-align:right"><button class="del-btn" onclick="deleteUser(\'' + escapeHtml(email).replace(/'/g,"\\'") + '\')">Eliminar</button></td></tr>';
+  }
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+async function handleAdminChangePass(e){
+  e.preventDefault();
+  const current = document.getElementById('admin-pass-current').value;
+  const next = document.getElementById('admin-pass-new').value;
+  const stored = localStorage.getItem(ADMIN_HASH_KEY);
+  if(await hashPass(current) !== stored){ setAdminPassMsg('La contraseña actual no es correcta.', 'error'); return false; }
+  localStorage.setItem(ADMIN_HASH_KEY, await hashPass(next));
+  setAdminPassMsg('Contraseña actualizada.', 'ok');
+  document.getElementById('form-admin-pass').reset();
+  return false;
+}
+
+async function renderAdminView(){
+  await ensureAdminPass();
+  const loggedIn = sessionStorage.getItem(ADMIN_SESSION_KEY) === '1';
+  document.getElementById('admin-login-card').classList.toggle('hidden', loggedIn);
+  document.getElementById('admin-panel-card').classList.toggle('hidden', !loggedIn);
+  if(loggedIn) renderUsersTable();
+}
+
+function initView(){
+  const isAdmin = new URLSearchParams(location.search).has('admin');
+  document.getElementById('public-view').classList.toggle('hidden', isAdmin);
+  document.getElementById('admin-view').classList.toggle('hidden', !isAdmin);
+  if(isAdmin) renderAdminView();
+}
+
+initView();
 </script>
 </body>
 </html>
