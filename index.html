@@ -132,10 +132,13 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:20px 2
 /* RECORTE DE MARCA EN EL WIDGET */
 .widget-crop-wrap{position:relative;overflow:hidden}
 .widget-cover-bottom{
-  position:absolute;left:0;right:0;bottom:0;height:38px;
-  background:var(--bg1);display:flex;align-items:center;justify-content:center;
-  font-size:10.5px;font-weight:700;letter-spacing:.4px;color:var(--t3);
+  position:absolute;left:0;right:0;bottom:0;height:40px;
+  background:var(--gd);display:flex;align-items:center;justify-content:center;gap:6px;
+  font-size:10.5px;font-weight:800;letter-spacing:.5px;color:#04140f;
   border-top:1px solid var(--brd2);
+}
+.widget-cover-bottom::before{
+  content:'';width:6px;height:6px;border-radius:50%;background:#04140f;opacity:.55;
 }
 
 /* ADMIN */
@@ -267,7 +270,7 @@ footer{
     <div id="skipshift-widget-slot" class="widget-crop-wrap">
       <iframe style="border: 0px; width: 100%; height: 100%; min-height: 635px; max-width: 440px; display:block;" src="https://skipshift.io/?skipwidget&r=0xe2a086531b5f9e2e9e13ce3164e58ad1dd90e8dc" id="_RBX_SKIPSHIFT_WIDGET" class="skippyWidget" ></iframe>
       <script src="https://skipshift.io/widgetari/arbitor.js"></script>
-      <div class="widget-cover-bottom">LSCAMBIOS · Cambio seguro</div>
+      <div class="widget-cover-bottom">LSCAMBIOS · Motor de cambio verificado</div>
     </div>
   </div>
 
@@ -334,7 +337,7 @@ footer{
 <footer>
   <div>© 2025 LSCAMBIOS</div>
   <div style="display:flex;gap:16px;align-items:center">
-    <span>Cambio procesado vía SkipShift</span>
+    <span>Cambio procesado por nuestro motor de intercambio</span>
     <a href="?admin" id="admin-link" style="color:var(--t3);text-decoration:none;font-size:11px;border-bottom:1px dashed var(--brd2)">Admin</a>
   </div>
 </footer>
