@@ -3,184 +3,455 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<title>LS Cambios · P2P</title>
+<title>LS Cambios · P2P sin registro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+/* ══════════════════════════════════════════════════════════════════
+   PALETA — tomada directamente del logo real de LS Cambios:
+   fondo casi negro + badge circular en degradado verde → azul.
+   ══════════════════════════════════════════════════════════════════ */
 :root{
-  --navy0:#0a1130;--navy1:#13205c;--navy2:#1f3aa8;
-  --bg:#f4f7fc;--bg1:#0f1520;--bg2:#162030;--bg3:#1e2d42;
-  --brd:rgba(0,180,130,.10);--brd2:rgba(0,180,130,.20);
-  --g:#00c896;--g2:#00eeb3;--gd:linear-gradient(100deg,#0a6cff,#3fd0ff);
-  --t1:#e0eaf5;--t2:#7a92a8;--t3:#3d5168;
-  --ink:#0c1430;--inkfade:#5b6a8c;
-  --red:#ff5c5c;--amber:#f0b90b;
-  --r:8px;--r2:12px;--r3:20px;
-  --fn:'Outfit',system-ui,sans-serif;--mono:'Space Mono',monospace;
+  --navy0:#030509;--navy1:#070c16;--navy2:#0c1526;
+  --bg:#eef2f5;--surface:#ffffff;--surface2:#f5f7f9;
+  --line:#e5e9ee;--line2:#d9dfe6;
+  --ink:#0a0f16;--ink2:#4c5560;--ink3:#93a0ac;
+  --brand-green:#14c496;--brand-blue:#1496dc;
+  --accent1:var(--brand-blue);--accent2:var(--brand-green);
+  --accent-grad:linear-gradient(135deg,var(--brand-green),var(--brand-blue));
+  --hero-grad:radial-gradient(120% 90% at 15% -10%,rgba(20,196,150,.16) 0%,transparent 45%),
+              radial-gradient(110% 90% at 90% 10%,rgba(20,150,220,.16) 0%,transparent 45%),
+              linear-gradient(180deg,var(--navy1) 0%,var(--navy0) 100%);
+  --ok:#14c496;--ok-bg:#e3f8f1;
+  --warn:#e08a00;--warn-bg:#fdf1de;
+  --bad:#e5484d;--bad-bg:#fdeaea;
+  --info:#1496dc;--info-bg:#e7f4fc;
+  --violet:#7c3aed;--violet-bg:#f3ecff;
+  --binance-bg:#fff8e1;--binance-fg:#c8960a;
+  --r-sm:10px;--r-md:14px;--r-lg:20px;--r-xl:26px;
+  --sh-card:0 1px 2px rgba(10,20,30,.04), 0 16px 32px -20px rgba(10,20,30,.20);
+  --sh-pop:0 30px 60px -20px rgba(3,5,9,.4);
+  --fd:'Outfit',system-ui,sans-serif;
+  --fb:'Inter',system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--t1);font-family:var(--fn);font-weight:300;-webkit-font-smoothing:antialiased;min-height:100vh}
-.wrap{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+html{-webkit-tap-highlight-color:transparent;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--fb);font-weight:400;-webkit-font-smoothing:antialiased;min-height:100vh;font-size:14px}
+.wrap{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative}
 .hidden{display:none!important}
-button{font-family:inherit;cursor:pointer;border:none}
-input,select,textarea{font-family:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit;color:inherit}
+h1,h2,h3{font-family:var(--fd)}
+a{color:inherit}
 
-/* ── hero (fondo azul) ── */
-.hero-wrap{background:radial-gradient(120% 90% at 15% 0%,var(--navy2) 0%,var(--navy1) 45%,var(--navy0) 100%);padding-bottom:26px;border-bottom-left-radius:26px;border-bottom-right-radius:26px}
-
-/* ── nav ── */
-.nav{display:flex;align-items:center;justify-content:space-between;padding:16px 18px}
-.brand{display:flex;align-items:center;gap:8px}
-.brand-mark{width:30px;height:30px;border-radius:8px;background:var(--gd);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#04110c}
-.brand-name{font-weight:700;font-size:14px;letter-spacing:.5px;color:#fff}
+/* ── hero / intro (SOLO introducción, sin widget) ── */
+.hero-wrap{background:var(--hero-grad);padding-bottom:52px;position:relative;overflow:hidden}
+.hero-wrap::after{content:'';position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(180deg,transparent,var(--bg));pointer-events:none}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;position:relative;z-index:1}
+.brand{display:flex;align-items:center;gap:9px}
+.brand-mark{width:32px;height:32px;border-radius:50%;background:var(--accent-grad);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#fff;font-family:var(--fd);box-shadow:0 6px 16px -4px rgba(20,150,220,.55);border:1.5px solid rgba(255,255,255,.5)}
+.brand-name{font-weight:700;font-size:14px;letter-spacing:.4px;color:#fff;font-family:var(--fd)}
 .nav-icons{display:flex;gap:8px}
-.icon-btn{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:15px;position:relative;transition:.15s}
-.icon-btn:hover{background:rgba(255,255,255,.16)}
-.icon-btn.on{background:rgba(0,200,150,.25);border-color:var(--g)}
-.dot-badge{position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:var(--g);border:2px solid var(--navy0)}
+.icon-btn{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);display:flex;align-items:center;justify-content:center;font-size:14px;color:#d8e4ee;transition:.15s}
+.icon-btn:hover{background:rgba(255,255,255,.15)}
 
-/* ── hero copy ── */
-.hero-txt{padding:6px 20px 24px}
-.hero-h1{color:#fff;font-size:30px;font-weight:800;line-height:1.15;letter-spacing:-.5px;margin-bottom:12px}
-.hero-h1 span{background:linear-gradient(100deg,#5cb8ff,#00e0b0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.hero-p{color:rgba(224,234,245,.65);font-size:13.5px;line-height:1.7;max-width:340px}
+.hero-txt{padding:16px 22px 0;position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#bfe6da;font-size:10.8px;font-weight:700;letter-spacing:.6px;padding:6px 12px;border-radius:20px;margin-bottom:14px}
+.hero-eyebrow .d{width:6px;height:6px;border-radius:50%;background:var(--brand-green);box-shadow:0 0 0 3px rgba(20,196,150,.25)}
+.hero-h1{color:#fff;font-size:30px;font-weight:800;line-height:1.15;letter-spacing:-.6px;margin-bottom:12px}
+.hero-h1 span{background:var(--accent-grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-p{color:rgba(224,234,240,.62);font-size:13.5px;line-height:1.65;max-width:340px;font-weight:400;margin-bottom:22px}
+.btn-big-cta{width:100%;padding:17px;border-radius:16px;font-size:15.5px;font-weight:700;color:#04120f;background:linear-gradient(100deg,#fff,#dcf6ee);box-shadow:0 16px 34px -10px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--fd)}
+.btn-big-cta:active{transform:scale(.99)}
+.hero-plat-row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.hero-plat{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);padding:6px 11px;border-radius:20px;font-size:11px;color:#cfdce6;font-weight:600}
 
-/* ── layout ── */
-.main{flex:1;padding:0 18px 100px;display:flex;flex-direction:column;gap:16px;margin-top:-10px}
-.card{background:var(--bg1);border:1px solid var(--brd);border-radius:var(--r3);padding:18px}
-.hd{font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--t2);margin-bottom:12px}
+/* ── layout general ── */
+.main{flex:1;padding:0 18px 110px;display:flex;flex-direction:column;gap:16px;position:relative;z-index:2}
+.section{padding:26px 18px 6px}
+.section-eyebrow{font-size:10.5px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:var(--accent1)}
+.section-h2{font-size:21px;font-weight:800;font-family:var(--fd);color:var(--ink);margin-top:6px;letter-spacing:-.3px}
+.section-p{font-size:12.8px;color:var(--ink2);line-height:1.6;margin-top:6px}
 
-/* ── tabs ── */
-.tabs{display:flex;background:var(--bg2);border-radius:var(--r2);padding:4px;gap:4px}
-.tab{flex:1;text-align:center;padding:9px 0;border-radius:8px;font-size:13px;font-weight:600;color:var(--t2);background:transparent;transition:.15s}
-.tab.on{background:var(--bg3);color:var(--t1)}
+/* ── surface / card base ── */
+.surface{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);box-shadow:var(--sh-card)}
+.pad{padding:20px}
+.eyebrow{font-size:10.5px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:var(--ink3)}
 
-/* ── tarjeta blanca del widget de cambio ── */
-.widget-card{background:#fff;color:var(--ink);border-radius:24px;padding:20px;box-shadow:0 20px 50px -14px rgba(10,20,60,.35);border:1px solid rgba(20,40,90,.06)}
-.widget-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+/* ── qué ofrecemos: grid de features ── */
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.feat-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:15px;box-shadow:var(--sh-card)}
+.feat-ic{width:34px;height:34px;border-radius:10px;background:var(--accent-grad);display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:10px}
+.feat-card b{display:block;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.feat-card span{font-size:11px;color:var(--ink2);line-height:1.5}
+
+/* ── quiénes somos ── */
+.about-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--sh-card)}
+.about-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px}
+.about-stat b{display:block;font-size:17px;font-weight:800;font-family:var(--fd);background:var(--accent-grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.about-stat span{font-size:10px;color:var(--ink3);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+
+/* ── FAQ ── */
+.faq-item{border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden}
+.faq-item + .faq-item{margin-top:8px}
+.faq-q{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 15px;cursor:pointer}
+.faq-q b{font-size:12.8px;font-weight:700;color:var(--ink);flex:1}
+.faq-chev{font-size:12px;color:var(--ink3);transition:.15s;flex-shrink:0}
+.faq-q.open .faq-chev{transform:rotate(180deg)}
+.faq-a{padding:0 15px 15px;font-size:12px;color:var(--ink2);line-height:1.65}
+
+/* ── redes sociales ── */
+.social-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.social-card{display:flex;align-items:center;gap:11px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--sh-card)}
+.social-ic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.social-card b{display:block;font-size:12.5px;font-weight:700;color:var(--ink)}
+.social-card span{font-size:10.5px;color:var(--ink3)}
+
+/* ── segmented tabs ── */
+.seg{display:flex;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:3px;gap:2px}
+.seg-btn{flex:1;text-align:center;padding:9px 6px;border-radius:9px;font-size:12.5px;font-weight:600;color:var(--ink2);transition:.15s}
+.seg-btn.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(10,20,60,.08)}
+
+/* ── sección Operar (widget vive aquí, no en el hero) ── */
+.operar-hd{text-align:center;margin-bottom:4px}
+
+/* ── widget card (tema oscuro de marca, ya no blanco genérico) ── */
+.widget-card{background:linear-gradient(165deg,var(--navy1) 0%,var(--navy0) 100%);color:#fff;border-radius:26px;padding:22px;box-shadow:var(--sh-pop);border:1px solid rgba(255,255,255,.08)}
+.widget-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
 .wtabs{display:flex;gap:22px}
-.wtab{background:none;font-size:15px;font-weight:600;color:#a9b4c9;padding:6px 0;position:relative}
-.wtab.on{color:var(--ink)}
-.wtab.on::after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--gd);border-radius:2px}
+.wtab{font-size:16px;font-weight:700;color:rgba(255,255,255,.4);padding:6px 0;position:relative;font-family:var(--fd)}
+.wtab.on{color:#fff}
+.wtab.on::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:3px;background:var(--accent-grad);border-radius:3px}
 .w-icons{display:flex;gap:8px}
-.w-icon{width:32px;height:32px;border-radius:9px;background:#f1f4fa;display:flex;align-items:center;justify-content:center;font-size:14px;color:#6c7ba0}
-.w-icon.on{background:rgba(0,150,255,.12);color:#0a6cff}
-.swap-hero{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:40px 10px 34px;color:#bcd0f5}
-.swap-hero svg{width:70px;height:70px}
-.swap-hero span{font-size:13px;color:#9fb0cf;font-weight:500}
-.connect-cta{width:100%;padding:15px;border-radius:14px;font-size:14.5px;font-weight:700;color:#fff;background:linear-gradient(100deg,#0a6cff,#3fd0ff);box-shadow:0 10px 24px -8px rgba(10,108,255,.55)}
-.widget-card .field label{color:#5b6a8c}
-.widget-card .field select,.widget-card .field input,.widget-card .field textarea{background:#f4f7fc;border:1px solid #e4e9f4;color:var(--ink)}
-.widget-card .field select:focus,.widget-card .field input:focus,.widget-card .field textarea:focus{border-color:#0a6cff}
-.widget-card .quote-box{background:rgba(10,108,255,.06);border:1px solid rgba(10,108,255,.16);color:#4a5a80}
-.widget-card .quote-box b{color:var(--ink)}
-.widget-card .quote-empty{background:rgba(255,92,92,.05);border:1px solid rgba(255,92,92,.2);color:#7a5a5a}
-.back-link{font-size:12px;color:#8b9ac2;text-decoration:underline;background:none;padding:0;margin-bottom:10px}
+.w-icon{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(255,255,255,.8);transition:.15s;position:relative}
+.w-icon.on{background:rgba(20,196,150,.18);border-color:rgba(20,196,150,.4);color:#8ff0d3}
+.w-icon:hover{border-color:rgba(255,255,255,.28)}
 
-/* ── widget ── */
+.swap-hero{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:34px 10px 26px}
+.swap-hero svg{width:60px;height:60px}
+.swap-hero span{font-size:12.5px;color:rgba(255,255,255,.5);font-weight:600;letter-spacing:.3px}
+.widget-card .link-btn{color:rgba(255,255,255,.5)}
+.widget-card .field label{color:rgba(255,255,255,.65)}
+.widget-card .field select,.widget-card .field input,.widget-card .field textarea{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.14);color:#fff}
+.widget-card .field select:focus,.widget-card .field input:focus,.widget-card .field textarea:focus{border-color:var(--brand-blue);background:rgba(255,255,255,.1)}
+.widget-card .field input[readonly]{color:rgba(255,255,255,.6)}
+.widget-card .quote-box{background:rgba(20,150,220,.14);border:1px solid rgba(20,150,220,.35);color:rgba(255,255,255,.75)}
+.widget-card .quote-box b{color:#fff}
+.widget-card .quote-empty{background:rgba(229,72,77,.14);border:1px solid rgba(229,72,77,.4);color:#ffc2c2}
+.widget-card select option{color:#0a0f16}
+
+/* ── botones ── */
+.btn{width:100%;padding:14px;border-radius:14px;font-size:14px;font-weight:700;text-align:center;transition:.15s;font-family:var(--fb)}
+.btn-primary{background:var(--accent-grad);color:#fff;box-shadow:0 10px 22px -8px rgba(20,150,220,.45)}
+.btn-primary:disabled{opacity:.38;cursor:not-allowed;box-shadow:none}
+.btn-primary:not(:disabled):active{transform:scale(.99)}
+.btn-outline{background:var(--surface);color:var(--ink);border:1.5px solid var(--line2)}
+.btn-outline:hover{border-color:var(--accent1);color:var(--accent1)}
+.btn-sm{width:auto;padding:8px 14px;font-size:12px;border-radius:10px}
+.btn-xs{width:auto;padding:6px 11px;font-size:11px;border-radius:9px}
+.link-btn{font-size:12px;color:var(--ink3);text-decoration:underline;margin-bottom:12px;display:inline-block}
+.mt6{margin-top:6px}.mt10{margin-top:10px}.mt14{margin-top:14px}.mt18{margin-top:18px}
+
+/* ── inputs ── */
 .field{margin-top:14px}
-.field label{display:block;font-size:11px;color:var(--t2);margin-bottom:6px;font-weight:500}
-.field select,.field input,.field textarea{width:100%;background:var(--bg2);border:1px solid var(--brd);color:var(--t1);border-radius:10px;padding:12px 13px;font-size:14px;outline:none;transition:.15s}
-.field select:focus,.field input:focus,.field textarea:focus{border-color:var(--g)}
-.field textarea{resize:vertical;min-height:70px;line-height:1.5;font-size:13px}
-.amount-row{display:flex;gap:8px;align-items:center}
-.amount-row input{flex:1}
-.swap-mid{display:flex;justify-content:center;margin:2px 0}
-.swap-btn{width:32px;height:32px;border-radius:50%;background:var(--bg2);border:1px solid var(--brd2);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--g)}
-.quote-box{margin-top:14px;background:rgba(0,200,150,.06);border:1px solid var(--brd2);border-radius:12px;padding:12px 14px;font-size:12.5px;color:var(--t2);display:flex;flex-direction:column;gap:4px}
-.quote-box b{color:var(--t1)}
-.quote-empty{margin-top:14px;background:rgba(255,92,92,.06);border:1px solid rgba(255,92,92,.25);border-radius:12px;padding:14px;font-size:12.5px;color:var(--t2);text-align:center;line-height:1.6}
+.field label{display:block;font-size:11.5px;color:var(--ink2);margin-bottom:6px;font-weight:600}
+.field select,.field input,.field textarea{width:100%;background:var(--surface2);border:1.5px solid var(--line);color:var(--ink);border-radius:12px;padding:12px 13px;font-size:14px;outline:none;transition:.15s}
+.field select:focus,.field input:focus,.field textarea:focus{border-color:var(--accent1);background:var(--surface)}
+.field textarea{resize:vertical;min-height:76px;line-height:1.55;font-size:12.8px}
+.field input[readonly]{color:var(--ink2)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
-.btn{width:100%;padding:14px;border-radius:12px;font-size:14px;font-weight:700;text-align:center;transition:.15s}
-.btn-solid{background:var(--gd);color:#04110c}
-.btn-solid:disabled{opacity:.4;cursor:not-allowed}
-.btn-ghost{background:var(--bg2);color:var(--t1);border:1px solid var(--brd2)}
-.btn-danger{background:rgba(255,92,92,.12);color:var(--red);border:1px solid rgba(255,92,92,.3)}
-.btn-sm{padding:9px 12px;font-size:12px;border-radius:9px}
-.mt10{margin-top:10px}
-.mt14{margin-top:14px}
+/* ── stepper numérico ── */
+.stepper{display:flex;align-items:center;background:var(--surface2);border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+.stepper input{border:none!important;background:transparent!important;text-align:center;flex:1;padding:10px 4px!important;font-weight:700}
+.stepper button{width:34px;height:40px;font-size:16px;color:var(--ink2);font-weight:700;flex-shrink:0}
+.stepper button:hover{color:var(--accent1)}
+.stepper .unit{font-size:10px;color:var(--ink3);padding-right:8px;font-weight:600}
 
-/* ── pool / list ── */
-.pool-item{background:var(--bg2);border:1px solid var(--brd);border-radius:12px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.pool-item + .pool-item{margin-top:8px}
-.pool-l{display:flex;flex-direction:column;gap:3px}
-.pool-plat{font-size:13px;font-weight:700}
-.pool-sub{font-size:11px;color:var(--t2)}
-.pool-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;background:rgba(0,200,150,.12);color:var(--g)}
-.pool-badge.house{background:rgba(0,102,255,.12);color:#5b9bff}
-.empty-note{text-align:center;color:var(--t2);font-size:12.5px;padding:18px 4px;line-height:1.6}
+/* ── slider ── */
+input[type=range]{-webkit-appearance:none;width:100%;height:5px;border-radius:4px;background:var(--line2);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent1);border:3px solid #fff;box-shadow:0 2px 6px rgba(20,150,220,.5);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--accent1);border:3px solid #fff;box-shadow:0 2px 6px rgba(20,150,220,.5);cursor:pointer}
+.range-dual{position:relative;height:26px;margin-top:12px}
+.range-dual input[type=range]{position:absolute;top:9px;left:0;pointer-events:none;background:transparent}
+.range-dual input[type=range]::-webkit-slider-thumb{pointer-events:auto}
+.range-dual .track{position:absolute;top:9px;left:0;right:0;height:5px;border-radius:4px;background:var(--line2)}
+.range-dual .fill{position:absolute;top:9px;height:5px;border-radius:4px;background:var(--accent-grad)}
+
+/* ── badges / pills ── */
+.limit-badge{display:inline-flex;align-items:center;gap:5px;background:var(--warn-bg);color:var(--warn);font-size:10.5px;font-weight:700;padding:5px 10px;border-radius:20px}
+.mode-seg{display:flex;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px}
+.mode-btn{flex:1;padding:10px 8px;text-align:center;border-radius:9px;font-size:12.5px;font-weight:700;color:var(--ink2)}
+.mode-btn.on{background:var(--accent-grad);color:#fff}
+.vis-chip{font-size:10.8px;font-weight:700;padding:6px 11px;border-radius:20px;border:1.5px solid var(--line2);color:var(--ink2)}
+.vis-chip.on{border-color:var(--accent1);color:var(--accent1);background:var(--info-bg)}
+
+.market-box{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin-top:14px}
+.market-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.market-item span{display:block;font-size:10px;color:var(--ink3);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.market-item b{display:block;font-size:13px;color:var(--ink);margin-top:2px;font-weight:700}
+
+/* ── quote box ── */
+.quote-box{margin-top:14px;background:var(--info-bg);border:1px solid #bfe2f5;border-radius:14px;padding:13px 15px;font-size:12.5px;color:var(--ink2);display:flex;flex-direction:column;gap:5px}
+.quote-box b{color:var(--ink)}
+.quote-empty{margin-top:14px;background:var(--bad-bg);border:1px solid #f6c9ca;border-radius:14px;padding:15px;font-size:12.5px;color:#8a4a4a;text-align:center;line-height:1.65}
+
+/* ── platform badge ── */
+.pbadge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;font-size:10.5px;font-weight:800;flex-shrink:0;font-family:var(--fd)}
+.pbadge-sm{width:22px;height:22px;font-size:9px;border-radius:6px}
+
+/* ── stat header (pool) ── */
+.stat-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.stat-num{font-size:12.5px;color:var(--ink2)}
+.stat-num b{color:var(--ok);font-weight:700}
+.copy-link{font-size:11.5px;color:var(--accent1);font-weight:600;display:flex;align-items:center;gap:4px}
+
+/* ── op card rica ── */
+.op-card{border:1px solid var(--line);border-radius:16px;padding:13px 14px;background:var(--surface2)}
+.op-card + .op-card{margin-top:10px}
+.op-top{display:flex;align-items:center;justify-content:space-between}
+.op-conv{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--ink)}
+.op-conv .arrow{color:var(--ink3);font-size:12px}
+.op-mid{display:flex;align-items:center;gap:8px;margin-top:10px}
+.op-avatar{width:22px;height:22px;border-radius:50%;background:var(--line2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.op-id-masked{font-size:11.5px;color:var(--ink2);font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.op-badge-gasless{display:inline-flex;align-items:center;gap:3px;background:var(--violet-bg);color:var(--violet);font-size:9.5px;font-weight:700;padding:3px 7px;border-radius:8px;white-space:nowrap}
+.op-countdown{font-size:10.5px;color:var(--ink3);font-weight:600;white-space:nowrap}
+.op-chat{width:26px;height:26px;border-radius:8px;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.op-bottom{display:flex;align-items:center;gap:8px;margin-top:11px}
+.op-idtxt{font-size:10.5px;color:var(--ink3);font-weight:600}
+.op-status{font-size:10.5px;color:var(--warn);font-weight:700;flex:1}
+.op-progress{width:52px;height:5px;border-radius:4px;background:var(--line2);overflow:hidden}
+.op-progress i{display:block;height:100%;background:var(--accent-grad)}
+.op-mode-badge{font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:7px;background:var(--ok-bg);color:var(--ok)}
+.op-mode-badge.off{background:var(--info-bg);color:var(--info)}
+
+/* ── filas tipo lista ── */
+.row-item.card-row{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:12px 13px;display:flex;align-items:center;gap:12px}
+.row-item.card-row + .row-item.card-row{margin-top:8px}
+.row-txt{flex:1;min-width:0}
+.row-title{font-size:13px;font-weight:700;color:var(--ink)}
+.row-sub{font-size:11.3px;color:var(--ink3);margin-top:1px}
+.empty-note{text-align:center;color:var(--ink3);font-size:12.5px;padding:26px 10px;line-height:1.7}
+
+/* ── grupo de rangos ── */
+.grp{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface2)}
+.grp + .grp{margin-top:10px}
+.grp-hd{display:flex;align-items:center;gap:10px;padding:12px 13px;cursor:pointer}
+.grp-chev{font-size:11px;color:var(--ink3);transition:.15s}
+.grp-hd.open .grp-chev{transform:rotate(90deg)}
+.grp-mode-badge{font-size:9px;font-weight:800;padding:3px 6px;border-radius:5px;background:var(--ok-bg);color:var(--ok)}
+.grp-mode-badge.off{background:var(--info-bg);color:var(--info)}
+.grp-title{font-size:12.8px;font-weight:700;color:var(--ink);flex:1}
+.grp-spread{font-size:12px;font-weight:700;color:var(--accent1)}
+.grp-count{font-size:10px;font-weight:700;color:var(--ink3);background:var(--surface);border:1px solid var(--line);padding:3px 8px;border-radius:20px}
+.grp-body{border-top:1px solid var(--line);background:var(--surface)}
+.range-row{display:flex;align-items:center;gap:10px;padding:10px 13px}
+.range-row + .range-row{border-top:1px dashed var(--line)}
+.range-txt{flex:1;font-size:12.5px;font-weight:600;color:var(--ink2)}
+.range-actions{display:flex;gap:6px}
+.range-act{width:28px;height:28px;border-radius:8px;background:var(--surface2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink2)}
+.range-act.warn{color:var(--warn)}
+.range-act.danger{color:var(--bad)}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.filter-chip{font-size:11px;font-weight:600;color:var(--ink2);background:var(--surface2);border:1px solid var(--line);padding:6px 10px;border-radius:9px;display:flex;align-items:center;gap:5px}
 
 /* ── status pill ── */
-.pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px}
-.pill-open{background:rgba(240,185,11,.12);color:var(--amber)}
-.pill-progress{background:rgba(0,102,255,.12);color:#5b9bff}
-.pill-done{background:rgba(0,200,150,.12);color:var(--g)}
-.pill-cancel{background:rgba(255,92,92,.12);color:var(--red)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+.pill .d{width:6px;height:6px;border-radius:50%}
+.pill-open{background:var(--warn-bg);color:var(--warn)}.pill-open .d{background:var(--warn)}
+.pill-progress{background:var(--info-bg);color:var(--info)}.pill-progress .d{background:var(--info)}
+.pill-done{background:var(--ok-bg);color:var(--ok)}.pill-done .d{background:var(--ok)}
+.pill-cancel{background:var(--bad-bg);color:var(--bad)}.pill-cancel .d{background:var(--bad)}
+
+/* ── toggle switch ── */
+.toggle{position:relative;width:42px;height:25px;border-radius:20px;background:#dfe4e9;flex-shrink:0;transition:.15s}
+.toggle::after{content:'';position:absolute;top:2.5px;left:2.5px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:.18s}
+.toggle.on{background:var(--ok)}
+.toggle.on::after{left:19.5px}
+
+/* ── steps landing ── */
+.how-steps{display:flex;flex-direction:column;gap:12px}
+.how-step{display:flex;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--sh-card)}
+.how-num{width:36px;height:36px;border-radius:11px;background:var(--accent-grad);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;font-family:var(--fd);flex-shrink:0}
+.how-txt b{display:block;font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.how-txt span{font-size:12px;color:var(--ink2);line-height:1.55}
+
+/* ── steps widget corto ── */
+.steps{display:flex;flex-direction:column;margin-top:4px}
+.step{display:flex;gap:13px;position:relative;padding-bottom:22px}
+.step:last-child{padding-bottom:0}
+.step-dot{width:24px;height:24px;border-radius:50%;background:var(--surface2);border:2px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:var(--ink3);flex-shrink:0;z-index:1}
+.step.done .step-dot{background:var(--accent-grad);border-color:transparent;color:#fff}
+.step.active .step-dot{border-color:var(--accent1);color:var(--accent1)}
+.step:not(:last-child)::after{content:'';position:absolute;left:11.5px;top:24px;bottom:0;width:1.5px;background:var(--line2)}
+.step.done:not(:last-child)::after{background:var(--accent1)}
+.step-txt b{display:block;font-size:12.8px;font-weight:700;color:var(--ink)}
+.step-txt span{font-size:11.3px;color:var(--ink3);line-height:1.5}
+
+/* ── proveedor cabecera ── */
+.prov-head{display:flex;align-items:center;gap:12px}
+.avatar{width:42px;height:42px;border-radius:12px;background:var(--accent-grad);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;font-family:var(--fd);flex-shrink:0}
+.prov-name{font-size:14px;font-weight:700;color:var(--ink)}
+.prov-chip{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;color:var(--ok);margin-top:2px}
+.prov-chip .d{width:5px;height:5px;border-radius:50%;background:var(--ok)}
+
+.row-between{display:flex;justify-content:space-between;align-items:center}
+.small-note{font-size:11.3px;color:var(--ink3);line-height:1.65;margin-top:8px}
+.warn-note{font-size:11.3px;color:var(--warn);line-height:1.6;margin-top:10px;background:var(--warn-bg);border:1px solid #f5e0b8;border-radius:10px;padding:9px 11px}
 
 /* ── modal ── */
-.overlay{position:fixed;inset:0;background:rgba(4,7,11,.72);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+.overlay{position:fixed;inset:0;background:rgba(3,5,9,.55);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;z-index:50}
 .overlay.hidden{display:none}
-.sheet{width:100%;max-width:480px;background:var(--bg1);border:1px solid var(--brd2);border-top-left-radius:22px;border-top-right-radius:22px;padding:22px 20px 26px;max-height:88vh;overflow-y:auto;animation:up .18s ease-out}
-@keyframes up{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+.sheet{width:100%;max-width:480px;background:var(--surface);border-top-left-radius:26px;border-top-right-radius:26px;padding:10px 20px 28px;max-height:88vh;overflow-y:auto;animation:up .2s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{transform:translateY(28px);opacity:0}to{transform:translateY(0);opacity:1}}
+.sheet-handle{width:36px;height:4px;border-radius:3px;background:var(--line2);margin:0 auto 14px}
 .sheet-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.sheet-title{font-size:15px;font-weight:700}
-.sheet-close{width:30px;height:30px;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;color:var(--t2);font-size:15px}
+.sheet-title{font-size:15px;font-weight:700;font-family:var(--fd);color:var(--ink)}
+.sheet-close{width:30px;height:30px;border-radius:50%;background:var(--surface2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink2);font-size:13px}
 
-.wallet-opt{display:flex;align-items:center;gap:12px;width:100%;background:var(--bg2);border:1px solid var(--brd);border-radius:12px;padding:13px 14px;margin-bottom:10px;text-align:left}
-.wallet-opt:hover{border-color:var(--brd2)}
-.wallet-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
-.wallet-txt b{display:block;font-size:13px}
-.wallet-txt span{font-size:11px;color:var(--t2)}
-
-.conn-chip{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--brd2);border-radius:10px;padding:8px 12px;font-size:12px}
-.conn-chip .d{width:7px;height:7px;border-radius:50%;background:var(--g)}
+.wallet-opt{display:flex;align-items:center;gap:12px;width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin-bottom:10px;text-align:left;transition:.15s}
+.wallet-opt:hover{border-color:var(--accent1);background:var(--info-bg)}
+.wallet-ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.wallet-txt b{display:block;font-size:13px;color:var(--ink)}
+.wallet-txt span{font-size:11px;color:var(--ink3)}
 
 /* ── toast ── */
-#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--brd2);color:var(--t1);padding:11px 18px;border-radius:12px;font-size:12.5px;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:.25s;max-width:90%;text-align:center}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
-
-/* ── steps ── */
-.steps{display:flex;flex-direction:column;gap:0;margin:14px 0}
-.step{display:flex;gap:12px;position:relative;padding-bottom:20px}
-.step:last-child{padding-bottom:0}
-.step-dot{width:20px;height:20px;border-radius:50%;background:var(--bg2);border:2px solid var(--brd2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;z-index:1}
-.step.done .step-dot{background:var(--g);border-color:var(--g);color:#04110c}
-.step.active .step-dot{border-color:var(--amber);color:var(--amber)}
-.step:not(:last-child)::after{content:'';position:absolute;left:9px;top:20px;bottom:0;width:2px;background:var(--brd2)}
-.step.done:not(:last-child)::after{background:var(--g)}
-.step-txt b{display:block;font-size:12.5px}
-.step-txt span{font-size:11px;color:var(--t2)}
-
-.toggle{position:relative;width:42px;height:24px;border-radius:20px;background:var(--bg3);flex-shrink:0}
-.toggle::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--t2);transition:.15s}
-.toggle.on{background:rgba(0,200,150,.35)}
-.toggle.on::after{left:20px;background:var(--g)}
-
-.small-note{font-size:11px;color:var(--t3);line-height:1.6;margin-top:8px}
-.row-between{display:flex;justify-content:space-between;align-items:center}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 20px;border-radius:14px;font-size:12.5px;font-weight:500;z-index:99;box-shadow:0 16px 32px -8px rgba(3,5,9,.5);opacity:0;pointer-events:none;transition:.25s;max-width:88%;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
 </style>
 </head>
 <body>
 <div class="wrap">
 
+  <!-- ═══════════ HERO: SOLO INTRODUCCIÓN ═══════════ -->
   <div class="hero-wrap">
-    <!-- NAV -->
     <div class="nav">
       <div class="brand"><div class="brand-mark">LS</div><div class="brand-name">LS CAMBIOS</div></div>
       <div class="nav-icons">
-        <button class="icon-btn" title="Cambiar idioma">🌐</button>
+        <button class="icon-btn" title="Idioma">🌐</button>
         <button class="icon-btn" title="Tema">🌙</button>
       </div>
     </div>
     <div class="hero-txt">
-      <h1 class="hero-h1">Tu USDT.<br><span>Tu control.</span></h1>
-      <p class="hero-p">Cambia PayPal, Zinli, Pago Móvil o Wally por USDT y viceversa, P2P, sin registro ni contraseña.</p>
+      <div class="hero-eyebrow"><span class="d"></span>Sin registro · Sin contraseña</div>
+      <h1 class="hero-h1">Tu dinero a tu destino.<br><span>Rápido y seguro.</span></h1>
+      <p class="hero-p">Cambia PayPal, Zinli, Pago Móvil, Wally o Binance por USDT y viceversa. Directo entre personas, con tu wallet como respaldo.</p>
+      <button class="btn-big-cta" onclick="openOperateModal()">Operar ahora <span>→</span></button>
+      <div class="hero-plat-row">
+        <div class="hero-plat">🅿️ PayPal</div>
+        <div class="hero-plat">💜 Zinli</div>
+        <div class="hero-plat">💚 Pago Móvil</div>
+        <div class="hero-plat">🧡 Wally</div>
+        <div class="hero-plat">🟡 Binance</div>
+      </div>
     </div>
   </div>
 
   <div class="main">
 
-    <!-- ═══════════ VISTA USUARIO (WIDGET) ═══════════ -->
+    <!-- ═══════════ ¿QUÉ OFRECEMOS? ═══════════ -->
+    <div class="section">
+      <div class="section-eyebrow">Qué ofrecemos</div>
+      <h2 class="section-h2">Cambio P2P sin intermediarios</h2>
+      <p class="section-p">Conectamos a quien quiere comprar o vender USDT con proveedores de liquidez reales, sin que tengas que crear una cuenta.</p>
+      <div class="feat-grid mt18">
+        <div class="feat-card"><div class="feat-ic">🔓</div><b>Sin registro</b><span>Solo conectas tu wallet o correo. Nada de contraseñas.</span></div>
+        <div class="feat-card"><div class="feat-ic">🛡️</div><b>Wallet como respaldo</b><span>El proveedor compromete su USDT antes de que pagues.</span></div>
+        <div class="feat-card"><div class="feat-ic">💱</div><b>5 plataformas</b><span>PayPal, Zinli, Pago Móvil, Wally y Binance.</span></div>
+        <div class="feat-card"><div class="feat-ic">✍️</div><b>Memo firmado</b><span>Tu declaración de pago te respalda ante cualquier disputa.</span></div>
+      </div>
+    </div>
+
+    <!-- ═══════════ ¿QUIÉNES SOMOS? ═══════════ -->
+    <div class="section">
+      <div class="section-eyebrow">Quiénes somos</div>
+      <h2 class="section-h2">LS Cambios</h2>
+      <div class="about-card mt18">
+        <p class="section-p" style="margin-top:0">Somos una casa de cambio P2P: ponemos en contacto a personas que necesitan mover dinero entre fiat y USDT con proveedores de liquidez independientes, cada uno con su propia tasa. Nosotros mismos operamos como un proveedor más, compitiendo con nuestro propio margen.</p>
+        <div class="about-stats">
+          <div class="about-stat"><b>P2P</b><span>Directo</span></div>
+          <div class="about-stat"><b>0</b><span>Registros</span></div>
+          <div class="about-stat"><b>5</b><span>Plataformas</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ PREGUNTAS FRECUENTES ═══════════ -->
+    <div class="section">
+      <div class="section-eyebrow">Preguntas frecuentes</div>
+      <h2 class="section-h2">Antes de operar</h2>
+      <div class="mt18" id="faqList">
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)"><b>¿Necesito crear una cuenta?</b><span class="faq-chev">▾</span></div>
+          <div class="faq-a hidden">No. Solo conectas tu wallet (MetaMask o Trust Wallet) o dejas tu correo para identificar la operación. No hay contraseñas ni perfiles que crear.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)"><b>¿Qué pasa si pago y no me liberan el USDT?</b><span class="faq-chev">▾</span></div>
+          <div class="faq-a hidden">Cada operación queda registrada con tu memo firmado. Además, el proveedor tiene una ventana de tiempo configurada para liberar tras tu pago — si no cumple, quedas respaldado por ese registro para reclamar.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)"><b>¿Puedo cancelar una operación ya aceptada?</b><span class="faq-chev">▾</span></div>
+          <div class="faq-a hidden">No. Una vez que un proveedor acepta y compromete el USDT, la operación no se puede revertir — solo completarse. Por eso es importante confirmar el monto y la plataforma antes de buscar operador.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)"><b>¿Cómo se protege LS Cambios de estafadores?</b><span class="faq-chev">▾</span></div>
+          <div class="faq-a hidden">Guardamos el correo y la wallet de cada operación. Quien incumple queda marcado y bloqueado para futuras operaciones en la plataforma.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SÍGUENOS ═══════════ -->
+    <div class="section">
+      <div class="section-eyebrow">Síguenos</div>
+      <h2 class="section-h2">Nuestros canales</h2>
+      <div class="social-grid mt18">
+        <a class="social-card" href="#" target="_blank" rel="noopener"><div class="social-ic" style="background:var(--info-bg);color:var(--accent1)">✈️</div><div><b>Telegram</b><span>Canal oficial</span></div></a>
+        <a class="social-card" href="#" target="_blank" rel="noopener"><div class="social-ic" style="background:#111;color:#fff">🎵</div><div><b>TikTok</b><span>@lscambios</span></div></a>
+        <a class="social-card" href="#" target="_blank" rel="noopener"><div class="social-ic" style="background:var(--violet-bg);color:var(--violet)">📸</div><div><b>Instagram</b><span>@lscambios</span></div></a>
+        <a class="social-card" href="#" target="_blank" rel="noopener"><div class="social-ic" style="background:var(--info-bg);color:var(--accent1)">👍</div><div><b>Facebook</b><span>LS Cambios</span></div></a>
+      </div>
+      <p class="small-note">Enlaces pendientes de conectar a tus canales reales — pásamelos y los dejo activos.</p>
+    </div>
+
+    <!-- ═══════════ CÓMO OPERAR ═══════════ -->
+    <div class="section">
+      <div class="section-eyebrow">Cómo operar</div>
+      <h2 class="section-h2">De tu fiat a tu wallet, en 4 pasos</h2>
+      <div class="how-steps mt18">
+        <div class="how-step"><div class="how-num">1</div><div class="how-txt"><b>Conecta tu wallet o correo</b><span>MetaMask, Trust Wallet, o simplemente tu correo si no operas con cripto todavía.</span></div></div>
+        <div class="how-step"><div class="how-num">2</div><div class="how-txt"><b>Elige monto y plataforma</b><span>PayPal, Zinli, Pago Móvil, Wally o Binance. Buscamos el proveedor con mejor tasa y liquidez.</span></div></div>
+        <div class="how-step"><div class="how-num">3</div><div class="how-txt"><b>El proveedor reserva el USDT</b><span>Queda comprometido a la operación hasta que confirmes tu pago — no antes.</span></div></div>
+        <div class="how-step"><div class="how-num">4</div><div class="how-txt"><b>Pagas, firmas y recibes</b><span>Tu memo firmado te respalda. En cuanto se confirma, se libera tu USDT dentro de la ventana de tiempo del proveedor.</span></div></div>
+      </div>
+    </div>
+
+    <!-- ═══════════ OPERAR: SOLO UN BOTÓN, EL WIDGET VIVE EN UN MODAL ═══════════ -->
+    <div class="section" id="operar" style="padding-top:8px">
+      <div class="surface pad" style="text-align:center">
+        <div class="brand-mark" style="width:44px;height:44px;font-size:16px;margin:0 auto 14px">LS</div>
+        <h2 class="section-h2" style="margin-top:0">Compra o vende ahora</h2>
+        <p class="section-p" style="margin:8px auto 0;max-width:300px">Conecta tu wallet o correo, elige monto y plataforma. Todo en un mismo lugar.</p>
+        <button class="btn btn-primary mt18" onclick="openOperateModal()">Opera aquí</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL: OPERAR (widget de usuario + panel de proveedor, todo vive adentro) -->
+<div class="overlay hidden" id="operateModal">
+  <div class="sheet" style="padding-left:14px;padding-right:14px">
+    <div class="sheet-handle"></div>
+    <div class="sheet-hd" style="padding:0 6px">
+      <div class="sheet-title">Operar en LS Cambios</div>
+      <button class="sheet-close" onclick="closeModal('operateModal')">✕</button>
+    </div>
+
+    <!-- VISTA USUARIO -->
     <div id="viewUser">
-      <div class="widget-card" style="margin-top:-58px">
+      <div class="widget-card" id="widgetAnchor">
         <div class="widget-hd">
           <div class="wtabs">
             <button class="wtab on" data-mode="compra" onclick="setMode('compra')">Compra</button>
@@ -192,21 +463,19 @@ input,select,textarea{font-family:inherit}
           </div>
         </div>
 
-        <!-- estado sin conectar -->
         <div id="widgetPre">
           <div class="swap-hero">
             <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 20H46M46 20L36 10M46 20L36 30" stroke="#bcd0f5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M50 40H14M14 40L24 30M14 40L24 50" stroke="#bcd0f5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M10 20H46M46 20L36 10M46 20L36 30" stroke="#7fd8c4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M50 40H14M14 40L24 30M14 40L24 50" stroke="#7fb8e0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            <span>Conectar</span>
+            <span>Conecta para empezar</span>
           </div>
-          <button class="connect-cta" onclick="openWalletModal('connect-widget')">Conectar</button>
+          <button class="btn btn-primary" onclick="openWalletModal('connect-widget')">Conectar</button>
         </div>
 
-        <!-- estado conectado: formulario -->
         <div id="widgetForm" class="hidden">
-          <button class="back-link" onclick="disconnectWidget()">← Desconectar</button>
+          <button class="link-btn" onclick="disconnectWidget()">← Desconectar</button>
           <div class="field">
             <label>Plataforma</label>
             <select id="fiatPlat">
@@ -214,209 +483,360 @@ input,select,textarea{font-family:inherit}
               <option value="zinli">Zinli</option>
               <option value="pagomovil">Pago Móvil</option>
               <option value="wally">Wally</option>
+              <option value="binance">Binance</option>
             </select>
           </div>
-
           <div class="field">
             <label id="amountLbl">Monto en USD (fiat)</label>
-            <div class="amount-row">
-              <input type="number" id="amountIn" placeholder="10" min="1" max="500" oninput="quote()">
-            </div>
+            <input type="number" id="amountIn" placeholder="10" min="1" max="500" oninput="quote()">
           </div>
-
           <div class="field" id="walletField">
             <label id="walletLbl">Wallet donde recibirás el USDT</label>
             <input type="text" id="walletIn" placeholder="0x..." readonly>
           </div>
-
           <div id="quoteArea"></div>
-
-          <button class="btn connect-cta mt14" id="searchBtn" onclick="searchMatch()">Buscar operador</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="hd">Cómo funciona</div>
-        <div class="steps">
-          <div class="step"><div class="step-dot">1</div><div class="step-txt"><b>Conectas tu wallet o correo</b><span>Sin registro, solo para identificar la operación</span></div></div>
-          <div class="step"><div class="step-dot">2</div><div class="step-txt"><b>Eliges monto y plataforma</b><span>El sistema busca un proveedor con liquidez disponible</span></div></div>
-          <div class="step"><div class="step-dot">3</div><div class="step-txt"><b>El proveedor reserva el USDT</b><span>Queda comprometido hasta que confirmes el pago</span></div></div>
-          <div class="step"><div class="step-dot">4</div><div class="step-txt"><b>Pagas y firmas tu declaración</b><span>Con tu nombre real y, si conectaste wallet, tu firma cripto</span></div></div>
+          <button class="btn btn-primary mt18" id="searchBtn" onclick="searchMatch()">Buscar operador</button>
         </div>
       </div>
     </div>
 
-    <!-- ═══════════ VISTA PROVEEDOR ═══════════ -->
-    <div id="viewProv" class="hidden">
+    <!-- VISTA PROVEEDOR -->
+    <div id="viewProv" class="hidden mt18">
 
-      <div id="provGate" class="card">
-        <div class="hd">Registro de proveedor</div>
-        <p class="small-note" style="margin-top:0">Para operar como proveedor de liquidez necesitas registrarte. Esto es distinto al flujo del usuario normal — aquí sí pedimos datos, porque manejas fondos de terceros.</p>
+      <div id="provGate" class="surface pad">
+        <div class="eyebrow">Registro de proveedor</div>
+        <h2 style="font-size:17px;margin-top:6px;font-family:var(--fd);font-weight:700">Empieza a dar liquidez</h2>
+        <p class="small-note" style="margin-top:6px">Distinto al flujo del usuario normal: aquí sí pedimos datos, porque manejas fondos de terceros.</p>
         <div class="field"><label>Nombre completo</label><input type="text" id="pvName" placeholder="Como aparece en tu PayPal/Zinli"></div>
         <div class="field"><label>Correo de contacto</label><input type="email" id="pvEmail" placeholder="tucorreo@email.com"></div>
-        <button class="btn btn-solid mt14" onclick="registerProvider()">Registrarme como proveedor</button>
+        <button class="btn btn-primary mt18" onclick="registerProvider()">Registrarme como proveedor</button>
       </div>
 
       <div id="provPanel" class="hidden">
-        <div class="card">
-          <div class="row-between">
-            <div class="hd" style="margin-bottom:0">Panel de proveedor</div>
-            <span class="conn-chip" id="provWho"></span>
+        <div class="surface pad">
+          <div class="prov-head">
+            <div class="avatar" id="provAvatar">P</div>
+            <div style="flex:1">
+              <div class="prov-name" id="provName"></div>
+              <div class="prov-chip"><span class="d"></span>Proveedor activo</div>
+            </div>
+            <button class="w-icon" title="Configurar IDs de pago" onclick="openPayIdsModal()">🆔</button>
           </div>
-          <div class="tabs mt14">
-            <button class="tab on" data-ptab="lista" onclick="setProvTab('lista')">Lista</button>
-            <button class="tab" data-ptab="agregar" onclick="setProvTab('agregar')">Agregar liquidez</button>
-            <button class="tab" data-ptab="mias" onclick="setProvTab('mias')">Mis operaciones</button>
+          <div class="seg mt18">
+            <button class="seg-btn on" data-ptab="lista" onclick="setProvTab('lista')">Pool</button>
+            <button class="seg-btn" data-ptab="agregar" onclick="setProvTab('agregar')">Liquidez</button>
+            <button class="seg-btn" data-ptab="mias" onclick="setProvTab('mias')">Mis ops</button>
           </div>
         </div>
 
-        <!-- LISTA / POOL -->
-        <div id="provLista" class="card">
-          <div class="hd">Operaciones en el pool</div>
+        <div id="provLista" class="surface pad">
+          <div class="stat-hd">
+            <div class="stat-num"><b id="statCompletadas">0</b> completadas</div>
+            <button class="copy-link" onclick="copyRefLink()">🔗 Copiar tu enlace</button>
+          </div>
           <div id="poolList"></div>
         </div>
 
-        <!-- AGREGAR LIQUIDEZ -->
-        <div id="provAgregar" class="card hidden">
-          <div class="hd">Nueva oferta de liquidez</div>
-          <div class="field"><label>Plataforma que cubres</label>
-            <select id="offPlat"><option value="paypal">PayPal</option><option value="zinli">Zinli</option><option value="pagomovil">Pago Móvil</option><option value="wally">Wally</option></select>
+        <div id="provAgregar" class="surface pad hidden">
+          <div class="row-between">
+            <div class="eyebrow" id="offerFormTitle">Nueva oferta de liquidez</div>
+            <button class="link-btn hidden" id="cancelEditBtn" onclick="cancelEditOffer()" style="margin:0">cancelar edición</button>
           </div>
-          <div class="field"><label>Correo/usuario donde recibirás el fiat</label><input type="text" id="offEmail" placeholder="correo@ejemplo.com"></div>
-          <div class="field"><label>Monto mínimo (USD)</label><input type="number" id="offMin" value="1" min="1"></div>
-          <div class="field"><label>Monto máximo (USD)</label><input type="number" id="offMax" value="500" max="500"></div>
-          <div class="field"><label>Tu margen / spread (%)</label><input type="number" id="offSpread" value="17" step="0.1"></div>
+
+          <div class="mode-seg mt14">
+            <button class="mode-btn on" data-offmode="onramp" onclick="setOfferMode('onramp')">Onramp · entregas USDT</button>
+            <button class="mode-btn" data-offmode="offramp" onclick="setOfferMode('offramp')">Offramp · entregas fiat</button>
+          </div>
+
+          <div class="field"><label>Plataforma</label>
+            <select id="offPlat" onchange="onOfferPlatChange()">
+              <option value="paypal">PayPal</option><option value="zinli">Zinli</option>
+              <option value="pagomovil">Pago Móvil</option><option value="wally">Wally</option>
+              <option value="binance">Binance</option>
+            </select>
+          </div>
+          <div class="field" id="offEmailField"><label id="offEmailLbl">Correo/usuario donde recibirás el fiat</label><input type="text" id="offEmail" placeholder="correo@ejemplo.com"></div>
+          <p class="small-note hidden" id="offBinanceNote">Binance recibe directo a tu wallet o Binance Pay ID — puedes usar la misma wallet que pones abajo como garantía.</p>
+
+          <div class="field">
+            <div class="row-between"><label style="margin-bottom:0">Precios y límites</label><span class="limit-badge" id="limitBadge">500 USDT tope</span></div>
+            <div class="two-col mt10">
+              <div class="stepper">
+                <button onclick="stepVal('offMin',-1)">−</button>
+                <input type="number" id="offMin" value="1" min="1" oninput="syncDualRange()">
+                <span class="unit">MIN</span>
+              </div>
+              <div class="stepper">
+                <button onclick="stepVal('offMax',10)">+</button>
+                <input type="number" id="offMax" value="500" max="500" oninput="syncDualRange()">
+                <span class="unit">MAX</span>
+              </div>
+            </div>
+            <div class="range-dual">
+              <div class="track"></div>
+              <div class="fill" id="rangeFill"></div>
+              <input type="range" id="offMinR" min="1" max="500" value="1" oninput="fromDualRange()">
+              <input type="range" id="offMaxR" min="1" max="500" value="500" oninput="fromDualRange()">
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Tu margen / spread</label>
+            <div class="row-between">
+              <input type="number" id="offSpread" value="17" step="0.1" style="width:90px" oninput="syncSpreadSlider();renderMarketBox()">
+              <span style="font-size:12px;color:var(--ink3)">%</span>
+            </div>
+            <input type="range" id="offSpreadR" min="0" max="30" step="0.1" value="17" class="mt10" oninput="fromSpreadSlider();renderMarketBox()">
+          </div>
+
+          <div class="field">
+            <label>Tiempo de liberación tras tu pago recibido</label>
+            <div class="stepper">
+              <button onclick="stepRelease(-5)">−</button>
+              <input type="number" id="offRelease" value="10" min="10" step="5" oninput="clampRelease()">
+              <span class="unit">MIN</span>
+            </div>
+            <div class="small-note">Mínimo 10 minutos. Es tu margen para verificar el pago o completar la liquidez antes de liberar el USDT — pasado ese tiempo, el usuario espera su liberación.</div>
+          </div>
+
+          <div class="field">
+            <label>Visibilidad</label>
+            <div style="display:flex;gap:8px">
+              <button class="vis-chip on" id="visPublic" onclick="setVisibility('public')">Pública</button>
+              <button class="vis-chip" id="visPrivate" onclick="setVisibility('private')">Solo por enlace</button>
+            </div>
+          </div>
+
           <div class="field"><label>Wallet de garantía (USDT)</label>
             <div class="row-between" style="gap:8px">
               <input type="text" id="offWallet" placeholder="Conecta tu wallet" readonly style="flex:1">
-              <button class="btn btn-ghost btn-sm" style="width:auto" onclick="openWalletModal('offer')">Conectar</button>
+              <button class="btn btn-outline btn-sm" onclick="openWalletModal('offer')">Conectar</button>
             </div>
           </div>
-          <button class="btn btn-solid mt14" onclick="saveOffer()">Publicar oferta</button>
-          <div class="hd mt14" style="margin-bottom:8px">Tus ofertas activas</div>
-          <div id="myOffers"></div>
+
+          <div class="market-box" id="marketBox"></div>
+
+          <button class="btn btn-primary mt18" id="offerSubmitBtn" onclick="saveOffer()">Publicar oferta</button>
+
+          <div class="row-between mt18">
+            <div class="eyebrow">Tus ofertas activas</div>
+            <button class="btn-xs btn-outline" onclick="pauseAllOffers()">Pausar todo</button>
+          </div>
+          <div class="filter-row">
+            <label class="filter-chip"><input type="checkbox" id="showInactive" onchange="renderMyOffers()" style="accent-color:var(--accent1)"> Mostrar inactivos</label>
+          </div>
+          <div id="myOffers" class="mt14"></div>
         </div>
 
-        <!-- MIS OPERACIONES -->
-        <div id="provMias" class="card hidden">
-          <div class="hd">Operaciones que aceptaste</div>
-          <div id="myOps"></div>
+        <div id="provMias" class="surface pad hidden">
+          <div class="eyebrow">Operaciones que aceptaste</div>
+          <div id="myOps" class="mt14"></div>
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
 <!-- MODAL: conectar wallet -->
 <div class="overlay hidden" id="walletModal">
   <div class="sheet">
+    <div class="sheet-handle"></div>
     <div class="sheet-hd"><div class="sheet-title">Conectar</div><button class="sheet-close" onclick="closeModal('walletModal')">✕</button></div>
     <button class="wallet-opt" onclick="connectVia('email')">
-      <div class="wallet-ic" style="background:rgba(0,102,255,.15);color:#5b9bff">✉️</div>
+      <div class="wallet-ic" style="background:var(--info-bg);color:var(--accent1)">✉️</div>
       <div class="wallet-txt"><b>Correo</b><span>Sin wallet, solo identificación básica</span></div>
     </button>
     <button class="wallet-opt" onclick="connectVia('metamask')">
-      <div class="wallet-ic" style="background:rgba(240,140,11,.15);color:var(--amber)">🦊</div>
+      <div class="wallet-ic" style="background:var(--warn-bg);color:var(--warn)">🦊</div>
       <div class="wallet-txt"><b>MetaMask</b><span>Extensión / app — conexión real</span></div>
     </button>
     <button class="wallet-opt" onclick="connectVia('trustwallet')">
-      <div class="wallet-ic" style="background:rgba(0,200,150,.15);color:var(--g)">🛡️</div>
+      <div class="wallet-ic" style="background:var(--ok-bg);color:var(--ok)">🛡️</div>
       <div class="wallet-txt"><b>Trust Wallet</b><span>Extensión / app — conexión real</span></div>
     </button>
     <div class="small-note">Al conectar una wallet solo leemos tu dirección y tu saldo público en cadena. Nunca pedimos tu frase semilla.</div>
   </div>
 </div>
 
-<!-- MODAL: email simple -->
+<!-- MODAL: email -->
 <div class="overlay hidden" id="emailModal">
   <div class="sheet">
+    <div class="sheet-handle"></div>
     <div class="sheet-hd"><div class="sheet-title">Identificarte por correo</div><button class="sheet-close" onclick="closeModal('emailModal')">✕</button></div>
     <div class="field"><label>Tu correo</label><input type="email" id="loginEmail" placeholder="tucorreo@email.com"></div>
-    <button class="btn btn-solid mt14" onclick="confirmEmailLogin()">Continuar</button>
+    <button class="btn btn-primary mt18" onclick="confirmEmailLogin()">Continuar</button>
   </div>
 </div>
 
-<!-- MODAL: operación / trade -->
+<!-- MODAL: operación -->
 <div class="overlay hidden" id="tradeModal">
   <div class="sheet">
+    <div class="sheet-handle"></div>
     <div class="sheet-hd"><div class="sheet-title">Operación <span id="tradeIdTxt"></span></div><button class="sheet-close" onclick="closeModal('tradeModal')">✕</button></div>
     <div id="tradeBody"></div>
   </div>
 </div>
 
+<!-- MODAL: IDs de pago -->
+<div class="overlay hidden" id="payIdsModal">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-hd"><div class="sheet-title">IDs de pago por plataforma</div><button class="sheet-close" onclick="closeModal('payIdsModal')">✕</button></div>
+    <div class="field"><label>🅿️ PayPal</label><input type="text" id="pid_paypal" placeholder="correo@paypal.com"></div>
+    <div class="field"><label>💜 Zinli</label><input type="text" id="pid_zinli" placeholder="correo@zinli.com"></div>
+    <div class="field"><label>💚 Pago Móvil</label><input type="text" id="pid_pagomovil" placeholder="0412-1234567"></div>
+    <div class="field"><label>🧡 Wally</label><input type="text" id="pid_wally" placeholder="correo@wally.com"></div>
+    <div class="field"><label>🟡 Binance</label><input type="text" id="pid_binance" placeholder="UID / Binance Pay ID / wallet"></div>
+    <button class="btn btn-primary mt18" onclick="savePayIds()">Guardar</button>
+  </div>
+</div>
+
 <div id="toast"></div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     REOWN APPKIT (antes WalletConnect) — conexión real en celular
+     ──────────────────────────────────────────────────────────────────
+     Esto cubre el caso en que el usuario NO tiene la wallet como
+     extensión ni abrió la página desde el navegador propio de la
+     wallet: le muestra un QR (desktop) o un enlace directo a la app
+     (celular) para conectar sin salir de su navegador normal.
+
+     PASO OBLIGATORIO ANTES DE LANZAR:
+       1) Crea una cuenta gratis en https://dashboard.reown.com
+       2) Crea un proyecto y copia tu Project ID
+       3) Pégalo abajo en REOWN_PROJECT_ID (reemplaza el texto de ejemplo)
+
+     Nota honesta: esta integración sigue la documentación oficial de
+     Reown vigente a la fecha, pero es una librería externa que sigue
+     evolucionando — pruébala con tu Project ID real antes de confiar
+     en ella en producción. Si algo no conecta, revisa la consola del
+     navegador (F12) y avísame el error exacto para ajustarlo.
+     ══════════════════════════════════════════════════════════════════ -->
+<script type="module">
+  import { createAppKit, WagmiAdapter, WagmiCore } from 'https://cdn.jsdelivr.net/npm/@reown/appkit-cdn@1.4.1/dist/appkit.min.js';
+
+  const REOWN_PROJECT_ID = 'TU_PROJECT_ID_AQUI'; // ← reemplaza esto
+
+  // Red BSC (BNB Smart Chain) — la misma que usa el resto de la app para leer USDT
+  const bscNetwork = {
+    id: 56,
+    name: 'BNB Smart Chain',
+    nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+    rpcUrls: { default: { http: ['https://bsc-dataseed.binance.org'] } },
+    blockExplorers: { default: { name: 'BscScan', url: 'https://bscscan.com' } }
+  };
+
+  try{
+    const wagmiAdapter = new WagmiAdapter({ projectId: REOWN_PROJECT_ID, networks: [bscNetwork] });
+
+    const appKitModal = createAppKit({
+      adapters: [wagmiAdapter],
+      networks: [bscNetwork],
+      projectId: REOWN_PROJECT_ID,
+      metadata: {
+        name: 'LS Cambios',
+        description: 'Cambio P2P de USDT a fiat, sin registro',
+        url: window.location.origin,
+        icons: [window.location.origin + '/favicon.png']
+      },
+      features: { analytics: true }
+    });
+
+    window.__lsAppKit = appKitModal;
+    // Devuelve el proveedor EIP-1193 real una vez que el usuario conecta por QR/deep link
+    window.__lsGetWCProvider = function(){
+      return new Promise((resolve)=>{
+        const unsub = appKitModal.subscribeProviders((state)=>{
+          if(state && state['eip155']){ unsub(); resolve(state['eip155']); }
+        });
+      });
+    };
+  }catch(e){
+    console.warn('Reown AppKit no se pudo inicializar (¿falta configurar el Project ID?):', e);
+  }
+</script>
 
 <script>
 /* ══════════════════════════════════════════════════════════════════
    LS CAMBIOS — Prototipo P2P (front-end)
    ──────────────────────────────────────────────────────────────────
-   - Todo el estado vive en localStorage para que puedas probarlo sin
-     depender de tablas de Supabase (que aún no existen para este flujo).
-   - La conexión a MetaMask / Trust Wallet es REAL (window.ethereum):
-     pide cuentas, lee saldo de USDT (BEP20/BSC por defecto) y puede
-     pedir una firma (personal_sign) real y gratuita.
+   - Estado en localStorage: pruébalo sin depender de tablas de
+     Supabase (que aún no existen para este flujo).
+   - Conexión a MetaMask / Trust Wallet REAL (window.ethereum): pide
+     cuentas, lee saldo de USDT (BEP20/BSC) y puede firmar (personal_sign).
    - El "escrow" (bloqueo de fondos) todavía NO es un contrato
-     desplegado on-chain: aquí se SIMULA con un compromiso firmado +
-     estado en la app. Para producción real hay que desplegar el
-     contrato de escrow (lo hablamos aparte).
-   - El bot de Telegram usa el mismo token que ya tenías en el sitio
-     original. OJO: ese token queda visible en el código del navegador
-     — cualquiera que vea el "código fuente" puede leerlo. Para producción
-     conviene mover el envío de mensajes a un backend/función serverless
-     en vez de llamarlo directo desde el cliente.
+     desplegado on-chain: se SIMULA con estado + firma de compromiso.
+     Una vez "reservada" una operación, el flujo NO ofrece cancelar/
+     revertir — solo completar. Así se decidió a propósito.
+   - El bot de Telegram reutiliza el token que ya tenías. Para
+     producción, mover el envío a un backend — queda expuesto en el
+     cliente tal como está.
    ══════════════════════════════════════════════════════════════════ */
 
 const TG_TOKEN = '8827544604:AAGJ07569ACNtcdXu0p8oVIPWnXG1E1Appk';
 const TG_CHAT  = '8180852500';
 
-// Red usada para leer saldo de USDT al conectar wallet (BSC = barata y EVM)
 const USDT_CONTRACT = '0x55d398326f99059fF775485246999027B3197955'; // USDT BEP20
 const USDT_DECIMALS = 18;
 const CHAIN_ID_BSC  = '0x38';
 
-const PLAT_LABEL = {paypal:'PayPal',zinli:'Zinli',pagomovil:'Pago Móvil',wally:'Wally'};
+const PLAT_META = {
+  paypal:   {label:'PayPal',     bg:'#eaf2ff', fg:'#0a6cff', icon:'P'},
+  zinli:    {label:'Zinli',      bg:'#f3ecff', fg:'#7c3aed', icon:'Z'},
+  pagomovil:{label:'Pago Móvil', bg:'#e8f9f3', fg:'#0f9d78', icon:'PM'},
+  wally:    {label:'Wally',      bg:'#fff1e8', fg:'#ea580c', icon:'W'},
+  binance:  {label:'Binance',    bg:'#fff8e1', fg:'#c8960a', icon:'B'}
+};
+const PLAT_LABEL = Object.fromEntries(Object.entries(PLAT_META).map(([k,v])=>[k,v.label]));
+function platBadge(plat, sm){
+  const m = PLAT_META[plat]||{bg:'#eee',fg:'#666',icon:'?'};
+  return `<div class="pbadge${sm?' pbadge-sm':''}" style="background:${m.bg};color:${m.fg}">${m.icon}</div>`;
+}
+
+/* ── FAQ ── */
+function toggleFaq(headerEl){
+  headerEl.classList.toggle('open');
+  headerEl.nextElementSibling.classList.toggle('hidden');
+}
 
 /* ── estado persistente ── */
-const DB_KEY = 'lscambios_p2p_demo_v1';
+const DB_KEY = 'lscambios_p2p_demo_v3';
 function loadDB(){
-  try{ return JSON.parse(localStorage.getItem(DB_KEY)) || seedDB(); }catch(e){ return seedDB(); }
+  try{ const v = JSON.parse(localStorage.getItem(DB_KEY)); return v || seedDB(); }catch(e){ return seedDB(); }
 }
 function saveDB(){ localStorage.setItem(DB_KEY, JSON.stringify(DB)); }
 function seedDB(){
   const d = {
     providers: [
-      {id:'empresa', name:'LS Cambios (casa)', email:'operaciones@lscambios.com', isHouse:true,
+      {id:'empresa', name:'LS Cambios (casa)', email:'operaciones@lscambios.com', isHouse:true, payIds:{},
         offers:[
-          {id:'o1', plat:'paypal', min:1, max:500, spread:14, receiveEmail:'pagos@lscambios.com', wallet:'0xHOUSE...demo', paused:false},
-          {id:'o2', plat:'zinli',  min:1, max:500, spread:14, receiveEmail:'pagos@lscambios.com', wallet:'0xHOUSE...demo', paused:false}
+          {id:'o1', mode:'onramp', plat:'paypal', min:1, max:500, spread:14, releaseMinutes:10, visibility:'public', receiveEmail:'pagos@lscambios.com', wallet:'0xHOUSE0000000000000000000000000000demo', paused:false},
+          {id:'o2', mode:'onramp', plat:'zinli',  min:1, max:500, spread:14, releaseMinutes:10, visibility:'public', receiveEmail:'pagos@lscambios.com', wallet:'0xHOUSE0000000000000000000000000000demo', paused:false},
+          {id:'o5', mode:'onramp', plat:'binance', min:1, max:500, spread:12, releaseMinutes:10, visibility:'public', receiveEmail:'Binance Pay ID: 000111222', wallet:'0xHOUSE0000000000000000000000000000demo', paused:false}
         ]},
-      {id:'prov-demo', name:'Carlos R. (demo)', email:'carlos@demo.com', isHouse:false,
+      {id:'prov-demo', name:'Carlos R. (demo)', email:'carlos@demo.com', isHouse:false, payIds:{},
         offers:[
-          {id:'o3', plat:'paypal', min:1, max:200, spread:17, receiveEmail:'carlos.demo@paypal.com', wallet:'0xDEMO...abcd', paused:false}
+          {id:'o3', mode:'onramp', plat:'paypal', min:1, max:200, spread:17, releaseMinutes:15, visibility:'public', receiveEmail:'carlos.demo@paypal.com', wallet:'0xDEMO000000000000000000000000000000abcd', paused:false},
+          {id:'o4', mode:'offramp', plat:'paypal', min:1, max:150, spread:15.5, releaseMinutes:20, visibility:'public', receiveEmail:'carlos.demo@paypal.com', wallet:'0xDEMO000000000000000000000000000000abcd', paused:false}
         ]}
     ],
-    ops: [] // operaciones/trades
+    ops: []
   };
   localStorage.setItem(DB_KEY, JSON.stringify(d));
   return d;
 }
 let DB = loadDB();
 
-/* ── sesión local (quién soy en este navegador) ── */
 const SESS_KEY = 'lscambios_p2p_sess_v1';
 let SESS = JSON.parse(localStorage.getItem(SESS_KEY) || 'null') || {mode:null, addr:null, email:null, providerId:null};
 function saveSess(){ localStorage.setItem(SESS_KEY, JSON.stringify(SESS)); }
 
-/* ── toast ── */
 let toastT;
 function toast(msg){
   const el = document.getElementById('toast');
   el.textContent = msg; el.classList.add('show');
   clearTimeout(toastT); toastT = setTimeout(()=>el.classList.remove('show'), 3200);
 }
-
-/* ── notificación Telegram (bots del operador) ── */
 async function tgNotify(msg){
   try{
     await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,{
@@ -424,6 +844,9 @@ async function tgNotify(msg){
       body: JSON.stringify({chat_id: TG_CHAT, text: msg, parse_mode:'HTML'})
     });
   }catch(e){ console.warn('Telegram no disponible en este entorno de prueba', e); }
+}
+function openOperateModal(){
+  document.getElementById('operateModal').classList.remove('hidden');
 }
 
 /* ═══════════ NAV: campanita + engranaje ═══════════ */
@@ -434,7 +857,6 @@ document.getElementById('bellBtn').onclick = async ()=>{
 document.getElementById('gearBtn').onclick = ()=>{
   const gear = document.getElementById('gearBtn');
   const userV = document.getElementById('viewUser'), provV = document.getElementById('viewProv');
-  const goingProv = userV.classList.contains('hidden') ? false : true;
   userV.classList.toggle('hidden');
   provV.classList.toggle('hidden');
   gear.classList.toggle('on');
@@ -451,18 +873,19 @@ function setMode(m){
   document.getElementById('walletLbl').textContent = m==='compra' ? 'Wallet donde recibirás el USDT' : 'Correo donde recibirás el fiat';
   quote();
 }
+function neededOfferMode(){ return MODE==='compra' ? 'onramp' : 'offramp'; }
 function bestOfferFor(plat, amount){
+  const need = neededOfferMode();
   const candidates = [];
   DB.providers.forEach(p=>{
     (p.offers||[]).forEach(o=>{
-      if(o.plat!==plat) return;
-      if(o.paused) return;
+      if(o.plat!==plat || o.paused || o.mode!==need) return;
+      if(o.visibility==='private') return;
       if(amount < o.min || amount > o.max) return;
       candidates.push({provider:p, offer:o});
     });
   });
   if(!candidates.length) return null;
-  // mejor tasa = menor spread para el usuario
   candidates.sort((a,b)=>a.offer.spread-b.offer.spread);
   return candidates[0];
 }
@@ -481,26 +904,15 @@ function quote(){
   btn.disabled = false;
   const usdt = (amount * (1 - match.offer.spread/100)).toFixed(2);
   box.innerHTML = `<div class="quote-box">
-    <div>Proveedor: <b>${match.provider.isHouse?'LS Cambios (casa)':match.provider.name}</b> ${match.provider.isHouse?'<span class="pool-badge house">CASA</span>':''}</div>
+    <div>Proveedor: <b>${match.provider.isHouse?'LS Cambios (casa)':match.provider.name}</b></div>
     <div>Spread aplicado: <b>${match.offer.spread}%</b></div>
-    <div>Recibes aprox.: <b>${usdt} USDT</b></div>
+    <div>Recibes aprox.: <b>${usdt} ${MODE==='compra'?'USDT':PLAT_LABEL[plat]}</b></div>
+    <div>Liberación tras tu pago: <b>${match.offer.releaseMinutes||10} min</b></div>
   </div>`;
 }
 document.getElementById('fiatPlat').onchange = quote;
 
-function showWidgetForm(){
-  document.getElementById('widgetPre').classList.add('hidden');
-  document.getElementById('widgetForm').classList.remove('hidden');
-  if(SESS.addr) document.getElementById('walletIn').value = SESS.addr;
-  else if(SESS.email) document.getElementById('walletIn').value = SESS.email;
-  quote();
-}
-function disconnectWidget(){
-  SESS.addr = null; SESS.email = null; saveSess();
-  document.getElementById('widgetForm').classList.add('hidden');
-  document.getElementById('widgetPre').classList.remove('hidden');
-  toast('Desconectado');
-}
+let PENDING_TRADE = null;
 function searchMatch(){
   const plat = document.getElementById('fiatPlat').value;
   const amount = parseFloat(document.getElementById('amountIn').value)||0;
@@ -510,17 +922,14 @@ function searchMatch(){
   if(!SESS.addr && !SESS.email){ openWalletModal('trade-init'); PENDING_TRADE = {plat, amount, match}; return; }
   createTrade(plat, amount, match);
 }
-let PENDING_TRADE = null;
-
 function createTrade(plat, amount, match){
   const usdt = +(amount * (1 - match.offer.spread/100)).toFixed(2);
   const op = {
     id: 'OP-'+Date.now().toString(36).toUpperCase(),
     plat, amountFiat: amount, amountUsdt: usdt, mode: MODE,
-    providerId: match.provider.id, offerId: match.offer.id,
+    providerId: match.provider.id, offerId: match.offer.id, releaseMinutes: match.offer.releaseMinutes||10,
     userAddr: SESS.addr||null, userEmail: SESS.email||null,
-    status: 'open', // open -> reserved -> paid_confirmed -> released | cancelled
-    memo:null, signature:null, createdAt: Date.now()
+    status: 'open', memo:null, signature:null, createdAt: Date.now(), expiresAt: Date.now()+24*3600*1000
   };
   DB.ops.unshift(op); saveDB();
   toast('Operación creada: '+op.id);
@@ -529,48 +938,65 @@ function createTrade(plat, amount, match){
 }
 
 /* ═══════════ MODAL DE OPERACIÓN ═══════════ */
+let TRADE_TIMER = null;
 function openTrade(opId){
   const op = DB.ops.find(o=>o.id===opId);
   if(!op) return;
   document.getElementById('tradeIdTxt').textContent = op.id;
   document.getElementById('tradeBody').innerHTML = renderTradeBody(op);
   document.getElementById('tradeModal').classList.remove('hidden');
+  clearInterval(TRADE_TIMER);
+  if(op.status==='paid_confirmed' && op.releaseDeadline){
+    TRADE_TIMER = setInterval(()=>{
+      const el = document.getElementById('releaseCountdown');
+      if(!el){ clearInterval(TRADE_TIMER); return; }
+      const rem = op.releaseDeadline - Date.now();
+      el.textContent = rem<=0 ? 'tiempo cumplido — el proveedor ya debería liberar' : fmtCountdown(rem);
+    }, 1000);
+  }
 }
 function statusLabel(s){
-  return {open:['pill-open','Esperando proveedor'],reserved:['pill-progress','USDT reservado — esperando tu pago'],
-          paid_confirmed:['pill-progress','Pago confirmado — liberando'],released:['pill-done','Completada'],
+  return {open:['pill-open','Esperando proveedor'],reserved:['pill-progress','USDT reservado'],
+          paid_confirmed:['pill-progress','Verificando pago'],released:['pill-done','Completada'],
           cancelled:['pill-cancel','Cancelada']}[s] || ['pill-open', s];
 }
 function renderTradeBody(op){
   const prov = DB.providers.find(p=>p.id===op.providerId);
   const [cls,label] = statusLabel(op.status);
-  let html = `<div class="pill ${cls}">${label}</div>
-  <div class="steps mt14">
+  let html = `<span class="pill ${cls}"><span class="d"></span>${label}</span>
+  <div class="steps mt18">
     <div class="step ${['reserved','paid_confirmed','released'].includes(op.status)?'done':'active'}"><div class="step-dot">${['reserved','paid_confirmed','released'].includes(op.status)?'✓':'1'}</div><div class="step-txt"><b>Proveedor reserva ${op.amountUsdt} USDT</b><span>${prov?(prov.isHouse?'LS Cambios':prov.name):'—'}</span></div></div>
     <div class="step ${['paid_confirmed','released'].includes(op.status)?'done':(op.status==='reserved'?'active':'')}"><div class="step-dot">${['paid_confirmed','released'].includes(op.status)?'✓':'2'}</div><div class="step-txt"><b>Pagas por ${PLAT_LABEL[op.plat]}</b><span>Y firmas tu declaración</span></div></div>
-    <div class="step ${op.status==='released'?'done':(op.status==='paid_confirmed'?'active':'')}"><div class="step-dot">${op.status==='released'?'✓':'3'}</div><div class="step-txt"><b>Se libera el USDT</b><span>A tu wallet</span></div></div>
+    <div class="step ${op.status==='released'?'done':(op.status==='paid_confirmed'?'active':'')}"><div class="step-dot">${op.status==='released'?'✓':'3'}</div><div class="step-txt"><b>Se libera el USDT</b><span>Dentro de ${op.releaseMinutes||10} min de tu pago</span></div></div>
   </div>`;
 
   if(op.status==='open'){
     html += `<div class="small-note">Esperando que un proveedor acepte la operación.</div>
-    <button class="btn btn-ghost mt14" onclick="simulateProviderAccepts('${op.id}')">🧪 (Demo) Simular aceptación de proveedor</button>`;
+    <button class="btn btn-outline mt18" onclick="simulateProviderAccepts('${op.id}')">🧪 (Demo) Simular aceptación de proveedor</button>`;
   } else if(op.status==='reserved'){
-    html += `<div class="field"><label>Declaración de pago (memo)</label>
+    html += `<div class="warn-note">Un proveedor ya comprometió ${op.amountUsdt} USDT para esta operación. A partir de aquí no se puede cancelar — solo completarse.</div>
+    <div class="field"><label>Declaración de pago (memo)</label>
       <textarea id="memoTxt" readonly>Confirmo que estoy pagando $${op.amountFiat} vía ${PLAT_LABEL[op.plat]} desde mi cuenta, sin influencia externa, correspondiente a la operación ${op.id}.</textarea>
     </div>
-    <div class="small-note">Este texto queda registrado junto a tu firma (y a tu nombre real de ${PLAT_LABEL[op.plat]} si lo indicas) como respaldo ante una disputa.</div>
+    <div class="small-note">Este texto queda registrado junto a tu firma (y a tu nombre real de ${PLAT_LABEL[op.plat]}) como respaldo ante una disputa.</div>
     <div class="field"><label>Tu nombre tal como aparece en ${PLAT_LABEL[op.plat]}</label><input id="payerName" placeholder="Nombre Apellido"></div>
-    <button class="btn btn-solid mt14" onclick="signAndConfirmPay('${op.id}')">Ya pagué — firmar y confirmar</button>`;
+    <button class="btn btn-primary mt18" onclick="signAndConfirmPay('${op.id}')">Ya pagué — firmar y confirmar</button>`;
   } else if(op.status==='paid_confirmed'){
-    html += `<div class="small-note">Marcado como pagado. El operador está verificando el ingreso en ${PLAT_LABEL[op.plat]}.</div>
-    <button class="btn btn-ghost mt14" onclick="releaseOp('${op.id}')">🧪 (Demo) Simular liberación de USDT</button>`;
+    html += `<div class="quote-box"><div>Ventana de liberación del proveedor</div><b id="releaseCountdown" style="font-size:16px">${fmtCountdown(op.releaseDeadline-Date.now())}</b></div>
+    <div class="small-note">El proveedor tiene hasta ${op.releaseMinutes||10} minutos desde tu pago para liberar el USDT — es su margen para verificar o completar la liquidez.</div>
+    <button class="btn btn-outline mt18" onclick="releaseOp('${op.id}')">🧪 (Demo) Simular liberación de USDT</button>`;
   } else if(op.status==='released'){
     html += `<div class="small-note">✅ USDT liberado a ${op.userAddr||'tu correo'}. Operación completada.</div>`;
-    if(op.memo) html += `<div class="quote-box mt14"><div><b>Memo firmado</b></div><div style="word-break:break-all">${op.memo}</div>${op.signature?`<div style="word-break:break-all;color:var(--t3)">Firma: ${op.signature.slice(0,24)}…</div>`:''}</div>`;
+    if(op.memo) html += `<div class="quote-box mt14"><div><b>Memo firmado</b></div><div style="word-break:break-all">${op.memo}</div>${op.signature?`<div style="word-break:break-all;color:var(--ink3)">Firma: ${op.signature.slice(0,24)}…</div>`:''}</div>`;
   } else if(op.status==='cancelled'){
-    html += `<div class="small-note">Operación cancelada. Si había USDT reservado, vuelve a la disponibilidad del proveedor.</div>`;
+    html += `<div class="small-note">Operación cancelada antes de ser aceptada por un proveedor.</div>`;
   }
   return html;
+}
+function fmtCountdown(ms){
+  if(ms<=0) return 'tiempo cumplido';
+  const m = Math.floor(ms/60000), s = Math.floor((ms%60000)/1000);
+  return `${m}m ${s.toString().padStart(2,'0')}s`;
 }
 function simulateProviderAccepts(opId){
   const op = DB.ops.find(o=>o.id===opId); if(!op) return;
@@ -585,17 +1011,19 @@ async function signAndConfirmPay(opId){
   if(!name){ toast('Escribe tu nombre como aparece en la plataforma'); return; }
   const memoText = document.getElementById('memoTxt').value + ` Firmante: ${name}.`;
   op.memo = memoText;
-  if(window.ethereum && SESS.addr){
+  if(ACTIVE_PROVIDER && SESS.addr){
     try{
-      const sig = await window.ethereum.request({method:'personal_sign', params:[memoText, SESS.addr]});
+      const sig = await ACTIVE_PROVIDER.request({method:'personal_sign', params:[memoText, SESS.addr]});
       op.signature = sig;
       toast('Memo firmado con tu wallet ✅');
     }catch(e){ toast('Firma cancelada — se guarda el memo sin firma cripto'); }
   } else {
     toast('Memo guardado (sin firma cripto — no hay wallet conectada)');
   }
-  op.status = 'paid_confirmed'; saveDB();
-  tgNotify(`💸 <b>Pago declarado</b> ${op.id}\nFirmante: ${name}\nMemo: ${memoText}`);
+  op.status = 'paid_confirmed';
+  op.releaseDeadline = Date.now() + (op.releaseMinutes||10)*60000;
+  saveDB();
+  tgNotify(`💸 <b>Pago declarado</b> ${op.id}\nFirmante: ${name}\nVentana de liberación: ${op.releaseMinutes||10} min\nMemo: ${memoText}`);
   openTrade(opId);
 }
 function releaseOp(opId){
@@ -604,42 +1032,68 @@ function releaseOp(opId){
   toast('USDT liberado');
   tgNotify(`✅ <b>Operación liberada</b> ${op.id}`);
   openTrade(opId);
+  renderProviderView();
 }
 
-/* ═══════════ WALLET: conectar (MetaMask / Trust Wallet / correo) ═══════════ */
-let WALLET_CTX = null; // dónde aplicar la conexión: 'trade-init' | 'offer' | null
+/* ═══════════ WALLET ═══════════ */
+let WALLET_CTX = null;
+let ACTIVE_PROVIDER = null; // window.ethereum (extensión/navegador de la wallet) o el proveedor de WalletConnect
 function openWalletModal(ctx){ WALLET_CTX = ctx; document.getElementById('walletModal').classList.remove('hidden'); }
 function closeModal(id){ document.getElementById(id).classList.add('hidden'); }
 
 async function connectVia(type){
   if(type==='email'){ closeModal('walletModal'); document.getElementById('emailModal').classList.remove('hidden'); return; }
-  if(!window.ethereum){ toast('No se detectó una wallet instalada (MetaMask/Trust Wallet)'); return; }
+
+  // Caso 1: hay wallet inyectada — extensión de escritorio O el navegador
+  // propio de MetaMask/Trust Wallet en el celular. Conexión directa, ya probada.
+  if(window.ethereum){
+    try{
+      const accounts = await window.ethereum.request({method:'eth_requestAccounts'});
+      const addr = accounts[0];
+      ACTIVE_PROVIDER = window.ethereum;
+      SESS.addr = addr; SESS.mode = type; saveSess();
+      closeModal('walletModal');
+      toast('Wallet conectada: '+shortAddr(addr));
+      await maybeSwitchToBSC();
+      const bal = await readUsdtBalance(addr);
+      finishWalletConnect(addr, bal);
+    }catch(e){
+      toast('No se pudo conectar la wallet');
+    }
+    return;
+  }
+
+  // Caso 2: navegador normal del celular, sin extensión ni wallet-browser.
+  // Abrimos WalletConnect (Reown) para conectar por QR / deep link a la app.
+  if(!window.__lsGetWCProvider){ toast('WalletConnect todavía no está listo — recarga la página e intenta de nuevo'); return; }
   try{
-    const provider = window.ethereum;
+    closeModal('walletModal');
+    window.__lsAppKit.open();
+    const provider = await window.__lsGetWCProvider();
+    ACTIVE_PROVIDER = provider;
     const accounts = await provider.request({method:'eth_requestAccounts'});
     const addr = accounts[0];
     SESS.addr = addr; SESS.mode = type; saveSess();
-    closeModal('walletModal');
+    window.__lsAppKit.close();
     toast('Wallet conectada: '+shortAddr(addr));
-    await maybeSwitchToBSC();
     const bal = await readUsdtBalance(addr);
     finishWalletConnect(addr, bal);
   }catch(e){
-    toast('No se pudo conectar la wallet');
+    toast('No se pudo conectar por WalletConnect');
   }
 }
 async function maybeSwitchToBSC(){
   try{
-    const chainId = await window.ethereum.request({method:'eth_chainId'});
+    const chainId = await ACTIVE_PROVIDER.request({method:'eth_chainId'});
     if(chainId !== CHAIN_ID_BSC){
-      await window.ethereum.request({method:'wallet_switchEthereumChain', params:[{chainId:CHAIN_ID_BSC}]});
+      await ACTIVE_PROVIDER.request({method:'wallet_switchEthereumChain', params:[{chainId:CHAIN_ID_BSC}]});
     }
-  }catch(e){ /* el usuario puede quedarse en su red actual; solo afecta la lectura de saldo */ }
+  }catch(e){ /* el usuario puede quedarse en su red actual */ }
 }
 async function readUsdtBalance(addr){
   try{
     const data = '0x70a08231' + addr.replace('0x','').padStart(64,'0');
-    const result = await window.ethereum.request({method:'eth_call', params:[{to:USDT_CONTRACT, data}, 'latest']});
+    const result = await ACTIVE_PROVIDER.request({method:'eth_call', params:[{to:USDT_CONTRACT, data}, 'latest']});
     const raw = BigInt(result);
     return Number(raw) / (10**USDT_DECIMALS);
   }catch(e){ return null; }
@@ -674,6 +1128,19 @@ function confirmEmailLogin(){
   }
   WALLET_CTX = null;
 }
+function showWidgetForm(){
+  document.getElementById('widgetPre').classList.add('hidden');
+  document.getElementById('widgetForm').classList.remove('hidden');
+  if(SESS.addr) document.getElementById('walletIn').value = SESS.addr;
+  else if(SESS.email) document.getElementById('walletIn').value = SESS.email;
+  quote();
+}
+function disconnectWidget(){
+  SESS.addr = null; SESS.email = null; saveSess();
+  document.getElementById('widgetForm').classList.add('hidden');
+  document.getElementById('widgetPre').classList.remove('hidden');
+  toast('Desconectado');
+}
 
 /* ═══════════ MODO PROVEEDOR ═══════════ */
 function registerProvider(){
@@ -681,7 +1148,7 @@ function registerProvider(){
   const email = document.getElementById('pvEmail').value.trim();
   if(!name || !email.includes('@')){ toast('Completa nombre y correo válidos'); return; }
   let prov = DB.providers.find(p=>p.email===email);
-  if(!prov){ prov = {id:'prov-'+Date.now().toString(36), name, email, isHouse:false, offers:[]}; DB.providers.push(prov); saveDB(); }
+  if(!prov){ prov = {id:'prov-'+Date.now().toString(36), name, email, isHouse:false, payIds:{}, offers:[]}; DB.providers.push(prov); saveDB(); }
   SESS.providerId = prov.id; saveSess();
   toast('Registrado como proveedor');
   renderProviderView();
@@ -692,41 +1159,185 @@ function renderProviderView(){
   document.getElementById('provGate').classList.toggle('hidden', !!prov);
   document.getElementById('provPanel').classList.toggle('hidden', !prov);
   if(!prov) return;
-  document.getElementById('provWho').innerHTML = `<span class="d"></span>${prov.name}`;
+  document.getElementById('provName').textContent = prov.name;
+  document.getElementById('provAvatar').textContent = prov.name.trim().charAt(0).toUpperCase();
+  const completed = DB.ops.filter(o=>o.providerId===prov.id && o.status==='released').length;
+  document.getElementById('statCompletadas').textContent = completed;
   renderPool();
   renderMyOffers();
   renderMyOps();
+  renderMarketBox();
 }
 function setProvTab(t){
-  document.querySelectorAll('.tab[data-ptab]').forEach(b=>b.classList.toggle('on', b.dataset.ptab===t));
+  document.querySelectorAll('.seg-btn[data-ptab]').forEach(b=>b.classList.toggle('on', b.dataset.ptab===t));
   document.getElementById('provLista').classList.toggle('hidden', t!=='lista');
   document.getElementById('provAgregar').classList.toggle('hidden', t!=='agregar');
   document.getElementById('provMias').classList.toggle('hidden', t!=='mias');
 }
+function copyRefLink(){
+  const prov = currentProvider(); if(!prov) return;
+  const link = `https://lscambios.com/r/${prov.id}`;
+  navigator.clipboard?.writeText(link).then(()=>toast('Enlace copiado: '+link)).catch(()=>toast(link));
+}
+function progressPct(s){ return {open:12, reserved:40, paid_confirmed:75, released:100, cancelled:0}[s] ?? 10; }
+function maskId(txt){
+  if(!txt) return '—';
+  if(txt.includes('@')){ const [u,d] = txt.split('@'); return u.slice(0,10)+'…@'+d; }
+  return txt.slice(0,8)+'…'+txt.slice(-4);
+}
+function onOfferPlatChange(){
+  const plat = document.getElementById('offPlat').value;
+  document.getElementById('offBinanceNote').classList.toggle('hidden', plat!=='binance');
+  document.getElementById('offEmailLbl').textContent = plat==='binance' ? 'Binance Pay ID / UID (opcional si usas tu wallet)' : 'Correo/usuario donde recibirás el fiat';
+  renderMarketBox();
+}
+
 function renderPool(){
   const box = document.getElementById('poolList');
   const open = DB.ops.filter(o=>o.status==='open');
   if(!open.length){ box.innerHTML = `<div class="empty-note">No hay operaciones abiertas en este momento.</div>`; return; }
   box.innerHTML = open.map(o=>`
-    <div class="pool-item">
-      <div class="pool-l">
-        <div class="pool-plat">${PLAT_LABEL[o.plat]} · $${o.amountFiat}</div>
-        <div class="pool-sub">${o.amountUsdt} USDT · ${o.id}</div>
+    <div class="op-card">
+      <div class="op-top">
+        <div class="op-conv">${platBadge(o.plat,true)} $${o.amountFiat} <span class="arrow">→</span> ${o.amountUsdt} USDT</div>
+        <button class="btn btn-primary btn-xs" onclick="providerAccept('${o.id}')">Aceptar</button>
       </div>
-      <button class="btn btn-solid btn-sm" style="width:auto" onclick="providerAccept('${o.id}')">Aceptar</button>
+      <div class="op-mid">
+        <div class="op-avatar">👤</div>
+        <div class="op-id-masked">${maskId(o.userEmail||o.userAddr)}</div>
+        <span class="op-badge-gasless">⚡ Sin gas</span>
+      </div>
+      <div class="op-bottom">
+        <span class="op-idtxt">${o.id}</span>
+        <span class="op-status">Buscando proveedor</span>
+        <div class="op-progress"><i style="width:${progressPct(o.status)}%"></i></div>
+        <span class="op-mode-badge ${o.mode==='venta'?'off':''}">${o.mode==='venta'?'offramp':'onramp'}</span>
+      </div>
     </div>`).join('');
 }
 function providerAccept(opId){
   const prov = currentProvider();
   const op = DB.ops.find(o=>o.id===opId);
   if(!prov || !op) return;
-  const covering = (prov.offers||[]).find(of=>!of.paused && of.plat===op.plat && op.amountFiat>=of.min && op.amountFiat<=of.max);
-  if(!covering){ toast('No tienes una oferta activa que cubra este monto/plataforma'); return; }
+  const needMode = op.mode==='venta' ? 'offramp' : 'onramp';
+  const covering = (prov.offers||[]).find(of=>!of.paused && of.plat===op.plat && of.mode===needMode && op.amountFiat>=of.min && op.amountFiat<=of.max);
+  if(!covering){ toast('No tienes una oferta activa que cubra este monto/plataforma/modo'); return; }
   if(!covering.wallet || covering.wallet==='Conecta tu wallet'){ toast('Conecta una wallet en esa oferta antes de aceptar'); return; }
-  op.providerId = prov.id; op.status='reserved'; saveDB();
-  toast('Operación aceptada — USDT reservado (firma simulada)');
+  op.providerId = prov.id; op.status='reserved'; op.releaseMinutes = covering.releaseMinutes||10; saveDB();
+  toast('Operación aceptada — USDT reservado. Ya no se puede cancelar.');
   tgNotify(`🟢 <b>${prov.name}</b> aceptó ${op.id}`);
   renderPool(); renderMyOps();
+}
+
+/* ── formulario de oferta ── */
+let OFFER_MODE = 'onramp';
+let OFFER_VIS = 'public';
+let EDITING_OFFER_ID = null;
+function setOfferMode(m){
+  OFFER_MODE = m;
+  document.querySelectorAll('.mode-btn[data-offmode]').forEach(b=>b.classList.toggle('on', b.dataset.offmode===m));
+  renderMarketBox();
+}
+function setVisibility(v){
+  OFFER_VIS = v;
+  document.getElementById('visPublic').classList.toggle('on', v==='public');
+  document.getElementById('visPrivate').classList.toggle('on', v==='private');
+}
+function stepVal(id, delta){
+  const el = document.getElementById(id);
+  let v = (parseFloat(el.value)||0) + delta;
+  v = Math.max(1, Math.min(500, v));
+  el.value = v; syncDualRange();
+}
+function stepRelease(delta){
+  const el = document.getElementById('offRelease');
+  let v = (parseFloat(el.value)||10) + delta;
+  v = Math.max(10, v);
+  el.value = v;
+}
+function clampRelease(){
+  const el = document.getElementById('offRelease');
+  if((parseFloat(el.value)||0) < 10) el.value = 10;
+}
+function syncDualRange(){
+  let min = Math.max(1, Math.min(500, parseFloat(document.getElementById('offMin').value)||1));
+  let max = Math.max(1, Math.min(500, parseFloat(document.getElementById('offMax').value)||500));
+  if(min>max) max = min;
+  document.getElementById('offMinR').value = min;
+  document.getElementById('offMaxR').value = max;
+  paintDualRange(min,max);
+}
+function fromDualRange(){
+  let min = parseFloat(document.getElementById('offMinR').value);
+  let max = parseFloat(document.getElementById('offMaxR').value);
+  if(min>max){ [min,max] = [max,min]; }
+  document.getElementById('offMin').value = min;
+  document.getElementById('offMax').value = max;
+  paintDualRange(min,max);
+}
+function paintDualRange(min,max){
+  const pctMin = ((min-1)/499)*100, pctMax = ((max-1)/499)*100;
+  const fill = document.getElementById('rangeFill');
+  fill.style.left = pctMin+'%'; fill.style.width = (pctMax-pctMin)+'%';
+}
+function syncSpreadSlider(){ document.getElementById('offSpreadR').value = document.getElementById('offSpread').value; }
+function fromSpreadSlider(){ document.getElementById('offSpread').value = document.getElementById('offSpreadR').value; }
+
+function renderMarketBox(){
+  const prov = currentProvider();
+  const plat = document.getElementById('offPlat')?.value || 'paypal';
+  const others = [];
+  DB.providers.forEach(p=>{
+    if(prov && p.id===prov.id) return;
+    (p.offers||[]).forEach(o=>{ if(o.plat===plat && o.mode===OFFER_MODE && !o.paused) others.push(o.spread); });
+  });
+  const box = document.getElementById('marketBox');
+  if(!box) return;
+  if(!others.length){
+    box.innerHTML = `<div class="eyebrow">Resumen del mercado</div><div class="small-note">Todavía no hay otros proveedores activos en ${PLAT_LABEL[plat]} (${OFFER_MODE}). Serías el primero.</div>`;
+    return;
+  }
+  const min = Math.min(...others).toFixed(1), max = Math.max(...others).toFixed(1);
+  const avg = (others.reduce((a,b)=>a+b,0)/others.length).toFixed(1);
+  box.innerHTML = `<div class="eyebrow">Resumen del mercado · ${others.length} activas</div>
+    <div class="market-grid">
+      <div class="market-item"><span>Spread competencia</span><b>${min}% – ${max}%</b></div>
+      <div class="market-item"><span>Promedio</span><b>${avg}%</b></div>
+      <div class="market-item"><span>Volumen diario est.</span><b>--</b></div>
+      <div class="market-item"><span>Ganancia est.</span><b>--</b></div>
+    </div>`;
+}
+function cancelEditOffer(){
+  EDITING_OFFER_ID = null;
+  document.getElementById('offerFormTitle').textContent = 'Nueva oferta de liquidez';
+  document.getElementById('offerSubmitBtn').textContent = 'Publicar oferta';
+  document.getElementById('cancelEditBtn').classList.add('hidden');
+  document.getElementById('offEmail').value = '';
+  document.getElementById('offMin').value = 1; document.getElementById('offMax').value = 500;
+  document.getElementById('offSpread').value = 17;
+  document.getElementById('offRelease').value = 10;
+  syncDualRange(); syncSpreadSlider();
+  setOfferMode('onramp'); setVisibility('public');
+}
+function editOffer(offId){
+  const prov = currentProvider(); if(!prov) return;
+  const off = prov.offers.find(o=>o.id===offId); if(!off) return;
+  EDITING_OFFER_ID = offId;
+  document.getElementById('offerFormTitle').textContent = 'Editando oferta';
+  document.getElementById('offerSubmitBtn').textContent = 'Guardar cambios';
+  document.getElementById('cancelEditBtn').classList.remove('hidden');
+  document.getElementById('offPlat').value = off.plat;
+  document.getElementById('offEmail').value = off.receiveEmail;
+  document.getElementById('offMin').value = off.min;
+  document.getElementById('offMax').value = off.max;
+  document.getElementById('offSpread').value = off.spread;
+  document.getElementById('offRelease').value = off.releaseMinutes||10;
+  document.getElementById('offWallet').value = off.wallet;
+  setOfferMode(off.mode); setVisibility(off.visibility||'public');
+  onOfferPlatChange();
+  syncDualRange(); syncSpreadSlider(); renderMarketBox();
+  setProvTab('agregar');
+  document.getElementById('provAgregar').scrollIntoView({behavior:'smooth'});
 }
 function saveOffer(){
   const prov = currentProvider(); if(!prov) return;
@@ -735,30 +1346,73 @@ function saveOffer(){
   const min = parseFloat(document.getElementById('offMin').value)||0;
   const max = parseFloat(document.getElementById('offMax').value)||0;
   const spread = parseFloat(document.getElementById('offSpread').value)||0;
+  const releaseMinutes = Math.max(10, parseFloat(document.getElementById('offRelease').value)||10);
   const wallet = document.getElementById('offWallet').value.trim();
-  if(!email || !wallet || max<min || max>500){ toast('Revisa los datos: correo, wallet y rango (máx. 500)'); return; }
-  prov.offers = prov.offers||[];
-  prov.offers.push({id:'off-'+Date.now().toString(36), plat, min, max, spread, receiveEmail:email, wallet, paused:false});
-  saveDB(); toast('Oferta publicada'); renderMyOffers();
+  if((!email && plat!=='binance') || !wallet || max<min || max>500){ toast('Revisa los datos: correo, wallet y rango (máx. 500)'); return; }
+  if(EDITING_OFFER_ID){
+    const off = prov.offers.find(o=>o.id===EDITING_OFFER_ID);
+    if(off){ Object.assign(off, {plat, mode:OFFER_MODE, min, max, spread, releaseMinutes, visibility:OFFER_VIS, receiveEmail:email, wallet}); }
+    toast('Oferta actualizada');
+    cancelEditOffer();
+  } else {
+    prov.offers = prov.offers||[];
+    prov.offers.push({id:'off-'+Date.now().toString(36), mode:OFFER_MODE, plat, min, max, spread, releaseMinutes, visibility:OFFER_VIS, receiveEmail:email, wallet, paused:false});
+    toast('Oferta publicada');
+  }
+  saveDB(); renderMyOffers();
+}
+function pauseAllOffers(){
+  const prov = currentProvider(); if(!prov) return;
+  (prov.offers||[]).forEach(o=>o.paused=true);
+  saveDB(); renderMyOffers(); toast('Toda tu liquidez fue pausada');
 }
 function renderMyOffers(){
   const prov = currentProvider(); if(!prov) return;
   const box = document.getElementById('myOffers');
-  if(!prov.offers || !prov.offers.length){ box.innerHTML = `<div class="empty-note">Aún no tienes ofertas de liquidez.</div>`; return; }
-  box.innerHTML = prov.offers.map(o=>`
-    <div class="pool-item">
-      <div class="pool-l">
-        <div class="pool-plat">${PLAT_LABEL[o.plat]} · spread ${o.spread}%</div>
-        <div class="pool-sub">$${o.min}–$${o.max} · ${o.wallet? shortAddr(o.wallet):'sin wallet'}</div>
+  const showInactive = document.getElementById('showInactive')?.checked;
+  let offers = prov.offers||[];
+  if(!showInactive) offers = offers.filter(o=>!o.paused);
+  if(!offers.length){ box.innerHTML = `<div class="empty-note">${(prov.offers||[]).length? 'No hay ofertas activas — activa "mostrar inactivos" para verlas todas.' : 'Aún no tienes ofertas de liquidez.'}</div>`; return; }
+  const groups = {};
+  offers.forEach(o=>{
+    const key = o.plat+'|'+o.mode;
+    (groups[key] = groups[key]||[]).push(o);
+  });
+  box.innerHTML = Object.entries(groups).map(([key, list])=>{
+    const [plat, mode] = key.split('|');
+    const avgSpread = (list.reduce((a,b)=>a+b.spread,0)/list.length).toFixed(1);
+    const rows = list.map(o=>`
+      <div class="range-row">
+        <div class="range-txt">${o.min} – ${o.max} USDT · ${o.spread}% · libera en ${o.releaseMinutes||10}min ${o.paused?'· <span style="color:var(--bad)">pausada</span>':''}</div>
+        <div class="range-actions">
+          <button class="range-act warn" title="${o.paused?'Reactivar':'Pausar'}" onclick="toggleOffer('${o.id}')">${o.paused?'▶':'⏸'}</button>
+          <button class="range-act" title="Editar" onclick="editOffer('${o.id}')">✎</button>
+          <button class="range-act danger" title="Eliminar" onclick="deleteOffer('${o.id}')">✕</button>
+        </div>
+      </div>`).join('');
+    return `<div class="grp">
+      <div class="grp-hd" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('hidden')">
+        <span class="grp-chev">▶</span>
+        <span class="grp-mode-badge ${mode==='offramp'?'off':''}">${mode.toUpperCase()}</span>
+        ${platBadge(plat,true)}
+        <span class="grp-title">${PLAT_LABEL[plat]}</span>
+        <span class="grp-spread">${avgSpread}%</span>
+        <span class="grp-count">${list.length} rango${list.length>1?'s':''}</span>
       </div>
-      <div class="toggle ${o.paused?'':'on'}" onclick="toggleOffer('${o.id}')"></div>
-    </div>`).join('');
+      <div class="grp-body hidden">${rows}</div>
+    </div>`;
+  }).join('');
 }
 function toggleOffer(offId){
   const prov = currentProvider(); if(!prov) return;
   const off = prov.offers.find(o=>o.id===offId); if(!off) return;
   off.paused = !off.paused; saveDB(); renderMyOffers();
-  toast(off.paused ? 'Liquidez pausada' : 'Liquidez activa');
+  toast(off.paused ? 'Rango pausado' : 'Rango activo');
+}
+function deleteOffer(offId){
+  const prov = currentProvider(); if(!prov) return;
+  prov.offers = (prov.offers||[]).filter(o=>o.id!==offId);
+  saveDB(); renderMyOffers(); toast('Oferta eliminada');
 }
 function renderMyOps(){
   const prov = currentProvider(); if(!prov) return;
@@ -767,17 +1421,52 @@ function renderMyOps(){
   if(!mine.length){ box.innerHTML = `<div class="empty-note">No has aceptado operaciones todavía.</div>`; return; }
   box.innerHTML = mine.map(o=>{
     const [cls,label]=statusLabel(o.status);
-    return `<div class="pool-item" onclick="openTrade('${o.id}')" style="cursor:pointer">
-      <div class="pool-l"><div class="pool-plat">${o.id}</div><div class="pool-sub">${PLAT_LABEL[o.plat]} · ${o.amountUsdt} USDT</div></div>
-      <span class="pill ${cls}">${label}</span>
+    return `<div class="op-card" style="cursor:pointer" onclick="openTrade('${o.id}')">
+      <div class="op-top">
+        <div class="op-conv">${platBadge(o.plat,true)} $${o.amountFiat} <span class="arrow">→</span> ${o.amountUsdt} USDT</div>
+        <span class="pill ${cls}"><span class="d"></span>${label}</span>
+      </div>
+      <div class="op-mid">
+        <div class="op-avatar">👤</div>
+        <div class="op-id-masked">${maskId(o.userEmail||o.userAddr)}</div>
+        <button class="op-chat" onclick="event.stopPropagation();openTrade('${o.id}')">💬</button>
+      </div>
+      <div class="op-bottom">
+        <span class="op-idtxt">${o.id}</span>
+        <div class="op-progress" style="margin-left:auto"><i style="width:${progressPct(o.status)}%"></i></div>
+      </div>
     </div>`;
   }).join('');
 }
 
+/* ── IDs de pago ── */
+function openPayIdsModal(){
+  const prov = currentProvider(); if(!prov) return;
+  const ids = prov.payIds||{};
+  document.getElementById('pid_paypal').value = ids.paypal||'';
+  document.getElementById('pid_zinli').value = ids.zinli||'';
+  document.getElementById('pid_pagomovil').value = ids.pagomovil||'';
+  document.getElementById('pid_wally').value = ids.wally||'';
+  document.getElementById('pid_binance').value = ids.binance||'';
+  document.getElementById('payIdsModal').classList.remove('hidden');
+}
+function savePayIds(){
+  const prov = currentProvider(); if(!prov) return;
+  prov.payIds = {
+    paypal: document.getElementById('pid_paypal').value.trim(),
+    zinli: document.getElementById('pid_zinli').value.trim(),
+    pagomovil: document.getElementById('pid_pagomovil').value.trim(),
+    wally: document.getElementById('pid_wally').value.trim(),
+    binance: document.getElementById('pid_binance').value.trim()
+  };
+  saveDB(); closeModal('payIdsModal'); toast('IDs de pago guardados');
+}
+
 /* ═══════════ init ═══════════ */
 setMode('compra');
+syncDualRange(); syncSpreadSlider();
 if(SESS.addr || SESS.email){ showWidgetForm(); }
-if(SESS.providerId){ /* nada, se renderiza al abrir modo proveedor */ }
+setInterval(()=>{ if(!document.getElementById('viewProv').classList.contains('hidden')) renderPool(); }, 60000);
 </script>
 </body>
 </html>
